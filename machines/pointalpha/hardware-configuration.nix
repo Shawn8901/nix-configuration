@@ -11,7 +11,7 @@
   boot = {
     initrd.availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
     initrd.kernelModules = [ "amdgpu" ];
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [ "kvm-amd" "cifs" ];
     extraModulePackages = [ ];
 
     loader.systemd-boot.enable = true;

@@ -50,6 +50,7 @@
   environment.systemPackages = with pkgs; [
     wget
     git
+    cifs-utils
     gnumake
     tree
     htop
@@ -80,6 +81,10 @@
           [org.gnome.shell]
           favorite-apps=[ "firefox.desktop", "org.gnome.Nautilus.desktop", "steam.desktop", "discord.desktop", "teamspeak.desktop" ,"org.keepassxc.KeePassXC.desktop"]
         '';
+        extraGSettingsOverrides = ''
+            [org.gnome.desktop.wm.preferences]
+            button-layout=":minimize,maximize,close"
+          '';
       };
     };
     gnome = {
