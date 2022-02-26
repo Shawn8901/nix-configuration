@@ -22,7 +22,7 @@
   };
 
   networking.hostId = "a642f2c0";
-  
+
   services.xserver.videoDrivers = [ "amdgpu" ];
 
   fileSystems."/" =

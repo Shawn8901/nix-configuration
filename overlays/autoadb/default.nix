@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-fmNySuOW+2HKIOIqIv/8W41ZXSmq3hbi+11yZBbhW5Q=";
 
-  buildInputs = [];
+  buildInputs = [ ];
 
   LIBCLANG_PATH = "${libclang.lib}/lib";
 

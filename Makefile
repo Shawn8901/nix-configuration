@@ -11,7 +11,7 @@ endif
 
 # cf https://stackoverflow.com/questions/2214575/passing-arguments-to-make-run
 deploy:
-	flake_update
+	make flake-update
 	deploy .#${REMOTE_HOST}
 
 flake-update:
@@ -23,6 +23,10 @@ full: flake-update switch
 garbage-collect:
 	nix-collect-garbage -d
 	sudo nix-collect-garbage -d
+
+check:
+	nix flake check
+
 
 #home-manager-switch:
 ## other method
@@ -48,3 +52,4 @@ switch:
 	echo "### NIXOS DIFF ###"
 	ls -v /nix/var/nix/profiles | tail -n 2 | awk '{print "/nix/var/nix/profiles/" $$0}' - | xargs nvd diff
 	echo ""
+

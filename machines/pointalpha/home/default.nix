@@ -1,7 +1,8 @@
 { self, config, pkgs, ... }:
 let
   nas_credentials = config.my.secrets.nas;
-in {
+in
+{
 
   home-manager.users.shawn = {
     imports = [
@@ -78,7 +79,7 @@ in {
     programs.zsh = {
       enable = true;
       shellAliases = {
-        nas_mount= "sudo mount -t cifs //tank.fritz.box/joerg /media/nas -o ${nas_credentials},iocharset=utf8,uid=1000,gid=1000,forcegid,forceuid,vers=3.0";
+        nas_mount = "sudo mount -t cifs //tank.fritz.box/joerg /media/nas -o ${nas_credentials},iocharset=utf8,uid=1000,gid=1000,forcegid,forceuid,vers=3.0";
         nas_umount = "sudo umount /media/nas";
         stfc = "adb connect blissos";
       };

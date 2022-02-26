@@ -1,4 +1,4 @@
-{ self, config, pkgs, ... }:
+{ self, config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -10,7 +10,7 @@
     hostName = "pointalpha";
     firewall = {
       allowedUDPPorts = [ ];
-      allowedTCPPorts = [ ];
+      allowedTCPPorts = [ 9811 9090 ];
     };
   };
 
@@ -66,7 +66,6 @@
     gnomeExtensions.caffeine
     gnomeExtensions.alphabetical-app-grid
     gnomeExtensions.screenshot-tool
-    
   ];
 
   fonts.fonts = with pkgs; [
@@ -88,9 +87,9 @@
           favorite-apps=[ "firefox.desktop", "org.gnome.Nautilus.desktop", "steam.desktop", "discord.desktop", "teamspeak.desktop" ,"org.keepassxc.KeePassXC.desktop"]
         '';
         extraGSettingsOverrides = ''
-            [org.gnome.desktop.wm.preferences]
-            button-layout=":minimize,maximize,close"
-          '';
+          [org.gnome.desktop.wm.preferences]
+          button-layout=":minimize,maximize,close"
+        '';
       };
     };
     gnome = {
@@ -116,6 +115,66 @@
     printing = {
       enable = true;
       drivers = [ pkgs.epson-escpr2 ];
+    };
+    zrepl = {
+      enable = true;
+      settings = {
+        global = {
+          monitoring = [
+            {
+              type = "prometheus";
+              listen = ":9811";
+              listen_freebind = true;
+            }
+          ];
+        };
+        jobs = [
+          {
+            name = "userdata";
+            type = "push";
+            filesystems = {
+              "rpool/userdata<" = true;
+              "rpool/userdata/steamlibrary" = false;
+            };
+            snapshotting = {
+              type = "periodic";
+              interval = "1h";
+              prefix = "zrepl_";
+            };
+            connect = {
+              type = "tls";
+              address = "tank:8888";
+              ca = "/etc/zrepl/tank.crt";
+              cert = "/etc/zrepl/pointalpha.crt";
+              key = "/etc/zrepl/pointalpha.key";
+              server_cn = "tank";
+            };
+            pruning = {
+              keep_sender = [
+                {
+                  type = "not_replicated";
+                }
+                {
+                  type = "last_n";
+                  count = 10;
+                }
+                {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 12x1h | 7x1d";
+                  regex = "^pointalpha_root_.*";
+                }
+              ];
+              keep_receiver = [
+                {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 24x1h | 35x1d | 6x30d | 1x365d";
+                  regex = "^zrepl_.*";
+                }
+              ];
+            };
+          }
+        ];
+      };
     };
   };
   security.rtkit.enable = true;
@@ -167,7 +226,7 @@
     '';
     ohMyZsh = {
       enable = true;
-      plugins = [ "git" "command-not-found" "cp" "zsh-interactive-cd"];
+      plugins = [ "git" "command-not-found" "cp" "zsh-interactive-cd" ];
       theme = "fletcherm";
     };
   };
@@ -181,9 +240,13 @@
     gnome.excludePackages = with pkgs.gnome; [
       totem
       cheese
-    ] ++ (with pkgs; [ 
+    ] ++ (with pkgs; [
       epiphany
     ]);
+
+    etc."zrepl/pointalpha.key".text = config.my.secrets.zrepl.certificates.pointalpha.private;
+    etc."zrepl/pointalpha.crt".text = config.my.secrets.zrepl.certificates.pointalpha.public;
+    etc."zrepl/tank.crt".text = config.my.secrets.zrepl.certificates.tank.public;
   };
 
   # remove bloatware (NixOS HTML file)
@@ -191,4 +254,3 @@
 
   system.stateVersion = "21.11";
 }
-
