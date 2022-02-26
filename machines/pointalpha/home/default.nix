@@ -67,7 +67,7 @@ in {
         Service = {
           Type = "simple";
           RemainAfterExit = "yes";
-          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i -s alsa_input.usb-WOER_WOER_20180508-00.analog-stereo -t 70";
+          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i -s alsa_input.usb-WOER_WOER_20180508-00.analog-stereo -t 65";
           ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
           Restart = "on-failure";
           RestartSec = 3;

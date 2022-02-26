@@ -61,7 +61,8 @@
     vulkan-tools
     neofetch
     fzf
-    
+    alsa-utils
+
     gnomeExtensions.caffeine
     gnomeExtensions.alphabetical-app-grid
     gnomeExtensions.screenshot-tool
@@ -112,11 +113,16 @@
       #wireplumber.enable = true;
     };
     flatpak.enable = false;
+    printing = {
+      enable = true;
+      drivers = [ pkgs.epson-escpr2 ];
+    };
   };
   security.rtkit.enable = true;
 
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;
+  hardware.sane.enable = true;
   sound.enable = false;
 
   hardware.opengl = {
@@ -141,7 +147,7 @@
   users.users.shawn = {
     hashedPassword = config.my.secrets.shawn.hashedPassword;
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "libvirtd" "plugdev" "adbusers" ];
+    extraGroups = [ "wheel" "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
     uid = 1000;
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
