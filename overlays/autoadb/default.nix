@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "autoadb";
-  version = "0.0.1";
+  version = "20200601";
 
   src = fetchFromGitHub {
     owner = "rom1v";
@@ -17,17 +17,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-9Sv38dCtvbqvxSnRpq+HsIwF/rfLUVZbi0J+mltLres=";
   };
 
-  cargoSha256 = "sha256-XglpWhwq4Xhlb28OnyJ/pkvVj4WDAoyNL1LIrPA9Fbo=";
+  cargoSha256 = "sha256-fmNySuOW+2HKIOIqIv/8W41ZXSmq3hbi+11yZBbhW5Q=";
 
   buildInputs = [];
 
   LIBCLANG_PATH = "${libclang.lib}/lib";
-
-  preCheck = "HOME=$(mktemp -d)";
-
-  checkFlags = [
-    "--skip checker::hunspell::tests::hunspell_binding_is_sane"
-  ];
 
   meta = with lib; {
     description = "Execute a command whenever a device is adb-connected ";

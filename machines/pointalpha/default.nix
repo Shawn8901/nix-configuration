@@ -61,6 +61,11 @@
     vulkan-tools
     neofetch
     fzf
+    
+    gnomeExtensions.caffeine
+    gnomeExtensions.alphabetical-app-grid
+    gnomeExtensions.screenshot-tool
+    
   ];
 
   fonts.fonts = with pkgs; [
@@ -163,6 +168,7 @@
   programs.steam.enable = true;
   programs.dconf.enable = true;
   programs.adb.enable = true;
+  programs.noisetorch.enable = true;
 
   environment = {
     variables.EDITOR = "nano";
