@@ -59,8 +59,8 @@ in
       "noisetorch" = {
         Unit = {
           Description = "Noisetorch Noise Cancelling";
-          Requires = "sys-devices-pci0000:00-0000:00:07.1-0000:2e:00.3-usb5-5\\x2d3-5\\x2d3:1.0-sound-card2-controlC2.device";
-          After = "sys-devices-pci0000:00-0000:00:07.1-0000:2e:00.3-usb5-5\\x2d3-5\\x2d3:1.0-sound-card2-controlC2.device";
+          Requires = ''dev-snd-by\x2did-usb\x2dWOER_WOER_20180508\x2d00.device'';
+          After = ''dev-snd-by\x2did-usb\x2dWOER_WOER_20180508\x2d00.device'';
         };
         Install = {
           WantedBy = [ "default.target" ];
