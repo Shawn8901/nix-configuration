@@ -96,6 +96,8 @@
       gnome-keyring.enable = true;
       gnome-remote-desktop.enable = false;
       #experimental-features.realtime-scheduling = true;
+      evolution-data-server.enable = true;
+      gnome-online-accounts.enable = true;
     };
     openssh.enable = true;
     resolved.enable = true;
@@ -234,6 +236,7 @@
   programs.dconf.enable = true;
   programs.adb.enable = true;
   programs.noisetorch.enable = true;
+  programs.evolution.enable = true;
 
   environment = {
     variables.EDITOR = "nano";
