@@ -146,6 +146,9 @@
               interval = "1h";
               prefix = "zrepl_";
             };
+            send = {
+              encrypted = false;
+            };
             connect = {
               type = "tls";
               address = "tank:8888";
