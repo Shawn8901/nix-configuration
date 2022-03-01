@@ -12,6 +12,8 @@
       allowedUDPPorts = [ ];
       allowedTCPPorts = [ 9811 9090 ];
     };
+    networkmanager.enable = false;
+    dhcpcd.enable = false;
   };
 
   systemd.network = {
@@ -66,6 +68,7 @@
     gnomeExtensions.caffeine
     gnomeExtensions.alphabetical-app-grid
     gnomeExtensions.screenshot-tool
+    gnomeExtensions.remmina-search-provider
   ];
 
   fonts.fonts = with pkgs; [
@@ -110,8 +113,8 @@
       pulse.enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
-      #media-session.enable = false;
-      #wireplumber.enable = true;
+      media-session.enable = false;
+      wireplumber.enable = true;
     };
     flatpak.enable = false;
     printing = {
@@ -204,7 +207,7 @@
   users.mutableUsers = false;
   users.users.root.hashedPassword = config.my.secrets.root.hashedPassword;
 
-  #nix.settings.trusted-users = [ "shawn" ];
+  nix.settings.trusted-users = [ "shawn" ];
   users.users.shawn = {
     hashedPassword = config.my.secrets.shawn.hashedPassword;
     isNormalUser = true;

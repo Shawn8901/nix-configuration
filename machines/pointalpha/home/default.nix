@@ -26,7 +26,6 @@ in
       # Social
       discord
       teamspeak_client
-      #ts3overlay
 
       # Moonlander
       wally-cli
