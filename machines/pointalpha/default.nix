@@ -64,6 +64,9 @@
     neofetch
     fzf
     alsa-utils
+    OVMF
+    python3
+    python3Packages.pip
 
     gnomeExtensions.caffeine
     gnomeExtensions.alphabetical-app-grid
