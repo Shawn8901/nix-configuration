@@ -6,13 +6,14 @@ in
 
   home-manager.users.shawn = {
     imports = [
-      ../../../home/browser.nix
-      ../../../home/git.nix
-      ../../../home/vscode.nix
+      ./browser.nix
+      ./vscode.nix
     ];
+
     home.packages = with pkgs; [
       # Administration      
       remmina
+      authy
 
       # Finance
       portfolio

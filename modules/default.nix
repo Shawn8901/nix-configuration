@@ -4,6 +4,6 @@
   imports = [
     ./nix.nix
     ./build-tools.nix
+    ./home-manager.nix
   ];
 }
-

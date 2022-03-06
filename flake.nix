@@ -9,7 +9,7 @@
     pre-commit-hooks = { url = "github:cachix/pre-commit-hooks.nix"; inputs.nixpkgs.follows = "nixpkgs"; };
   };
 
-  outputs = { self, nixpkgs, flake-utils, home-manager, pre-commit-hooks, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, nur, home-manager, pre-commit-hooks, ... }@inputs:
 
     flake-utils.lib.mkFlake {
       inherit self inputs;
@@ -18,29 +18,24 @@
 
       sharedOverlays = [
         self.overlay
-        inputs.nur.overlay
+        nur.overlay
       ];
 
       channelsConfig.allowUnfree = true;
 
-      hostDefaults = {
-        modules = [
-          ./modules/nix.nix
-          ./.secrets
-        ];
-      };
+      hostDefaults.modules = [
+        home-manager.nixosModule
+        ./modules
+        ./.secrets
+      ];
 
       hosts = {
         pointalpha.modules = [
           ./machines/pointalpha
-          ./home
-          ./modules
-          home-manager.nixosModule
         ];
       };
 
-
-      overlay = import ./overlays { inherit inputs; };
+      overlay = import ./overlays;
 
       outputsBuilder = channels: with channels.nixpkgs; {
         devShell = mkShell {

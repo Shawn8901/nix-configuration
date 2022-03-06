@@ -1,6 +1,5 @@
-{ inputs }:
-
 final: prev: {
   remmina = prev.callPackage ./remmina { inherit prev; };
-  autoadb = prev.callPackage ./autoadb { inherit (inputs.darwin.apple_sdk.frameworks) Security; };
+  jameica = prev.callPackage ./jameica { inherit prev; };
+  autoadb = prev.callPackage ./autoadb { inherit (prev.darwin.apple_sdk.frameworks) Security; };
 }

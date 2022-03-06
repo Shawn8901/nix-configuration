@@ -2,12 +2,15 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ./hardware.nix
     ./home
   ];
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-9.4.4"
+  ];
+
   networking = {
-    hostName = "pointalpha";
     firewall = {
       allowedUDPPorts = [ ];
       allowedTCPPorts = [ 9811 9090 ];
@@ -42,7 +45,6 @@
 
   time.timeZone = "Europe/Berlin";
 
-  environment.pathsToLink = [ "/share/zsh" ];
   i18n.defaultLocale = "de_DE.UTF-8";
   console = {
     font = "Lat2-Terminus16";
@@ -50,20 +52,13 @@
   };
 
   environment.systemPackages = with pkgs; [
-    wget
-    git
-    cifs-utils
-    gnumake
-    tree
-    htop
-    nano
-    unzip
     jq
     glxinfo
     vulkan-tools
-    neofetch
-    fzf
+    cifs-utils
     alsa-utils
+    xdg-utils
+
     OVMF
     python3
     python3Packages.pip
@@ -241,6 +236,8 @@
       theme = "fletcherm";
     };
   };
+  environment.pathsToLink = [ "/share/zsh" ];
+
   programs.steam.enable = true;
   programs.dconf.enable = true;
   programs.adb.enable = true;
