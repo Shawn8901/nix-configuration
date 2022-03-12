@@ -80,7 +80,6 @@
       enable = true;
       layout = "de";
       displayManager.gdm.enable = true;
-      displayManager.gdm.wayland = true;
       desktopManager.gnome = {
         enable = true;
         favoriteAppsOverride = ''
@@ -114,7 +113,6 @@
       media-session.enable = false;
       wireplumber.enable = true;
     };
-    flatpak.enable = false;
     printing = {
       enable = true;
       drivers = [ pkgs.epson-escpr2 ];
