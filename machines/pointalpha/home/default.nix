@@ -53,7 +53,7 @@ in
           WantedBy = [ "default.target" ];
         };
         Service = {
-          ExecStart = "${pkgs.autoadb}/bin/autoadb ${pkgs.scrcpy}/bin/scrcpy -b 16M -s '{}'";
+          ExecStart = "${pkgs.autoadb}/bin/autoadb ${pkgs.scrcpy}/bin/scrcpy -b 16M --render-driver opengles2 -s '{}'";
         };
       };
       "noisetorch" = {

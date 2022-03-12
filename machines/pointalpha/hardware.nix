@@ -14,7 +14,7 @@
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
 
-    supportedFilesystems = [ "zfs" ];
+    supportedFilesystems = [ "zfs" "ntfs" ];
     zfs.devNodes = "/dev/disk/by-id";
   };
 

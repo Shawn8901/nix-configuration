@@ -1,9 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, libclang
-, stdenv
-, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,12 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-fmNySuOW+2HKIOIqIv/8W41ZXSmq3hbi+11yZBbhW5Q=";
 
-  buildInputs = [ ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
-
   meta = with lib; {
-    description = "Execute a command whenever a device is adb-connected ";
+    description = "Execute a command whenever a device is adb-connected";
     homepage = "https://github.com/rom1v/autoadb";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
