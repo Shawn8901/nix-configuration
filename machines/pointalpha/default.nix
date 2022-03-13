@@ -59,7 +59,6 @@
     alsa-utils
     xdg-utils
 
-    OVMF
     python3
     python3Packages.pip
 
@@ -199,7 +198,6 @@
       enable = true;
       onBoot = "ignore";
       qemu.package = pkgs.qemu_kvm;
-      qemu.ovmf.enable = true;
     };
   };
 
