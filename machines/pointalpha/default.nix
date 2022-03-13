@@ -208,6 +208,7 @@
   users.users.shawn = {
     hashedPassword = config.my.secrets.shawn.hashedPassword;
     isNormalUser = true;
+    group = "users";
     extraGroups = [ "wheel" "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
     uid = 1000;
     shell = pkgs.zsh;
@@ -257,5 +258,5 @@
   # remove bloatware (NixOS HTML file)
   documentation.nixos.enable = false;
 
-  system.stateVersion = "22.05";
+  system.stateVersion = "21.11";
 }
