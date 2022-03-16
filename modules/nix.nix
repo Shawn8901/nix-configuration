@@ -2,7 +2,7 @@
 
 {
   nix = {
-    package = pkgs.nixUnstable;
+    package = pkgs.nix;
     settings.auto-optimise-store = true;
     generateNixPathFromInputs = true;
     generateRegistryFromInputs = true;

@@ -20,7 +20,6 @@ flake-update:
 full: flake-update switch
 
 garbage-collect:
-	nix-collect-garbage -d
 	sudo nix-collect-garbage -d
 
 check:
@@ -35,6 +34,4 @@ build:
 
 switch:
 	sudo nixos-rebuild switch --flake .#${HOSTNAME} -L -v
-	echo "### NIXOS DIFF ###"
 	ls -v /nix/var/nix/profiles | tail -n 2 | awk '{print "/nix/var/nix/profiles/" $$0}' - | xargs nvd diff
-	echo ""

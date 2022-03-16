@@ -8,7 +8,7 @@
   networking = {
     firewall = {
       allowedUDPPorts = [ ];
-      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPorts = [ 80 443 9443 ];
     };
     networkmanager.enable = false;
     dhcpcd.enable = false;
@@ -48,7 +48,10 @@
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
   sound.enable = false;
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    liveRestore = false;
+  };
 
 
   users.mutableUsers = false;

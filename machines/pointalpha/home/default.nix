@@ -38,6 +38,8 @@ in
       virt-manager
       autoadb
       scrcpy
+
+      xorg.xeyes
     ];
 
     services.nextcloud-client = {
@@ -54,7 +56,7 @@ in
         };
         Service = {
           ExecStart = "${pkgs.autoadb}/bin/autoadb ${pkgs.scrcpy}/bin/scrcpy -b 16M --render-driver opengles2 -s '{}'";
-          Environment = "DISPLAY=:0";
+          Environment = "DISPLAY=:1";
         };
       };
       "noisetorch" = {

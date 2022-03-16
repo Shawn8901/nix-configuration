@@ -17,6 +17,10 @@
     };
     networkmanager.enable = false;
     dhcpcd.enable = false;
+    extraHosts = ''
+      192.168.11.12 portainer.pointjig.local 
+      192.168.11.12 edge.pointjig.local
+    '';
   };
 
   systemd.network = {
@@ -58,6 +62,7 @@
     cifs-utils
     alsa-utils
     xdg-utils
+    libva-utils
 
     python3
     python3Packages.pip
@@ -79,6 +84,7 @@
       enable = true;
       layout = "de";
       displayManager.gdm.enable = true;
+      displayManager.gdm.wayland = false;
       desktopManager.gnome = {
         enable = true;
         favoriteAppsOverride = ''
@@ -94,7 +100,6 @@
     gnome = {
       gnome-keyring.enable = true;
       gnome-remote-desktop.enable = false;
-      #experimental-features.realtime-scheduling = true;
       evolution-data-server.enable = true;
       gnome-online-accounts.enable = true;
     };
@@ -179,6 +184,9 @@
         ];
       };
     };
+    udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
+    '';
   };
   security.rtkit.enable = true;
 
@@ -191,6 +199,7 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
+    extraPackages = with pkgs; [ libva ];
   };
 
   virtualisation = {
@@ -243,6 +252,8 @@
 
   environment = {
     variables.EDITOR = "nano";
+    #variables.NIXOS_OZONE_WL = "1";
+    
     gnome.excludePackages = with pkgs.gnome; [
       totem
       cheese
