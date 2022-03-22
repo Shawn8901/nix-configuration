@@ -19,6 +19,8 @@ in
       portfolio
       jameica
 
+      libreoffice
+
       # Password and Sync
       nextcloud-client
       keepassxc
@@ -56,7 +58,7 @@ in
         };
         Service = {
           ExecStart = "${pkgs.autoadb}/bin/autoadb ${pkgs.scrcpy}/bin/scrcpy -b 16M --render-driver opengles2 -s '{}'";
-          Environment = "DISPLAY=:1";
+          Environment = ["DISPLAY=:1" "XAUTHORITY=/run/user/1000/gdm/Xauthority"];
         };
       };
       "noisetorch" = {
@@ -71,10 +73,11 @@ in
         Service = {
           Type = "simple";
           RemainAfterExit = "yes";
-          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i -s alsa_input.usb-WOER_WOER_20180508-00.analog-stereo -t 65";
+          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i -s alsa_input.usb-WOER_WOER_20180508-00.iec958-stereo -t 50";
           ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
           Restart = "on-failure";
           RestartSec = 3;
+          Nice=-10;
         };
       };
     };
@@ -98,6 +101,7 @@ in
       gnomeExtensions.caffeine.passthru.extensionUuid
       gnomeExtensions.alphabetical-app-grid.passthru.extensionUuid
       gnomeExtensions.screenshot-tool.passthru.extensionUuid
+      gnomeExtensions.remmina-search-provider.passthru.extensionUuid
     ];
   };
 }

@@ -84,7 +84,7 @@
       enable = true;
       layout = "de";
       displayManager.gdm.enable = true;
-      displayManager.gdm.wayland = false;
+      displayManager.gdm.wayland = true;
       desktopManager.gnome = {
         enable = true;
         favoriteAppsOverride = ''
@@ -96,6 +96,8 @@
           button-layout=":minimize,maximize,close"
         '';
       };
+      desktopManager.xterm.enable = false;
+      desktopManager.plasma5.enable = false;
     };
     gnome = {
       gnome-keyring.enable = true;
@@ -106,8 +108,9 @@
     openssh.enable = true;
     resolved.enable = true;
 
-    zfs.autoScrub.enable = true;
     zfs.trim.enable = true;
+    zfs.autoScrub.enable = true;
+    zfs.autoScrub.pools = [ "rpool" ];
 
     pipewire = {
       enable = true;
@@ -205,7 +208,7 @@
   virtualisation = {
     libvirtd = {
       enable = true;
-      onBoot = "ignore";
+      onBoot = "start";
       qemu.package = pkgs.qemu_kvm;
     };
   };
@@ -249,18 +252,19 @@
   programs.adb.enable = true;
   programs.noisetorch.enable = true;
   programs.evolution.enable = true;
+  programs.ssh.startAgent = true;
 
   environment = {
     variables.EDITOR = "nano";
-    #variables.NIXOS_OZONE_WL = "1";
-    
+    variables.NIXOS_OZONE_WL = "1";
+
     gnome.excludePackages = with pkgs.gnome; [
       totem
       cheese
     ] ++ (with pkgs; [
       epiphany
     ]);
-
+    
     etc."zrepl/pointalpha.key".text = config.my.secrets.zrepl.certificates.pointalpha.private;
     etc."zrepl/pointalpha.crt".text = config.my.secrets.zrepl.certificates.pointalpha.public;
     etc."zrepl/tank.crt".text = config.my.secrets.zrepl.certificates.tank.public;

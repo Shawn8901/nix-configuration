@@ -16,6 +16,8 @@
 
     supportedFilesystems = [ "zfs" "ntfs" ];
     zfs.devNodes = "/dev/disk/by-id";
+
+    kernelPackages = pkgs.linuxKernel.packages.linux_zen;
   };
 
   networking.hostName = "pointalpha";

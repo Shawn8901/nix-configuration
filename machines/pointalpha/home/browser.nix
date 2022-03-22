@@ -5,24 +5,25 @@ let
 in
 {
   home.sessionVariables = {
-    #MOZ_ENABLE_WAYLAND = 1;
-    #MOZ_DISABLE_RDD_SANDBOX = 1;
+    MOZ_ENABLE_WAYLAND = 1;
+    MOZ_DISABLE_RDD_SANDBOX = 1;
   };
   programs.firefox = {
     enable = true;
-    #package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-    #  forceWayland = true;
-    #};
+    package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+      forceWayland = true;
+    };
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin
       umatrix
       keepassxc-browser
+      plasma-integration
       (buildFirefoxXpiAddon {
         pname = "Tampermonkey";
-        version = "4.13.6136";
+        version = "4.15.6154";
         addonId = "firefox@tampermonkey.net";
-        url = "https://addons.mozilla.org/firefox/downloads/file/3768983/tampermonkey-4.13.6136-an+fx.xpi";
-        sha256 = "sha256-7ogucKRkqnIyJsmuc7WYwk5uENGCG1EmwH6FPOGmhWc=";
+        url = "https://addons.mozilla.org/firefox/downloads/file/3916879/tampermonkey-4.15.6154-an+fx.xpi";
+        sha256 = "sha256-VmPxiH+lDnodiTGh04/6Vh3+1rCohddcrJR+AZbGf1c=";
         meta = { };
       })
       (buildFirefoxXpiAddon {
