@@ -56,7 +56,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    jq
     glxinfo
     vulkan-tools
     cifs-utils
@@ -64,13 +63,11 @@
     xdg-utils
     libva-utils
 
-    python3
-    python3Packages.pip
-
-    gnomeExtensions.caffeine
-    gnomeExtensions.alphabetical-app-grid
-    gnomeExtensions.screenshot-tool
-    gnomeExtensions.remmina-search-provider
+    plasma5Packages.skanlite
+    plasma5Packages.ark
+    plasma5Packages.kate
+    plasma5Packages.kdeplasma-addons
+    plasma5Packages.xdg-desktop-portal-kde
   ];
 
   fonts.fonts = with pkgs; [
@@ -83,27 +80,14 @@
     xserver = {
       enable = true;
       layout = "de";
-      displayManager.gdm.enable = true;
-      displayManager.gdm.wayland = true;
-      desktopManager.gnome = {
+
+      displayManager.sddm.enable = true;
+      displayManager.defaultSession = "plasmawayland";
+      desktopManager.plasma5 = {
         enable = true;
-        favoriteAppsOverride = ''
-          [org.gnome.shell]
-          favorite-apps=[ "firefox.desktop", "org.gnome.Nautilus.desktop", "steam.desktop", "discord.desktop", "teamspeak.desktop" ,"org.keepassxc.KeePassXC.desktop"]
-        '';
-        extraGSettingsOverrides = ''
-          [org.gnome.desktop.wm.preferences]
-          button-layout=":minimize,maximize,close"
-        '';
+        phononBackend = "vlc";
       };
       desktopManager.xterm.enable = false;
-      desktopManager.plasma5.enable = false;
-    };
-    gnome = {
-      gnome-keyring.enable = true;
-      gnome-remote-desktop.enable = false;
-      evolution-data-server.enable = true;
-      gnome-online-accounts.enable = true;
     };
     openssh.enable = true;
     resolved.enable = true;
@@ -190,6 +174,7 @@
     udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
     '';
+    avahi.enable = true;
   };
   security.rtkit.enable = true;
 
@@ -251,20 +236,12 @@
   programs.dconf.enable = true;
   programs.adb.enable = true;
   programs.noisetorch.enable = true;
-  programs.evolution.enable = true;
   programs.ssh.startAgent = true;
 
   environment = {
     variables.EDITOR = "nano";
     variables.NIXOS_OZONE_WL = "1";
 
-    gnome.excludePackages = with pkgs.gnome; [
-      totem
-      cheese
-    ] ++ (with pkgs; [
-      epiphany
-    ]);
-    
     etc."zrepl/pointalpha.key".text = config.my.secrets.zrepl.certificates.pointalpha.private;
     etc."zrepl/pointalpha.crt".text = config.my.secrets.zrepl.certificates.pointalpha.public;
     etc."zrepl/tank.crt".text = config.my.secrets.zrepl.certificates.tank.public;

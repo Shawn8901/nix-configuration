@@ -94,14 +94,7 @@ in
     programs.gpg.enable = true;
     services.gpg-agent = {
       enable = true;
-      pinentryFlavor = "gnome3";
+      pinentryFlavor = "qt";
     };
-
-    dconf.settings."org/gnome/shell".enabled-extensions = with pkgs; [
-      gnomeExtensions.caffeine.passthru.extensionUuid
-      gnomeExtensions.alphabetical-app-grid.passthru.extensionUuid
-      gnomeExtensions.screenshot-tool.passthru.extensionUuid
-      gnomeExtensions.remmina-search-provider.passthru.extensionUuid
-    ];
   };
 }
