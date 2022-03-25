@@ -33,5 +33,5 @@ build:
 	nvd diff $$(ls --reverse -v /nix/var/nix/profiles | head --lines=1 | awk '{print "/nix/var/nix/profiles/" $$0}' -) result
 
 switch:
-	sudo nixos-rebuild switch --flake .#${HOSTNAME} -L -v
+	sudo nixos-rebuild switch --flake .#${HOSTNAME} -L
 	ls -v /nix/var/nix/profiles | tail -n 2 | awk '{print "/nix/var/nix/profiles/" $$0}' - | xargs nvd diff

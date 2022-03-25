@@ -18,6 +18,10 @@
     zfs.devNodes = "/dev/disk/by-id";
 
     kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+
+    kernel.sysctl = {
+      "vm.swappiness" = lib.mkDefault 1;
+    };
   };
 
   networking.hostName = "pointalpha";

@@ -187,7 +187,7 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
-    extraPackages = with pkgs; [ libva ];
+    extraPackages = with pkgs; [ libva rocm-opencl-icd rocm-opencl-runtime ];
   };
 
   virtualisation = {
@@ -239,6 +239,7 @@
   programs.ssh.startAgent = true;
 
   environment = {
+    variables.AMD_VULKAN_ICD = "RADV";
     variables.EDITOR = "nano";
     variables.NIXOS_OZONE_WL = "1";
 

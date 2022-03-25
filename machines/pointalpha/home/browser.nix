@@ -18,14 +18,7 @@ in
       umatrix
       keepassxc-browser
       plasma-integration
-      (buildFirefoxXpiAddon {
-        pname = "Tampermonkey";
-        version = "4.15.6154";
-        addonId = "firefox@tampermonkey.net";
-        url = "https://addons.mozilla.org/firefox/downloads/file/3916879/tampermonkey-4.15.6154-an+fx.xpi";
-        sha256 = "sha256-VmPxiH+lDnodiTGh04/6Vh3+1rCohddcrJR+AZbGf1c=";
-        meta = { };
-      })
+      tampermonkey
       (buildFirefoxXpiAddon {
         pname = "Video-DownloadHelper";
         version = "7.6.0";
