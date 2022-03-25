@@ -42,6 +42,8 @@ in
       scrcpy
 
       xorg.xeyes
+
+      s25rttr
     ];
 
     services.nextcloud-client = {
