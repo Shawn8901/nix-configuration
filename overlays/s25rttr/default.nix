@@ -1,10 +1,21 @@
-{ 
-  stdenv, lib, fetchFromGitHub, requireFile,
-  cmake, pkg-config,
-  boost, bzip2, curl, gettext, libiconv, miniupnpc, SDL2, SDL2_mixer, libsamplerate
+{ stdenv
+, lib
+, fetchFromGitHub
+, requireFile
+, cmake
+, pkg-config
+, boost
+, bzip2
+, curl
+, gettext
+, libiconv
+, miniupnpc
+, SDL2
+, SDL2_mixer
+, libsamplerate
 }:
-let 
-  gamefiles = import ./s2files.nix { inherit stdenv requireFile;  };
+let
+  gamefiles = import ./s2files.nix { inherit stdenv requireFile; };
 in
 stdenv.mkDerivation rec {
   pname = "s25rttr";
@@ -44,8 +55,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-      ls -alh $out
-      rm -rf $out/share/s25rttr/S2/
-      ln -s "${gamefiles}" $out/share/s25rttr/S2
+    ls -alh $out
+    rm -rf $out/share/s25rttr/S2/
+    ln -s "${gamefiles}" $out/share/s25rttr/S2
   '';
 }

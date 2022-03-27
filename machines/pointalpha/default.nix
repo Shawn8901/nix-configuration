@@ -17,10 +17,6 @@
     };
     networkmanager.enable = false;
     dhcpcd.enable = false;
-    extraHosts = ''
-      192.168.11.12 portainer.pointjig.local 
-      192.168.11.12 edge.pointjig.local
-    '';
   };
 
   systemd.network = {
@@ -191,22 +187,6 @@
     };
   };
 
-  users.mutableUsers = false;
-  users.users.root.hashedPassword = config.my.secrets.root.hashedPassword;
-
-  nix.settings.trusted-users = [ "shawn" ];
-  users.users.shawn = {
-    hashedPassword = config.my.secrets.shawn.hashedPassword;
-    isNormalUser = true;
-    group = "users";
-    extraGroups = [ "wheel" "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
-    uid = 1000;
-    shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
-    ];
-  };
-
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
   programs.steam.enable = true;
@@ -217,7 +197,6 @@
 
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
-    variables.EDITOR = "nano";
     variables.NIXOS_OZONE_WL = "1";
 
     etc."zrepl/pointalpha.key".text = config.my.secrets.zrepl.certificates.pointalpha.private;

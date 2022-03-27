@@ -6,6 +6,6 @@
     ./nix.nix
     ./build-tools.nix
     ./home-manager.nix
-    ./zsh.nix
+    ./user-config.nix
   ];
 }
