@@ -47,14 +47,6 @@
     };
   };
 
-  time.timeZone = "Europe/Berlin";
-
-  i18n.defaultLocale = "de_DE.UTF-8";
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "de";
-  };
-
   environment.systemPackages = with pkgs; [
     glxinfo
     vulkan-tools
@@ -215,22 +207,6 @@
   };
 
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
-
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    enableBashCompletion = true;
-    enableGlobalCompInit = true;
-    interactiveShellInit = ''
-      neofetch
-    '';
-    ohMyZsh = {
-      enable = true;
-      plugins = [ "git" "command-not-found" "cp" "zsh-interactive-cd" ];
-      theme = "fletcherm";
-    };
-  };
-  environment.pathsToLink = [ "/share/zsh" ];
 
   programs.steam.enable = true;
   programs.dconf.enable = true;

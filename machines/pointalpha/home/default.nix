@@ -20,6 +20,8 @@ in
       jameica
 
       libreoffice
+      inkscape
+      gimp
 
       # Password and Sync
       nextcloud-client

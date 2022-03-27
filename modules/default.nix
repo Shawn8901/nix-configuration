@@ -2,8 +2,10 @@
 
 {
   imports = [
+    ./locale.nix
     ./nix.nix
     ./build-tools.nix
     ./home-manager.nix
+    ./zsh.nix
   ];
 }
