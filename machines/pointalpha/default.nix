@@ -163,10 +163,11 @@
         ];
       };
     };
-    udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
-    '';
+    #udev.extraRules = ''
+    #  ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
+    #'';
     avahi.enable = true;
+    avahi.nssmdns = true;
   };
   security.rtkit.enable = true;
 

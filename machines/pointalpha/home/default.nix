@@ -62,7 +62,7 @@ in
         };
         Service = {
           ExecStart = "${pkgs.autoadb}/bin/autoadb ${pkgs.scrcpy}/bin/scrcpy -b 16M --render-driver opengles2 -s '{}'";
-          Environment = ["DISPLAY=:1" "XAUTHORITY=/run/user/1000/gdm/Xauthority"];
+          Environment = [ "DISPLAY=:1" "XAUTHORITY=/run/user/1000/gdm/Xauthority" ];
         };
       };
       "noisetorch" = {
@@ -81,7 +81,7 @@ in
           ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
           Restart = "on-failure";
           RestartSec = 3;
-          Nice=-10;
+          Nice = -10;
         };
       };
     };
@@ -91,7 +91,7 @@ in
       shellAliases = {
         nas_mount = "sudo mount -t cifs //tank.fritz.box/joerg /media/nas -o ${nas_credentials},iocharset=utf8,uid=1000,gid=1000,forcegid,forceuid,vers=3.0";
         nas_umount = "sudo umount /media/nas";
-        stfc = "adb connect blissos";
+        stfc = "adb disconnet blissos; adb connect blissos";
       };
     };
 
