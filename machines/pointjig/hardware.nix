@@ -10,6 +10,10 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+  boot.kernel.sysctl = {
+    "vm.swappiness" = lib.mkDefault 1;
+  };
 
   boot.loader.grub = {
     enable = true;
@@ -26,6 +30,4 @@
     };
 
   swapDevices = [ ];
-
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
