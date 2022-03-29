@@ -55,7 +55,6 @@
     plasma5Packages.ark
     plasma5Packages.kate
     plasma5Packages.kdeplasma-addons
-    plasma5Packages.xdg-desktop-portal-kde
   ];
 
   fonts.fonts = with pkgs; [
@@ -198,7 +197,6 @@
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
     variables.NIXOS_OZONE_WL = "1";
-
     etc."zrepl/pointalpha.key".text = config.my.secrets.zrepl.certificates.pointalpha.private;
     etc."zrepl/pointalpha.crt".text = config.my.secrets.zrepl.certificates.pointalpha.public;
     etc."zrepl/tank.crt".text = config.my.secrets.zrepl.certificates.tank.public;

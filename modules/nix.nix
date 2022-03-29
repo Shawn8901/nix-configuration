@@ -10,6 +10,8 @@
     extraOptions = ''
       experimental-features = nix-command flakes
       builders-use-substitutes = true
+      keep-outputs = true
+      keep-derivations = true
     '';
     gc = {
       automatic = true;

@@ -45,8 +45,17 @@ in
 
       xorg.xeyes
 
+      # Games
       s25rttr
+      proton-ge-custom
+
+      # Shell
+      stfc
     ];
+
+  home.sessionVariables = {
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${pkgs.proton-ge-custom}";
+  };
 
     services.nextcloud-client = {
       startInBackground = true;
@@ -91,7 +100,6 @@ in
       shellAliases = {
         nas_mount = "sudo mount -t cifs //tank.fritz.box/joerg /media/nas -o ${nas_credentials},iocharset=utf8,uid=1000,gid=1000,forcegid,forceuid,vers=3.0";
         nas_umount = "sudo umount /media/nas";
-        stfc = "adb disconnet blissos; adb connect blissos";
       };
     };
 
