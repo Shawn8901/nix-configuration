@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, requireFile
+, git
 , cmake
 , pkg-config
 , boost
@@ -14,19 +14,22 @@
 , SDL2_mixer
 , libsamplerate
 }:
-let
-  gamefiles = import ./s2files.nix { inherit stdenv requireFile; };
-in
+
 stdenv.mkDerivation rec {
   pname = "s25rttr";
   version = "0.9.5";
+
+  message = ''
+    Copy the S2 folder of the Settler 2 Gold Edition to ~/.s25rttr/S2/".
+  '';
 
   src = fetchFromGitHub {
     owner = "Return-To-The-Roots";
     repo = "s25client";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-6gBvWYP08eoT2i8kco/3nXnTKwVa20DWtv6fLaoH07M";
+    leaveDotGit = true;
+    sha256 = "sha256-+89F6LtY6nEJEgVM1R5qiPhG6CLEKymowzEowuLCfUM=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    git
     boost
     bzip2
     curl
@@ -46,17 +50,22 @@ stdenv.mkDerivation rec {
     libsamplerate
   ];
 
+  patches = [ ./skip_placeholder.patch ];
+
   cmakeBuildType = "Release";
+
   cmakeFlags = [
-    "-DRTTR_REVISION=${version}"
+    "-DRTTR_VERSION=${version}"
     "-DRTTR_USE_SYSTEM_LIBS=ON"
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
-    "-DRTTR_ENABLE_OPTIMIZATIONS=OFF"
+    "-DRTTR_INSTALL_PLACEHOLDER=OFF"
+    "-DRTTR_GAMEDIR=~/.s25rttr/S2/"
   ];
 
-  postInstall = ''
-    ls -alh $out
-    rm -rf $out/share/s25rttr/S2/
-    ln -s "${gamefiles}" $out/share/s25rttr/S2
-  '';
+  meta = with lib; {
+    description = "Return To The Roots (Settlers II(R) Clone) ";
+    homepage = "https://www.rttr.info/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ shawn8901 ];
+  };
 }

@@ -1,0 +1,29 @@
+From 144e6eb6a5dd8d73b344016b8eaffe00653d1c03 Mon Sep 17 00:00:00 2001
+From: Shawn8901 <shawn8901@googlemail.com>
+Date: Wed, 30 Mar 2022 19:38:28 +0200
+Subject: [PATCH] created option to not write placeholder files in install
+ phase
+
+---
+ CMakeLists.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4562487ef..77f515af8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -384,7 +384,10 @@ if(NOT WIN32)
+ endif()
+ 
+ # Placeholder for S2 installation
+-install(FILES "${RTTR_S2_PLACEHOLDER_PATH}" DESTINATION "${RTTR_GAMEDIR}")
++option(RTTR_INSTALL_PLACEHOLDER "Defines if a the placeholder file should be written on install." ON)
++if(RTTR_INSTALL_PLACEHOLDER)
++    install(FILES "${RTTR_S2_PLACEHOLDER_PATH}" DESTINATION "${RTTR_GAMEDIR}")
++endif()
+ 
+ ################################################################################
+ # Postbuild
+-- 
+2.35.1
+
