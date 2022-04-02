@@ -6,6 +6,7 @@
     extensions = (with pkgs.vscode-extensions; [
       ms-python.python
       ms-python.vscode-pylance
+      editorconfig.editorconfig
 
       esbenp.prettier-vscode
 
