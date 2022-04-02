@@ -6,6 +6,15 @@
     ./home
   ];
 
+  age.secrets = {
+    zrepl_pointalpha = {
+      file = ../../secrets/zrepl_pointalpha.age;
+    };
+    samba_credentials = {
+      file = ../../secrets/samba_credentials.age;
+    };
+  };
+
   nixpkgs.config.permittedInsecurePackages = [
     "electron-9.4.4"
   ];
@@ -197,9 +206,10 @@
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
     variables.NIXOS_OZONE_WL = "1";
-    etc."zrepl/pointalpha.key".text = config.my.secrets.zrepl.certificates.pointalpha.private;
-    etc."zrepl/pointalpha.crt".text = config.my.secrets.zrepl.certificates.pointalpha.public;
-    etc."zrepl/tank.crt".text = config.my.secrets.zrepl.certificates.tank.public;
+    etc."samba/credentials".source = config.age.secrets.samba_credentials.path;
+    etc."zrepl/pointalpha.key".source = config.age.secrets.zrepl_pointalpha.path;
+    etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
+    etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
   };
 
   # remove bloatware (NixOS HTML file)

@@ -1,6 +1,15 @@
 { config, pkgs, ... }:
 
 {
+  age.secrets = {
+    shawn_password_file = {
+      file = ../secrets/shawn_password.age;
+    };
+    root_password_file = {
+      file = ../secrets/root_password.age;
+    };
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -19,14 +28,14 @@
 
   users.mutableUsers = false;
   users.users.root = {
-    hashedPassword = config.my.secrets.root.hashedPassword;
+    passwordFile = config.age.secrets.root_password_file.path;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
     ];
   };
   nix.settings.trusted-users = [ "shawn" ];
   users.users.shawn = {
-    hashedPassword = config.my.secrets.shawn.hashedPassword;
+    passwordFile = config.age.secrets.shawn_password_file.path;
     isNormalUser = true;
     group = "users";
     extraGroups = [ "wheel" "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];

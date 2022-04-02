@@ -8,9 +8,10 @@
     nur = { url = "github:nix-community/NUR"; inputs.nixpkgs.follows = "nixpkgs"; };
     pre-commit-hooks = { url = "github:cachix/pre-commit-hooks.nix"; inputs.nixpkgs.follows = "nixpkgs"; };
     deploy-rs = { url = "github:serokell/deploy-rs"; inputs.nixpkgs.follows = "nixpkgs"; };
+    agenix = {url = "github:ryantm/agenix"; inputs.nixpkgs.follows = "nixpkgs"; };
   };
 
-  outputs = { self, nixpkgs, flake-utils, nur, home-manager, pre-commit-hooks, deploy-rs, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, nur, home-manager, agenix, deploy-rs, pre-commit-hooks, ... }@inputs:
 
     flake-utils.lib.mkFlake {
       inherit self inputs;
@@ -20,14 +21,25 @@
       sharedOverlays = [
         self.overlay
         nur.overlay
+        deploy-rs.overlay
+        agenix.overlay
       ];
 
       channelsConfig.allowUnfree = true;
 
       hostDefaults.modules = [
         home-manager.nixosModule
+        {
+          home-manager = {
+            extraSpecialArgs = {
+              inherit inputs self;
+            };
+            useUserPackages = true;
+            useGlobalPkgs = true;
+          };
+        }
+        agenix.nixosModule
         ./modules
-        ./.secrets
       ];
 
       hosts = {
@@ -51,7 +63,7 @@
 
       outputsBuilder = channels: with channels.nixpkgs; {
         devShell = mkShell {
-          packages = [ nixpkgs-fmt lefthook ];
+          packages = [ nixpkgs-fmt lefthook deploy-rs ];
           inherit (self.checks.${system}.pre-commit-check) shellHook;
         };
 

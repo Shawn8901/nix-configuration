@@ -1,3 +1,6 @@
 { writeShellScriptBin }:
 
-writeShellScriptBin "stfc" "adb disconnect blissos; adb connect blissos"
+writeShellScriptBin "stfc" ''
+  adb disconnect blissos
+  adb connect blissos
+''

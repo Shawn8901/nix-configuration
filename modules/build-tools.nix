@@ -16,5 +16,7 @@
     unzip
     python3
     python3Packages.pip
+    agenix
+    deploy-rs.deploy-rs
   ];
 }
