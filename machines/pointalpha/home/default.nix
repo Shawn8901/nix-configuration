@@ -24,7 +24,6 @@
       # Password and Sync
       nextcloud-client
       keepassxc
-      git-crypt
 
       # Social
       discord
@@ -41,8 +40,6 @@
       autoadb
       scrcpy
 
-      xorg.xeyes
-
       # Games
       s25rttr
       proton-ge-custom
@@ -50,7 +47,8 @@
       # Shell
       stfc
       nas
-    ];
+
+    ] ++ (with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {
       STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${pkgs.proton-ge-custom}";

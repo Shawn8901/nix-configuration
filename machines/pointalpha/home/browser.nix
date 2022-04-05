@@ -12,6 +12,7 @@ in
     enable = true;
     package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
       forceWayland = true;
+      extraNativeMessagingHosts = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
     };
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin

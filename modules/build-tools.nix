@@ -6,7 +6,6 @@
     git
     jq
     wget
-    git
     fzf
     gnumake
     tree
@@ -14,8 +13,6 @@
     nano
     neofetch
     unzip
-    python3
-    python3Packages.pip
     age
     agenix
     deploy-rs.deploy-rs

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Return To The Roots (Settlers II(R) Clone) ";
+    description = "Return To The Roots (Settlers II(R) Clone)";
     homepage = "https://www.rttr.info/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ shawn8901 ];

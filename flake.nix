@@ -59,21 +59,5 @@
           };
         };
       };
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-
-      outputsBuilder = channels: with channels.nixpkgs; {
-        devShell = mkShell {
-          packages = [ nixpkgs-fmt lefthook deploy-rs ];
-          inherit (self.checks.${system}.pre-commit-check) shellHook;
-        };
-
-        checks = {
-          pre-commit-check = pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks.nixpkgs-fmt.enable = true;
-            hooks.shellcheck.enable = true;
-          };
-        };
-      };
     };
 }
