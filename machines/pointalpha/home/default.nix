@@ -48,6 +48,8 @@
       stfc
       nas
 
+      haguichi
+
     ] ++ (with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {

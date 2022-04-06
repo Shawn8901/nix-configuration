@@ -172,6 +172,8 @@
     #'';
     avahi.enable = true;
     avahi.nssmdns = true;
+
+    logmein-hamachi.enable = true;
   };
   security.rtkit.enable = true;
 

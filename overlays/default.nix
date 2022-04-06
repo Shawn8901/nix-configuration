@@ -7,4 +7,5 @@ final: prev: {
   proton-ge-custom = prev.callPackage ./proton-ge-custom { };
   stfc = prev.callPackage ./shellscripts/stfc.nix { };
   nas = prev.callPackage ./shellscripts/nas.nix { };
+  haguichi = prev.callPackage ./haguichi { };  
 }
