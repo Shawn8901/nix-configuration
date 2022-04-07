@@ -21,8 +21,9 @@
 
   networking = {
     firewall = {
-      allowedUDPPorts = [ ];
-      allowedTCPPorts = [ 9811 9090 ];
+      allowedUDPPortRanges = [ { from = 2300; to = 2400; } ];
+      allowedTCPPorts = [ 9811 9090 47624 ];
+      allowedTCPPortRanges = [{ from = 2300; to = 2400; } ];
     };
     networkmanager.enable = false;
     dhcpcd.enable = false;
@@ -63,7 +64,9 @@
     plasma5Packages.skanlite
     plasma5Packages.ark
     plasma5Packages.kate
+    plasma5Packages.kalk
     plasma5Packages.kdeplasma-addons
+
   ];
 
   fonts.fonts = with pkgs; [

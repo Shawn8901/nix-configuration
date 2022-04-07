@@ -50,6 +50,8 @@
 
       haguichi
 
+      protontricks
+
     ] ++ (with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {
