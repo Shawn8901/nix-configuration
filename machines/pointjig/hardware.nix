@@ -12,7 +12,7 @@
   boot.extraModulePackages = [ ];
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
   boot.kernel.sysctl = {
-    "vm.swappiness" = lib.mkDefault 1;
+    "vm.swappiness" = lib.mkDefault 10;
   };
 
   boot.loader.grub = {

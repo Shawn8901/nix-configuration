@@ -11,7 +11,6 @@ endif
 
 # cf https://stackoverflow.com/questions/2214575/passing-arguments-to-make-run
 deploy:
-	make flake-update
 	nix run github:serokell/deploy-rs .#${REMOTE_HOST}
 
 flake-update:

@@ -14,5 +14,10 @@ in
   "samba_credentials.age".publicKeys = [ shawn pointalpha ];
 
   "zrepl_pointalpha.age".publicKeys = [ shawn pointalpha ];
+
   "zrepl_tank.age".publicKeys = [ shawn tank ];
+  "ela_password.age".publicKeys = [ shawn tank ];
+  "nextcloud_db.age".publicKeys = [ shawn tank ];
+  "nextcloud_admin.age".publicKeys = [ shawn tank ];
+  "ztank_key.age".publicKeys = [ shawn tank ];
 }

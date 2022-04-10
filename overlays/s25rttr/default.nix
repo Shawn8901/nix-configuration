@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "0.9.5";
 
   message = ''
-    Copy the S2 folder of the Settler 2 Gold Edition to ~/.s25rttr/S2/".
+    Copy the S2 folder of the Settler 2 Gold Edition to /var/lib/s25rttr/S2/".
   '';
 
   src = fetchFromGitHub {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libsamplerate
   ];
 
-  patches = [ ./skip_placeholder.patch ];
+  patches = [ ./cmake_file_placeholder.patch ];
 
   cmakeBuildType = "Release";
 
@@ -59,13 +59,14 @@ stdenv.mkDerivation rec {
     "-DRTTR_USE_SYSTEM_LIBS=ON"
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DRTTR_INSTALL_PLACEHOLDER=OFF"
-    "-DRTTR_GAMEDIR=~/.s25rttr/S2/"
+    "-DRTTR_GAMEDIR=/var/lib/s25rttr/S2/"
   ];
 
   meta = with lib; {
     description = "Return To The Roots (Settlers II(R) Clone)";
     homepage = "https://www.rttr.info/";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ shawn8901 ];
   };
 }

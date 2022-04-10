@@ -20,7 +20,7 @@
       supportedSystems = [ "x86_64-linux" ];
 
       sharedOverlays = [
-        self.overlay
+        self.overlays.default
         nur.overlay
         deploy-rs.overlay
         agenix.overlay
@@ -46,9 +46,10 @@
       hosts = {
         pointalpha.modules = [ ./machines/pointalpha ];
         pointjig.modules = [ ./machines/pointjig ];
+        tank.modules = [ ./machines/tank ];
       };
 
-      overlay = import ./overlays;
+      overlays.default = import ./overlays;
 
       deploy.nodes = {
         pointjig = {
@@ -57,6 +58,14 @@
             sshUser = "root";
             user = "root";
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.pointjig;
+          };
+        };
+        tank = {
+          hostname = "tank";
+          profiles.system = {
+            sshUser = "root";
+            user = "root";
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.tank;
           };
         };
       };

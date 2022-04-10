@@ -52,6 +52,8 @@
 
       protontricks
 
+      samba
+
     ] ++ (with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {

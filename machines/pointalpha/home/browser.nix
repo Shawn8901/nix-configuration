@@ -67,6 +67,15 @@ in
         "toolkit.telemetry.shutdownPingSender.enabled" = false;
         "toolkit.telemetry.unified" = false;
         "toolkit.telemetry.updatePing.enabled" = false;
+        "gfx.webrender.compositor.force-enabled" = true;
+        "browser.cache.disk.enable" = false;
+        "browser.cache.memory.enable" = true;
+        "extensions.pocket.enabled" = false;
+
+        "media.ffmpeg.vaapi.enabled" = true;
+        "media.ffvpx.enabled" = false;
+        "media.navigator.mediadatadecoder_vpx_enabled" = true;
+        "media.rdd-vpx.enabled" = false;
       };
     };
   };

@@ -27,6 +27,8 @@
     };
     networkmanager.enable = false;
     dhcpcd.enable = false;
+    useNetworkd = true;
+    useDHCP = false;
   };
 
   systemd.network = {
@@ -52,6 +54,7 @@
       };
     };
   };
+  systemd.network.wait-online.anyInterface = true;
 
   environment.systemPackages = with pkgs; [
     glxinfo

@@ -24,6 +24,7 @@
       };
     };
   };
+  systemd.network.wait-online.anyInterface = true;
 
   environment.systemPackages = with pkgs; [
   ];
