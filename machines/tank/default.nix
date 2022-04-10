@@ -54,6 +54,20 @@
         ignoredInterfaces = [ "enp4s0" ];
       };
     };
+
+    paths."nextcloud-secret-watcher" = {
+      wantedBy = [ "multi-user.target" ];
+      pathConfig = {
+        PathModified = config.age.secrets.nextcloud_db_file.path;
+      };
+    };
+    services."nextcloud-secret-watcher" = {
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "systemctl restart phpfpm-nextcloud.service";
+      };
+    };
+
     services.backup-nextcloud = {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
@@ -271,6 +285,7 @@
         adminpassFile = config.age.secrets.nextcloud_admin_file.path;
         defaultPhoneRegion = "DE";
       };
+      caching.apcu = true;
     };
     postgresql = {
       enable  = true;
