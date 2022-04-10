@@ -220,6 +220,10 @@
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
   };
 
+  users.users.shawn = {
+      extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
+  };
+
   # remove bloatware (NixOS HTML file)
   documentation.nixos.enable = false;
 

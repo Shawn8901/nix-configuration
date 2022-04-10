@@ -29,6 +29,7 @@
       channelsConfig.allowUnfree = true;
 
       hostDefaults.modules = [
+        agenix.nixosModule
         home-manager.nixosModule
         {
           home-manager = {
@@ -39,7 +40,6 @@
             useGlobalPkgs = true;
           };
         }
-        agenix.nixosModule
         ./modules
       ];
 

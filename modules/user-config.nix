@@ -38,7 +38,7 @@
     passwordFile = config.age.secrets.shawn_password_file.path;
     isNormalUser = true;
     group = "users";
-    extraGroups = [ "wheel" "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
+    extraGroups = [ "wheel" ];
     uid = 1000;
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
