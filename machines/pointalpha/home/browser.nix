@@ -20,6 +20,7 @@ in
       keepassxc-browser
       plasma-integration
       tampermonkey
+      betterttv
       (buildFirefoxXpiAddon {
         pname = "Video-DownloadHelper";
         version = "7.6.0";
