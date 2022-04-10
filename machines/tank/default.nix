@@ -40,25 +40,100 @@
     useDHCP = false;
   };
 
-  systemd.network = {
-    enable = true;
-    networks = {
-      "20-wired" = {
-        matchConfig.Name = "eno1";
-        networkConfig.DHCP = "yes";
-        networkConfig.Domains = "fritz.box ~box ~.";
+  systemd = {
+    network = {
+      enable = true;
+      networks = {
+        "20-wired" = {
+          matchConfig.Name = "eno1";
+          networkConfig.DHCP = "yes";
+          networkConfig.Domains = "fritz.box ~box ~.";
+        };
+      };
+      wait-online = {
+        ignoredInterfaces = [ "enp4s0" ];
       };
     };
-    wait-online = {
-      ignoredInterfaces = [ "enp4s0" ];
+    services.backup-nextcloud = {
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      description = "Copy nextcloud stuff to dropbox";
+      serviceConfig = {
+        Type = "oneshot";
+        User = "shawn";
+        ExecStart = ''${pkgs.rclone}/bin/rclone copy /var/lib/nextcloud/data/shawn/files/ dropbox:'';
+      };
+    };
+    timers.backup-nextcloud = {
+      wantedBy = [ "timers.target" ];
+      partOf = [ "backup-nextcloud.service" ];
+      timerConfig = {
+        OnCalendar = [ "daily" ];
+        Persistent = true;
+        OnBootSec = "15min";
+      };
+    };
+
+    services.sched-shutdown = {
+      description = "Scheduled shutdown";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = ''${pkgs.systemd}/bin/systemctl --force poweroff'';
+      };
+    };
+    timers.sched-shutdown = {
+      wantedBy = [ "timers.target" ];
+      partOf = [ "sched-shutdown.service" ];
+      timerConfig = {
+        OnCalendar = [ "*-*-* 00:01:00" ];
+      };
+    };
+
+    services.rtcwakeup = {
+      description = "Automatic wakeup";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = ''${pkgs.util-linux}/bin/rtcwake -m no -u -t $(${pkgs.coreutils-full}/bin/date +\%s -d 'tomorrow 14:00')'';
+      };
+    };
+    timers.rtcwakeup = {
+      wantedBy = [ "timers.target" ];
+      partOf = [ "sched-shutdown.service" ];
+      timerConfig = {
+        Persistent = true;
+        OnBootSec = "1min";
+        OnCalendar = [ "*-*-* 14:05" ];
+      };
+    };
+
+    services."usb-backup-ela@" = {
+      description = "Backups /media/daniela to usb hdd";
+      serviceConfig = {
+        Type = "simple";
+        GuessMainPID = false;
+        WorkingDirectory = "/media/daniela";
+        ExecStart = ''${pkgs.usb-backup-ela}/bin/usb-backup-ela %I'';
+      };
     };
   };
 
   environment.systemPackages = with pkgs; [
     cifs-utils
+    rclone
+    coreutils-full
+    util-linux
+    beep
+    usb-backup-ela
+    udisks2
+    rsync
   ];
 
   services = {
+    udev.extraRules = ''
+      SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="04fc", ATTRS{idProduct}=="0c25", ATTR{partition}=="2", TAG+="systemd", ENV{SYSTEMD_WANTS}="usb-backup-ela@%k.service"
+    '';
+
+
     openssh.enable = true;
     resolved.enable = true;
 
@@ -194,6 +269,7 @@
         dbpassFile = config.age.secrets.nextcloud_db_file.path;
         adminuser = "admin";
         adminpassFile = config.age.secrets.nextcloud_admin_file.path;
+        defaultPhoneRegion = "DE";
       };
     };
     postgresql = {
@@ -271,6 +347,15 @@
         };
       };
     };
+
+    fail2ban = {
+      enable = true;
+      maxretry = 5;
+      ignoreIP = [
+        "192.168.11.0/24"
+      ];
+    };
+    vnstat.enable = true;
   };
   security.rtkit.enable = true;
   security.acme = {
@@ -291,6 +376,9 @@
       group = "users";
       uid = 1001;
       shell = pkgs.zsh;
+    };
+    shawn = {
+      extraGroups = [ "nextcloud" ];
     };
   };
 
