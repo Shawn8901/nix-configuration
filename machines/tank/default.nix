@@ -107,7 +107,7 @@
       description = "Automatic wakeup";
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = ''${pkgs.util-linux}/bin/rtcwake -m no -u -t $(${pkgs.coreutils-full}/bin/date +\%s -d 'tomorrow 14:00')'';
+        ExecStart = ''${pkgs.util-linux}/bin/rtcwake -m no -u -t $(${pkgs.coreutils-full}/bin/date -d 'tomorrow 14:00')'';
       };
     };
     timers.rtcwakeup = {
