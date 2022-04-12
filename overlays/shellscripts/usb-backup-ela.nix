@@ -18,13 +18,13 @@ writeShellScriptBin "usb-backup-ela" ''
   ${pkgs.coreutils-full}/bin/sync
 
   echo "Unmount $BACKUP_DEVICE"
-  ${pkgs.udisks2}/bin/udisksctl unmount -b $\{BACKUP_DEVICE}
+  ${pkgs.udisks2}/bin/udisksctl unmount -b ''${BACKUP_DEVICE}
 
   sleep 1
   ${pkgs.beep}/bin/beep
 
   echo "Poweroff device"
-  ${pkgs.udisks2} power-off -b $\{BACKUP_DEVICE//[[:digit:]]/}
+  ${pkgs.udisks2}/bin/udisksctl power-off -b ''${BACKUP_DEVICE//[[:digit:]]}
 
   ${pkgs.beep}/bin/beep
 ''
