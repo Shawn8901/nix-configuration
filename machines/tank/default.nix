@@ -25,6 +25,26 @@
       owner = "nextcloud";
       group = "nextcloud";
     };
+    nextcloud_prometheus_file = {
+      file = ../../secrets/nextcloud_prometheus.age;
+      owner = "nextcloud-exporter";
+      group = "nextcloud-exporter";
+    };
+    grafana_db_file = {
+      file = ../../secrets/grafana_db.age;
+      owner = "grafana";
+      group = "grafana";
+    };
+    grafana_admin_password_file = {
+      file = ../../secrets/grafana_admin_password_file.age;
+      owner = "grafana";
+      group = "grafana";
+    };
+    grafana_secret_key_file = {
+      file = ../../secrets/grafana_secret_key_file.age;
+      owner = "grafana";
+      group = "grafana";
+    };
   };
 
   networking = {
@@ -133,13 +153,6 @@
 
   environment.systemPackages = with pkgs; [
     cifs-utils
-    rclone
-    coreutils-full
-    util-linux
-    beep
-    usb-backup-ela
-    udisks2
-    rsync
   ];
 
   services = {
@@ -289,12 +302,18 @@
     };
     postgresql = {
       enable  = true;
-      ensureDatabases = [ "nextcloud" ];
+      ensureDatabases = [ "${config.services.nextcloud.config.dbname}" "${config.services.grafana.database.name}" ];
       ensureUsers = [
         {
-          name = "nextcloud";
+          name = "${config.services.nextcloud.config.dbuser}";
           ensurePermissions = {
-            "DATABASE nextcloud" = "ALL PRIVILEGES";
+            "DATABASE ${config.services.nextcloud.config.dbname}" = "ALL PRIVILEGES";
+          };
+        }
+        {
+          name = "${config.services.grafana.database.user}";
+          ensurePermissions = {
+            "DATABASE ${config.services.grafana.database.name}" = "ALL PRIVILEGES";
           };
         }
       ];
@@ -306,10 +325,17 @@
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       virtualHosts = {
-
-        "next.tank.pointjig.de" = {
+        "${config.services.nextcloud.hostName}" = {
           forceSSL = true;
           enableACME = true;
+        };
+        "${config.services.grafana.domain}" = {
+          enableACME = true;
+          forceSSL = true;
+          locations."/" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
+              proxyWebsockets = true;
+          };
         };
       };
     };
@@ -371,6 +397,121 @@
       ];
     };
     vnstat.enable = true;
+    smartd.enable = true;
+    prometheus = {
+      enable = true;
+      port = 9001;
+      retentionTime = "30d";
+
+      globalConfig = {
+        external_labels = { machine = "${config.networking.hostName}"; };
+      };
+      scrapeConfigs = [
+        {
+          job_name = "node";
+          static_configs = [
+            {
+              targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
+              labels = { machine = "${config.networking.hostName}"; };
+            }
+          ];
+        }
+        {
+          job_name = "zrepl";
+          static_configs = [
+            {
+              targets = [ "localhost${toString (builtins.head config.services.zrepl.settings.global.monitoring ).listen}" ];
+              labels = { machine = "${config.networking.hostName}"; };
+            }
+          ];
+        }
+        {
+          job_name = "postgres";
+          static_configs = [
+            {
+              targets = [ "localhost:${toString config.services.prometheus.exporters.postgres.port}" ];
+              labels = { machine = "${config.networking.hostName}"; };
+            }
+          ];
+        }
+        {
+          job_name = "nextcloud";
+          static_configs = [
+            {
+              targets = [ "localhost:${toString config.services.prometheus.exporters.nextcloud.port}" ];
+              labels = { machine = "${config.networking.hostName}"; };
+            }
+          ];
+        }
+        {
+          job_name = "systemd";
+          static_configs = [
+            {
+              targets = [ "localhost:${toString config.services.prometheus.exporters.systemd.port}" ];
+              labels = { machine = "${config.networking.hostName}"; };
+            }
+          ];
+        }
+        {
+          job_name = "fritzbox";
+          static_configs = [
+            {
+              targets = [ "localhost:${toString config.services.prometheus.exporters.fritzbox.port}" ];
+              labels = { machine = "fritz.box"; };
+            }
+          ];
+        }
+      ];
+
+      exporters = {
+        node = {
+          enable = true;
+          enabledCollectors = [ "systemd" ];
+          port = 9100;
+        };
+        systemd.enable = true;
+        fritzbox = {
+          enable = true;
+          extraFlags = ["-username test" "-password test1231"];
+        };
+        nextcloud = {
+          enable = true;
+          port = 9205;
+          url = "https://${config.services.nextcloud.hostName}";
+          passwordFile = config.age.secrets.nextcloud_prometheus_file.path;
+        };
+        postgres = {
+          enable = true;
+          port = 9187;
+          runAsLocalSuperUser = true;
+        };
+      };
+    };
+    grafana = {
+      enable = true;
+      domain = "status.tank.pointjig.de";
+      database = {
+        type = "postgres";
+        host = "/run/postgresql";
+        user = "grafana";
+        passwordFile = config.age.secrets.grafana_db_file.path;
+      };
+      security = {
+        adminPasswordFile = config.age.secrets.grafana_admin_password_file.path;
+        secretKeyFile = config.age.secrets.grafana_secret_key_file.path;
+      };
+      analytics.reporting.enable = false;
+      provision = {
+        enable = true;
+        datasources = [
+          {
+            name = "Prometheus";
+            type = "prometheus";
+            url = "http://localhost:${builtins.toString config.services.prometheus.port}";
+          }
+        ];
+      };
+    };
   };
   security.rtkit.enable = true;
   security.acme = {

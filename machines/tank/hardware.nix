@@ -19,7 +19,7 @@
     zfs.extraPools = [ "ztank" ];
     zfs.requestEncryptionCredentials = [ "ztank" ];
 
-    kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
     kernel.sysctl = {
       "vm.swappiness" = lib.mkDefault 10;
@@ -117,5 +117,5 @@
 
   swapDevices = [ { device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee"; } ];
 
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = true;
 }
