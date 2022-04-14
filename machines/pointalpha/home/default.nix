@@ -3,11 +3,6 @@
 {
 
   home-manager.users.shawn = {
-    imports = [
-      ./browser.nix
-      ./vscode.nix
-    ];
-
     home.packages = with pkgs; [
       # Administration
       remmina
@@ -60,48 +55,29 @@
       STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${pkgs.proton-ge-custom}";
     };
 
-    services.nextcloud-client = {
-      startInBackground = true;
+    env = {
+      vscode.enable = true;
+      browser.enable = true;
     };
 
-    systemd.user.services = {
-      "autoadb" = {
-        Unit = {
-          Description = "Start autoadb";
-        };
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-        Service = {
-          ExecStart = "${pkgs.autoadb}/bin/autoadb ${pkgs.scrcpy}/bin/scrcpy -b 16M --render-driver opengles2 -s '{}'";
-          Environment = [ "DISPLAY=:1" "XAUTHORITY=/run/user/1000/gdm/Xauthority" ];
-        };
+    services = {
+      nextcloud-client = {
+        startInBackground = true;
       };
-      "noisetorch" = {
-        Unit = {
-          Description = "Noisetorch Noise Cancelling";
-          Requires = ''dev-snd-by\x2did-usb\x2dWOER_WOER_20180508\x2d00.device'';
-          After = ''dev-snd-by\x2did-usb\x2dWOER_WOER_20180508\x2d00.device'';
-        };
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-        Service = {
-          Type = "simple";
-          RemainAfterExit = "yes";
-          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i -s alsa_input.usb-WOER_WOER_20180508-00.iec958-stereo -t 50";
-          ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
-          Restart = "on-failure";
-          RestartSec = 3;
-          Nice = -10;
-        };
+      gpg-agent = {
+        enable = true;
+        pinentryFlavor = "qt";
+      };
+      autoadb.enable = true;
+      noisetorch = {
+        enable = true;
+        threshold = 75;
+        device = "alsa_input.usb-WOER_WOER_20180508-00.iec958-stereo";
+        deviceUnit = ''dev-snd-by\x2did-usb\x2dWOER_WOER_20180508\x2d00.device'';
       };
     };
 
     programs.gpg.enable = true;
-    services.gpg-agent = {
-      enable = true;
-      pinentryFlavor = "qt";
-    };
+
   };
 }

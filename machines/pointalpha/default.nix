@@ -68,6 +68,7 @@
     plasma5Packages.ark
     plasma5Packages.kate
     plasma5Packages.kalk
+    plasma5Packages.kmail
     plasma5Packages.kdeplasma-addons
 
   ];
@@ -108,6 +109,7 @@
     };
     printing = {
       enable = true;
+      listenAddresses = [ "localhost:631" ];
       drivers = [ pkgs.epson-escpr2 ];
     };
     zrepl = {
@@ -173,15 +175,13 @@
         ];
       };
     };
-    #udev.extraRules = ''
-    #  ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
-    #'';
     avahi.enable = true;
     avahi.nssmdns = true;
 
     logmein-hamachi.enable = true;
   };
   security.rtkit.enable = true;
+  security.pam.services.shawn.enableKwallet = true;
 
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;

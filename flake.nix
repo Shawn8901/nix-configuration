@@ -38,6 +38,7 @@
             };
             useUserPackages = true;
             useGlobalPkgs = true;
+            sharedModules = [ ./modules/home ];
           };
         }
         ./modules
