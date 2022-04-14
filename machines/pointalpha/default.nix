@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware.nix
-    ./home
+    ./home.nix
   ];
 
   age.secrets = {
@@ -227,5 +227,5 @@
   # remove bloatware (NixOS HTML file)
   documentation.nixos.enable = false;
 
-  system.stateVersion = "21.11";
+  system.stateVersion = "22.05";
 }
