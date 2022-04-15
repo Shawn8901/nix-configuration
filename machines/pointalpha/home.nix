@@ -23,6 +23,7 @@
       # Social
       discord
       teamspeak_client
+      signal-desktop
 
       # Moonlander
       wally-cli
