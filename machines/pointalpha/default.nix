@@ -20,11 +20,16 @@
   ];
 
   networking = {
-    firewall = {
-      allowedUDPPortRanges = [ { from = 2300; to = 2400; } ];
-      allowedTCPPorts = [ 9811 9090 47624 ];
-      allowedTCPPortRanges = [{ from = 2300; to = 2400; } ];
-    };
+    firewall =
+      let
+        stronghold_range = { from = 2300; to = 2400; };
+        stronghold_tcp = 47624;
+      in
+      {
+        allowedUDPPortRanges = [ stronghold_range ];
+        allowedTCPPorts = [ config.services.prometheus.port stronghold_tcp ];
+        allowedTCPPortRanges = [ stronghold_range ];
+      };
     networkmanager.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;
@@ -176,7 +181,7 @@
       };
     };
 
-   prometheus = {
+    prometheus = {
       enable = true;
       port = 9001;
       retentionTime = "30d";
@@ -198,16 +203,7 @@
           job_name = "zrepl";
           static_configs = [
             {
-              targets = [ "localhost${toString (builtins.head config.services.zrepl.settings.global.monitoring ).listen}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
-        }
-        {
-          job_name = "systemd";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.systemd.port}" ];
+              targets = [ "localhost:${toString (builtins.head (helpers.zreplMonitoringPorts config.services.zrepl))}" ];
               labels = { machine = "${config.networking.hostName}"; };
             }
           ];
@@ -219,7 +215,6 @@
           enabledCollectors = [ "systemd" ];
           port = 9100;
         };
-        systemd.enable = true;
       };
     };
 
@@ -270,7 +265,7 @@
   };
 
   users.users.shawn = {
-      extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
+    extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
   };
 
   # remove bloatware (NixOS HTML file)
