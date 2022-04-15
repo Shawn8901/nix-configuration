@@ -28,7 +28,7 @@
 
       channelsConfig.allowUnfree = true;
 
-      hostDefaults.extraArgs = { hosts = self.nixosConfigurations; };
+      hostDefaults.extraArgs = { hosts = self.nixosConfigurations; helpers = import ./helpers { lib = nixpkgs.lib; }; };
       hostDefaults.modules = [
         agenix.nixosModule
         home-manager.nixosModule
