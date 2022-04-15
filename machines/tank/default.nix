@@ -1,4 +1,4 @@
-{ self, config, pkgs, lib, hosts, ... }:
+{ self, config, pkgs, lib, hosts, helpers, ... }:
 
 {
   imports = [
@@ -48,10 +48,13 @@
   };
 
   networking = {
-    firewall = {
+    firewall = let
+      zrepl = helpers.zreplServePorts config.services.zrepl;
+    in
+    {
       allowedUDPPorts = [ ];
       allowedUDPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 8888 ];
+      allowedTCPPorts = [ 80 443 ] ++ zrepl;
       allowedTCPPortRanges = [ ];
     };
     networkmanager.enable = false;
@@ -210,8 +213,35 @@
               ca = "/etc/zrepl/sapsrv01.crt";
               cert = "/etc/zrepl/tank.crt";
               key = "/etc/zrepl/tank.key";
-
               server_cn = "sapsrv01";
+            };
+            recv = {
+              placeholder = { encryption = "inherit"; };
+            };
+            pruning = {
+              keep_sender = [{
+                type = "regex";
+                regex = ".*";
+              }];
+              keep_receiver = [{
+                type = "grid";
+                grid = "14x1d(keep=all) | 3x30d";
+                regex = "^auto_daily.*";
+              }];
+            };
+          }
+          {
+            name = "sapsrv02_pull";
+            type = "pull";
+            root_fs = "ztank/sapsrv02";
+            interval =  "1h";
+            connect = {
+              type = "tls";
+              address = "sapsrv02.clansap.org:8888";
+              ca = "/etc/zrepl/sapsrv02.crt";
+              cert = "/etc/zrepl/tank.crt";
+              key = "/etc/zrepl/tank.key";
+              server_cn = "sapsrv02";
             };
             recv = {
               placeholder = { encryption = "inherit"; };
@@ -420,7 +450,7 @@
           job_name = "zrepl";
           static_configs = [
             {
-              targets = [ "localhost${toString (builtins.head config.services.zrepl.settings.global.monitoring ).listen}" ];
+              targets = [ "localhost:${toString (builtins.head (helpers.zreplMonitoringPorts config.services.zrepl))}" ];
               labels = { machine = "${config.networking.hostName}"; };
             }
           ];
@@ -557,6 +587,7 @@
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
     etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
     etc."zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
+    etc."zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
   };
 
   # remove bloatware (NixOS HTML file)
