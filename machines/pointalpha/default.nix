@@ -175,6 +175,55 @@
         ];
       };
     };
+
+   prometheus = {
+      enable = true;
+      port = 9001;
+      retentionTime = "30d";
+
+      globalConfig = {
+        external_labels = { machine = "${config.networking.hostName}"; };
+      };
+      scrapeConfigs = [
+        {
+          job_name = "node";
+          static_configs = [
+            {
+              targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
+              labels = { machine = "${config.networking.hostName}"; };
+            }
+          ];
+        }
+        {
+          job_name = "zrepl";
+          static_configs = [
+            {
+              targets = [ "localhost${toString (builtins.head config.services.zrepl.settings.global.monitoring ).listen}" ];
+              labels = { machine = "${config.networking.hostName}"; };
+            }
+          ];
+        }
+        {
+          job_name = "systemd";
+          static_configs = [
+            {
+              targets = [ "localhost:${toString config.services.prometheus.exporters.systemd.port}" ];
+              labels = { machine = "${config.networking.hostName}"; };
+            }
+          ];
+        }
+      ];
+      exporters = {
+        node = {
+          enable = true;
+          enabledCollectors = [ "systemd" ];
+          port = 9100;
+        };
+        systemd.enable = true;
+      };
+    };
+
+
     avahi.enable = true;
     avahi.nssmdns = true;
 
