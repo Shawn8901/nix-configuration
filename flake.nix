@@ -14,7 +14,7 @@
 
   outputs = { self, nixpkgs, flake-utils, nur, home-manager, agenix, deploy-rs, pre-commit-hooks, ... }@inputs:
 
-    flake-utils.lib.mkFlake {
+    flake-utils.lib.mkFlake rec {
       inherit self inputs;
 
       supportedSystems = [ "x86_64-linux" ];
@@ -28,6 +28,7 @@
 
       channelsConfig.allowUnfree = true;
 
+      hostDefaults.extraArgs = { hosts = self.nixosConfigurations; };
       hostDefaults.modules = [
         agenix.nixosModule
         home-manager.nixosModule

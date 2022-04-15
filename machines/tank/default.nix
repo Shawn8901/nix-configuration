@@ -1,4 +1,4 @@
-{ self, config, pkgs, lib, ... }:
+{ self, config, pkgs, lib, hosts, ... }:
 
 {
   imports = [
@@ -461,8 +461,20 @@
             }
           ];
         }
+        {
+          job_name = "${hosts.pointalpha.config.networking.hostName}";
+          honor_labels = true;
+          metrics_path = "/federate";
+          params = {
+            "match[]" = map (config: "{job='${config.job_name}'}") hosts.pointalpha.config.services.prometheus.scrapeConfigs;
+          };
+          static_configs = [
+            {
+              targets = [ "${hosts.pointalpha.config.networking.hostName}:${toString hosts.pointalpha.config.services.prometheus.port}" ];
+            }
+          ];
+        }
       ];
-
       exporters = {
         node = {
           enable = true;
