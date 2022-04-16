@@ -10,6 +10,10 @@
     initrd.kernelModules = [ "amdgpu" ];
     kernelModules = [ "kvm-amd" "cifs" ];
     extraModulePackages = [ ];
+    extraModprobeConfig = ''
+      options zfs zfs_arc_min=6442450944
+      options zfs zfs_arc_max=10737418240
+    '';
 
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
