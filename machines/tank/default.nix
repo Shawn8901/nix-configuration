@@ -433,6 +433,124 @@
       port = 9001;
       retentionTime = "30d";
 
+      configText = ''
+        {
+          "alerting": {
+            "alertmanagers": [],
+          },
+          "global": {
+            "external_labels": {
+              "machine": "tank"
+            }
+          },
+          "remote_read": [],
+          "remote_write": [],
+          "rule_files": [],
+          "scrape_configs": [
+            {
+              "job_name": "node",
+              "static_configs": [
+                {
+                  "labels": {
+                    "machine": "tank"
+                  },
+                  "targets": [
+                    "localhost:9100"
+                  ]
+                }
+              ]
+            },
+            {
+              "job_name": "zrepl",
+              "static_configs": [
+                {
+                  "labels": {
+                    "machine": "tank"
+                  },
+                  "targets": [
+                    "localhost:9811"
+                  ]
+                }
+              ]
+            },
+            {
+              "job_name": "postgres",
+              "static_configs": [
+                {
+                  "labels": {
+                    "machine": "tank"
+                  },
+                  "targets": [
+                    "localhost:9187"
+                  ]
+                }
+              ]
+            },
+            {
+              "job_name": "nextcloud",
+              "static_configs": [
+                {
+                  "labels": {
+                    "machine": "tank"
+                  },
+                  "targets": [
+                    "localhost:9205"
+                  ]
+                }
+              ]
+            },
+            {
+              "job_name": "fritzbox",
+              "static_configs": [
+                {
+                  "labels": {
+                    "machine": "fritz.box"
+                  },
+                  "targets": [
+                    "localhost:9133"
+                  ]
+                }
+              ]
+            },
+            {
+              "honor_labels": true,
+              "job_name": "pointalpha",
+              "metrics_path": "/federate",
+              "params": {
+                "match[]": [
+                  "{machine='pointalpha'}"
+                ]
+              },
+              "static_configs": [
+                {
+                  "labels": {},
+                  "targets": [
+                    "pointalpha:9001"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      '';
+    /*
+    scrapeConfigs = [
+    {
+        job_name = "myJob";
+        honor_labels = true;
+        metrics_path = "/federate";
+        params = {
+        "match[]" = [ "{myLabel='LabelValue'}"  ];
+        };
+        static_configs = [
+        {
+            targets = [ "other_host:9001" ];
+        }
+        ];
+    }
+    ];
+      */
+      /*
       globalConfig = {
         external_labels = { machine = "${config.networking.hostName}"; };
       };
@@ -474,15 +592,6 @@
           ];
         }
         {
-          job_name = "systemd";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.systemd.port}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
-        }
-        {
           job_name = "fritzbox";
           static_configs = [
             {
@@ -496,7 +605,7 @@
           honor_labels = true;
           metrics_path = "/federate";
           params = {
-            "match[]" = map (config: "{job='${config.job_name}'}") hosts.pointalpha.config.services.prometheus.scrapeConfigs;
+            "match[]" = [ "{machine='${hosts.pointalpha.config.networking.hostName}'}" ];
           };
           static_configs = [
             {
@@ -505,13 +614,13 @@
           ];
         }
       ];
+      */
       exporters = {
         node = {
           enable = true;
           enabledCollectors = [ "systemd" ];
           port = 9100;
         };
-        systemd.enable = true;
         fritzbox = {
           enable = true;
           extraFlags = ["-username test" "-password test1231"];
