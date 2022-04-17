@@ -50,12 +50,30 @@ def wait_for_port(host: str, port: int, shutdown: bool = False) -> None:
                 sys.stdout.write(".")
                 sys.stdout.flush()
 
+@task
+def boot(_, hosts="localhost"):
+    g: DeployGroup = parse_hosts(hosts)
+    def run(h: DeployHost) -> None:
+        flake_path = "/etc/nixos"
+        flake_attr = h.meta.get("flake_attr")
+        if flake_attr:
+            flake_path += "#" + flake_attr
+        target_host = h.meta.get("target_host", "localhost")
+
+        h.run_local(
+            f"rsync {' --exclude '.join([''] + RSYNC_EXCLUDES)} -vaF --delete -e ssh . {h.user}@{h.host}:/etc/nixos"
+        )
+        h.run(
+            f"nixos-rebuild boot --build-host localhost --target-host {target_host} --flake $(realpath {flake_path})"
+        )
+
+    g.run_function(run)
 
 @task
 def deploy(_, hosts="localhost"):
     g: DeployGroup = parse_hosts(hosts)
 
-    def deploy(h: DeployHost) -> None:
+    def run(h: DeployHost) -> None:
         flake_path = "/etc/nixos"
         flake_attr = h.meta.get("flake_attr")
         if flake_attr:
@@ -71,7 +89,7 @@ def deploy(_, hosts="localhost"):
         )
         h.run("ls -v /nix/var/nix/profiles | tail -n 2 | awk '{print \"/nix/var/nix/profiles/\" $$0}' - | xargs nvd diff")
 
-    g.run_function(deploy)
+    g.run_function(run)
 
 
 @task
@@ -94,7 +112,7 @@ def reboot(_, hosts=""):
     deploy_hosts = [DeployHost(h) for h in hosts.split(",")]
     for h in deploy_hosts:
         g = DeployGroup([h])
-        g.run("reboot &")
+        g.run("systemctl reboot &")
 
         wait_for_reboot(h)
 
