@@ -20,6 +20,7 @@ in
   "nextcloud_db.age".publicKeys = [ shawn tank ];
   "nextcloud_admin.age".publicKeys = [ shawn tank ];
   "nextcloud_prometheus.age".publicKeys = [ shawn tank ];
+  "fritzbox_prometheus.age".publicKeys = [ shawn tank ];
   "ztank_key.age".publicKeys = [ shawn tank ];
   "grafana_db.age".publicKeys = [ shawn tank ];
   "grafana_admin_password_file.age".publicKeys = [ shawn tank ];

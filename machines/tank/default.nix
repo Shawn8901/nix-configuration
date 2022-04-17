@@ -30,6 +30,11 @@
       owner = "nextcloud-exporter";
       group = "nextcloud-exporter";
     };
+    fritzbox_prometheus_file = {
+      file = ../../secrets/fritzbox_prometheus.age;
+      owner = "fritzbox-exporter";
+      group = "fritzbox-exporter";
+    };
     grafana_db_file = {
       file = ../../secrets/grafana_db.age;
       owner = "grafana";
@@ -624,7 +629,7 @@
         };
         fritzbox = {
           enable = true;
-          extraFlags = [ "-username test" "-password test1231" ];
+          extraFlags = [ "-username prometheus" "-password ${lib.escapeShellArg "@${config.age.secrets.fritzbox_prometheus_file.path}"}" ];
         };
         nextcloud = {
           enable = true;
