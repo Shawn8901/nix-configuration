@@ -36,6 +36,7 @@ in
         plasma-integration
         tampermonkey
         betterttv
+        h264ify
         (buildFirefoxXpiAddon {
           pname = "Video-DownloadHelper";
           version = "7.6.0";
