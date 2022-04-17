@@ -15,6 +15,5 @@
     unzip
     age
     agenix
-    deploy-rs.deploy-rs
   ];
 }

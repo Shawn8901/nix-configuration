@@ -8,11 +8,10 @@
     flake-utils = { url = "github:gytis-ivaskevicius/flake-utils-plus"; inputs.nixpkgs.follows = "nixpkgs"; };
     nur = { url = "github:nix-community/NUR"; inputs.nixpkgs.follows = "nixpkgs"; };
     pre-commit-hooks = { url = "github:cachix/pre-commit-hooks.nix"; inputs.nixpkgs.follows = "nixpkgs"; };
-    deploy-rs = { url = "github:serokell/deploy-rs"; inputs.nixpkgs.follows = "nixpkgs"; };
     agenix = { url = "github:ryantm/agenix"; inputs.nixpkgs.follows = "nixpkgs"; };
   };
 
-  outputs = { self, nixpkgs, flake-utils, nur, home-manager, agenix, deploy-rs, pre-commit-hooks, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, nur, home-manager, agenix, pre-commit-hooks, ... }@inputs:
 
     flake-utils.lib.mkFlake rec {
       inherit self inputs;
@@ -22,7 +21,6 @@
       sharedOverlays = [
         self.overlays.default
         nur.overlay
-        deploy-rs.overlay
         agenix.overlay
       ];
 
@@ -53,29 +51,20 @@
 
       overlays.default = import ./overlays;
 
-      deploy.nodes = {
-        pointjig = {
-          hostname = "pointjig";
-          profiles.system = {
-            sshUser = "root";
-            user = "root";
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.pointjig;
-          };
-        };
-        tank = {
-          hostname = "tank";
-          profiles.system = {
-            sshUser = "root";
-            user = "root";
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.tank;
-          };
-        };
-      };
       checks."x86_64-linux" = {
         pre-commit-hooks = inputs.pre-commit-hooks.lib."x86_64-linux".run {
           src = self;
           hooks.nixpkgs-fmt.enable = true;
           hooks.shellcheck.enable = true;
+        };
+      };
+      outputsBuilder = channels: {
+        devShell = channels.nixpkgs.mkShell {
+          nativeBuildInputs = with channels.nixpkgs; [
+            python3.pkgs.invoke
+            direnv
+            nix-direnv
+          ];
         };
       };
     };
