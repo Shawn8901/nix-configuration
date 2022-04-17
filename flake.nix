@@ -9,7 +9,7 @@
     nur = { url = "github:nix-community/NUR"; inputs.nixpkgs.follows = "nixpkgs"; };
     pre-commit-hooks = { url = "github:cachix/pre-commit-hooks.nix"; inputs.nixpkgs.follows = "nixpkgs"; };
     deploy-rs = { url = "github:serokell/deploy-rs"; inputs.nixpkgs.follows = "nixpkgs"; };
-    agenix = {url = "github:ryantm/agenix"; inputs.nixpkgs.follows = "nixpkgs"; };
+    agenix = { url = "github:ryantm/agenix"; inputs.nixpkgs.follows = "nixpkgs"; };
   };
 
   outputs = { self, nixpkgs, flake-utils, nur, home-manager, agenix, deploy-rs, pre-commit-hooks, ... }@inputs:
@@ -71,6 +71,12 @@
           };
         };
       };
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      checks."x86_64-linux" = {
+        pre-commit-hooks = inputs.pre-commit-hooks.lib."x86_64-linux".run {
+          src = self;
+          hooks.nixpkgs-fmt.enable = true;
+          hooks.shellcheck.enable = true;
+        };
+      };
     };
 }

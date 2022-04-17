@@ -48,15 +48,16 @@
   };
 
   networking = {
-    firewall = let
-      zrepl = helpers.zreplServePorts config.services.zrepl;
-    in
-    {
-      allowedUDPPorts = [ ];
-      allowedUDPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 ] ++ zrepl;
-      allowedTCPPortRanges = [ ];
-    };
+    firewall =
+      let
+        zrepl = helpers.zreplServePorts config.services.zrepl;
+      in
+      {
+        allowedUDPPorts = [ ];
+        allowedUDPPortRanges = [ ];
+        allowedTCPPorts = [ 80 443 ] ++ zrepl;
+        allowedTCPPortRanges = [ ];
+      };
     networkmanager.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;
@@ -184,7 +185,7 @@
           ];
         };
         jobs = [
-         {
+          {
             name = "pointalpha_sink";
             type = "sink";
             root_fs = "ztank/backup";
@@ -206,7 +207,7 @@
             name = "sapsrv01_pull";
             type = "pull";
             root_fs = "ztank/sapsrv01";
-            interval =  "1h";
+            interval = "1h";
             connect = {
               type = "tls";
               address = "sapsrv01.clansap.org:8888";
@@ -234,7 +235,7 @@
             name = "sapsrv02_pull";
             type = "pull";
             root_fs = "ztank/sapsrv02";
-            interval =  "1h";
+            interval = "1h";
             connect = {
               type = "tls";
               address = "sapsrv02.clansap.org:8888";
@@ -331,7 +332,7 @@
       caching.apcu = true;
     };
     postgresql = {
-      enable  = true;
+      enable = true;
       ensureDatabases = [ "${config.services.nextcloud.config.dbname}" "${config.services.grafana.database.name}" ];
       ensureUsers = [
         {
@@ -363,8 +364,8 @@
           enableACME = true;
           forceSSL = true;
           locations."/" = {
-              proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
-              proxyWebsockets = true;
+            proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
+            proxyWebsockets = true;
           };
         };
       };
@@ -533,9 +534,9 @@
           ]
         }
       '';
-    /*
-    scrapeConfigs = [
-    {
+      /*
+        scrapeConfigs = [
+        {
         job_name = "myJob";
         honor_labels = true;
         metrics_path = "/federate";
@@ -544,76 +545,76 @@
         };
         static_configs = [
         {
-            targets = [ "other_host:9001" ];
+        targets = [ "other_host:9001" ];
         }
         ];
-    }
-    ];
+        }
+        ];
       */
       /*
-      globalConfig = {
+        globalConfig = {
         external_labels = { machine = "${config.networking.hostName}"; };
-      };
-      scrapeConfigs = [
+        };
+        scrapeConfigs = [
         {
-          job_name = "node";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
+        job_name = "node";
+        static_configs = [
+        {
+        targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
+        labels = { machine = "${config.networking.hostName}"; };
+        }
+        ];
         }
         {
-          job_name = "zrepl";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString (builtins.head (helpers.zreplMonitoringPorts config.services.zrepl))}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
+        job_name = "zrepl";
+        static_configs = [
+        {
+        targets = [ "localhost:${toString (builtins.head (helpers.zreplMonitoringPorts config.services.zrepl))}" ];
+        labels = { machine = "${config.networking.hostName}"; };
+        }
+        ];
         }
         {
-          job_name = "postgres";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.postgres.port}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
+        job_name = "postgres";
+        static_configs = [
+        {
+        targets = [ "localhost:${toString config.services.prometheus.exporters.postgres.port}" ];
+        labels = { machine = "${config.networking.hostName}"; };
+        }
+        ];
         }
         {
-          job_name = "nextcloud";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.nextcloud.port}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
+        job_name = "nextcloud";
+        static_configs = [
+        {
+        targets = [ "localhost:${toString config.services.prometheus.exporters.nextcloud.port}" ];
+        labels = { machine = "${config.networking.hostName}"; };
+        }
+        ];
         }
         {
-          job_name = "fritzbox";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.fritzbox.port}" ];
-              labels = { machine = "fritz.box"; };
-            }
-          ];
+        job_name = "fritzbox";
+        static_configs = [
+        {
+        targets = [ "localhost:${toString config.services.prometheus.exporters.fritzbox.port}" ];
+        labels = { machine = "fritz.box"; };
+        }
+        ];
         }
         {
-          job_name = "${hosts.pointalpha.config.networking.hostName}";
-          honor_labels = true;
-          metrics_path = "/federate";
-          params = {
-            "match[]" = [ "{machine='${hosts.pointalpha.config.networking.hostName}'}" ];
-          };
-          static_configs = [
-            {
-              targets = [ "${hosts.pointalpha.config.networking.hostName}:${toString hosts.pointalpha.config.services.prometheus.port}" ];
-            }
-          ];
+        job_name = "${hosts.pointalpha.config.networking.hostName}";
+        honor_labels = true;
+        metrics_path = "/federate";
+        params = {
+        "match[]" = [ "{machine='${hosts.pointalpha.config.networking.hostName}'}" ];
+        };
+        static_configs = [
+        {
+        targets = [ "${hosts.pointalpha.config.networking.hostName}:${toString hosts.pointalpha.config.services.prometheus.port}" ];
         }
-      ];
+        ];
+        }
+        ];
       */
       exporters = {
         node = {
@@ -623,7 +624,7 @@
         };
         fritzbox = {
           enable = true;
-          extraFlags = ["-username test" "-password test1231"];
+          extraFlags = [ "-username test" "-password test1231" ];
         };
         nextcloud = {
           enable = true;
@@ -641,6 +642,7 @@
     grafana = {
       enable = true;
       domain = "status.tank.pointjig.de";
+      declarativePlugins = with pkgs.grafanaPlugins; [ grafana-polystat-panel grafana-clock-panel ];
       database = {
         type = "postgres";
         host = "/run/postgresql";
@@ -666,8 +668,8 @@
   };
   security.rtkit.enable = true;
   security.acme = {
-      acceptTerms = true;
-      defaults.email = "shawn@pointjig.de";
+    acceptTerms = true;
+    defaults.email = "shawn@pointjig.de";
   };
 
 

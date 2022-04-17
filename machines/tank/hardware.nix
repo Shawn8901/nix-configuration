@@ -119,7 +119,7 @@
     options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
   };
 
-  swapDevices = [ { device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee"; } ];
+  swapDevices = [{ device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee"; }];
 
   hardware.cpu.intel.updateMicrocode = true;
 }
