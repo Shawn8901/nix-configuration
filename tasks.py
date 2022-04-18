@@ -7,7 +7,6 @@
 #
 ###############################################################################
 
-from tracemalloc import take_snapshot
 from invoke import task
 from invoke.context import Context
 
@@ -18,6 +17,13 @@ from deploy_nixos import DeployHost, DeployGroup, parse_hosts, HostKeyCheck
 
 
 RSYNC_EXCLUDES = [".git", ".direnv"]
+ALL_HOSTS = DeployGroup([DeployHost("localhost"), DeployHost("tank"), ])
+
+def parse_host_arg(hosts:str):
+    if hosts == "all":
+        return ALL_HOSTS
+    return parse_hosts(hosts)
+
 
 def wait_for_reboot(h: DeployHost):
     print(f"Wait for {h.host} to shutdown", end="")
@@ -52,7 +58,7 @@ def wait_for_port(host: str, port: int, shutdown: bool = False) -> None:
 
 @task
 def boot(_, hosts="localhost"):
-    g: DeployGroup = parse_hosts(hosts)
+    g: DeployGroup = parse_host_arg(hosts)
     def run(h: DeployHost) -> None:
         flake_path = "/etc/nixos"
         flake_attr = h.meta.get("flake_attr")
@@ -71,7 +77,7 @@ def boot(_, hosts="localhost"):
 
 @task
 def deploy(_, hosts="localhost"):
-    g: DeployGroup = parse_hosts(hosts)
+    g: DeployGroup = parse_host_arg(hosts)
 
     def run(h: DeployHost) -> None:
         flake_path = "/etc/nixos"
@@ -119,7 +125,7 @@ def reboot(_, hosts=""):
 
 @task
 def collect_garbage(_, hosts="localhost"):
-    g: DeployGroup = parse_hosts(hosts)
+    g: DeployGroup = parse_host_arg(hosts)
 
     def run(h: DeployHost) -> None:
         h.run("find /nix/var/nix/gcroots/auto -type s -delete")
