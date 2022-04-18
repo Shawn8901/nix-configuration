@@ -51,13 +51,6 @@
 
       overlays.default = import ./overlays;
 
-      checks."x86_64-linux" = {
-        pre-commit-hooks = inputs.pre-commit-hooks.lib."x86_64-linux".run {
-          src = self;
-          hooks.nixpkgs-fmt.enable = true;
-          hooks.shellcheck.enable = true;
-        };
-      };
       outputsBuilder = channels: {
         devShell = channels.nixpkgs.mkShell {
           nativeBuildInputs = with channels.nixpkgs; [
@@ -65,6 +58,13 @@
             direnv
             nix-direnv
           ];
+        };
+        checks = {
+          pre-commit-hooks = inputs.pre-commit-hooks.lib."${channels.nixpkgs.system}".run {
+            src = self;
+            hooks.nixpkgs-fmt.enable = true;
+            hooks.shellcheck.enable = true;
+          };
         };
       };
     };
