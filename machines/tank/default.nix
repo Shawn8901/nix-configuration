@@ -438,7 +438,6 @@
       enable = true;
       port = 9001;
       retentionTime = "30d";
-
       configText = ''
         {
           "alerting": {
@@ -446,7 +445,7 @@
           },
           "global": {
             "external_labels": {
-              "machine": "tank"
+              "machine": "${config.networking.hostName}"
             }
           },
           "remote_read": [],
@@ -458,10 +457,10 @@
               "static_configs": [
                 {
                   "labels": {
-                    "machine": "tank"
+                    "machine": "${config.networking.hostName}"
                   },
                   "targets": [
-                    "localhost:9100"
+                    "localhost:${toString config.services.prometheus.exporters.node.port}"
                   ]
                 }
               ]
@@ -471,10 +470,10 @@
               "static_configs": [
                 {
                   "labels": {
-                    "machine": "tank"
+                    "machine": "${config.networking.hostName}"
                   },
                   "targets": [
-                    "localhost:9811"
+                    "localhost:${toString (builtins.head (helpers.zreplMonitoringPorts config.services.zrepl))}"
                   ]
                 }
               ]
@@ -484,10 +483,10 @@
               "static_configs": [
                 {
                   "labels": {
-                    "machine": "tank"
+                    "machine": "${config.networking.hostName}"
                   },
                   "targets": [
-                    "localhost:9187"
+                    "localhost:${toString config.services.prometheus.exporters.postgres.port}"
                   ]
                 }
               ]
@@ -497,10 +496,10 @@
               "static_configs": [
                 {
                   "labels": {
-                    "machine": "tank"
+                    "machine": "${config.networking.hostName}"
                   },
                   "targets": [
-                    "localhost:9205"
+                    "localhost:${toString config.services.prometheus.exporters.nextcloud.port}"
                   ]
                 }
               ]
@@ -513,25 +512,25 @@
                     "machine": "fritz.box"
                   },
                   "targets": [
-                    "localhost:9133"
+                    "localhost:${toString config.services.prometheus.exporters.fritzbox.port}"
                   ]
                 }
               ]
             },
             {
               "honor_labels": true,
-              "job_name": "pointalpha",
+              "job_name": "${hosts.pointalpha.config.networking.hostName}",
               "metrics_path": "/federate",
               "params": {
                 "match[]": [
-                  "{machine='pointalpha'}"
+                  "{machine='${hosts.pointalpha.config.networking.hostName}'}"
                 ]
               },
               "static_configs": [
                 {
                   "labels": {},
                   "targets": [
-                    "pointalpha:9001"
+                    "${hosts.pointalpha.config.networking.hostName}:${toString hosts.pointalpha.config.services.prometheus.port}"
                   ]
                 }
               ]
