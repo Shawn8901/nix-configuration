@@ -77,8 +77,5 @@
         deviceUnit = ''dev-snd-by\x2did-usb\x2dWOER_WOER_20180508\x2d00.device'';
       };
     };
-
-    programs.gpg.enable = true;
-
   };
 }
