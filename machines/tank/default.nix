@@ -540,6 +540,7 @@
             name = "Prometheus";
             type = "prometheus";
             url = "http://localhost:${builtins.toString config.services.prometheus.port}";
+            isDefault = true;
           }
         ];
       };
