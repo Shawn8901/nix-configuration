@@ -75,11 +75,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1650234580,
-        "narHash": "sha256-wTmlRedCrDl+XYJom65GMfI3RgA3eZE/w03lD28Txoc=",
+        "lastModified": 1650301786,
+        "narHash": "sha256-9rz9NqL+mC+BIggn2emuzZ+3MYogxVBTdsFK7E3Vv1k=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "742c6cb3e9d866e095c629162fe5faf519adeb26",
+        "rev": "8d38ca886880265d523a66fe3da4d42e92ab0748",
         "type": "github"
       },
       "original": {
@@ -90,27 +90,27 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1650298143,
-        "narHash": "sha256-Yj1IMnTFhHsDYVKGJymi3gosLde7lQAfE198iFnJQYs=",
+        "lastModified": 1650298451,
+        "narHash": "sha256-nV519+lUGYKm0k42imM8rZLKj8JTUkDoy8NDpWsb1R4=",
         "owner": "Shawn8901",
         "repo": "nixpkgs",
-        "rev": "7f01ff7822ac74f2e92a6fcc5367c16838038dd4",
+        "rev": "bfa958d8735062a9a70f6b20abaa0289a53eb0d7",
         "type": "github"
       },
       "original": {
         "owner": "Shawn8901",
-        "ref": "fix_prometheus_config_generation",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
     "nur": {
       "locked": {
-        "lastModified": 1650298024,
-        "narHash": "sha256-mBFmJUNtBT+sGfBPvxSVGnX/W7mE3GgPkmZTq+GU1KM=",
+        "lastModified": 1650303783,
+        "narHash": "sha256-uNI9ADxq7kYt6iXFbJRFo1VUbJh0k+RY0SplOjve9fM=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "fd0d415ae021b13abaf393c3cb8bde78986b6a24",
+        "rev": "2eb40b08e834976def66c50ba281ac5119dbc92a",
         "type": "github"
       },
       "original": {
