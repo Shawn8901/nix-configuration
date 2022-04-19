@@ -11,8 +11,8 @@
     kernelModules = [ "kvm-amd" "cifs" ];
     extraModulePackages = [ ];
     extraModprobeConfig = ''
-      options zfs zfs_arc_min=3221225472
-      options zfs zfs_arc_max=6442450944
+      options zfs zfs_arc_min=2147483648
+      options zfs zfs_arc_max=4294967296
     '';
 
     loader.systemd-boot.enable = true;
