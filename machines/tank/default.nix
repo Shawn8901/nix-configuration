@@ -148,7 +148,6 @@
         OnCalendar = [ "*-*-* 12:05" ];
       };
     };
-
     services."usb-backup-ela@" = {
       description = "Backups /media/daniela to usb hdd";
       serviceConfig = {
@@ -551,6 +550,8 @@
     acceptTerms = true;
     defaults.email = "shawn@pointjig.de";
   };
+  security.auditd.enable = false;
+  security.audit.enable = false;
 
 
   hardware.pulseaudio.enable = false;

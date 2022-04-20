@@ -185,7 +185,6 @@
       enable = true;
       port = 9001;
       retentionTime = "30d";
-
       globalConfig = {
         external_labels = { machine = "${config.networking.hostName}"; };
       };
@@ -217,15 +216,14 @@
         };
       };
     };
-
-
     avahi.enable = true;
     avahi.nssmdns = true;
-
     logmein-hamachi.enable = true;
   };
   security.rtkit.enable = true;
   security.pam.services.shawn.enableKwallet = true;
+  security.auditd.enable = false;
+  security.audit.enable = false;
 
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;
