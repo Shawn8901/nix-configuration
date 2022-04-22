@@ -17,7 +17,7 @@ from deploy_nixos import DeployHost, DeployGroup, parse_hosts, HostKeyCheck
 
 
 RSYNC_EXCLUDES = [".git", ".direnv"]
-ALL_HOSTS = DeployGroup([DeployHost("localhost"), DeployHost("tank"), ])
+ALL_HOSTS = DeployGroup([DeployHost("localhost"), DeployHost("tank"),  DeployHost("backup.pointjig.de"),])
 
 def parse_host_arg(hosts:str):
     if hosts == "all":

@@ -26,4 +26,6 @@ in
   "grafana_db.age".publicKeys = [ shawn tank ];
   "grafana_admin_password_file.age".publicKeys = [ shawn tank ];
   "grafana_secret_key_file.age".publicKeys = [ shawn tank ];
+
+  "zrepl_backup.age".publicKeys = [ shawn backup ];
 }

@@ -47,6 +47,7 @@
         pointalpha.modules = [ ./machines/pointalpha ];
         pointjig.modules = [ ./machines/pointjig ];
         tank.modules = [ ./machines/tank ];
+        backup.modules = [ ./machines/backup ];
       };
 
       overlays.default = import ./overlays;
