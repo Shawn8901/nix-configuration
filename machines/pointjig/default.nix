@@ -23,8 +23,8 @@
         networkConfig.Domains = "fritz.box ~box ~.";
       };
     };
+    wait-online.anyInterface = true;
   };
-  systemd.network.wait-online.anyInterface = true;
 
   environment.systemPackages = with pkgs; [
   ];
