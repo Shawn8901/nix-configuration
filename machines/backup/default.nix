@@ -33,12 +33,17 @@
       enable = true;
       networks = {
         "20-wired" = {
-          matchConfig.MACAddress = "fa:d1:59:0f:e0:aa";
-          networkConfig = {
-            Address = "5.182.206.58/23";
-            DNS = "8.8.8.8";
-            Gateway = "5.182.206.1";
-          };
+          matchConfig.Name = "ens3";
+          networkConfig.Address = [ "78.128.127.235/25" "2a01:8740:1:e4::2cd3/64" ];
+          networkConfig.DNS = "8.8.8.8";
+          networkConfig.Gateway = "78.128.127.129";
+          routes = [{
+            routeConfig =
+              {
+                Gateway = "2a01:8740:0001:0000:0000:0000:0000:0001";
+                GatewayOnLink = "yes";
+              };
+          }];
         };
       };
       wait-online.anyInterface = true;
@@ -52,7 +57,11 @@
 
   services = {
     xserver.enable = false;
-    openssh.enable = true;
+    openssh = {
+      enable = true;
+      passwordAuthentication = false;
+      kbdInteractiveAuthentication = false;
+    };
     resolved.enable = true;
     zfs = {
       autoScrub.enable = true;
@@ -66,14 +75,12 @@
             name = "ztank_sink";
             type = "sink";
             root_fs = "zbackup/replica";
-
             serve = {
               type = "tls";
               listen = ":8888";
               ca = "/etc/zrepl/tank.crt";
               cert = "/etc/zrepl/backup.crt";
               key = "/etc/zrepl/backup.key";
-
               client_cns = [ "tank" ];
             };
             recv = {

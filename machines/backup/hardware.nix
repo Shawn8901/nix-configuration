@@ -1,10 +1,13 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ ];
+  imports =
+    [
+      (modulesPath + "/profiles/qemu-guest.nix")
+    ];
 
   boot = {
-    initrd.availableKernelModules = [ "ata_piix" "mptsas" "floppy" ];
+    initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_blk" ];
     initrd.kernelModules = [ ];
     kernelModules = [ ];
     extraModulePackages = [ ];
@@ -19,7 +22,7 @@
     loader.grub = {
       enable = true;
       version = 2;
-      device = "/dev/sda";
+      device = "/dev/vda";
     };
   };
 
@@ -28,17 +31,11 @@
 
   fileSystems."/" =
     {
-      device = "/dev/disk/by-uuid/245619d4-3928-4015-8ed3-3d60a9c54e2a";
+      device = "/dev/disk/by-uuid/9de45e18-29e7-4330-b5ab-8a272f87aa36";
       fsType = "ext4";
     };
 
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/ca11b8b3-dc96-4ae3-b9da-4ef8f8557701";
-      fsType = "ext4";
-    };
+  swapDevices = [{ device = "/dev/disk/by-uuid/fdf6956a-9418-4da8-9702-45c8a670a0eb"; }];
 
-  swapDevices = [{ device = "/dev/disk/by-uuid/70c51df2-8c10-4fe1-a083-f1eb5caf43e0"; }];
-
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = true;
 }
