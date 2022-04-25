@@ -286,67 +286,37 @@
               ];
             };
           }
-          /*
-            {
-            name = "tank_replica";
-            type = "push";
-            filesystems = { "ztank/replica<" = true; };
-            snapshotting = {
-            type = "periodic";
-            interval = "1h";
-            prefix = "zrepl_";
-            };
-            connect = {
-            type = "tls";
-            address = "backup.pointjig.de:${toString (builtins.head (helpers.zreplServePorts hosts.backup.config.services.zrepl))}";
-            ca = "/etc/zrepl/backup.crt";
-            cert = "/etc/zrepl/tank.crt";
-            key = "/etc/zrepl/tank.key";
-            server_cn = "backup";
-            };
-            send = {
-            encrypted = true;
-            };
-            pruning = {
-            keep_sender = [
-            {
-            type = "not_replicated";
-            }
-            {
-            type = "last_n";
-            count = 10;
-            }
-            {
-            type = "grid";
-            grid = "1x1h(keep=all) | 24x1h | 30x1d | 6x30d | 1x365d";
-            regex = "^zrepl_.*";
-            }
-            {
-            type = "regex";
-            negate = true;
-            regex = "^zrepl_.*";
-            }
-            ];
-            keep_receiver = [
-            {
-            type = "grid";
-            grid = "1x1h(keep=all) | 24x1h | 30x1d | 6x30d | 5x365d";
-            regex = "^zrepl_.*";
-            }
-            ];
-            };
-            }*/
+
           {
             name = "tank_replica";
-            type = "snap";
+            type = "push";
             filesystems = { "ztank/replica<" = true; };
             snapshotting = {
               type = "periodic";
               interval = "1h";
               prefix = "zrepl_";
             };
+            connect = {
+              type = "tls";
+              address = "backup.pointjig.de:${toString (builtins.head (helpers.zreplServePorts hosts.backup.config.services.zrepl))}";
+              ca = "/etc/zrepl/backup.crt";
+              cert = "/etc/zrepl/tank.crt";
+              key = "/etc/zrepl/tank.key";
+              server_cn = "backup";
+            };
+            send = {
+              #bandwidth_limit = { max = "3145728 B"; };
+              encrypted = true;
+            };
             pruning = {
-              keep = [
+              keep_sender = [
+                {
+                  type = "not_replicated";
+                }
+                {
+                  type = "last_n";
+                  count = 10;
+                }
                 {
                   type = "grid";
                   grid = "1x1h(keep=all) | 24x1h | 30x1d | 6x30d | 1x365d";
@@ -355,6 +325,13 @@
                 {
                   type = "regex";
                   negate = true;
+                  regex = "^zrepl_.*";
+                }
+              ];
+              keep_receiver = [
+                {
+                  type = "grid";
+                  grid = "1x1h(keep=all) | 24x1h | 30x1d | 6x30d | 5x365d";
                   regex = "^zrepl_.*";
                 }
               ];
