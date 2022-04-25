@@ -4,7 +4,7 @@ let
   pointalpha = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILzWsbvSeDXhbrhEr+NLvG087/ahHJ0JV7a5gGtIr58l";
   pointjig = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB/mOOPSGuN9nikbteB8pZhKAE7i8K5/B214/UoBy0nU";
   tank = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsh4IWvnMlQTfU9N1BpcE0b4KzxDYrjh+k8TTqj07Gw";
-  backup = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBlSb7RMtCjn8Y4iy+iQUVduYUZnfssNSeJ/PaC/UAnm";
+  backup = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDg8wKBWXd+v9FeoujUAppfFp4FUX4IobYNujKO8PBGL";
 
   systems = [ pointalpha pointjig tank backup ];
 in
