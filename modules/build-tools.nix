@@ -15,5 +15,6 @@
     unzip
     age
     agenix
+    ncdu
   ];
 }

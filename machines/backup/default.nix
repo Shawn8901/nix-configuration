@@ -52,7 +52,6 @@
 
 
   environment.systemPackages = with pkgs; [
-    ncdu
   ];
 
   services = {

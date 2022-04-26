@@ -161,7 +161,6 @@
 
   environment.systemPackages = with pkgs; [
     cifs-utils
-    ncdu
   ];
 
   services = {
