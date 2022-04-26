@@ -176,14 +176,14 @@
                 }
                 {
                   type = "grid";
-                  grid = "1x1h(keep=all) | 6x1h | 7x1d";
+                  grid = "1x1h(keep=all) | 2x3h | 7x1d";
                   regex = "^pointalpha_root_.*";
                 }
               ];
               keep_receiver = [
                 {
                   type = "grid";
-                  grid = "1x1h(keep=all) | 7x1h | 15x1d | 6x30d | 1x365d";
+                  grid = "1x1h(keep=all) | 2x3h | 7x1d | 6x30d";
                   regex = "^zrepl_.*";
                 }
               ];

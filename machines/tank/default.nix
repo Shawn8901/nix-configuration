@@ -229,7 +229,7 @@
               }];
               keep_receiver = [{
                 type = "grid";
-                grid = "14x1d(keep=all) | 3x30d";
+                grid = "7x1d(keep=all) | 3x30d";
                 regex = "^auto_daily.*";
               }];
             };
@@ -257,7 +257,7 @@
               }];
               keep_receiver = [{
                 type = "grid";
-                grid = "14x1d(keep=all) | 3x30d";
+                grid = "7x1d(keep=all) | 3x30d";
                 regex = "^auto_daily.*";
               }];
             };
@@ -275,7 +275,7 @@
               keep = [
                 {
                   type = "grid";
-                  grid = "1x1h(keep=all) | 24x1h | 14x1d | 3x30d | 1x365d";
+                  grid = "1x3h(keep=all) | 2x6h | 7x1d | 1x30d | 1x365d";
                   regex = "^zrepl_.*";
                 }
                 {
@@ -286,7 +286,6 @@
               ];
             };
           }
-
           {
             name = "tank_replica";
             type = "push";
@@ -319,7 +318,7 @@
                 }
                 {
                   type = "grid";
-                  grid = "1x1h(keep=all) | 24x1h | 30x1d | 6x30d | 1x365d";
+                  grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
                   regex = "^zrepl_.*";
                 }
                 {
@@ -331,7 +330,7 @@
               keep_receiver = [
                 {
                   type = "grid";
-                  grid = "1x1h(keep=all) | 24x1h | 30x1d | 6x30d | 5x365d";
+                  grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
                   regex = "^zrepl_.*";
                 }
               ];
