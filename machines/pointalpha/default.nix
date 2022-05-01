@@ -75,13 +75,17 @@
     plasma5Packages.kalk
     plasma5Packages.kmail
     plasma5Packages.kdeplasma-addons
-
   ];
 
   fonts.fonts = with pkgs; [
-    roboto
-    font-awesome
     corefonts
+    dejavu_fonts
+    font-awesome
+    freefont_ttf
+    liberation_ttf
+    roboto
+    noto-fonts
+    noto-fonts-emoji
   ];
 
   services = {
