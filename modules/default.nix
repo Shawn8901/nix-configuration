@@ -8,6 +8,6 @@
     ./home-manager.nix
     ./user-config.nix
 
-    ./services/mimir.nix
+    #./services/mimir.nix
   ];
 }

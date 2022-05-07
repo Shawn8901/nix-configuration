@@ -32,7 +32,7 @@
   services = {
     openssh.enable = true;
     resolved.enable = true;
-    mimir.enable = true;
+    #mimir.enable = true;
     nginx.enable = true;
   };
   security.rtkit.enable = true;
