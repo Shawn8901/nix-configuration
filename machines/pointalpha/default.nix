@@ -78,18 +78,32 @@
     plasma5Packages.kalk
     plasma5Packages.kmail
     plasma5Packages.kdeplasma-addons
+
+    python39
   ];
 
-  fonts.fonts = with pkgs; [
-    corefonts
-    dejavu_fonts
-    font-awesome
-    freefont_ttf
-    liberation_ttf
-    roboto
-    noto-fonts
-    noto-fonts-emoji
-  ];
+  fonts = {
+    enableDefaultFonts = true;
+    fonts = with pkgs; [
+      corefonts
+      dejavu_fonts
+      font-awesome
+      freefont_ttf
+      liberation_ttf
+      roboto
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      powerline-fonts
+    ];
+    fontconfig = {
+      defaultFonts = {
+        serif = [ "Noto Serif" ];
+        sansSerif = [ "Noto Sans" ];
+        monospace = [ "Noto Sans Mono" ];
+      };
+    };
+  };
 
   services = {
     udev.packages = [ pkgs.libmtp.out ];
