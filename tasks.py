@@ -8,16 +8,17 @@
 ###############################################################################
 
 from invoke import task
-from invoke.context import Context
 
-import sys
-from typing import List
-import subprocess
+import sys, os, subprocess
 from deploy_nixos import DeployHost, DeployGroup, parse_hosts, HostKeyCheck
 
 
 RSYNC_EXCLUDES = [".git", ".direnv"]
 ALL_HOSTS = DeployGroup([DeployHost("localhost"), DeployHost("tank"),  DeployHost("backup.pointjig.de"),])
+
+if "flake.nix" not in os.listdir(os.getcwd()):
+    print("No flake.nix found, likely we are in a subdirectory.")
+    sys.exit(1)
 
 def parse_host_arg(hosts:str):
     if hosts == "all":
