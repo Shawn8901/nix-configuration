@@ -10,8 +10,11 @@
     zrepl_pointalpha = {
       file = ../../secrets/zrepl_pointalpha.age;
     };
-    samba_credentials = {
-      file = ../../secrets/samba_credentials.age;
+    shawn_samba_credentials = {
+      file = ../../secrets/shawn_samba_credentials.age;
+    };
+    ela_samba_credentials = {
+      file = ../../secrets/ela_samba_credentials.age;
     };
   };
 
@@ -89,6 +92,7 @@
   ];
 
   services = {
+    udev.packages = [ pkgs.libmtp.out ];
     xserver = {
       enable = true;
       layout = "de";
@@ -272,7 +276,8 @@
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
     variables.NIXOS_OZONE_WL = "1";
-    etc."samba/credentials".source = config.age.secrets.samba_credentials.path;
+    etc."samba/credentials_shawn".source = config.age.secrets.shawn_samba_credentials.path;
+    etc."samba/credentials_ela".source = config.age.secrets.ela_samba_credentials.path;
     etc."zrepl/pointalpha.key".source = config.age.secrets.zrepl_pointalpha.path;
     etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;

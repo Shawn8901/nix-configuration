@@ -12,7 +12,8 @@ in
   "shawn_password.age".publicKeys = [ shawn ] ++ systems;
   "root_password.age".publicKeys = [ shawn ] ++ systems;
 
-  "samba_credentials.age".publicKeys = [ shawn pointalpha ];
+  "shawn_samba_credentials.age".publicKeys = [ shawn pointalpha ];
+  "ela_samba_credentials.age".publicKeys = [ shawn pointalpha ];
 
   "zrepl_pointalpha.age".publicKeys = [ shawn pointalpha ];
 
