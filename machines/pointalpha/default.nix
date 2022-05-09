@@ -106,7 +106,11 @@
   };
 
   services = {
-    udev.packages = [ pkgs.libmtp.out ];
+    udev = {
+      packages = [ pkgs.libmtp.out ];
+      extraRules = ''
+      '';
+    };
     xserver = {
       enable = true;
       layout = "de";

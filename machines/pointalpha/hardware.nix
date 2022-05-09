@@ -9,6 +9,7 @@
     initrd.availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
     initrd.kernelModules = [ "amdgpu" ];
     kernelModules = [ "kvm-amd" "cifs" ];
+    kernelParams = [ "elevator=none" ];
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_min=2147483648
@@ -17,7 +18,6 @@
 
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-
     supportedFilesystems = [ "zfs" "ntfs" ];
     zfs.devNodes = "/dev/disk/by-id";
 
