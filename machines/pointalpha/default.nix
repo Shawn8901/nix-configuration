@@ -115,19 +115,18 @@
       enable = true;
       layout = "de";
 
-      displayManager.sddm =
-        {
-          enable = true;
-          settings = {
-            General = {
-              DisplayServer = "wayland";
-              GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
-            };
-            Wayland = {
-              CompositorCommand = "kwin_wayland --no-lockscreen";
-            };
+      displayManager.sddm = {
+        enable = true;
+        settings = {
+          General = {
+            DisplayServer = "wayland";
+            GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
+          };
+          Wayland = {
+            CompositorCommand = "kwin_wayland --no-lockscreen";
           };
         };
+      };
       displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5 = {
         enable = true;
