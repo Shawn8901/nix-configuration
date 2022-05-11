@@ -26,7 +26,6 @@ with lib;
 
         bbenoist.nix
 
-        wwm.better-align
         kamadorueda.alejandra
 
       ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
@@ -47,6 +46,12 @@ with lib;
           publisher = "pmneo";
           version = "2.0.1";
           sha256 = "124jyk9iz3spq8q17z79lqgcwfabbvldcq243xbzbjmbb01ds3i5";
+        }
+        {
+          name = "better-align";
+          publisher = "wwm";
+          version = "1.1.6";
+          sha256 = "sha256-kJJi+0I/ZCbWmLR8zrhMALY0LwEMMM7/8Jj2pLa6u9E=";
         }
       ];
       userSettings = {
