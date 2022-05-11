@@ -25,7 +25,9 @@ with lib;
         eamodio.gitlens
 
         bbenoist.nix
-        b4dm4n.vscode-nixpkgs-fmt
+
+        wwm.better-align
+        kamadorueda.alejandra
 
       ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
@@ -47,6 +49,21 @@ with lib;
           sha256 = "124jyk9iz3spq8q17z79lqgcwfabbvldcq243xbzbjmbb01ds3i5";
         }
       ];
+      userSettings = {
+        "[nix]" = {
+          "editor.insertSpaces" = true;
+          "editor.tabSize" = 2;
+          "editor.autoIndent" = "full";
+          "editor.quickSuggestions" = {
+            "other" = true;
+            "comments" = false;
+            "strings" = true;
+          };
+          "editor.formatOnSave" = false;
+          "editor.formatOnPaste" = false;
+          "editor.formatOnType" = false;
+        };
+      };
     };
   };
 }
