@@ -145,7 +145,7 @@
       timerConfig = {
         Persistent = true;
         OnBootSec = "1min";
-        OnCalendar = [ "*-*-* 12:05" ];
+        OnCalendar = [ "*-*-* 15:05" ];
       };
     };
     services."usb-backup-ela@" = {
