@@ -19,6 +19,7 @@
   };
 
   nixpkgs.config.permittedInsecurePackages = [
+     "NoiseTorch-0.11.5"
   ];
 
   networking = {
