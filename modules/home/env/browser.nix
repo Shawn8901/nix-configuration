@@ -3,17 +3,16 @@
 with lib;
 
 let
-  buildFirefoxXpiAddon = pkgs.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon;
+  inherit (pkgs.nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
   cfg = config.env.browser;
-in
-{
+in {
   options = {
     env.browser = {
       enable = mkEnableOption "Enable browser on the environment";
       wayland = mkOption {
         type = types.bool;
         default = true;
-        description = ''Set true it wayland is used.'';
+        description = "Set true it wayland is used.";
       };
     };
   };
@@ -27,7 +26,8 @@ in
       enable = true;
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         forceWayland = true;
-        extraNativeMessagingHosts = with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ];
+        extraNativeMessagingHosts = with pkgs.nur.repos.wolfangaukang;
+          [ vdhcoapp ];
       };
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
         ublock-origin
@@ -41,7 +41,8 @@ in
           pname = "Video-DownloadHelper";
           version = "7.6.0";
           addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-          url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
+          url =
+            "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
           sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
           meta = { };
         })

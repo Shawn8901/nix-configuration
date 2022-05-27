@@ -1,14 +1,16 @@
 { config, lib, pkgs, ... }:
-let
-  cfg = config.env.vscode;
-in
-with lib;
-{
+let cfg = config.env.vscode;
+in with lib; {
   options = {
-    env.vscode = { enable = mkEnableOption "Enable vsocde on the environment"; };
+    env.vscode = {
+      enable = mkEnableOption "Enable vsocde on the environment";
+    };
   };
 
   config = mkIf cfg.enable {
+
+    home.packages = with pkgs; [ nixfmt ];
+
     programs.vscode = {
       enable = true;
       extensions = (with pkgs.vscode-extensions; [
@@ -25,6 +27,7 @@ with lib;
         eamodio.gitlens
 
         bbenoist.nix
+        brettm12345.nixfmt-vscode
       ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
           name = "code-python-isort";
@@ -55,8 +58,8 @@ with lib;
             "comments" = false;
             "strings" = true;
           };
-          "editor.formatOnSave" = false;
-          "editor.formatOnPaste" = false;
+          "editor.formatOnSave" = true;
+          "editor.formatOnPaste" = true;
           "editor.formatOnType" = false;
         };
         "editor.tabSize" = 2;

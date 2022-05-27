@@ -1,9 +1,7 @@
 { self, config, pkgs, lib, ... }:
 
 {
-  imports = [
-    ./hardware.nix
-  ];
+  imports = [ ./hardware.nix ];
 
   networking = {
     firewall = {
@@ -26,8 +24,7 @@
     wait-online.anyInterface = true;
   };
 
-  environment.systemPackages = with pkgs; [
-  ];
+  environment.systemPackages = with pkgs; [ ];
 
   services = {
     openssh.enable = true;

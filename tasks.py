@@ -13,7 +13,7 @@ import sys, os, subprocess
 from deploy_nixos import DeployHost, DeployGroup, parse_hosts, HostKeyCheck
 
 
-RSYNC_EXCLUDES = [".git", ".direnv"]
+RSYNC_EXCLUDES = [".git", ".direnv", "result"]
 ALL_HOSTS = DeployGroup([DeployHost("localhost"), DeployHost("tank"),  DeployHost("backup.pointjig.de"),])
 
 if "flake.nix" not in os.listdir(os.getcwd()):
@@ -98,6 +98,29 @@ def deploy(_, hosts="localhost"):
 
     g.run_function(run)
 
+
+
+@task
+def build(_, hosts="localhost"):
+    g: DeployGroup = parse_host_arg(hosts)
+
+    def run(h: DeployHost) -> None:
+        flake_path = "/etc/nixos"
+        flake_attr = h.meta.get("flake_attr")
+        if flake_attr:
+            flake_path += "#" + flake_attr
+        target_host = h.meta.get("target_host", "localhost")
+
+        h.run_local(
+            f"rsync {' --exclude '.join([''] + RSYNC_EXCLUDES)} -vaF --delete -e ssh . {h.user}@{h.host}:/etc/nixos"
+        )
+
+        h.run(
+            f"nixos-rebuild build --build-host localhost --target-host {target_host} --flake $(realpath {flake_path})"
+        )
+        h.run("ls -v /nix/var/nix/profiles | tail -n 2 | awk '{print \"/nix/var/nix/profiles/\" $$0}' - | xargs nvd diff")
+
+    g.run_function(run)
 
 @task
 def add_github_user(_, hosts="", github_user="shawn8901"):

@@ -1,20 +1,12 @@
 { self, config, pkgs, lib, hosts, helpers, ... }:
 
 {
-  imports = [
-    ./hardware.nix
-  ];
+  imports = [ ./hardware.nix ];
 
   age.secrets = {
-    ztank_key = {
-      file = ../../secrets/ztank_key.age;
-    };
-    zrepl_tank = {
-      file = ../../secrets/zrepl_tank.age;
-    };
-    ela_password_file = {
-      file = ../../secrets/ela_password.age;
-    };
+    ztank_key = { file = ../../secrets/ztank_key.age; };
+    zrepl_tank = { file = ../../secrets/zrepl_tank.age; };
+    ela_password_file = { file = ../../secrets/ela_password.age; };
     nextcloud_db_file = {
       file = ../../secrets/nextcloud_db.age;
       owner = "nextcloud";
@@ -53,16 +45,13 @@
   };
 
   networking = {
-    firewall =
-      let
-        zrepl = helpers.zreplServePorts config.services.zrepl;
-      in
-      {
-        allowedUDPPorts = [ ];
-        allowedUDPPortRanges = [ ];
-        allowedTCPPorts = [ 80 443 ] ++ zrepl;
-        allowedTCPPortRanges = [ ];
-      };
+    firewall = let zrepl = helpers.zreplServePorts config.services.zrepl;
+    in {
+      allowedUDPPorts = [ ];
+      allowedUDPPortRanges = [ ];
+      allowedTCPPorts = [ 80 443 ] ++ zrepl;
+      allowedTCPPortRanges = [ ];
+    };
     networkmanager.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;
@@ -79,9 +68,7 @@
           networkConfig.Domains = "fritz.box ~box ~.";
         };
       };
-      wait-online = {
-        ignoredInterfaces = [ "enp4s0" ];
-      };
+      wait-online = { ignoredInterfaces = [ "enp4s0" ]; };
     };
 
     paths."nextcloud-secret-watcher" = {
@@ -104,7 +91,8 @@
       serviceConfig = {
         Type = "oneshot";
         User = "shawn";
-        ExecStart = ''${pkgs.rclone}/bin/rclone copy /var/lib/nextcloud/data/shawn/files/ dropbox:'';
+        ExecStart =
+          "${pkgs.rclone}/bin/rclone copy /var/lib/nextcloud/data/shawn/files/ dropbox:";
       };
     };
     timers.backup-nextcloud = {
@@ -121,15 +109,13 @@
       description = "Scheduled shutdown";
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.systemd}/bin/systemctl --force poweroff'';
+        ExecStart = "${pkgs.systemd}/bin/systemctl --force poweroff";
       };
     };
     timers.sched-shutdown = {
       wantedBy = [ "timers.target" ];
       partOf = [ "sched-shutdown.service" ];
-      timerConfig = {
-        OnCalendar = [ "*-*-* 00:01:00" ];
-      };
+      timerConfig = { OnCalendar = [ "*-*-* 00:01:00" ]; };
     };
 
     services.rtcwakeup = {
@@ -154,14 +140,12 @@
         Type = "simple";
         GuessMainPID = false;
         WorkingDirectory = "/media/daniela";
-        ExecStart = ''${pkgs.usb-backup-ela}/bin/usb-backup-ela %I'';
+        ExecStart = "${pkgs.usb-backup-ela}/bin/usb-backup-ela %I";
       };
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    cifs-utils
-  ];
+  environment.systemPackages = with pkgs; [ cifs-utils ];
 
   services = {
     udev.extraRules = ''
@@ -178,13 +162,11 @@
       enable = true;
       settings = {
         global = {
-          monitoring = [
-            {
-              type = "prometheus";
-              listen = ":9811";
-              listen_freebind = true;
-            }
-          ];
+          monitoring = [{
+            type = "prometheus";
+            listen = ":9811";
+            listen_freebind = true;
+          }];
         };
         jobs = [
           {
@@ -201,9 +183,7 @@
 
               client_cns = [ "pointalpha" ];
             };
-            recv = {
-              placeholder = { encryption = "inherit"; };
-            };
+            recv = { placeholder = { encryption = "inherit"; }; };
           }
           {
             name = "sapsrv01_pull";
@@ -218,9 +198,7 @@
               key = "/etc/zrepl/tank.key";
               server_cn = "sapsrv01";
             };
-            recv = {
-              placeholder = { encryption = "inherit"; };
-            };
+            recv = { placeholder = { encryption = "inherit"; }; };
             pruning = {
               keep_sender = [{
                 type = "regex";
@@ -246,9 +224,7 @@
               key = "/etc/zrepl/tank.key";
               server_cn = "sapsrv02";
             };
-            recv = {
-              placeholder = { encryption = "inherit"; };
-            };
+            recv = { placeholder = { encryption = "inherit"; }; };
             pruning = {
               keep_sender = [{
                 type = "regex";
@@ -296,7 +272,10 @@
             };
             connect = {
               type = "tls";
-              address = "backup.pointjig.de:${toString (builtins.head (helpers.zreplServePorts hosts.backup.config.services.zrepl))}";
+              address = "backup.pointjig.de:${
+                  toString (builtins.head (helpers.zreplServePorts
+                    hosts.backup.config.services.zrepl))
+                }";
               ca = "/etc/zrepl/backup.crt";
               cert = "/etc/zrepl/tank.crt";
               key = "/etc/zrepl/tank.key";
@@ -308,9 +287,7 @@
             };
             pruning = {
               keep_sender = [
-                {
-                  type = "not_replicated";
-                }
+                { type = "not_replicated"; }
                 {
                   type = "last_n";
                   count = 10;
@@ -326,13 +303,11 @@
                   regex = "^zrepl_.*";
                 }
               ];
-              keep_receiver = [
-                {
-                  type = "grid";
-                  grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
-                  regex = "^zrepl_.*";
-                }
-              ];
+              keep_receiver = [{
+                type = "grid";
+                grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
+                regex = "^zrepl_.*";
+              }];
             };
           }
         ];
@@ -360,18 +335,23 @@
     };
     postgresql = {
       enable = true;
-      ensureDatabases = [ "${config.services.nextcloud.config.dbname}" "${config.services.grafana.database.name}" ];
+      ensureDatabases = [
+        "${config.services.nextcloud.config.dbname}"
+        "${config.services.grafana.database.name}"
+      ];
       ensureUsers = [
         {
           name = "${config.services.nextcloud.config.dbuser}";
           ensurePermissions = {
-            "DATABASE ${config.services.nextcloud.config.dbname}" = "ALL PRIVILEGES";
+            "DATABASE ${config.services.nextcloud.config.dbname}" =
+              "ALL PRIVILEGES";
           };
         }
         {
           name = "${config.services.grafana.database.user}";
           ensurePermissions = {
-            "DATABASE ${config.services.grafana.database.name}" = "ALL PRIVILEGES";
+            "DATABASE ${config.services.grafana.database.name}" =
+              "ALL PRIVILEGES";
           };
         }
       ];
@@ -391,7 +371,8 @@
           enableACME = true;
           forceSSL = true;
           locations."/" = {
-            proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
+            proxyPass =
+              "http://127.0.0.1:${toString config.services.grafana.port}";
             proxyWebsockets = true;
           };
         };
@@ -427,8 +408,8 @@
           public = "no";
           writeable = "yes";
           printable = "no";
-          "create mask" = 0700;
-          "directory mask" = 0700;
+          "create mask" = 700;
+          "directory mask" = 700;
           browseable = "yes";
         };
         ela = {
@@ -438,8 +419,8 @@
           public = "no";
           writeable = "yes";
           printable = "no";
-          "create mask" = 0700;
-          "directory mask" = 0700;
+          "create mask" = 700;
+          "directory mask" = 700;
           browseable = "yes";
         };
       };
@@ -447,9 +428,7 @@
     fail2ban = {
       enable = true;
       maxretry = 5;
-      ignoreIP = [
-        "192.168.11.0/24"
-      ];
+      ignoreIP = [ "192.168.11.0/24" ];
     };
     vnstat.enable = true;
     smartd.enable = true;
@@ -463,61 +442,75 @@
       scrapeConfigs = [
         {
           job_name = "node";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
+          static_configs = [{
+            targets = [
+              "localhost:${
+                toString config.services.prometheus.exporters.node.port
+              }"
+            ];
+            labels = { machine = "${config.networking.hostName}"; };
+          }];
         }
         {
           job_name = "zrepl";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString (builtins.head (helpers.zreplMonitoringPorts config.services.zrepl))}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
+          static_configs = [{
+            targets = [
+              "localhost:${
+                toString (builtins.head
+                  (helpers.zreplMonitoringPorts config.services.zrepl))
+              }"
+            ];
+            labels = { machine = "${config.networking.hostName}"; };
+          }];
         }
         {
           job_name = "postgres";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.postgres.port}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
+          static_configs = [{
+            targets = [
+              "localhost:${
+                toString config.services.prometheus.exporters.postgres.port
+              }"
+            ];
+            labels = { machine = "${config.networking.hostName}"; };
+          }];
         }
         {
           job_name = "nextcloud";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.nextcloud.port}" ];
-              labels = { machine = "${config.networking.hostName}"; };
-            }
-          ];
+          static_configs = [{
+            targets = [
+              "localhost:${
+                toString config.services.prometheus.exporters.nextcloud.port
+              }"
+            ];
+            labels = { machine = "${config.networking.hostName}"; };
+          }];
         }
         {
           job_name = "fritzbox";
-          static_configs = [
-            {
-              targets = [ "localhost:${toString config.services.prometheus.exporters.fritzbox.port}" ];
-              labels = { machine = "fritz.box"; };
-            }
-          ];
+          static_configs = [{
+            targets = [
+              "localhost:${
+                toString config.services.prometheus.exporters.fritzbox.port
+              }"
+            ];
+            labels = { machine = "fritz.box"; };
+          }];
         }
         {
           job_name = "${hosts.pointalpha.config.networking.hostName}";
           honor_labels = true;
           metrics_path = "/federate";
           params = {
-            "match[]" = [ "{machine='${hosts.pointalpha.config.networking.hostName}'}" ];
+            "match[]" =
+              [ "{machine='${hosts.pointalpha.config.networking.hostName}'}" ];
           };
-          static_configs = [
-            {
-              targets = [ "${hosts.pointalpha.config.networking.hostName}:${toString hosts.pointalpha.config.services.prometheus.port}" ];
-            }
-          ];
+          static_configs = [{
+            targets = [
+              "${hosts.pointalpha.config.networking.hostName}:${
+                toString hosts.pointalpha.config.services.prometheus.port
+              }"
+            ];
+          }];
         }
       ];
       exporters = {
@@ -528,7 +521,13 @@
         };
         fritzbox = {
           enable = true;
-          extraFlags = [ "-username prometheus" "-password ${lib.escapeShellArg "@${config.age.secrets.fritzbox_prometheus_file.path}"}" ];
+          extraFlags = [
+            "-username prometheus"
+            "-password ${
+              lib.escapeShellArg
+              "@${config.age.secrets.fritzbox_prometheus_file.path}"
+            }"
+          ];
         };
         nextcloud = {
           enable = true;
@@ -546,7 +545,10 @@
     grafana = {
       enable = true;
       domain = "status.tank.pointjig.de";
-      declarativePlugins = with pkgs.grafanaPlugins; [ grafana-polystat-panel grafana-clock-panel ];
+      declarativePlugins = with pkgs.grafanaPlugins; [
+        grafana-polystat-panel
+        grafana-clock-panel
+      ];
       database = {
         type = "postgres";
         host = "/run/postgresql";
@@ -560,14 +562,14 @@
       analytics.reporting.enable = false;
       provision = {
         enable = true;
-        datasources = [
-          {
-            name = "Prometheus";
-            type = "prometheus";
-            url = "http://localhost:${builtins.toString config.services.prometheus.port}";
-            isDefault = true;
-          }
-        ];
+        datasources = [{
+          name = "Prometheus";
+          type = "prometheus";
+          url = "http://localhost:${
+              builtins.toString config.services.prometheus.port
+            }";
+          isDefault = true;
+        }];
       };
     };
   };
@@ -578,7 +580,6 @@
   };
   security.auditd.enable = false;
   security.audit.enable = false;
-
 
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
@@ -593,11 +594,8 @@
       uid = 1001;
       shell = pkgs.zsh;
     };
-    shawn = {
-      extraGroups = [ "nextcloud" ];
-    };
+    shawn = { extraGroups = [ "nextcloud" ]; };
   };
-
 
   environment = {
     etc.".ztank_key".source = config.age.secrets.ztank_key.path;

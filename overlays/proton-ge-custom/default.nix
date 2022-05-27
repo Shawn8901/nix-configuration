@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "GE-Proton7-14";
 
   src = fetchurl {
-    url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${version}/${version}.tar.gz";
+    url =
+      "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${version}/${version}.tar.gz";
     sha256 = "sha256-qEjBJrIFPgSh5Q3FsWw01YQaMWQ49AfhTeRygBf6htk=";
   };
 

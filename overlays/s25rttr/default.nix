@@ -1,19 +1,5 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, git
-, cmake
-, pkg-config
-, boost
-, bzip2
-, curl
-, gettext
-, libiconv
-, miniupnpc
-, SDL2
-, SDL2_mixer
-, libsamplerate
-}:
+{ stdenv, lib, fetchFromGitHub, git, cmake, pkg-config, boost, bzip2, curl
+, gettext, libiconv, miniupnpc, SDL2, SDL2_mixer, libsamplerate }:
 
 stdenv.mkDerivation rec {
   pname = "s25rttr";
@@ -32,10 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+89F6LtY6nEJEgVM1R5qiPhG6CLEKymowzEowuLCfUM=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     git

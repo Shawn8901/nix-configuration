@@ -7,9 +7,7 @@
     users.shawn = {
       home.stateVersion = "22.05";
       imports = [ ../home/git.nix ];
-      programs.zsh = {
-        enable = true;
-      };
+      programs.zsh = { enable = true; };
     };
   };
 }

@@ -2,14 +2,9 @@
 
 {
   age.secrets = {
-    shawn_password_file = {
-      file = ../secrets/shawn_password.age;
-    };
-    root_password_file = {
-      file = ../secrets/root_password.age;
-    };
+    shawn_password_file = { file = ../secrets/shawn_password.age; };
+    root_password_file = { file = ../secrets/root_password.age; };
   };
-
 
   programs.zsh = {
     enable = true;
@@ -49,7 +44,5 @@
     ];
   };
 
-  environment = {
-    variables.EDITOR = "nano";
-  };
+  environment = { variables.EDITOR = "nano"; };
 }
