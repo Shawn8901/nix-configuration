@@ -20,7 +20,7 @@
     supportedFilesystems = [ "zfs" "ntfs" ];
     zfs.devNodes = "/dev/disk/by-id";
 
-    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    kernelPackages = pkgs.linuxPackages_zen;
 
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
   };
