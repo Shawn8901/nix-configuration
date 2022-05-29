@@ -17,15 +17,8 @@
       options zfs zfs_arc_max=209715200
     '';
     supportedFilesystems = [ "zfs" ];
-    loader.grub = {
-      enable = true;
-      version = 2;
-      device = "/dev/vda";
-    };
-  };
 
-  networking.hostName = "backup";
-  networking.hostId = "5e9aced4";
+  };
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/9de45e18-29e7-4330-b5ab-8a272f87aa36";

@@ -14,9 +14,6 @@
       options zfs zfs_arc_max=10737418240
     '';
 
-    loader.systemd-boot.enable = true;
-    loader.efi.canTouchEfiVariables = true;
-
     supportedFilesystems = [ "zfs" "ntfs" ];
     zfs.devNodes = "/dev/disk/by-id";
     zfs.extraPools = [ "ztank" ];
@@ -29,9 +26,6 @@
       ${pkgs.zfs}/bin/zfs mount -a
     '';
   };
-
-  networking.hostName = "tank";
-  networking.hostId = "d41d8cd9";
 
   fileSystems."/" = {
     device = "none";

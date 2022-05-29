@@ -1,9 +1,18 @@
-{ self, config, pkgs, ... }:
+{ self, ... }@inputs:
+{ config, pkgs, ... }:
+let
+  nPkgs = import inputs.nixpkgs {
+    system = "x86_64-linux";
+    config.allowUnfree = true;
+    overlays = [ inputs.nur.outputs.overlay ];
+  };
+  sPkgs = self.packages.x86_64-linux;
 
-{
+in {
 
   home-manager.users.shawn = {
     home.packages = with pkgs;
+      with sPkgs;
       [
         # Administration
         remmina
@@ -33,7 +42,7 @@
 
         # STFC
         virt-manager
-        autoadb
+
         scrcpy
 
         # Games
@@ -50,16 +59,18 @@
 
         samba
 
-      ] ++ (with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
+      ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${pkgs.proton-ge-custom}";
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${sPkgs.proton-ge-custom}";
     };
 
     env = {
       vscode.enable = true;
       browser.enable = true;
     };
+    programs.direnv.enable = true;
+    programs.direnv.nix-direnv.enable = true;
 
     services = {
       nextcloud-client = { startInBackground = true; };

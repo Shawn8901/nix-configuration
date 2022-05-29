@@ -15,8 +15,6 @@
       options zfs zfs_arc_max=4294967296
     '';
 
-    loader.systemd-boot.enable = true;
-    loader.efi.canTouchEfiVariables = true;
     supportedFilesystems = [ "zfs" "ntfs" ];
     zfs.devNodes = "/dev/disk/by-id";
 
@@ -24,9 +22,6 @@
 
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
   };
-
-  networking.hostName = "pointalpha";
-  networking.hostId = "a642f2c0";
 
   services.xserver.videoDrivers = [ "amdgpu" ];
 

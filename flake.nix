@@ -2,14 +2,9 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    flake-utils = {
-      url = "github:gytis-ivaskevicius/flake-utils-plus";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur = {
@@ -26,57 +21,25 @@
     };
   };
 
-  outputs = { self, ... }@inputs:
+  outputs = { self, ... }@inputs: {
+    nixosModules = import ./modules/nixos inputs;
+    nixosConfigurations = import ./machines inputs;
 
-    inputs.flake-utils.lib.mkFlake rec {
-      inherit self inputs;
+    lib = import ./lib inputs;
 
-      supportedSystems = [ "x86_64-linux" ];
+    packages.x86_64-linux = (import ./packages inputs)
+      // self.lib.nixosConfigurationsAsPackages.x86_64-linux;
 
-      sharedOverlays =
-        [ self.overlays.default inputs.nur.overlay inputs.agenix.overlay ];
-
-      channelsConfig.allowUnfree = true;
-
-      hostDefaults.extraArgs = {
-        hosts = self.nixosConfigurations;
-        helpers = import ./helpers { inherit (inputs.nixpkgs) lib; };
+    devShells.x86_64-linux.default =
+      let pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+      in pkgs.mkShell {
+        packages = [
+          self.packages.x86_64-linux.statix
+          pkgs.python3.pkgs.invoke
+          pkgs.direnv
+          pkgs.nix-direnv
+          pkgs.nixfmt
+        ];
       };
-      hostDefaults.modules = [
-        inputs.agenix.nixosModule
-        inputs.home-manager.nixosModule
-        {
-          home-manager = {
-            extraSpecialArgs = { inherit inputs self; };
-            useUserPackages = true;
-            useGlobalPkgs = true;
-            sharedModules = [ ./modules/home ];
-          };
-        }
-        ./modules
-      ];
-
-      hosts = {
-        pointalpha.modules = [ ./machines/pointalpha ];
-        pointjig.modules = [ ./machines/pointjig ];
-        tank.modules = [ ./machines/tank ];
-        backup.modules = [ ./machines/backup ];
-      };
-
-      overlays.default = import ./overlays;
-
-      outputsBuilder = channels: {
-        devShell = channels.nixpkgs.mkShell {
-          nativeBuildInputs = with channels.nixpkgs; [
-            python3.pkgs.invoke
-            direnv
-            nix-direnv
-            nixfmt
-            statix
-
-          ];
-        };
-        checks = { };
-      };
-    };
+  };
 }

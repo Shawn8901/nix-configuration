@@ -114,11 +114,10 @@ def build(_, hosts="localhost"):
         h.run_local(
             f"rsync {' --exclude '.join([''] + RSYNC_EXCLUDES)} -vaF --delete -e ssh . {h.user}@{h.host}:/etc/nixos"
         )
-
         h.run(
             f"nixos-rebuild build --build-host localhost --target-host {target_host} --flake $(realpath {flake_path})"
         )
-        h.run("ls -v /nix/var/nix/profiles | tail -n 2 | awk '{print \"/nix/var/nix/profiles/\" $$0}' - | xargs nvd diff")
+        h.run(f"nvd diff $(ls --reverse -v /nix/var/nix/profiles | head --lines=1 | awk '{{print \"/nix/var/nix/profiles/\" $$0}}' -) ~/result")
 
     g.run_function(run)
 
