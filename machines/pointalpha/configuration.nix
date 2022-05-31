@@ -81,6 +81,7 @@
     plasma5Packages.kdeplasma-addons
 
     python39
+    sysstat
   ];
 
   fonts = {
@@ -116,6 +117,7 @@
 
       displayManager.sddm = {
         enable = true;
+        autoNumlock = true;
         settings = {
           General = {
             DisplayServer = "wayland";
