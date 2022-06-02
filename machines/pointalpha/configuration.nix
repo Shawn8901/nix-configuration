@@ -177,12 +177,9 @@
           }];
         };
         jobs = [{
-          name = "userdata";
+          name = "pointalpha_safe";
           type = "push";
-          filesystems = {
-            "rpool/userdata<" = true;
-            "rpool/userdata/steamlibrary" = false;
-          };
+          filesystems = { "rpool/safe<" = true; };
           snapshotting = {
             type = "periodic";
             interval = "1h";
@@ -207,7 +204,7 @@
               {
                 type = "grid";
                 grid = "1x1h(keep=all) | 2x3h | 7x1d";
-                regex = "^pointalpha_root_.*";
+                regex = "^pointalpha_safe_.*";
               }
             ];
             keep_receiver = [{
@@ -290,13 +287,12 @@
     };
   };
 
+  # NixOS/nixpkgs/issues/170573
   systemd.tmpfiles.rules = [
     "d /media/nas 0750 shawn users -"
     #"L /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
     "L /etc/nixos/ - - - - /persist/etc/nixos"
-
   ];
-  #systemd.targets."bluetooth".after = [ "systemd-tmpfiles-setup.service" ];
 
   programs.steam.enable = true;
   programs.dconf.enable = true;

@@ -65,6 +65,13 @@
     options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
   };
 
+  # NixOS/nixpkgs/issues/170573
+  fileSystems."/var/lib/bluetooth" = {
+    device = "/persist/var/lib/bluetooth";
+    options = [ "bind" "noauto" "x-systemd.automount" ];
+    noCheck = true;
+  };
+
   swapDevices = [ ];
 
   hardware.cpu.amd.updateMicrocode = true;
