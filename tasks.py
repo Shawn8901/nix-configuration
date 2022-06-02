@@ -13,7 +13,7 @@ import sys, os, subprocess
 from deploy_nixos import DeployHost, DeployGroup, parse_hosts, HostKeyCheck
 
 
-RSYNC_EXCLUDES = [".git", ".direnv", "result"]
+RSYNC_EXCLUDES = [".git", ".gitignore", ".direnv", "result"]
 ALL_HOSTS = DeployGroup([DeployHost("localhost"), DeployHost("tank"),  DeployHost("backup.pointjig.de"),])
 
 if "flake.nix" not in os.listdir(os.getcwd()):
