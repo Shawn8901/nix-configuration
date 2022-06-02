@@ -133,7 +133,20 @@
       };
       desktopManager.xterm.enable = false;
     };
-    openssh.enable = true;
+    openssh = {
+      enable = true;
+      hostKeys = [
+        {
+          path = "/persist/etc/ssh/ssh_host_ed25519_key";
+          type = "ed25519";
+        }
+        {
+          path = "/persist/etc/ssh/ssh_host_rsa_key";
+          type = "rsa";
+          bits = 4096;
+        }
+      ];
+    };
     resolved.enable = true;
 
     zfs.trim.enable = true;
@@ -250,7 +263,7 @@
     };
     avahi.enable = true;
     avahi.nssmdns = true;
-    logmein-hamachi.enable = true;
+    logmein-hamachi.enable = false;
   };
   security.rtkit.enable = true;
   security.pam.services.shawn.enableKwallet = true;
@@ -277,7 +290,13 @@
     };
   };
 
-  systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
+  systemd.tmpfiles.rules = [
+    "d /media/nas 0750 shawn users -"
+    #"L /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
+    "L /etc/nixos/ - - - - /persist/etc/nixos"
+
+  ];
+  #systemd.targets."bluetooth".after = [ "systemd-tmpfiles-setup.service" ];
 
   programs.steam.enable = true;
   programs.dconf.enable = true;

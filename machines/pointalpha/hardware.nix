@@ -21,66 +21,40 @@
     kernelPackages = pkgs.linuxPackages_zen;
 
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
+    #initrd.postDeviceCommands = lib.mkAfter ''
+    #  zfs rollback -r rpool/local/root@blank
+    #'';
   };
 
   services.xserver.videoDrivers = [ "amdgpu" ];
 
   fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [ "defaults" "mode=755" ];
+    device = "rpool/local/root";
+    fsType = "zfs";
+    options = [ "zfsutil" "X-mount.mkdir" ];
+  };
+
+  fileSystems."/persist" = {
+    device = "rpool/safe/persist";
+    fsType = "zfs";
+    options = [ "zfsutil" "X-mount.mkdir" ];
+    neededForBoot = true;
   };
 
   fileSystems."/nix" = {
-    device = "rpool/nixos/nix";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/etc" = {
-    device = "rpool/nixos/etc";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/var" = {
-    device = "rpool/nixos/var";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/var/lib" = {
-    device = "rpool/nixos/var/lib";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/var/log" = {
-    device = "rpool/nixos/var/log";
+    device = "rpool/local/nix";
     fsType = "zfs";
     options = [ "zfsutil" "X-mount.mkdir" ];
   };
 
   fileSystems."/home" = {
-    device = "rpool/userdata/home";
+    device = "rpool/safe/home";
     fsType = "zfs";
     options = [ "zfsutil" "X-mount.mkdir" ];
   };
 
-  fileSystems."/home/shawn" = {
-    device = "rpool/userdata/home/shawn";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/home/shawn/.steamlibrary" = {
-    device = "rpool/userdata/steamlibrary";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/root" = {
-    device = "rpool/userdata/home/root";
+  fileSystems."/steamlibrary" = {
+    device = "rpool/local/steamlibrary";
     fsType = "zfs";
     options = [ "zfsutil" "X-mount.mkdir" ];
   };

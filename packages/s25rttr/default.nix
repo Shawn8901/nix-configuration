@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     repo = "s25client";
     rev = "v${version}";
     fetchSubmodules = true;
-    leaveDotGit = true;
-    sha256 = "sha256-+89F6LtY6nEJEgVM1R5qiPhG6CLEKymowzEowuLCfUM=";
+    leaveDotGit = false;
+    sha256 = "sha256-6gBvWYP08eoT2i8kco/3nXnTKwVa20DWtv6fLaoH07M=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
