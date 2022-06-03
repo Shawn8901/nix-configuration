@@ -11,7 +11,7 @@
     kernelParams = [ "elevator=none" ];
     extraModulePackages = [ ];
     extraModprobeConfig = ''
-      options zfs zfs_arc_min=2147483648
+      options zfs zfs_arc_min=4294967296
       options zfs zfs_arc_max=4294967296
     '';
 
@@ -21,9 +21,6 @@
     kernelPackages = pkgs.linuxPackages_zen;
 
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
-    #initrd.postDeviceCommands = lib.mkAfter ''
-    #  zfs rollback -r rpool/local/root@blank
-    #'';
   };
 
   services.xserver.videoDrivers = [ "amdgpu" ];
@@ -63,13 +60,6 @@
     device = "/dev/disk/by-uuid/F66B-A20D";
     fsType = "vfat";
     options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
-  };
-
-  # NixOS/nixpkgs/issues/170573
-  fileSystems."/var/lib/bluetooth" = {
-    device = "/persist/var/lib/bluetooth";
-    options = [ "bind" "noauto" "x-systemd.automount" ];
-    noCheck = true;
   };
 
   swapDevices = [ ];

@@ -287,12 +287,7 @@
     };
   };
 
-  # NixOS/nixpkgs/issues/170573
-  systemd.tmpfiles.rules = [
-    "d /media/nas 0750 shawn users -"
-    #"L /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
-    "L /etc/nixos/ - - - - /persist/etc/nixos"
-  ];
+  systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
   programs.steam.enable = true;
   programs.dconf.enable = true;

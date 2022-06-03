@@ -6,6 +6,8 @@ nixpkgs.lib.nixosSystem (let
   bootloader = "${configFolder}/bootloader.nix";
   hardware = "${configFolder}/hardware.nix";
   home = "${configFolder}/home.nix";
+  darlings = "${configFolder}/erase-darlings.nix";
+
 in {
   system = "x86_64-linux";
 
@@ -32,9 +34,7 @@ in {
 
   ] ++ builtins.attrValues self.nixosModules
     ++ nixpkgs.lib.optionals (builtins.pathExists home) [
-
       { home-manager = { extraSpecialArgs = { inherit inputs self; }; }; }
-
       (import home inputs)
-    ];
+    ] ++ nixpkgs.lib.optionals (builtins.pathExists darlings) [ darlings ];
 })
