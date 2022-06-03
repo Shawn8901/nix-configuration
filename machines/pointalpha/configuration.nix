@@ -295,6 +295,7 @@
   programs.noisetorch.enable = true;
   programs.ssh.startAgent = true;
   programs.xwayland.enable = true;
+  programs.iotop.enable = true;
 
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
