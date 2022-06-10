@@ -25,6 +25,11 @@
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
+  fileSystems."/var/lib/prometheus2" = {
+    device = "/persist/var/lib/prometheus2";
+    options = [ "bind" "noauto" "x-systemd.automount" ];
+  };
+
   fileSystems."/etc/nixos" = {
     device = "/persist/etc/nixos";
     options = [ "bind" "noauto" "x-systemd.automount" ];
