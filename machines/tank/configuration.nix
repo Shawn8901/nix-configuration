@@ -248,7 +248,7 @@ in {
     };
     nextcloud = {
       enable = true;
-      package = pkgs.nextcloud23;
+      package = pkgs.nextcloud24;
       https = true;
       hostName = "next.tank.pointjig.de";
 
@@ -268,6 +268,7 @@ in {
     };
     postgresql = {
       enable = true;
+      package = pkgs.postgresql_14;
       ensureDatabases = [
         "${config.services.nextcloud.config.dbname}"
         "${config.services.grafana.database.name}"
@@ -550,4 +551,31 @@ in {
     etc."zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
     etc."zrepl/backup.crt".source = ../../public_certs/zrepl/backup.crt;
   };
+
+  environment.systemPackages = with pkgs;
+    [
+      (pkgs.writeScriptBin "upgrade-pg-cluster" ''
+        set -eux
+        # XXX it's perhaps advisable to stop all services that depend on postgresql
+        systemctl stop postgresql
+
+        # XXX replace `<new version>` with the psqlSchema here
+        export NEWDATA="/var/lib/postgresql/14"
+
+        # XXX specify the postgresql package you'd like to upgrade to
+        export NEWBIN="${pkgs.postgresql_14}/bin"
+
+        export OLDDATA="${config.services.postgresql.dataDir}"
+        export OLDBIN="${config.services.postgresql.package}/bin"
+
+        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
+        cd "$NEWDATA"
+        sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+
+        sudo -u postgres $NEWBIN/pg_upgrade \
+          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
+          --old-bindir $OLDBIN --new-bindir $NEWBIN \
+          "$@"
+      '')
+    ];
 }
