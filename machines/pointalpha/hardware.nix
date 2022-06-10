@@ -31,6 +31,13 @@
     options = [ "zfsutil" "X-mount.mkdir" ];
   };
 
+  fileSystems."/var/log" = {
+    device = "rpool/local/log";
+    fsType = "zfs";
+    options = [ "zfsutil" "X-mount.mkdir" ];
+    neededForBoot = true;
+  };
+
   fileSystems."/persist" = {
     device = "rpool/safe/persist";
     fsType = "zfs";
