@@ -15,6 +15,11 @@
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
+  fileSystems."/var/lib/cups" = {
+    device = "/persist/var/lib/cups";
+    options = [ "bind" "noauto" "x-systemd.automount" ];
+  };
+
   fileSystems."/etc/nixos" = {
     device = "/persist/etc/nixos";
     options = [ "bind" "noauto" "x-systemd.automount" ];
