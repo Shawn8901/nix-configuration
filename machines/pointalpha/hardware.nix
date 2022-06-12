@@ -1,66 +1,62 @@
 { config, lib, pkgs, modulesPath, ... }:
-
-{
+let zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
+in {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot = {
-    initrd.availableKernelModules =
-      [ "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-    initrd.kernelModules = [ "amdgpu" ];
-    kernelModules = [ "kvm-amd" "cifs" ];
+    initrd = {
+      availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod" ];
+      kernelModules = [ "amdgpu" ];
+    };
+    kernelModules = [ "kvm-amd" "cifs" "usb_storage" ];
     kernelParams = [ "elevator=none" ];
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_min=4294967296
       options zfs zfs_arc_max=6442450944
     '';
-
     supportedFilesystems = [ "zfs" "ntfs" ];
-    zfs.devNodes = "/dev/disk/by-id";
-
     kernelPackages = pkgs.linuxPackages_zen;
-
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
+    zfs.devNodes = "/dev/disk/by-id";
   };
-
-  services.xserver.videoDrivers = [ "amdgpu" ];
 
   fileSystems."/" = {
     device = "rpool/local/root";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
   };
 
   fileSystems."/var/log" = {
     device = "rpool/local/log";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
     neededForBoot = true;
   };
 
   fileSystems."/persist" = {
     device = "rpool/safe/persist";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
     neededForBoot = true;
   };
 
   fileSystems."/nix" = {
     device = "rpool/local/nix";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
   };
 
   fileSystems."/home" = {
     device = "rpool/safe/home";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
   };
 
   fileSystems."/steamlibrary" = {
     device = "rpool/local/steamlibrary";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
   };
 
   fileSystems."/boot" = {
@@ -72,4 +68,5 @@
   swapDevices = [ ];
 
   hardware.cpu.amd.updateMicrocode = true;
+  hardware.enableRedistributableFirmware = true;
 }

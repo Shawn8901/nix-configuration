@@ -114,7 +114,7 @@
     xserver = {
       enable = true;
       layout = "de";
-
+      videoDrivers = [ "amdgpu" ];
       displayManager.sddm = {
         enable = true;
         autoNumlock = true;
