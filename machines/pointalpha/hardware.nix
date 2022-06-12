@@ -12,7 +12,7 @@
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_min=4294967296
-      options zfs zfs_arc_max=4294967296
+      options zfs zfs_arc_max=6442450944
     '';
 
     supportedFilesystems = [ "zfs" "ntfs" ];
