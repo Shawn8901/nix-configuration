@@ -1,5 +1,5 @@
 _:
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
 
   environment.systemPackages = [ pkgs.cachix ];
   nix = {
@@ -15,6 +15,8 @@ _:
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA="
       ];
+      cores = lib.mkDefault 8;
+      max-jobs = lib.mkDefault 8;
     };
     daemonIOSchedClass = "idle";
     daemonCPUSchedPolicy = "idle";
