@@ -82,6 +82,8 @@
 
     python39
     sysstat
+    nixpkgs-review
+
   ];
 
   fonts = {

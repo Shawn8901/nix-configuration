@@ -8,10 +8,10 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB/mOOPSGuN9nikbteB8pZhKAE7i8K5/B214/UoBy0nU";
   tank =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsh4IWvnMlQTfU9N1BpcE0b4KzxDYrjh+k8TTqj07Gw";
-  backup =
+  shelter =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDg8wKBWXd+v9FeoujUAppfFp4FUX4IobYNujKO8PBGL";
 
-  systems = [ pointalpha pointjig tank backup ];
+  systems = [ pointalpha pointjig tank shelter ];
 in {
   "shawn_password.age".publicKeys = [ shawn ] ++ systems;
   "root_password.age".publicKeys = [ shawn ] ++ systems;
@@ -32,5 +32,5 @@ in {
   "grafana_admin_password_file.age".publicKeys = [ shawn tank ];
   "grafana_secret_key_file.age".publicKeys = [ shawn tank ];
 
-  "zrepl_backup.age".publicKeys = [ shawn backup ];
+  "zrepl_shelter.age".publicKeys = [ shawn shelter ];
 }

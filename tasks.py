@@ -14,7 +14,7 @@ from deploy_nixos import DeployHost, DeployGroup, parse_hosts, HostKeyCheck
 
 
 RSYNC_EXCLUDES = [".git", ".github", ".gitignore", ".direnv", "result"]
-ALL_HOSTS = DeployGroup([DeployHost("localhost"), DeployHost("tank"),  DeployHost("backup.pointjig.de"),])
+ALL_HOSTS = DeployGroup([DeployHost("localhost"), DeployHost("tank"),  DeployHost("shelter.pointjig.de"),])
 
 if "flake.nix" not in os.listdir(os.getcwd()):
     print("No flake.nix found, likely we are in a subdirectory.")

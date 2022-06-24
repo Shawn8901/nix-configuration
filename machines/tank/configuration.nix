@@ -108,7 +108,7 @@ in {
           {
             name = "pointalpha_sink";
             type = "sink";
-            root_fs = "ztank/backup";
+            root_fs = "ztank/shelter";
 
             serve = {
               type = "tls";
@@ -208,14 +208,14 @@ in {
             };
             connect = {
               type = "tls";
-              address = "backup.pointjig.de:${
+              address = "shelter.pointjig.de:${
                   toString (builtins.head (self.lib.zrepl.servePorts
-                    hosts.backup.config.services.zrepl))
+                    hosts.shelter.config.services.zrepl))
                 }";
-              ca = "/etc/zrepl/backup.crt";
+              ca = "/etc/zrepl/shelter.crt";
               cert = "/etc/zrepl/tank.crt";
               key = "/etc/zrepl/tank.key";
-              server_cn = "backup";
+              server_cn = "shelter";
             };
             send = { encrypted = true; };
             pruning = {
@@ -549,7 +549,7 @@ in {
     etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
     etc."zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
     etc."zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
-    etc."zrepl/backup.crt".source = ../../public_certs/zrepl/backup.crt;
+    etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
   };
 
   environment.systemPackages = with pkgs;

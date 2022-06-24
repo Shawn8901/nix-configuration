@@ -2,7 +2,9 @@
 { config, ... }:
 
 {
-  age.secrets = { zrepl_backup = { file = ../../secrets/zrepl_backup.age; }; };
+  age.secrets = {
+    zrepl_shelter = { file = ../../secrets/zrepl_shelter.age; };
+  };
 
   networking = {
     firewall = let zrepl = self.lib.zrepl.servePorts config.services.zrepl;
@@ -63,8 +65,8 @@
             type = "tls";
             listen = ":8888";
             ca = "/etc/zrepl/tank.crt";
-            cert = "/etc/zrepl/backup.crt";
-            key = "/etc/zrepl/backup.key";
+            cert = "/etc/zrepl/shelter.crt";
+            key = "/etc/zrepl/shelter.key";
             client_cns = [ "tank" ];
           };
           recv = { placeholder = { encryption = "inherit"; }; };
@@ -84,8 +86,8 @@
   sound.enable = false;
 
   environment = {
-    etc."zrepl/backup.key".source = config.age.secrets.zrepl_backup.path;
-    etc."zrepl/backup.crt".source = ../../public_certs/zrepl/backup.crt;
+    etc."zrepl/shelter.key".source = config.age.secrets.zrepl_shelter.path;
+    etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
   };
 }
