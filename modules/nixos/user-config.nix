@@ -32,7 +32,6 @@ _:
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
     ];
   };
-  nix.settings.trusted-users = [ "shawn" ];
   users.users.shawn = {
     passwordFile = config.age.secrets.shawn_password_file.path;
     isNormalUser = true;
