@@ -17,10 +17,7 @@ _:
         "shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA="
       ];
     };
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      allow-import-from-derivation = false
-    '';
+    extraOptions = "experimental-features = nix-command flakes";
     gc = {
       automatic = true;
       dates = "daily";
