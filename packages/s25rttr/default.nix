@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
     repo = "s25client";
     rev = "v${version}";
     fetchSubmodules = true;
-    leaveDotGit = false;
     sha256 = "sha256-6gBvWYP08eoT2i8kco/3nXnTKwVa20DWtv6fLaoH07M=";
   };
 
@@ -34,11 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [ ./cmake_file_placeholder.patch ];
-
+  #doCheck = true;
   cmakeBuildType = "Release";
-
   cmakeFlags = [
     "-DRTTR_VERSION=${version}"
+    "-DRTTR_REVISION=${version}"
     "-DRTTR_USE_SYSTEM_LIBS=ON"
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DRTTR_INSTALL_PLACEHOLDER=OFF"

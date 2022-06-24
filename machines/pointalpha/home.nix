@@ -46,7 +46,7 @@ in {
         scrcpy
 
         # Games
-        #s25rttr
+        s25rttr
         proton-ge-custom
 
         # Shell
