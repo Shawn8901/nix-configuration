@@ -1,6 +1,6 @@
 inputs:
 let
-  pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+  pkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
   inherit (pkgs.lib) toInt removePrefix filter;
 in {
   servePorts = zrepl:

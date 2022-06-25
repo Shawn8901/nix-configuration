@@ -1,8 +1,8 @@
 { self, ... }@inputs:
 let
-  pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+  pkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
 
-  unfree-pkgs = import inputs.nixpkgs {
+  unfree-pkgs = import inputs.nixpkgs-stable {
     system = "x86_64-linux";
     config.allowUnfree = true;
   };
