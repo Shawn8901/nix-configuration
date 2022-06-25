@@ -1,5 +1,11 @@
 { self, ... }@inputs:
-{ pkgs, lib, config, ... }: {
+{ pkgs, lib, config, ... }:
+
+let sPkgs = import inputs.nixpkgs-stable { system = "x86_64-linux"; };
+in {
+
+  disabledModules = [ "services/backup/zrepl.nix" ];
+  imports = [ ../../modules/nixos/zrepl.nix ];
 
   age.secrets = {
     zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };
@@ -170,6 +176,7 @@
     };
     zrepl = {
       enable = true;
+      package = sPkgs.zrepl;
       settings = {
         global = {
           monitoring = [{

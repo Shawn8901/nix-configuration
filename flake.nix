@@ -3,20 +3,17 @@
 
   inputs = {
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     nur = {
       url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     agenix = {
       url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
-    statix = {
-      url = "github:nerdypepper/statix";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
   };
@@ -33,13 +30,7 @@
     devShells.x86_64-linux.default =
       let pkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
       in pkgs.mkShell {
-        packages = [
-          self.packages.x86_64-linux.statix
-          pkgs.python3.pkgs.invoke
-          pkgs.direnv
-          pkgs.nix-direnv
-          pkgs.nixfmt
-        ];
+        packages = with pkgs; [ python3.pkgs.invoke direnv nix-direnv nixfmt ];
       };
   };
 }

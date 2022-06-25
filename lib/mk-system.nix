@@ -4,7 +4,7 @@ nixpkgs.lib.nixosSystem (let
   configFolder = "${self}/machines/${name}";
   entryPoint = import "${configFolder}/configuration.nix" inputs;
   bootloader = "${configFolder}/bootloader.nix";
-  hardware = "${configFolder}/hardware.nix";
+  hardware = import "${configFolder}/hardware.nix" inputs;
   home = "${configFolder}/home.nix";
   darlings = "${configFolder}/erase-darlings.nix";
 
