@@ -1,8 +1,6 @@
 { self, ... }@inputs:
 { config, pkgs, lib, ... }:
-let
-  hosts = self.nixosConfigurations;
-  sPkgs = self.packages.x86_64-linux;
+let hosts = self.nixosConfigurations;
 in {
   age.secrets = {
     ztank_key = { file = ../../secrets/ztank_key.age; };

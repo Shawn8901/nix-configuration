@@ -3,7 +3,7 @@
 
 let
   cfg = config.services.shutdown-wakeup;
-  sPkgs = self.packages.x86_64-linux;
+  fPkgs = self.packages.x86_64-linux;
 in {
   options = {
     services.shutdown-wakeup = {
@@ -35,7 +35,7 @@ in {
       };
 
       services.rtcwakeup =
-        let rtcHelper = sPkgs.rtc-helper.override { inherit (cfg) wakeupTime; };
+        let rtcHelper = fPkgs.rtc-helper.override { inherit (cfg) wakeupTime; };
         in {
           description = "Automatic wakeup";
           serviceConfig = {

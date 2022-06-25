@@ -1,9 +1,7 @@
 { self, ... }:
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.services.usb-backup;
-  sPkgs = self.packages.x86_64-linux;
+let cfg = config.services.usb-backup;
 in {
   options = {
     services.backup-nextcloud = {

@@ -3,7 +3,7 @@
 
 let
   cfg = config.services.usb-backup;
-  sPkgs = self.packages.x86_64-linux;
+  fPkgs = self.packages.x86_64-linux;
 in {
   options = {
     services.usb-backup = {
@@ -29,7 +29,7 @@ in {
 
     systemd.services."usb-backup@" = let
       usbBackup =
-        sPkgs.usb-backup.override { inherit (cfg) backupPath mountPoint; };
+        fPkgs.usb-backup.override { inherit (cfg) backupPath mountPoint; };
     in {
       description = "Backups ${cfg.backupPath} to usb hdd";
       serviceConfig = {

@@ -6,13 +6,13 @@ let
     config.allowUnfree = true;
     overlays = [ inputs.nur.outputs.overlay ];
   };
-  sPkgs = self.packages.x86_64-linux;
+  fPkgs = self.packages.x86_64-linux;
 
 in {
 
   home-manager.users.shawn = {
     home.packages = with pkgs;
-      with sPkgs;
+      with fPkgs;
       [
         # Administration
         remmina
@@ -62,7 +62,7 @@ in {
       ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${sPkgs.proton-ge-custom}";
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${fPkgs.proton-ge-custom}";
     };
 
     env = {
