@@ -8,6 +8,12 @@ in {
   options = {
     services.noisetorch = {
       enable = mkEnableOption "noisetorch service";
+      package = mkOption {
+        type = types.package;
+        description = "Which package to use for noisetorch";
+        default = pkgs.noisetorch;
+        defaultText = literalExpression "pkgs.noisetorch";
+      };
       threshold = mkOption {
         type = types.int;
         default = -1;
@@ -35,11 +41,8 @@ in {
       Service = {
         Type = "simple";
         RemainAfterExit = "yes";
-        ExecStart =
-          "${pkgs.noisetorch}/bin/noisetorch -i -s  ${cfg.device} -t ${
-            builtins.toString cfg.threshold
-          }";
-        ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
+        ExecStart = "${cfg.package}/bin/noisetorch -i -s  ${cfg.device} -t ${builtins.toString cfg.threshold}";
+        ExecStop = "${cfg.package}/bin/noisetorch -u";
         Restart = "on-failure";
         RestartSec = 3;
         Nice = -10;
