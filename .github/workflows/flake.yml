@@ -74,7 +74,7 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        package: ${{fromJson(needs.generate_matrix.outputs.packages)}}
+        package: ${{ fromJson(needs.generate_matrix.outputs.packages) }}
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -101,7 +101,12 @@ jobs:
       with:
         name: flake_lock
     - name: Build everything
-      run: nix build .#${{ matrix.package }}
+      run: |
+        (while true; do 
+              df -h
+              sleep 15
+              done) &
+        nix build .#${{ matrix.package }}
 
   #build_checks:
   #  runs-on: ubuntu-20.04
