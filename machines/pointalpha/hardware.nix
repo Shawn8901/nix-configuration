@@ -20,6 +20,17 @@ in {
     '';
     supportedFilesystems = [ "zfs" "ntfs" ];
     kernelPackages = sPkgs.linuxPackages_zen;
+    kernelPatches = [{
+      name = "enable RT_FULL";
+      patch = null;
+      extraConfig = ''
+        PREEMPT y
+        PREEMPT_BUILD y
+        PREEMPT_VOLUNTARY n
+        PREEMPT_COUNT y
+        PREEMPTION y
+      '';
+    }];
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
     zfs.devNodes = "/dev/disk/by-id";
   };
