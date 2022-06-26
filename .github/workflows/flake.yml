@@ -105,7 +105,7 @@ jobs:
         
   build_machines:
     runs-on: ubuntu-22.04
-    needs: [ build_packages ]
+    needs: [build_packages]
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -179,7 +179,7 @@ jobs:
   push_update:
     runs-on: ubuntu-20.04
     permissions: write-all
-    needs: [build_packages, build_machines, check_flake]
+    needs: [build_machines, check_flake]
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
