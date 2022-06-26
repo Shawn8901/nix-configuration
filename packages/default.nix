@@ -13,7 +13,6 @@ in {
     SDL2 = pkgs.SDL2.override { withStatic = true; };
   };
   proton-ge-custom = pkgs.callPackage ./proton-ge-custom { };
-  haguichi = unfree-pkgs.callPackage ./haguichi { };
   stfc = pkgs.callPackage ./shellscripts/stfc.nix { };
   rtc-helper = pkgs.callPackage ./shellscripts/rtc-helper.nix { };
   nas = pkgs.callPackage ./shellscripts/nas.nix { };

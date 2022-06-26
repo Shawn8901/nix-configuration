@@ -53,8 +53,6 @@ in {
         stfc
         nas
 
-        haguichi
-
         protontricks
 
         samba

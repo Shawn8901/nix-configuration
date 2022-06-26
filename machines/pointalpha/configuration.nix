@@ -269,7 +269,6 @@ in {
     };
     avahi.enable = true;
     avahi.nssmdns = true;
-    logmein-hamachi.enable = false;
   };
   security.rtkit.enable = true;
   security.pam.services.shawn.enableKwallet = true;
@@ -298,14 +297,16 @@ in {
 
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
-  programs.steam.enable = true;
-  programs.dconf.enable = true;
-  programs.adb.enable = true;
-  programs.noisetorch.enable = true;
-  programs.ssh.startAgent = true;
-  programs.xwayland.enable = true;
-  programs.iotop.enable = true;
-
+  programs = {
+    steam.enable = true;
+    dconf.enable = true;
+    adb.enable = true;
+    noisetorch.enable = true;
+    ssh.startAgent = true;
+    xwayland.enable = true;
+    iotop.enable = true;
+    haguichi.enable = false;
+  };
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
     variables.NIXOS_OZONE_WL = "1";
