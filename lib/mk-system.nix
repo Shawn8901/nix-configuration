@@ -30,11 +30,30 @@ in {
     hardware
 
     inputs.agenix.nixosModule
-    inputs.home-manager.nixosModule
+
 
   ] ++ builtins.attrValues self.nixosModules
     ++ nixpkgs.lib.optionals (builtins.pathExists home) [
-      { home-manager = { extraSpecialArgs = { inherit inputs self; }; }; }
+      inputs.home-manager.nixosModule
+      {
+        home-manager = {
+          extraSpecialArgs = { inherit inputs self; };
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          sharedModules = [ (import ../modules/home-manager inputs) ];
+          users.shawn = {
+            home.stateVersion = "22.05";
+            programs.zsh = { enable = true; };
+            programs.git = {
+              enable = true;
+              userName = "Shawn8901";
+              userEmail = "shawn8901@googlemail.com";
+              ignores = [ "*.swp" ];
+              extraConfig = { init = { defaultBranch = "main"; }; };
+            };
+          };
+        };
+      }
       (import home inputs)
     ] ++ nixpkgs.lib.optionals (builtins.pathExists darlings) [ darlings ];
 })
