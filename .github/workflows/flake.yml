@@ -32,10 +32,12 @@ jobs:
     - id: gen_packages
       run: |
         packages=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
+        printf "packages::%s" "$packages"
         printf "::set-output name=packages::%s" "$packages"
     - id: gen_machines
       run: |
         machines=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") ))' < flake.json)
+        printf "machines::%s" "$machines"
         printf "::set-output name=machines::%s" "$machines"
 
   update_flake:
