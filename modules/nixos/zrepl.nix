@@ -14,8 +14,9 @@ in {
 
       package = mkOption {
         type = types.package;
-        description = "Which package to use for the Nextcloud instance.";
-        defaultText = "pkgs.zrepl";
+        description = "Which package to use for zrepl";
+        default = pkgs.zrepl;
+        defaultText = literalExpression "pkgs.zrepl";
       };
 
       settings = mkOption {

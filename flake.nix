@@ -30,7 +30,7 @@
     devShells.x86_64-linux.default =
       let pkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
       in pkgs.mkShell {
-        packages = with pkgs; [ python3.pkgs.invoke direnv nix-direnv nixfmt ];
+        packages = with pkgs; [ python3.pkgs.invoke direnv nix-direnv ];
       };
   };
 }
