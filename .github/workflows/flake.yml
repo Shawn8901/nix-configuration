@@ -106,7 +106,7 @@ jobs:
               echo "----------------------------------"
               sleep 15
               done) &
-        nix build .#${{ matrix.package }}
+        nix build --print-build-logs .#${{ matrix.package }}
 
   check_flake:
     runs-on: ubuntu-20.04
