@@ -31,8 +31,12 @@ jobs:
         nix flake show --allow-import-from-derivation --json > flake.json
     - id: gen_packages
       run: |
-        packages=$(jq -c '.packages."x86_64-linux" | keys' < flake.json)
+        packages=$(.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
         printf "::set-output name=packages::%s" "$packages"
+    - id: gen_machines
+      run: |
+        machines=$(.packages."x86_64-linux" | keys | map(select(. | contains ("machines/")))' < flake.json)
+        printf "::set-output name=machines::%s" "$machines"
 
   update_flake:
     runs-on: ubuntu-22.04
@@ -63,7 +67,7 @@ jobs:
         name: flake_lock
         path: flake.lock
 
-  build_flake:
+  build_packages:
     runs-on: ubuntu-22.04
     needs: [generate_matrix, update_flake]
     strategy:
@@ -71,6 +75,42 @@ jobs:
       max-parallel: 5
       matrix:
         package: ${{ fromJson(needs.generate_matrix.outputs.packages) }}
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+      with:
+        token: '${{ secrets.GITHUB_TOKEN }}'
+    - name: Install nix
+      uses: cachix/install-nix-action@v17
+      with:
+        extra_nix_config: |
+          auto-optimise-store = true
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          experimental-features = nix-command flakes
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+        install_url: https://releases.nixos.org/nix/nix-2.9.1/install
+    - name: Set up cachix
+      uses: cachix/cachix-action@master # pathsToPush, please update once we have v11!
+      with:
+        name: shawn8901
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        pathsToPush: result
+    - name: Restore flake.lock
+      uses: actions/download-artifact@v3
+      with:
+        name: flake_lock
+    - name: Build everything
+      run: nix build --print-build-logs .#${{ matrix.package }}
+        
+  build_machines:
+    runs-on: ubuntu-22.04
+    needs: [ build_packages ]
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        machines: ${{ fromJson(needs.generate_matrix.outputs.machines) }}
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -106,7 +146,8 @@ jobs:
               echo "----------------------------------"
               sleep 15
               done) &
-        nix build --print-build-logs .#${{ matrix.package }}
+        nix build --print-build-logs .#${{ matrix.machines }}
+        
 
   check_flake:
     runs-on: ubuntu-20.04
@@ -134,10 +175,11 @@ jobs:
     - name: Build everything
       run: |
         nix flake check --keep-going
+        
   push_update:
     runs-on: ubuntu-20.04
     permissions: write-all
-    needs: [update_flake, build_flake,  check_flake]
+    needs: [update_flake, build_packages, build_machines, check_flake]
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
