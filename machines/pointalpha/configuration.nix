@@ -1,7 +1,9 @@
 { self, ... }@inputs:
 { pkgs, lib, config, ... }:
 
-let sPkgs = import inputs.nixpkgs-stable { system = "x86_64-linux"; };
+let
+  sPkgs = import inputs.nixpkgs-stable { system = "x86_64-linux"; };
+  fPkgs = self.packages.x86_64-linux;
 in {
 
   disabledModules = [ "services/backup/zrepl.nix" ];
@@ -89,7 +91,6 @@ in {
     python39
     sysstat
     nixpkgs-review
-
   ];
 
   fonts = {
@@ -172,11 +173,11 @@ in {
     printing = {
       enable = true;
       listenAddresses = [ "localhost:631" ];
-      drivers = [ sPkgs.epson-escpr2 ];
+      drivers = [ fPkgs.epson ];
     };
     zrepl = {
       enable = true;
-      package = sPkgs.zrepl;
+      package = fPkgs.zrepl;
       settings = {
         global = {
           monitoring = [{
