@@ -179,7 +179,7 @@ jobs:
   push_update:
     runs-on: ubuntu-20.04
     permissions: write-all
-    needs: [update_flake, build_packages, build_machines, check_flake]
+    needs: [build_packages, build_machines, check_flake]
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
