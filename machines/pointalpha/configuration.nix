@@ -177,7 +177,7 @@ in {
     };
     zrepl = {
       enable = true;
-      package = fPkgs.zrepl;
+      package = sPkgs.zrepl;
       settings = {
         global = {
           monitoring = [{
