@@ -9,6 +9,7 @@
       [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_blk" ];
     initrd.kernelModules = [ ];
     kernelModules = [ ];
+    kernelParams = [ "elevator=none" ];
     extraModulePackages = [ ];
     zfs.devNodes = "/dev/";
     zfs.extraPools = [ "zbackup" ];
