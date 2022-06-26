@@ -31,11 +31,11 @@ jobs:
         nix flake show --allow-import-from-derivation --json > flake.json
     - id: gen_packages
       run: |
-        packages=$(.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
+        packages=$(jq '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
         printf "::set-output name=packages::%s" "$packages"
     - id: gen_machines
       run: |
-        machines=$(.packages."x86_64-linux" | keys | map(select(. | contains ("machines/")))' < flake.json)
+        machines=$(jq '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/")))' < flake.json)
         printf "::set-output name=machines::%s" "$machines"
 
   update_flake:
