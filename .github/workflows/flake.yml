@@ -31,13 +31,8 @@ jobs:
         nix flake show --allow-import-from-derivation --json > flake.json
     - id: gen_packages
       run: |
-        packages=$(jq '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
+        packages=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
         printf "::set-output name=packages::%s" "$packages"
-    - id: gen_machines
-      run: |
-        machines=$(jq '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") ))' < flake.json)
-        printf "::set-output name=machines::%s" "$machines"
-        
 
   update_flake:
     runs-on: ubuntu-22.04
@@ -102,8 +97,16 @@ jobs:
       with:
         name: flake_lock
     - name: Build everything
-      run: nix build --print-build-logs .#${{ matrix.package }}
-   
+      run: |
+        (while true; do 
+              echo "----------------------------------"
+              ps aux | sort -nrk 3,3 | head -n 5
+              echo "----------------------------------"
+              df -h
+              echo "----------------------------------"
+              sleep 15
+              done) &
+        nix build --print-build-logs .#${{ matrix.package }}
 
   check_flake:
     runs-on: ubuntu-20.04
@@ -131,11 +134,10 @@ jobs:
     - name: Build everything
       run: |
         nix flake check --keep-going
-        
   push_update:
     runs-on: ubuntu-20.04
     permissions: write-all
-    needs: [build_packages, check_flake]
+    needs: [update_flake, build_packages,  check_flake]
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
