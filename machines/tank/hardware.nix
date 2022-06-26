@@ -11,7 +11,6 @@
     kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
     extraModulePackages = [ ];
     extraModprobeConfig = ''
-      options zfs zfs_arc_min=6442450944
       options zfs zfs_arc_max=10737418240
     '';
 

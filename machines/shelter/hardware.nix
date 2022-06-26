@@ -14,7 +14,6 @@
     zfs.extraPools = [ "zbackup" ];
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModprobeConfig = ''
-      options zfs zfs_arc_min=104857600
       options zfs zfs_arc_max=209715200
     '';
     supportedFilesystems = [ "zfs" ];
