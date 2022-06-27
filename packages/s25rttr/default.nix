@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Return-To-The-Roots";
     repo = "s25client";
-    rev = "v${version}";
+    rev = "8f16126b4ff8bfe5aad693bc6d57cffbb8e3cce8";
     fetchSubmodules = true;
     sha256 = "sha256-6gBvWYP08eoT2i8kco/3nXnTKwVa20DWtv6fLaoH07M=";
   };
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [ ./cmake_file_placeholder.patch ];
-  #doCheck = true;
+
   cmakeBuildType = "Release";
   cmakeFlags = [
     "-DRTTR_VERSION=${version}"
-    "-DRTTR_REVISION=${version}"
+    "-DRTTR_REVISION=${src.rev}"
     "-DRTTR_USE_SYSTEM_LIBS=ON"
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DRTTR_INSTALL_PLACEHOLDER=OFF"
