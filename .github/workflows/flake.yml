@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       packages: ${{ steps.gen_packages.outputs.packages }}
-      checks: ${{ steps.gen_checks.outputs.checks }}
+      machines: ${{ steps.gen_machines.outputs.checks }}
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -102,14 +102,42 @@ jobs:
         name: flake_lock
     - name: Build everything
       run: nix build --print-build-logs .#${{ matrix.package }}
-        
+   
   build_machines:
     runs-on: ubuntu-22.04
     needs: [generate_matrix, build_packages, update_flake]
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        machine: ${{fromJson(needs.generate_matrix.outputs.machines)}}
     steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+      with:
+        token: '${{ secrets.GITHUB_TOKEN }}'
+    - name: Install nix
+      uses: cachix/install-nix-action@v17
+      with:
+        extra_nix_config: |
+          auto-optimise-store = true
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          experimental-features = nix-command flakes
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+        install_url: https://releases.nixos.org/nix/nix-2.9.1/install
+    - name: Set up cachix
+      uses: cachix/cachix-action@master # pathsToPush, please update once we have v11!
+      with:
+        name: shawn8901
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        pathsToPush: result
+    - name: Restore flake.lock
+      uses: actions/download-artifact@v3
+      with:
+        name: flake_lock
     - name: Build everything
-      run: |
-        echo "${{needs.generate_matrix.outputs.machines}}"
+      run: nix build --print-build-logs .#${{ matrix.machine }}   
 
   check_flake:
     runs-on: ubuntu-20.04
