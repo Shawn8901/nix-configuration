@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       packages: ${{ steps.gen_packages.outputs.packages }}
-      machines: ${{ steps.gen_machines.outputs.checks }}
+      machines: ${{ steps.gen_machines.outputs.machines }}
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
