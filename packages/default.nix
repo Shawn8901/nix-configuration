@@ -29,6 +29,9 @@ in {
         PREEMPT_COUNT = mkForce yes;
         PREEMPTION = mkForce yes;
 
+        KERNEL_XZ = mkForce no;
+        KERNEL_ZSTD = mkForce yes;
+
         INFINIBAND = mkForce no;
 
         REISERFS_FS = mkForce no;
