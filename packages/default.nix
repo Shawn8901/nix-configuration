@@ -23,6 +23,7 @@ in {
     argsOverride =  {
       ignoreConfigErrors = true;
       structuredExtraConfig = with pkgs.lib; with pkgs.lib.kernel; {
+        ZEN_INTERACTIVE = yes;
         PREEMPT = mkForce yes;
         PREEMPT_BUILD = mkForce yes;
         PREEMPT_VOLUNTARY = mkForce no;
@@ -72,6 +73,7 @@ in {
         BLK_DEV_MD = mkForce no;
         DM_RAID = mkForce no;
         MD = mkForce no;
+        HYPERV = mkForce no;
 
         VGA_SWITCHEROO = mkForce no;
         DRM_GMA500 = mkForce no;
