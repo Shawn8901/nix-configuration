@@ -13,12 +13,12 @@
     extraModulePackages = [ ];
     zfs.devNodes = "/dev/";
     zfs.extraPools = [ "zbackup" ];
+    zfs.requestEncryptionCredentials = false;
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModprobeConfig = ''
       options zfs zfs_arc_max=209715200
     '';
     supportedFilesystems = [ "zfs" ];
-
   };
 
   fileSystems."/" = {
