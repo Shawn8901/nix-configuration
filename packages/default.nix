@@ -31,6 +31,7 @@ in {
         PREEMPTION = mkForce yes;
 
         KERNEL_XZ = mkForce no;
+        HAVE_KERNEL_ZSTD = mkForce yes;
         KERNEL_ZSTD = mkForce yes;
         CONFIG_RD_ZSTD = mkForce yes;
         CONFIG_MODULE_COMPRESS_ZSTD = mkForce yes;
@@ -89,6 +90,7 @@ in {
         FB_ATY_GX = mkForce no;
         FB_SAVAGE_I2C = mkForce no;
         FB_SAVAGE_ACCEL = mkForce no;
+        FB_SIS = mkForce no;
         FB_SIS_300 = mkForce no;
         FB_SIS_315 = mkForce no;
         FB_3DFX_ACCEL = mkForce no;
