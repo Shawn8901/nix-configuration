@@ -31,6 +31,9 @@ in {
 
         KERNEL_XZ = mkForce no;
         KERNEL_ZSTD = mkForce yes;
+        CONFIG_RD_ZSTD = mkForce yes;
+        CONFIG_MODULE_COMPRESS_ZSTD = mkForce yes;
+        CONFIG_CRYPTO_ZSTD = mkForce yes;
 
         INFINIBAND = mkForce no;
 
@@ -63,6 +66,12 @@ in {
         ANDROID = mkForce no;
 
         CHROME_PLATFORMS = mkForce no;
+        SURFACE_PLATFORMS = mkForce no;
+        INPUT_TOUCHSCREEN = mkForce no;
+        ARCH_TEGRA = mkForce no;
+        BLK_DEV_MD = mkForce no;
+        DM_RAID = mkForce no;
+        MD = mkForce no;
 
         VGA_SWITCHEROO = mkForce no;
         DRM_GMA500 = mkForce no;
