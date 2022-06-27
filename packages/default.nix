@@ -7,6 +7,7 @@ let
     config.allowUnfree = true;
   };
 
+  baseKernel = pkgs.linuxKernel.kernels.linux_zen;
 in {
 
   s25rttr = pkgs.callPackage ./s25rttr {
@@ -18,5 +19,16 @@ in {
   rtc-helper = pkgs.callPackage ./shellscripts/rtc-helper.nix { };
   nas = pkgs.callPackage ./shellscripts/nas.nix { };
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
+
+  linux_zen_rt = baseKernel.override ({
+    extraConfig = ''
+      PREEMPT y
+      PREEMPT_BUILD y
+      PREEMPT_VOLUNTARY n
+      PREEMPT_COUNT y
+      PREEMPTION y
+    '';
+  });
+
   agenix = inputs.agenix.defaultPackage.x86_64-linux;
 }

@@ -3,6 +3,7 @@
 let
   zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
   sPkgs = import inputs.nixpkgs-stable { system = "x86_64-linux"; };
+  fPkgs = self.packages.x86_64-linux;
 in {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -18,18 +19,7 @@ in {
       options zfs zfs_arc_max=6442450944
     '';
     supportedFilesystems = [ "zfs" "ntfs" ];
-    kernelPackages = sPkgs.linuxPackages_zen;
-    kernelPatches = [{
-      name = "enable RT_FULL";
-      patch = null;
-      extraConfig = ''
-        PREEMPT y
-        PREEMPT_BUILD y
-        PREEMPT_VOLUNTARY n
-        PREEMPT_COUNT y
-        PREEMPTION y
-      '';
-    }];
+    kernelPackages = pkgs.linuxPackagesFor fPkgs.linux_zen_rt;
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
     zfs.devNodes = "/dev/disk/by-id";
   };
