@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Return-To-The-Roots";
     repo = "s25client";
-    rev = "8f16126b4ff8bfe5aad693bc6d57cffbb8e3cce8";
+    rev = "397f2b2315e997504d4958bfbdea0af815ce559a";
     fetchSubmodules = true;
     sha256 = "sha256-6gBvWYP08eoT2i8kco/3nXnTKwVa20DWtv6fLaoH07M=";
   };
