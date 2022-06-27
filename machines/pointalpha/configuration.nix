@@ -173,7 +173,7 @@ in {
     printing = {
       enable = true;
       listenAddresses = [ "localhost:631" ];
-      drivers = [ fPkgs.epson ];
+      drivers = [ fPkgs.epson-escpr2 ];
     };
     zrepl = {
       enable = true;
