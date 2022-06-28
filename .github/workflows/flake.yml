@@ -23,9 +23,9 @@ jobs:
           auto-optimise-store = true
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           experimental-features = nix-command flakes
-          substituters = https://cache.nixos.org/ https://nix-community.cachix.org
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
-        install_url: https://releases.nixos.org/nix/nix-2.7.0/install
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
+        install_url: https://releases.nixos.org/nix/nix-2.9.1/install
     - name: Generate flake.json
       run: |
         nix flake show --allow-import-from-derivation --json > flake.json
@@ -52,8 +52,8 @@ jobs:
           auto-optimise-store = true
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           experimental-features = nix-command flakes
-          substituters = https://cache.nixos.org/ https://nix-community.cachix.org
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
         install_url: https://releases.nixos.org/nix/nix-2.9.1/install
     - name: Set up git
       run: |
@@ -87,8 +87,8 @@ jobs:
           auto-optimise-store = true
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           experimental-features = nix-command flakes
-          substituters = https://cache.nixos.org/ https://nix-community.cachix.org
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
         install_url: https://releases.nixos.org/nix/nix-2.9.1/install
     - name: Set up cachix
       uses: cachix/cachix-action@master # pathsToPush, please update once we have v11!
@@ -123,8 +123,8 @@ jobs:
           auto-optimise-store = true
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           experimental-features = nix-command flakes
-          substituters = https://cache.nixos.org/ https://nix-community.cachix.org
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
         install_url: https://releases.nixos.org/nix/nix-2.9.1/install
     - name: Set up cachix
       uses: cachix/cachix-action@master # pathsToPush, please update once we have v11!
@@ -155,8 +155,8 @@ jobs:
           auto-optimise-store = true
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           experimental-features = nix-command flakes
-          substituters = https://cache.nixos.org/ https://nix-community.cachix.org
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
         install_url: https://releases.nixos.org/nix/nix-2.9.1/install
     - name: Restore flake.lock
       uses: actions/download-artifact@v3
