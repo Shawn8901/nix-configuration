@@ -4,7 +4,6 @@ let
   zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
 in {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
-
   boot = {
     initrd = {
       availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod" ];
