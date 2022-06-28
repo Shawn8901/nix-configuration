@@ -20,7 +20,6 @@ in {
 
   linux_zen_rt = baseKernel.override ({
     argsOverride =  {
-      modDirVersion = builtins.replaceStrings ["zen"] ["shawn"] baseKernel.modDirVersion;
       ignoreConfigErrors = true;
       structuredExtraConfig = with uPkgs.lib; with uPkgs.lib.kernel; {
         ZEN_INTERACTIVE = yes;
