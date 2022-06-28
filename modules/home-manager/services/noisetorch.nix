@@ -31,6 +31,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    home.packages = [ cfg.package ];
+
     systemd.user.services.noisetorch = {
       Unit = {
         Description = "Noisetorch Noise Cancelling";
@@ -41,7 +43,7 @@ in {
       Service = {
         Type = "simple";
         RemainAfterExit = "yes";
-        ExecStart = "${cfg.package}/bin/noisetorch -i -s  ${cfg.device} -t ${builtins.toString cfg.threshold}";
+        ExecStart = "${cfg.package}/bin/noisetorch -i -s ${cfg.device} -t ${builtins.toString cfg.threshold}";
         ExecStop = "${cfg.package}/bin/noisetorch -u";
         Restart = "on-failure";
         RestartSec = 3;
