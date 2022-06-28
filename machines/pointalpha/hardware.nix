@@ -2,7 +2,6 @@
 { config, lib, pkgs, modulesPath, ... }:
 let
   zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
-  fPkgs = self.packages.x86_64-linux;
 in {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -13,7 +12,7 @@ in {
     };
     kernelModules = [ "kvm-amd" "cifs" "usb_storage" ];
     kernelParams = [ "elevator=none" ];
-    kernelPackages =  pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor (fPkgs.linux_zen_rt));
+    kernelPackages =  pkgs.linuxPackages_xanmod_latest;
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944
