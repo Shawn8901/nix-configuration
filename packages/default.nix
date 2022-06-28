@@ -30,6 +30,7 @@ in {
         PREEMPT_COUNT = mkForce yes;
         PREEMPTION = mkForce yes;
 
+        /*
         KERNEL_XZ = mkForce no;
         HAVE_KERNEL_ZSTD = mkForce yes;
         KERNEL_ZSTD = mkForce yes;
@@ -37,6 +38,7 @@ in {
         MODULE_COMPRESS_XZ = mkForce no;
         MODULE_COMPRESS_ZSTD = mkForce yes;
         CRYPTO_ZSTD = mkForce yes;
+        */
 
         INFINIBAND = mkForce no;
 

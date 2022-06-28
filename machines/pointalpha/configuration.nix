@@ -304,7 +304,7 @@ in {
     adb.enable = true;
     noisetorch.enable = true;
     ssh.startAgent = true;
-    xwayland.enable = true;
+    xwayland.enable = false;
     iotop.enable = true;
     haguichi.enable = false;
   };
