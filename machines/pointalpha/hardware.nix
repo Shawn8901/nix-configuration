@@ -13,7 +13,7 @@ in {
     };
     kernelModules = [ "kvm-amd" "cifs" "usb_storage" ];
     kernelParams = [ "elevator=none" ];
-    kernelPackages = fPkgs.linux_zen_rt;
+    kernelPackages =  pkgs.linuxPackagesFor (fPkgs.linux_zen_rt);
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944

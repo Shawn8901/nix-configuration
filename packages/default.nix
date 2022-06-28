@@ -1,7 +1,7 @@
 { self, ... }@inputs:
 let
   pkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
-  uPkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
+  uPkgs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux;
 
   baseKernel = uPkgs.linuxKernel.kernels.linux_zen;
 in {
@@ -18,7 +18,7 @@ in {
 
   agenix = inputs.agenix.defaultPackage.x86_64-linux;
 
-  linux_zen_rt = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor (baseKernel.override ({
+  linux_zen_rt = baseKernel.override ({
     argsOverride =  {
       kernelPatches = with uPkgs.lib; with uPkgslib.kernel; [
         {
@@ -112,5 +112,5 @@ in {
         }
       ];
     };
-  })));
+  });
 }
