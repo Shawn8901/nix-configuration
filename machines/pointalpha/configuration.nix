@@ -176,9 +176,6 @@ in {
       media-session.enable = false;
       wireplumber.enable = true;
       config.pipewire = {
-            "context.properties" = {"default.clock.min-quantum" = quantum;};
-      };
-      config.pipewire = {
         "context.properties" = {
           "link.max-buffers" = 16;
           "log.level" = 2;
@@ -255,6 +252,7 @@ in {
           "node.latency" = qr;
           "resample.quality" = 1;
         };
+      };
     };
     printing = {
       enable = true;
