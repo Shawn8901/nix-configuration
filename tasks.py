@@ -154,6 +154,7 @@ def collect_garbage(_, hosts="localhost"):
         h.run("find /nix/var/nix/gcroots/auto -type s -delete")
         h.run("systemctl restart nix-gc")
         h.run("nix-collect-garbage -d")
+        h.run("nix store optimise")
 
     g.run_function(run)
 
