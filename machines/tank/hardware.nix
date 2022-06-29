@@ -20,7 +20,7 @@
     zfs.extraPools = [ "ztank" ];
     zfs.requestEncryptionCredentials = [ "ztank" ];
 
-    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    kernelPackages = pkgs.linuxPackages;
 
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 10; };
     postBootCommands = ''

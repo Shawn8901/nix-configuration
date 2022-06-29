@@ -14,7 +14,7 @@
     zfs.devNodes = "/dev/";
     zfs.extraPools = [ "zbackup" ];
     zfs.requestEncryptionCredentials = false;
-    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    kernelPackages = pkgs.linuxPackages;
     extraModprobeConfig = ''
       options zfs zfs_arc_max=209715200
     '';
