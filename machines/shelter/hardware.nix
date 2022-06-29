@@ -10,11 +10,11 @@
     initrd.kernelModules = [ ];
     kernelModules = [ ];
     kernelParams = [ "elevator=none" ];
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [ ];
     zfs.devNodes = "/dev/";
     zfs.extraPools = [ "zbackup" ];
     zfs.requestEncryptionCredentials = false;
-    kernelPackages = pkgs.linuxPackages;
     extraModprobeConfig = ''
       options zfs zfs_arc_max=209715200
     '';

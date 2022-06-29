@@ -10,6 +10,7 @@
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
     kernelParams = [ "elevator=none" ];
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=10737418240
@@ -19,8 +20,6 @@
     zfs.devNodes = "/dev/disk/by-id";
     zfs.extraPools = [ "ztank" ];
     zfs.requestEncryptionCredentials = [ "ztank" ];
-
-    kernelPackages = pkgs.linuxPackages;
 
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 10; };
     postBootCommands = ''
