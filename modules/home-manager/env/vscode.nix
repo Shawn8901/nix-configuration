@@ -27,7 +27,7 @@ in with lib; {
 
         eamodio.gitlens
 
-        bbenoist.nix
+        jnoortheen.nix-ide
       ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
           name = "code-python-isort";
