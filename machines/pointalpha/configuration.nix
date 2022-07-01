@@ -169,7 +169,7 @@ in {
       maxQuantum = 8192;
       qr = "${toString quantum}/${toString rate}";
       rtLimitSoft = 200000;
-      rtLimitHard = 200000;
+      rtLimitHard = 300000;
     in {
       enable = true;
       pulse.enable = true;
