@@ -10,7 +10,7 @@
     initrd.kernelModules = [ ];
     kernelModules = [ ];
     kernelParams = [ "elevator=none" ];
-    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    kernelPackages = pkgs.linuxPackages;
     extraModulePackages = [ ];
     zfs.devNodes = "/dev/";
     zfs.extraPools = [ "zbackup" ];
