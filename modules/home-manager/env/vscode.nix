@@ -10,7 +10,7 @@ in with lib; {
 
   config = mkIf cfg.enable {
 
-    home.packages = with pkgs; [ nixfmt ];
+    home.packages = with pkgs; [ nixpkgs-fmt ];
 
     programs.vscode = {
       enable = true;

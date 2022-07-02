@@ -2,7 +2,8 @@
 { config, lib, pkgs, modulesPath, ... }:
 let
   zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
-in {
+in
+{
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
   boot = {
     initrd = {

@@ -5,7 +5,8 @@ let
   cfg = config.services.zrepl;
   format = pkgs.formats.yaml { };
   configFile = format.generate "zrepl.yml" cfg.settings;
-in {
+in
+{
   meta.maintainers = with maintainers; [ cole-h ];
 
   options = {

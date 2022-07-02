@@ -8,7 +8,8 @@ let
   inherit (nPkgs.nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
 
   cfg = config.env.browser;
-in {
+in
+{
   options = {
     env.browser = {
       enable = mkEnableOption "Enable browser on the environment";

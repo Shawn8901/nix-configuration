@@ -44,13 +44,14 @@ in {
   };
 
   networking = {
-    firewall = let zrepl = self.lib.zrepl.servePorts config.services.zrepl;
-    in {
-      allowedUDPPorts = [ ];
-      allowedUDPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 ] ++ zrepl;
-      allowedTCPPortRanges = [ ];
-    };
+    firewall =
+      let zrepl = self.lib.zrepl.servePorts config.services.zrepl;
+      in {
+        allowedUDPPorts = [ ];
+        allowedUDPPortRanges = [ ];
+        allowedTCPPorts = [ 80 443 ] ++ zrepl;
+        allowedTCPPortRanges = [ ];
+      };
     networkmanager.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;

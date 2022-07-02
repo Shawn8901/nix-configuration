@@ -1,7 +1,8 @@
 { self, ... }@inputs:
 let
   pkgs = self.sPkgs;
-in {
+in
+{
   s25rttr = pkgs.callPackage ./s25rttr {
     SDL2 = pkgs.SDL2.override { withStatic = true; };
   };

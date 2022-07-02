@@ -7,13 +7,14 @@
   };
 
   networking = {
-    firewall = let zrepl = self.lib.zrepl.servePorts config.services.zrepl;
-    in {
-      allowedUDPPorts = [ ];
-      allowedUDPPortRanges = [ ];
-      allowedTCPPorts = [ ] ++ zrepl;
-      allowedTCPPortRanges = [ ];
-    };
+    firewall =
+      let zrepl = self.lib.zrepl.servePorts config.services.zrepl;
+      in {
+        allowedUDPPorts = [ ];
+        allowedUDPPortRanges = [ ];
+        allowedTCPPorts = [ ] ++ zrepl;
+        allowedTCPPortRanges = [ ];
+      };
     networkmanager.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;

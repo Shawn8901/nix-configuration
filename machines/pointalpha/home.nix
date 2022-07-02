@@ -1,9 +1,10 @@
 { self, ... }@inputs:
 { config, pkgs, ... }:
 let
-  inherit (self)nPkgs;
+  inherit (self) nPkgs;
   fPkgs = self.packages.x86_64-linux;
-in {
+in
+{
   home-manager.users.shawn = {
     home.packages = with pkgs;
       with fPkgs;

@@ -1,5 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, git, cmake, pkg-config, boost, bzip2, curl
-, gettext, libiconv, miniupnpc, SDL2, SDL2_mixer, libsamplerate }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, git
+, cmake
+, pkg-config
+, boost
+, bzip2
+, curl
+, gettext
+, libiconv
+, miniupnpc
+, SDL2
+, SDL2_mixer
+, libsamplerate
+}:
 
 stdenv.mkDerivation rec {
   pname = "s25rttr";

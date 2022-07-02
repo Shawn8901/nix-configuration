@@ -18,26 +18,28 @@
     };
   };
 
-  outputs = { self, ... }@inputs: let
-    nPkgs = (import inputs.nixpkgs-stable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-      overlays = [ inputs.nur.outputs.overlay ];
-    });
-    sPkgs = (import inputs.nixpkgs-stable { system = "x86_64-linux"; });
-  in {
-    inherit nPkgs sPkgs;
+  outputs = { self, ... }@inputs:
+    let
+      nPkgs = (import inputs.nixpkgs-stable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        overlays = [ inputs.nur.outputs.overlay ];
+      });
+      sPkgs = (import inputs.nixpkgs-stable { system = "x86_64-linux"; });
+    in
+    {
+      inherit nPkgs sPkgs;
 
-    nixosModules = import ./modules/nixos inputs;
-    nixosConfigurations = import ./machines inputs;
+      nixosModules = import ./modules/nixos inputs;
+      nixosConfigurations = import ./machines inputs;
 
-    lib = import ./lib inputs;
+      lib = import ./lib inputs;
 
-    packages.x86_64-linux = (import ./packages inputs)
-      // self.lib.nixosConfigurationsAsPackages.x86_64-linux;
+      packages.x86_64-linux = (import ./packages inputs)
+        // self.lib.nixosConfigurationsAsPackages.x86_64-linux;
 
-    devShells.x86_64-linux.default = sPkgs.mkShell {
-        packages = with sPkgs; [ python3.pkgs.invoke direnv nix-direnv nix-diff nixfmt ];
+      devShells.x86_64-linux.default = sPkgs.mkShell {
+        packages = with sPkgs; [ python3.pkgs.invoke direnv nix-direnv nix-diff ];
       };
-  };
+    };
 }

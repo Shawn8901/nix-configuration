@@ -4,7 +4,8 @@
 let
   cfg = config.services.shutdown-wakeup;
   fPkgs = self.packages.x86_64-linux;
-in {
+in
+{
   options = {
     services.shutdown-wakeup = {
       enable = lib.mkEnableOption "shutdown-wakeup service combo";

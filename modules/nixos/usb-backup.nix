@@ -4,7 +4,8 @@
 let
   cfg = config.services.usb-backup;
   fPkgs = self.packages.x86_64-linux;
-in {
+in
+{
   options = {
     services.usb-backup = {
       enable = lib.mkEnableOption "automatic backup to usb disk";
@@ -27,17 +28,19 @@ in {
       '';
     };
 
-    systemd.services."usb-backup@" = let
-      usbBackup =
-        fPkgs.usb-backup.override { inherit (cfg) backupPath mountPoint; };
-    in {
-      description = "Backups ${cfg.backupPath} to usb hdd";
-      serviceConfig = {
-        Type = "simple";
-        GuessMainPID = false;
-        WorkingDirectory = "${cfg.mountPoint}";
-        ExecStart = "${usbBackup}/bin/usb-backup %I";
+    systemd.services."usb-backup@" =
+      let
+        usbBackup =
+          fPkgs.usb-backup.override { inherit (cfg) backupPath mountPoint; };
+      in
+      {
+        description = "Backups ${cfg.backupPath} to usb hdd";
+        serviceConfig = {
+          Type = "simple";
+          GuessMainPID = false;
+          WorkingDirectory = "${cfg.mountPoint}";
+          ExecStart = "${usbBackup}/bin/usb-backup %I";
+        };
       };
-    };
   };
 }
