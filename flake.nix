@@ -1,7 +1,7 @@
 {
   description = "A very basic flake";
 
-  inputs = {
+  inputs = rec {
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
@@ -18,7 +18,16 @@
     };
   };
 
-  outputs = { self, ... }@inputs: {
+  outputs = { self, ... }@inputs: let
+    nPkgs = (import inputs.nixpkgs-stable {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+      overlays = [ inputs.nur.outputs.overlay ];
+    });
+    sPkgs = (import inputs.nixpkgs-stable { system = "x86_64-linux"; });
+  in {
+    inherit nPkgs sPkgs;
+
     nixosModules = import ./modules/nixos inputs;
     nixosConfigurations = import ./machines inputs;
 
@@ -27,10 +36,8 @@
     packages.x86_64-linux = (import ./packages inputs)
       // self.lib.nixosConfigurationsAsPackages.x86_64-linux;
 
-    devShells.x86_64-linux.default =
-      let pkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
-      in pkgs.mkShell {
-        packages = with pkgs; [ python3.pkgs.invoke direnv nix-direnv nix-diff nixfmt ];
+    devShells.x86_64-linux.default = sPkgs.mkShell {
+        packages = with sPkgs; [ python3.pkgs.invoke direnv nix-direnv nix-diff nixfmt ];
       };
   };
 }

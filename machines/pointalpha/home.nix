@@ -1,15 +1,9 @@
 { self, ... }@inputs:
 { config, pkgs, ... }:
 let
-  nPkgs = import inputs.nixpkgs-stable {
-    system = "x86_64-linux";
-    config.allowUnfree = true;
-    overlays = [ inputs.nur.outputs.overlay ];
-  };
+  inherit (self)nPkgs;
   fPkgs = self.packages.x86_64-linux;
-
 in {
-
   home-manager.users.shawn = {
     home.packages = with pkgs;
       with fPkgs;

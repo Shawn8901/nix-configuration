@@ -4,11 +4,7 @@
 with lib;
 
 let
-  nPkgs = import inputs.nixpkgs-stable {
-    system = "x86_64-linux";
-    config.allowUnfree = true;
-    overlays = [ inputs.nur.outputs.overlay ];
-  };
+  inherit (self) nPkgs;
   inherit (nPkgs.nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
 
   cfg = config.env.browser;

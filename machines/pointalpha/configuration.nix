@@ -2,7 +2,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  sPkgs = import inputs.nixpkgs-stable { system = "x86_64-linux"; };
+  inherit (self)sPkgs;
   fPkgs = self.packages.x86_64-linux;
 in {
 
@@ -397,6 +397,10 @@ in {
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
     variables.NIXOS_OZONE_WL = "1";
+    variables.SDL_VIDEODRIVER = "wayland";
+    variables.QT_QPA_PLATFORM = "wayland";
+    variables.QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    variables._JAVA_AWT_WM_NONREPARENTING = "1";
     etc."samba/credentials_shawn".source =
       config.age.secrets.shawn_samba_credentials.path;
     etc."samba/credentials_ela".source =

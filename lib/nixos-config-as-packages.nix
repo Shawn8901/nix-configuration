@@ -1,6 +1,6 @@
 { self, ... }@inputs:
 let
-  pkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
+  pkgs = self.sPkgs;
 
   inherit (pkgs.lib) genAttrs mapAttrs';
 

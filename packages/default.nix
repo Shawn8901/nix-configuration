@@ -1,6 +1,6 @@
 { self, ... }@inputs:
 let
-  pkgs = inputs.nixpkgs-stable.legacyPackages.x86_64-linux;
+  pkgs = self.sPkgs;
 in {
   s25rttr = pkgs.callPackage ./s25rttr {
     SDL2 = pkgs.SDL2.override { withStatic = true; };
