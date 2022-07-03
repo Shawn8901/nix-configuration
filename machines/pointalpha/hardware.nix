@@ -16,6 +16,9 @@ in
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944
+      options zfs zfs_vdev_scheduler=deadline
+      options zfs zfs_vdev_scrub_max_active=2
+      options zfs zfs_scrub_min_time_ms=2000
     '';
     supportedFilesystems = [ "zfs" "ntfs" ];
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
