@@ -23,6 +23,7 @@ nixpkgs.lib.nixosSystem (
           enable = true;
           generateCaches = true;
         };
+        nix.registry.nixpkgs.flake = nixpkgs;
         system.stateVersion = "22.05";
       }
       entryPoint
