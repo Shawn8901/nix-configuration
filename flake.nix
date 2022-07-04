@@ -20,7 +20,7 @@
 
   outputs = { self, ... }@inputs:
     let
-      nPkgs = (import inputs.nixpkgs-stable {
+      nPkgs = (import inputs.nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfree = true;
         overlays = [ inputs.nur.outputs.overlay ];
