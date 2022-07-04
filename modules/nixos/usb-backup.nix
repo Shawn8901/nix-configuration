@@ -3,7 +3,7 @@
 
 let
   cfg = config.services.usb-backup;
-  fPkgs = self.packages.x86_64-linux;
+  fPkgs = self.packages.${self.system};
 in
 {
   options = {

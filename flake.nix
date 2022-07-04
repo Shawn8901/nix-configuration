@@ -20,25 +20,26 @@
 
   outputs = { self, ... }@inputs:
     let
+      system = "x86_64-linux";
       nPkgs = (import inputs.nixpkgs-unstable {
-        system = "x86_64-linux";
+        inherit system;
         config.allowUnfree = true;
         overlays = [ inputs.nur.outputs.overlay ];
       });
-      sPkgs = (import inputs.nixpkgs-stable { system = "x86_64-linux"; });
+      sPkgs = (import inputs.nixpkgs-stable { inherit system; });
     in
     {
-      inherit nPkgs sPkgs;
+      inherit system nPkgs sPkgs;
 
       nixosModules = import ./modules/nixos inputs;
       nixosConfigurations = import ./machines inputs;
 
       lib = import ./lib inputs;
 
-      packages.x86_64-linux = (import ./packages inputs)
-        // self.lib.nixosConfigurationsAsPackages.x86_64-linux;
+      packages.${system} = (import ./packages inputs)
+        // self.lib.nixosConfigurationsAsPackages.configs;
 
-      devShells.x86_64-linux.default = sPkgs.mkShell {
+      devShells.${system}.default = sPkgs.mkShell {
         packages = with sPkgs; [ python3.pkgs.invoke direnv nix-direnv nix-diff ];
       };
     };

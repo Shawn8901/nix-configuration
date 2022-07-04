@@ -8,11 +8,9 @@ nixpkgs.lib.nixosSystem (
     hardware = import "${configFolder}/hardware.nix" inputs;
     home = "${configFolder}/home.nix";
     darlings = "${configFolder}/erase-darlings.nix";
-
   in
   {
-    system = "x86_64-linux";
-
+    inherit (self) system;
     modules = [
       {
         boot.cleanTmpDir = true;

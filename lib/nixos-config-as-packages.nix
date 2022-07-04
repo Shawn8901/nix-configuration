@@ -13,4 +13,4 @@ let
     })
     attrHostNames;
 in
-{ x86_64-linux = configs; }
+{ inherit configs; }

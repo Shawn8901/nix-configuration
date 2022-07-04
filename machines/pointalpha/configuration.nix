@@ -3,7 +3,7 @@
 
 let
   inherit (self) sPkgs;
-  fPkgs = self.packages.x86_64-linux;
+  fPkgs = self.packages.${self.system};
 in
 {
 

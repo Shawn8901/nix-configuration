@@ -13,5 +13,5 @@ in
   nas = pkgs.callPackage ./shellscripts/nas.nix { };
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
 
-  agenix = inputs.agenix.defaultPackage.x86_64-linux;
+  agenix = inputs.agenix.defaultPackage.${self.system};
 }

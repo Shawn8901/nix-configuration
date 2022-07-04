@@ -15,7 +15,7 @@
     neofetch
     unzip
     age
-    self.packages.x86_64-linux.agenix
+    self.packages.${self.system}.agenix
     ncdu
   ];
 }
