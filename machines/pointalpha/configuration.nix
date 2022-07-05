@@ -1,9 +1,8 @@
-{ self, ... }@inputs:
+{ self, sPkgs, system, ... }@inputs:
 { pkgs, lib, config, ... }:
 
 let
-  inherit (self) sPkgs;
-  fPkgs = self.packages.${self.system};
+  fPkgs = self.packages.${system};
 in
 {
 
@@ -344,7 +343,7 @@ in
             targets = [
               "localhost:${
                 toString (builtins.head
-                  (self.lib.zrepl.monitoringPorts config.services.zrepl))
+                  (inputs.lib.zrepl.monitoringPorts config.services.zrepl))
               }"
             ];
             labels = { machine = "${config.networking.hostName}"; };

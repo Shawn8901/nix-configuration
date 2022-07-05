@@ -1,9 +1,9 @@
-{ self, ... }:
+{ self, system, ... }:
 { config, lib, pkgs, ... }:
 
 let
   cfg = config.services.usb-backup;
-  fPkgs = self.packages.${self.system};
+  fPkgs = self.packages.${system};
 in
 {
   options = {

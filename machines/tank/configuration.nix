@@ -1,7 +1,8 @@
 { self, ... }@inputs:
 { config, pkgs, lib, ... }:
 let hosts = self.nixosConfigurations;
-in {
+in
+{
   age.secrets = {
     ztank_key = { file = ../../secrets/ztank_key.age; };
     zrepl_tank = { file = ../../secrets/zrepl_tank.age; };
@@ -45,8 +46,9 @@ in {
 
   networking = {
     firewall =
-      let zrepl = self.lib.zrepl.servePorts config.services.zrepl;
-      in {
+      let zrepl = inputs.lib.zrepl.servePorts config.services.zrepl;
+      in
+      {
         allowedUDPPorts = [ ];
         allowedUDPPortRanges = [ ];
         allowedTCPPorts = [ 80 443 ] ++ zrepl;
@@ -208,7 +210,7 @@ in {
             connect = {
               type = "tls";
               address = "shelter.pointjig.de:${
-                  toString (builtins.head (self.lib.zrepl.servePorts
+                  toString (builtins.head (inputs.lib.zrepl.servePorts
                     hosts.shelter.config.services.zrepl))
                 }";
               ca = "/etc/zrepl/shelter.crt";
@@ -390,7 +392,7 @@ in {
             targets = [
               "localhost:${
                 toString (builtins.head
-                  (self.lib.zrepl.monitoringPorts config.services.zrepl))
+                  (inputs.lib.zrepl.monitoringPorts config.services.zrepl))
               }"
             ];
             labels = { machine = "${config.networking.hostName}"; };

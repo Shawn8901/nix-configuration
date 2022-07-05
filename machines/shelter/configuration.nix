@@ -8,8 +8,9 @@
 
   networking = {
     firewall =
-      let zrepl = self.lib.zrepl.servePorts config.services.zrepl;
-      in {
+      let zrepl = inputs.lib.zrepl.servePorts config.services.zrepl;
+      in
+      {
         allowedUDPPorts = [ ];
         allowedUDPPortRanges = [ ];
         allowedTCPPorts = [ ] ++ zrepl;

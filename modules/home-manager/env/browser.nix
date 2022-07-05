@@ -1,12 +1,9 @@
-{ self, ... }@inputs:
+{ nPkgs, ... }@inputs:
 { config, lib, pkgs, ... }:
-
 with lib;
-
 let
-  inherit (self) nPkgs;
-  inherit (nPkgs.nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
-
+  inherit (nPkgs) nur;
+  inherit (nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
   cfg = config.env.browser;
 in
 {
@@ -31,10 +28,9 @@ in
       enable = true;
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         forceWayland = true;
-        extraNativeMessagingHosts = with nPkgs.nur.repos.wolfangaukang;
-          [ vdhcoapp ];
+        extraNativeMessagingHosts = with nur.repos.wolfangaukang; [ vdhcoapp ];
       };
-      extensions = with nPkgs.nur.repos.rycee.firefox-addons; [
+      extensions = with nur.repos.rycee.firefox-addons; [
         ublock-origin
         umatrix
         keepassxc-browser

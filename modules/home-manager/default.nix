@@ -1,4 +1,5 @@
-inputs: {
+inputs:
+{
   imports = [
     (import ./services/autoadb.nix inputs)
     (import ./services/noisetorch.nix inputs)

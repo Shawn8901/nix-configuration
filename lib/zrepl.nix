@@ -1,7 +1,6 @@
-{ self, ... }@inputs:
+{ self, sPkgs, ... }@inputs:
 let
-  pkgs = self.sPkgs;
-  inherit (pkgs.lib) toInt removePrefix filter;
+  inherit (sPkgs.lib) toInt removePrefix filter;
 in
 {
   servePorts = zrepl:

@@ -1,8 +1,7 @@
-{ self, ... }@inputs:
+{ self, system, nPkgs, ... }@inputs:
 { config, pkgs, ... }:
 let
-  inherit (self) nPkgs;
-  fPkgs = self.packages.${self.system};
+  fPkgs = self.packages.${system};
 in
 {
   home-manager.users.shawn = {

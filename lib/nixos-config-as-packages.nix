@@ -1,8 +1,6 @@
-{ self, ... }@inputs:
+{ self, sPkgs, ... }@inputs:
 let
-  pkgs = self.sPkgs;
-
-  inherit (pkgs.lib) genAttrs mapAttrs';
+  inherit (sPkgs.lib) genAttrs mapAttrs';
 
   hostNames = __attrNames self.nixosConfigurations;
   attrHostNames = genAttrs hostNames (name: "machines/${name}");

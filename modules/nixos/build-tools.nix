@@ -1,4 +1,4 @@
-{ self, ... }@inputs:
+{ self, system, ... }@inputs:
 { pkgs, ... }:
 
 {
@@ -15,7 +15,7 @@
     neofetch
     unzip
     age
-    self.packages.${self.system}.agenix
+    self.packages.${system}.agenix
     ncdu
   ];
 }

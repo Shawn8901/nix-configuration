@@ -27,17 +27,14 @@
         overlays = [ inputs.nur.outputs.overlay ];
       });
       sPkgs = (import inputs.nixpkgs-stable { inherit system; });
+      lib = import ./lib (inputs // { inherit lib nPkgs sPkgs system; });
     in
     {
-      inherit system nPkgs sPkgs;
+      nixosModules = import ./modules/nixos (inputs // { inherit lib system; });
+      nixosConfigurations = import ./machines (inputs // { inherit lib nPkgs sPkgs system; });
 
-      nixosModules = import ./modules/nixos inputs;
-      nixosConfigurations = import ./machines inputs;
-
-      lib = import ./lib inputs;
-
-      packages.${system} = (import ./packages inputs)
-        // self.lib.nixosConfigurationsAsPackages.configs;
+      packages.${system} = (import ./packages (inputs // { inherit system; pkgs = sPkgs; }))
+        // lib.nixosConfigurationsAsPackages.configs;
 
       devShells.${system}.default = sPkgs.mkShell {
         packages = with sPkgs; [ python3.pkgs.invoke direnv nix-direnv nix-diff ];

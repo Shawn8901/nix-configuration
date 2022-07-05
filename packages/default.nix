@@ -1,7 +1,4 @@
-{ self, ... }@inputs:
-let
-  pkgs = self.sPkgs;
-in
+{ self, system, pkgs, ... }@inputs:
 {
   s25rttr = pkgs.callPackage ./s25rttr {
     SDL2 = pkgs.SDL2.override { withStatic = true; };
@@ -13,5 +10,5 @@ in
   nas = pkgs.callPackage ./shellscripts/nas.nix { };
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
 
-  agenix = inputs.agenix.defaultPackage.${self.system};
+  agenix = inputs.agenix.defaultPackage.${system};
 }
