@@ -99,7 +99,6 @@ def deploy(_, hosts="localhost"):
     g.run_function(run)
 
 
-
 @task
 def build(_, hosts="localhost"):
     g: DeployGroup = parse_host_arg(hosts)
@@ -118,6 +117,25 @@ def build(_, hosts="localhost"):
             f"nixos-rebuild build --build-host localhost --target-host {target_host} --flake $(realpath {flake_path})"
         )
         h.run(f"nvd diff $(ls --reverse -v /nix/var/nix/profiles | head --lines=1 | awk '{{print \"/nix/var/nix/profiles/\" $$0}}' -) ~/result")
+
+    g.run_function(run)
+
+@task
+def test(_, hosts="localhost"):
+    g: DeployGroup = parse_host_arg(hosts)
+    def run(h: DeployHost) -> None:
+        flake_path = "/etc/nixos"
+        flake_attr = h.meta.get("flake_attr")
+        if flake_attr:
+            flake_path += "#" + flake_attr
+        target_host = h.meta.get("target_host", "localhost")
+
+        h.run_local(
+            f"rsync {' --exclude '.join([''] + RSYNC_EXCLUDES)} -vaF --delete -e ssh . {h.user}@{h.host}:/etc/nixos"
+        )
+        h.run(
+            f"nixos-rebuild test --build-host localhost --target-host {target_host} --flake $(realpath {flake_path})"
+        )
 
     g.run_function(run)
 
