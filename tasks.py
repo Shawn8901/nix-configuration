@@ -116,7 +116,6 @@ def build(_, hosts="localhost"):
         h.run(
             f"nixos-rebuild build --build-host localhost --target-host {target_host} --flake $(realpath {flake_path})"
         )
-        h.run(f"nvd diff $(ls --reverse -v /nix/var/nix/profiles | head --lines=1 | awk '{{print \"/nix/var/nix/profiles/\" $$0}}' -) ~/result")
 
     g.run_function(run)
 
