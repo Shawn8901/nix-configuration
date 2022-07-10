@@ -109,7 +109,7 @@ in
           {
             name = "pointalpha_sink";
             type = "sink";
-            root_fs = "ztank/shelter";
+            root_fs = "ztank/backup";
 
             serve = {
               type = "tls";
