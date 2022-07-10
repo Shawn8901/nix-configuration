@@ -8,6 +8,7 @@
     initrd.availableKernelModules =
       [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_blk" ];
     initrd.kernelModules = [ ];
+    initrd.systemd.enable = true;
     kernelModules = [ ];
     kernelParams = [ "elevator=none" ];
     kernelPackages = pkgs.linuxPackages;

@@ -9,8 +9,9 @@ in
     initrd = {
       availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod" ];
       kernelModules = [ "amdgpu" ];
+      systemd.enable = true;
     };
-    kernelModules = [ "kvm-amd" "cifs" "usb_storage" ];
+    kernelModules = [ "amdgpu" "kvm-amd" "cifs" "usb_storage" ];
     kernelParams = [ "elevator=none" ];
     kernelPackages = pkgs.linuxPackages_xanmod_latest;
     extraModulePackages = [ ];
