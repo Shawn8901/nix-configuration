@@ -477,9 +477,10 @@ in
         };
       };
     };
-    grafana = {
+    grafana = rec {
       enable = true;
       domain = "status.tank.pointjig.de";
+      rootUrl = "https://${domain}/";
       declarativePlugins = with pkgs.grafanaPlugins; [
         grafana-polystat-panel
         grafana-clock-panel
