@@ -12,7 +12,6 @@
     tree
     htop
     nano
-    neofetch
     unzip
     age
     self.packages.${system}.agenix

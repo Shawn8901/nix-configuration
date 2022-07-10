@@ -14,9 +14,6 @@ _:
     enableGlobalCompInit = true;
     syntaxHighlighting.enable = true;
     autosuggestions.enable = true;
-    interactiveShellInit = ''
-      neofetch
-    '';
     ohMyZsh = {
       enable = true;
       plugins = [ "git" "command-not-found" "cp" "zsh-interactive-cd" ];
