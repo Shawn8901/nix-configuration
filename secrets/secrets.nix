@@ -12,25 +12,28 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDg8wKBWXd+v9FeoujUAppfFp4FUX4IobYNujKO8PBGL";
 
   systems = [ pointalpha pointjig tank shelter ];
-in {
+in
+{
   "shawn_password.age".publicKeys = [ shawn ] ++ systems;
   "root_password.age".publicKeys = [ shawn ] ++ systems;
+  "ela_password.age".publicKeys = [ shawn tank ];
 
   "shawn_samba_credentials.age".publicKeys = [ shawn pointalpha ];
   "ela_samba_credentials.age".publicKeys = [ shawn pointalpha ];
 
   "zrepl_pointalpha.age".publicKeys = [ shawn pointalpha ];
-
+  "zrepl_shelter.age".publicKeys = [ shawn shelter ];
   "zrepl_tank.age".publicKeys = [ shawn tank ];
-  "ela_password.age".publicKeys = [ shawn tank ];
+  "ztank_key.age".publicKeys = [ shawn tank ];
+
   "nextcloud_db.age".publicKeys = [ shawn tank ];
   "nextcloud_admin.age".publicKeys = [ shawn tank ];
+
   "nextcloud_prometheus.age".publicKeys = [ shawn tank ];
   "fritzbox_prometheus.age".publicKeys = [ shawn tank ];
-  "ztank_key.age".publicKeys = [ shawn tank ];
+
   "grafana_db.age".publicKeys = [ shawn tank ];
   "grafana_admin_password_file.age".publicKeys = [ shawn tank ];
   "grafana_secret_key_file.age".publicKeys = [ shawn tank ];
 
-  "zrepl_shelter.age".publicKeys = [ shawn shelter ];
 }
