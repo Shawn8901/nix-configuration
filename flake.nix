@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Flake from a random person on the internet";
 
   inputs = rec {
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.05";
