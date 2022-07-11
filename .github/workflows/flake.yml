@@ -101,7 +101,7 @@ jobs:
       with:
         name: flake_lock
     - name: Build everything
-      run: nix build --print-build-logs .#${{ matrix.package }}
+      run: nix build .#${{ matrix.package }}
    
   build_machines:
     runs-on: ubuntu-22.04
@@ -137,7 +137,7 @@ jobs:
       with:
         name: flake_lock
     - name: Build everything
-      run: nix build --print-build-logs .#${{ matrix.machine }}   
+      run: nix build .#${{ matrix.machine }}   
 
   check_flake:
     runs-on: ubuntu-20.04
