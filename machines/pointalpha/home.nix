@@ -63,6 +63,8 @@ in
     };
     programs.direnv.enable = true;
     programs.direnv.nix-direnv.enable = true;
+    xdg.enable = true;
+    xdg.mime.enable = true;
 
     services = {
       nextcloud-client = { startInBackground = true; };
