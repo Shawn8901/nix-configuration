@@ -3,8 +3,8 @@ _:
 
 with lib;
 let cfg = config.services.noisetorch;
-in {
-
+in
+{
   options = {
     services.noisetorch = {
       enable = mkEnableOption "noisetorch service";

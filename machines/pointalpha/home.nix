@@ -75,8 +75,7 @@ in
         enable = true;
         threshold = 75;
         device = "alsa_input.usb-WOER_WOER_20180508-00.iec958-stereo";
-        deviceUnit =
-          "dev-snd-by\\x2did-usb\\x2dWOER_WOER_20180508\\x2d00.device";
+        deviceUnit = "dev-snd-by\\x2did-usb\\x2dWOER_WOER_20180508\\x2d00.device";
       };
     };
   };
