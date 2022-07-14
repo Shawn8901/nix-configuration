@@ -10,9 +10,9 @@ in
       enable = mkEnableOption "noisetorch service";
       package = mkOption {
         type = types.package;
-        description = "Which package to use for noisetorch";
         default = pkgs.noisetorch;
         defaultText = literalExpression "pkgs.noisetorch";
+        description = "Which package to use for noisetorch";
       };
       threshold = mkOption {
         type = types.int;
