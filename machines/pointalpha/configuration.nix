@@ -5,10 +5,6 @@ let
   fPkgs = self.packages.${system};
 in
 {
-
-  disabledModules = [ "services/backup/zrepl.nix" ];
-  imports = [ ../../modules/nixos/zrepl.nix ];
-
   age.secrets = {
     zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };
     shawn_samba_credentials = {
