@@ -36,21 +36,18 @@ in
 
         # STFC
         virt-manager
-
         scrcpy
 
         # Games
         s25rttr
         proton-ge-custom
+        protontricks
 
         # Shell
         stfc
         nas
 
-        protontricks
-
         samba
-
       ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {
