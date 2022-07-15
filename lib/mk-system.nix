@@ -47,6 +47,7 @@ nixpkgs.lib.nixosSystem (
             sharedModules = [ (import ../modules/home-manager inputs) ];
             users.shawn = {
               home.stateVersion = "22.05";
+              nix.registry.nixpkgs.flake = nixpkgs;
               programs.zsh = { enable = true; };
               programs.git = {
                 enable = true;
