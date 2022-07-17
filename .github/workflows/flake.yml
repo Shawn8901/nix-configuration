@@ -27,8 +27,7 @@ jobs:
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
         install_url: https://releases.nixos.org/nix/nix-2.9.1/install
     - name: Generate flake.json
-      run: |
-        nix flake show --json > flake.json
+      run: nix flake show --allow-import-from-derivation --json > flake.json
     - id: gen_packages
       run: |
         packages=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
