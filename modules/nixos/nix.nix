@@ -6,7 +6,7 @@ _:
     package = pkgs.nix;
     settings = {
       auto-optimise-store = true;
-      allow-import-from-derivation = false;
+      #allow-import-from-derivation = false;
       substituters = [
         "https://cache.nixos.org/"
         "https://nix-community.cachix.org"
