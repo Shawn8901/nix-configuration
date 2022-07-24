@@ -10,5 +10,4 @@
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
 
   agenix = inputs.agenix.defaultPackage.${system};
-  epson-escpr2 = pkgs.callPackage ./epson-escpr2 { };
 }
