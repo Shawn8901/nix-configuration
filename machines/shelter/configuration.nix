@@ -80,6 +80,10 @@
       maxretry = 5;
     };
     vnstat.enable = true;
+    journald.extraConfig = ''
+      SystemMaxUse=500M
+      SystemMaxFileSize=100M
+    '';
   };
   security.auditd.enable = false;
   security.audit.enable = false;

@@ -519,6 +519,10 @@ in
       backupPath = "/media/daniela/";
     };
     backup-nextcloud.enable = true;
+    journald.extraConfig = ''
+      SystemMaxUse=500M
+      SystemMaxFileSize=100M
+    '';
   };
   security.rtkit.enable = true;
   security.acme = {

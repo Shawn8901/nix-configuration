@@ -357,6 +357,11 @@ in
     };
     avahi.enable = true;
     avahi.nssmdns = true;
+
+    journald.extraConfig = ''
+      SystemMaxUse=500M
+      SystemMaxFileSize=100M
+    '';
   };
   security.rtkit.enable = true;
   security.pam.services.shawn.enableKwallet = true;
