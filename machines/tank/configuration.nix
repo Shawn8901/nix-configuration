@@ -1,6 +1,8 @@
 { self, ... }@inputs:
 { config, pkgs, lib, ... }:
-let hosts = self.nixosConfigurations;
+let
+  hosts = self.nixosConfigurations;
+  secrets = config.age.secrets;
 in
 {
   age.secrets = {
@@ -46,12 +48,12 @@ in
 
   networking = {
     firewall =
-      let zrepl = inputs.lib.zrepl.servePorts config.services.zrepl;
+      let zreplServePorts = inputs.lib.zrepl.servePorts config.services.zrepl;
       in
       {
         allowedUDPPorts = [ ];
         allowedUDPPortRanges = [ ];
-        allowedTCPPorts = [ 80 443 ] ++ zrepl;
+        allowedTCPPorts = [ 80 443 ] ++ zreplServePorts;
         allowedTCPPortRanges = [ ];
       };
     networkmanager.enable = false;
@@ -76,7 +78,7 @@ in
     paths."nextcloud-secret-watcher" = {
       wantedBy = [ "multi-user.target" ];
       pathConfig = {
-        PathModified = config.age.secrets.nextcloud_db_file.path;
+        PathModified = secrets.nextcloud_db_file.path;
       };
     };
     services."nextcloud-secret-watcher" = {
@@ -207,17 +209,18 @@ in
               interval = "1h";
               prefix = "zrepl_";
             };
-            connect = {
-              type = "tls";
-              address = "shelter.pointjig.de:${
-                  toString (builtins.head (inputs.lib.zrepl.servePorts
-                    hosts.shelter.config.services.zrepl))
-                }";
-              ca = "/etc/zrepl/shelter.crt";
-              cert = "/etc/zrepl/tank.crt";
-              key = "/etc/zrepl/tank.key";
-              server_cn = "shelter";
-            };
+            connect =
+              let
+                zreplPort = (builtins.head (inputs.lib.zrepl.servePorts hosts.shelter.config.services.zrepl));
+              in
+              {
+                type = "tls";
+                address = "shelter.pointjig.de:${toString zreplPort}";
+                ca = "/etc/zrepl/shelter.crt";
+                cert = "/etc/zrepl/tank.crt";
+                key = "/etc/zrepl/tank.key";
+                server_cn = "shelter";
+              };
             send = { encrypted = true; };
             pruning = {
               keep_sender = [
@@ -260,9 +263,9 @@ in
         dbuser = "nextcloud";
         dbhost = "/run/postgresql";
         dbname = "nextcloud";
-        dbpassFile = config.age.secrets.nextcloud_db_file.path;
+        dbpassFile = secrets.nextcloud_db_file.path;
         adminuser = "admin";
-        adminpassFile = config.age.secrets.nextcloud_admin_file.path;
+        adminpassFile = secrets.nextcloud_admin_file.path;
         defaultPhoneRegion = "DE";
       };
       caching.apcu = true;
@@ -375,80 +378,56 @@ in
       globalConfig = {
         external_labels = { machine = "${config.networking.hostName}"; };
       };
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [{
-            targets = [
-              "localhost:${
-                toString config.services.prometheus.exporters.node.port
-              }"
-            ];
-            labels = { machine = "${config.networking.hostName}"; };
-          }];
-        }
-        {
-          job_name = "zrepl";
-          static_configs = [{
-            targets = [
-              "localhost:${
-                toString (builtins.head
-                  (inputs.lib.zrepl.monitoringPorts config.services.zrepl))
-              }"
-            ];
-            labels = { machine = "${config.networking.hostName}"; };
-          }];
-        }
-        {
-          job_name = "postgres";
-          static_configs = [{
-            targets = [
-              "localhost:${
-                toString config.services.prometheus.exporters.postgres.port
-              }"
-            ];
-            labels = { machine = "${config.networking.hostName}"; };
-          }];
-        }
-        {
-          job_name = "nextcloud";
-          static_configs = [{
-            targets = [
-              "localhost:${
-                toString config.services.prometheus.exporters.nextcloud.port
-              }"
-            ];
-            labels = { machine = "${config.networking.hostName}"; };
-          }];
-        }
-        {
-          job_name = "fritzbox";
-          static_configs = [{
-            targets = [
-              "localhost:${
-                toString config.services.prometheus.exporters.fritzbox.port
-              }"
-            ];
-            labels = { machine = "fritz.box"; };
-          }];
-        }
-        {
-          job_name = "${hosts.pointalpha.config.networking.hostName}";
-          honor_labels = true;
-          metrics_path = "/federate";
-          params = {
-            "match[]" =
-              [ "{machine='${hosts.pointalpha.config.networking.hostName}'}" ];
-          };
-          static_configs = [{
-            targets = [
-              "${hosts.pointalpha.config.networking.hostName}:${
-                toString hosts.pointalpha.config.services.prometheus.port
-              }"
-            ];
-          }];
-        }
-      ];
+      scrapeConfigs =
+        let
+          ownHostname = config.networking.hostName;
+          pointalphaHostname = hosts.pointalpha.config.networking.hostName;
+          nodePort = config.services.prometheus.exporters.node.port;
+          zreplPort = (builtins.head
+            (
+              inputs.lib.zrepl.monitoringPorts
+                config.services.zrepl
+            ));
+          postgresPort = config.services.prometheus.exporters.postgres.port;
+          nextcloudPort = config.services.prometheus.exporters.postgres.port;
+          fritzboxPort = config.services.prometheus.exporters.fritzbox.port;
+          prometheusPort = hosts.pointalpha.config.services.prometheus.port;
+          labels = { machine = "${ownHostname}"; };
+        in
+        [
+          {
+            job_name = "node";
+            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "zrepl";
+            static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "postgres";
+            static_configs = [{ targets = [ "localhost:${toString postgresPort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "nextcloud";
+            static_configs = [{ targets = [ "localhost:${toString nextcloudPort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "fritzbox";
+            static_configs = [{ targets = [ "localhost:${toString fritzboxPort}" ]; labels = { machine = "fritz.box"; }; }];
+          }
+          {
+            job_name = "${pointalphaHostname}";
+            honor_labels = true;
+            metrics_path = "/federate";
+            params = {
+              "match[]" =
+                [ "{machine='${pointalphaHostname}'}" ];
+            };
+            static_configs = [{
+              targets = [ "${pointalphaHostname}:${toString prometheusPort}" ];
+            }];
+          }
+        ];
       exporters = {
         node = {
           enable = true;
@@ -459,17 +438,14 @@ in
           enable = true;
           extraFlags = [
             "-username prometheus"
-            "-password ${
-              lib.escapeShellArg
-              "@${config.age.secrets.fritzbox_prometheus_file.path}"
-            }"
+            "-password ${lib.escapeShellArg "@${secrets.fritzbox_prometheus_file.path}"}"
           ];
         };
         nextcloud = {
           enable = true;
           port = 9205;
           url = "https://${config.services.nextcloud.hostName}";
-          passwordFile = config.age.secrets.nextcloud_prometheus_file.path;
+          passwordFile = secrets.nextcloud_prometheus_file.path;
         };
         postgres = {
           enable = true;
@@ -490,11 +466,11 @@ in
         type = "postgres";
         host = "/run/postgresql";
         user = "grafana";
-        passwordFile = config.age.secrets.grafana_db_file.path;
+        passwordFile = secrets.grafana_db_file.path;
       };
       security = {
-        adminPasswordFile = config.age.secrets.grafana_admin_password_file.path;
-        secretKeyFile = config.age.secrets.grafana_secret_key_file.path;
+        adminPasswordFile = secrets.grafana_admin_password_file.path;
+        secretKeyFile = secrets.grafana_secret_key_file.path;
       };
       analytics.reporting.enable = false;
       provision = {
@@ -532,15 +508,14 @@ in
   };
   security.auditd.enable = false;
   security.audit.enable = false;
-
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
-
+  # Used by nas_backup
   sound.enable = true;
 
   users.users = {
     ela = {
-      passwordFile = config.age.secrets.ela_password_file.path;
+      passwordFile = secrets.ela_password_file.path;
       isNormalUser = true;
       group = "users";
       uid = 1001;
@@ -550,8 +525,8 @@ in
   };
 
   environment = {
-    etc.".ztank_key".source = config.age.secrets.ztank_key.path;
-    etc."zrepl/tank.key".source = config.age.secrets.zrepl_tank.path;
+    etc.".ztank_key".source = secrets.ztank_key.path;
+    etc."zrepl/tank.key".source = secrets.zrepl_tank.path;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
     etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
     etc."zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
