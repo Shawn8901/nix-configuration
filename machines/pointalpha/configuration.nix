@@ -314,47 +314,41 @@ in
       };
     };
 
-    prometheus = {
-      enable = true;
-      port = 9001;
-      retentionTime = "30d";
-      globalConfig = {
-        external_labels = { machine = "${config.networking.hostName}"; };
-      };
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [{
-            targets = [
-              "localhost:${
-                toString config.services.prometheus.exporters.node.port
-              }"
-            ];
-            labels = { machine = "${config.networking.hostName}"; };
-          }];
-        }
-        {
-          job_name = "zrepl";
-          static_configs = [{
-            targets = [
-              "localhost:${
-                toString (builtins.head
-                  (inputs.lib.zrepl.monitoringPorts config.services.zrepl))
-              }"
-            ];
-            labels = { machine = "${config.networking.hostName}"; };
-          }];
-        }
-
-      ];
-      exporters = {
-        node = {
-          enable = true;
-          enabledCollectors = [ "systemd" ];
-          port = 9100;
+    prometheus =
+      let
+        labels = { machine = "${config.networking.hostName}"; };
+        nodePort = config.services.prometheus.exporters.node.port;
+        zreplPort = (builtins.head
+          (
+            inputs.lib.zrepl.monitoringPorts
+              config.services.zrepl
+          ));
+      in
+      {
+        enable = true;
+        port = 9001;
+        retentionTime = "30d";
+        globalConfig = {
+          external_labels = labels;
+        };
+        scrapeConfigs = [
+          {
+            job_name = "node";
+            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "zrepl";
+            static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
+          }
+        ];
+        exporters = {
+          node = {
+            enable = true;
+            enabledCollectors = [ "systemd" ];
+            port = 9100;
+          };
         };
       };
-    };
     avahi.enable = true;
     avahi.nssmdns = true;
 
@@ -418,7 +412,6 @@ in
   };
 
   users.users.shawn = {
-    extraGroups =
-      [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
+    extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
   };
 }
