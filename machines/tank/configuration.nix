@@ -342,7 +342,6 @@ in
         };
         joerg = {
           path = "/media/joerg";
-          writable = "no";
           "valid users" = "shawn";
           public = "no";
           writeable = "yes";
@@ -353,7 +352,6 @@ in
         };
         ela = {
           path = "/media/daniela";
-          writable = "no";
           "valid users" = "ela";
           public = "no";
           writeable = "yes";
@@ -361,6 +359,18 @@ in
           "create mask" = 700;
           "directory mask" = 700;
           browseable = "yes";
+        };
+        hopfelde = {
+          path = "/media/hopfelde";
+          public = "yes";
+          writeable = "yes";
+          printable = "no";
+          browseable = "yes";
+          available = "yes";
+          "guest ok" = "yes";
+          "valid users" = "nologin";
+          "create mask" = 700;
+          "directory mask" = 700;
         };
       };
     };
@@ -521,6 +531,7 @@ in
       uid = 1001;
       shell = pkgs.zsh;
     };
+    nologin = { isNormalUser = false; isSystemUser = true; group = "users"; };
     shawn = { extraGroups = [ "nextcloud" ]; };
   };
 
