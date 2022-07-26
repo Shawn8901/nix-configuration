@@ -20,6 +20,7 @@ in
       "steam"
       "steam-original"
       "teamspeak-client"
+      "teamviewer"
       "vscode"
       "vscode-extension-MS-python-vscode-pylance"
     ];
@@ -356,6 +357,7 @@ in
       SystemMaxUse=500M
       SystemMaxFileSize=100M
     '';
+    teamviewer.enable = true;
   };
   security.rtkit.enable = true;
   security.pam.services.shawn.enableKwallet = true;
