@@ -51,9 +51,9 @@ in
       let zreplServePorts = inputs.lib.zrepl.servePorts config.services.zrepl;
       in
       {
-        allowedUDPPorts = [ ];
+        allowedUDPPorts = [ 443 ];
         allowedUDPPortRanges = [ ];
-        allowedTCPPorts = [ 80 443 ] ++ zreplServePorts;
+        allowedTCPPorts = [ 443 ] ++ zreplServePorts;
         allowedTCPPortRanges = [ ];
       };
     networkmanager.enable = false;
@@ -296,20 +296,23 @@ in
     };
     nginx = {
       enable = true;
+      package = pkgs.nginxQuic;
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       virtualHosts = {
         "${config.services.nextcloud.hostName}" = {
-          forceSSL = true;
           enableACME = true;
+          http3 = true;
           kTLS = true;
+          onlySSL = true;
         };
         "${config.services.grafana.domain}" = {
           enableACME = true;
-          forceSSL = true;
+          http3 = true;
           kTLS = true;
+          onlySSL = true;
           locations."/" = {
             proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
             proxyWebsockets = true;
