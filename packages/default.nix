@@ -8,6 +8,7 @@
   rtc-helper = pkgs.callPackage ./shellscripts/rtc-helper.nix { };
   nas = pkgs.callPackage ./shellscripts/nas.nix { };
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
+  noisetorch = pkgs.callPackage ./noisetorch { };
 
   agenix = inputs.agenix.defaultPackage.${system};
 }
