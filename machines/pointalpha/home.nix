@@ -10,6 +10,7 @@ in
       [
         # Administration
         remmina
+        samba
 
         # Finance
         portfolio
@@ -34,20 +35,16 @@ in
         # Entertainment
         vlc
 
-        # STFC
-        virt-manager
-        scrcpy
-
         # Games
         s25rttr
         proton-ge-custom
-        protontricks
+        virt-manager
+        scrcpy
 
         # Shell
         stfc
         nas
 
-        samba
       ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {
