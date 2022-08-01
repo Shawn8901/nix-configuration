@@ -10,5 +10,9 @@
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
   noisetorch = pkgs.callPackage ./noisetorch { };
 
+  jameica = pkgs.callPackage ./jameica {
+    Cocoa = null;
+  };
+
   agenix = inputs.agenix.defaultPackage.${system};
 }
