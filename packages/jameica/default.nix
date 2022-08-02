@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    gappsWrapperArgsHook
-
     mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
 
     # copy libraries except SWT
@@ -58,15 +56,16 @@ stdenv.mkDerivation rec {
     install -Dm644 plugin.xml $out/share/java/
     install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
     cp ${desktopItem}/share/applications/* $out/share/applications/
+  '';
 
+  fixupPhase = ''
     makeWrapper ${jre}/bin/java $out/bin/jameica \
-      --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
-        lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
-      } de.willuhn.jameica.Main" \
-      --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg (lib.makeLibraryPath buildInputs)} \
-      --chdir "$out/share/java/" \
-      "''${gappsWrapperArgs[@]}"
-
+    --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
+      lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
+    } de.willuhn.jameica.Main" \
+    --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg (lib.makeLibraryPath buildInputs)} \
+    --chdir "$out/share/java/" \
+    "''${gappsWrapperArgs[@]}"
   '';
 
   meta = with lib; {
