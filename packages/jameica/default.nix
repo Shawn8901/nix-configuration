@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  fixupPhase = ''
+  postFixup = ''
     makeWrapper ${jre}/bin/java $out/bin/jameica \
     --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
       lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
