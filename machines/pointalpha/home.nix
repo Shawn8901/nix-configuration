@@ -11,6 +11,7 @@ in
         # Administration
         remmina
         samba
+        chromium
 
         # Finance
         portfolio
@@ -40,8 +41,6 @@ in
         proton-ge-custom
         virt-manager
         scrcpy
-        winetricks
-        wineWowPackages.stable
 
         # Shell
         stfc
