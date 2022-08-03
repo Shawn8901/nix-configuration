@@ -40,6 +40,8 @@ in
         proton-ge-custom
         virt-manager
         scrcpy
+        winetricks
+        wineWowPackages.stable
 
         # Shell
         stfc
