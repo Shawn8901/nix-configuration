@@ -402,7 +402,7 @@ in
                 config.services.zrepl
             ));
           postgresPort = config.services.prometheus.exporters.postgres.port;
-          nextcloudPort = config.services.prometheus.exporters.postgres.port;
+          nextcloudPort = config.services.prometheus.exporters.nextcloud.port;
           fritzboxPort = config.services.prometheus.exporters.fritzbox.port;
           prometheusPort = hosts.pointalpha.config.services.prometheus.port;
           labels = { machine = "${ownHostname}"; };
