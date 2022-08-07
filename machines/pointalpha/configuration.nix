@@ -5,9 +5,6 @@ let
   fPkgs = self.packages.${system};
 in
 {
-  disabledModules = [ "programs/noisetorch.nix" ];
-  imports = [ ../../modules/nixos/noisetorch.nix ];
-
   age.secrets = {
     zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };
     shawn_samba_credentials = {
