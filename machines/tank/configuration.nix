@@ -53,7 +53,7 @@ in
       {
         allowedUDPPorts = [ 443 ];
         allowedUDPPortRanges = [ ];
-        allowedTCPPorts = [ 443 ] ++ zreplServePorts;
+        allowedTCPPorts = [ 80 443 ] ++ zreplServePorts;
         allowedTCPPortRanges = [ ];
       };
     networkmanager.enable = false;
