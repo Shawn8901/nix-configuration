@@ -1,6 +1,8 @@
 { self, ... }@inputs:
 { config, lib, pkgs, modulesPath, ... }:
-
+let
+  zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
+in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -35,63 +37,47 @@
   };
 
   fileSystems."/nix" = {
-    device = "rpool/nixos/nix";
+    device = "rpool/local/nix";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
   };
 
   fileSystems."/etc" = {
     device = "rpool/nixos/etc";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
   };
 
   fileSystems."/var" = {
     device = "rpool/nixos/var";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
+    neededForBoot = true;
   };
 
   fileSystems."/var/lib" = {
     device = "rpool/nixos/var/lib";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
   };
 
   fileSystems."/var/log" = {
-    device = "rpool/nixos/var/log";
+    device = "rpool/local/log";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
+    neededForBoot = true;
   };
 
   fileSystems."/home" = {
-    device = "rpool/userdata/home";
+    device = "rpool/safe/home";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/home/shawn" = {
-    device = "rpool/userdata/home/shawn";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/home/ela" = {
-    device = "rpool/userdata/home/ela";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
-  };
-
-  fileSystems."/root" = {
-    device = "rpool/userdata/home/root";
-    fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = zfsOptions;
   };
 
   fileSystems."/var/lib/nextcloud/data" = {
     device = "ztank/replica/nextcloud";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" "noauto" ];
+    options = zfsOptions ++ [ "noauto" ];
   };
 
   fileSystems."/boot" = {
