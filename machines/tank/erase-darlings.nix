@@ -1,8 +1,8 @@
 { lib, ... }:
 {
-  #boot.initrd.postDeviceCommands = lib.mkAfter ''
-  #  zfs rollback -r rpool/local/root@blank
-  #'';
+  boot.initrd.postDeviceCommands = lib.mkAfter ''
+    zfs rollback -r rpool/local/root@blank
+  '';
 
   fileSystems."/var/lib/systemd" = {
     device = "/persist/var/lib/systemd";
@@ -11,11 +11,6 @@
 
   fileSystems."/var/lib/prometheus2" = {
     device = "/persist/var/lib/prometheus2";
-    options = [ "bind" "noauto" "x-systemd.automount" ];
-  };
-
-  fileSystems."/var/lib/grafana" = {
-    device = "/persist/var/lib/grafana";
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
@@ -38,7 +33,6 @@
     device = "/persist/var/lib/acme";
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
-
 
   fileSystems."/etc/nixos" = {
     device = "/persist/etc/nixos";

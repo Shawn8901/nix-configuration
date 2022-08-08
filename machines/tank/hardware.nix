@@ -31,9 +31,9 @@ in
   };
 
   fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [ "defaults" "mode=755" ];
+    device = "rpool/local/root";
+    fsType = "zfs";
+    options = zfsOptions;
   };
 
   fileSystems."/nix" = {
@@ -42,23 +42,11 @@ in
     options = zfsOptions;
   };
 
-  fileSystems."/etc" = {
-    device = "rpool/nixos/etc";
-    fsType = "zfs";
-    options = zfsOptions;
-  };
-
-  fileSystems."/var" = {
-    device = "rpool/nixos/var";
+  fileSystems."/persist" = {
+    device = "rpool/safe/persist";
     fsType = "zfs";
     options = zfsOptions;
     neededForBoot = true;
-  };
-
-  fileSystems."/var/lib" = {
-    device = "rpool/nixos/var/lib";
-    fsType = "zfs";
-    options = zfsOptions;
   };
 
   fileSystems."/var/log" = {
@@ -74,7 +62,7 @@ in
     options = zfsOptions;
   };
 
-  fileSystems."/var/lib/nextcloud/data" = {
+  fileSystems."/persist/var/lib/nextcloud/data" = {
     device = "ztank/replica/nextcloud";
     fsType = "zfs";
     options = zfsOptions ++ [ "noauto" ];
@@ -86,8 +74,7 @@ in
     options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
   };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee"; }];
+  swapDevices = [{ device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee"; }];
 
   hardware.cpu.intel.updateMicrocode = true;
 }
