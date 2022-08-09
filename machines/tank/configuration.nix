@@ -122,6 +122,30 @@ in
         };
         jobs = [
           {
+            name = "rpool_safe";
+            type = "snap";
+            filesystems = { "rpool/safe<" = true; };
+            snapshotting = {
+              type = "periodic";
+              interval = "1h";
+              prefix = "zrepl_";
+            };
+            pruning = {
+              keep = [
+                {
+                  type = "grid";
+                  grid = "1x3h(keep=all) | 2x6h | 14x1d";
+                  regex = "^zrepl_.*";
+                }
+                {
+                  type = "regex";
+                  negate = true;
+                  regex = "^zrepl_.*";
+                }
+              ];
+            };
+          }
+          {
             name = "pointalpha_sink";
             type = "sink";
             root_fs = "ztank/backup";
