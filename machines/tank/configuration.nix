@@ -318,15 +318,15 @@ in
       virtualHosts = {
         "${config.services.nextcloud.hostName}" = {
           enableACME = true;
+          forceSSL = true;
           http3 = true;
           kTLS = true;
-          onlySSL = true;
         };
         "${config.services.grafana.domain}" = {
           enableACME = true;
+          forceSSL = true;
           http3 = true;
           kTLS = true;
-          onlySSL = true;
           locations."/" = {
             proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
             proxyWebsockets = true;
