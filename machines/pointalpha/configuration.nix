@@ -393,7 +393,6 @@ in
     noisetorch.enable = true;
     noisetorch.package = fPkgs.noisetorch;
     ssh.startAgent = true;
-    xwayland.enable = false;
     iotop.enable = true;
     haguichi.enable = false;
   };

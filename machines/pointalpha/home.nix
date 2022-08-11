@@ -37,10 +37,11 @@ in
         vlc
 
         # Games
-        s25rttr
         proton-ge-custom
+        wineWowPackages.waylandFull
         virt-manager
         scrcpy
+        s25rttr
 
         # Shell
         stfc

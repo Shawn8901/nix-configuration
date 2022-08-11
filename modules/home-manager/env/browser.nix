@@ -10,11 +10,6 @@ in
   options = {
     env.browser = {
       enable = mkEnableOption "Enable browser on the environment";
-      wayland = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Set true it wayland is used.";
-      };
     };
   };
 
