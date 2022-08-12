@@ -38,7 +38,7 @@ in
 
         # Games
         proton-ge-custom
-        wineWowPackages.waylandFull
+        wineWowPackages.unstableFull
         virt-manager
         scrcpy
         s25rttr
