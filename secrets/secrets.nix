@@ -1,7 +1,6 @@
 let
   shawn =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM";
-
   pointalpha =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILzWsbvSeDXhbrhEr+NLvG087/ahHJ0JV7a5gGtIr58l";
   pointjig =
@@ -36,4 +35,5 @@ in
   "grafana_admin_password_file.age".publicKeys = [ shawn tank ];
   "grafana_secret_key_file.age".publicKeys = [ shawn tank ];
 
+  "github_access_token.age".publicKeys = [ shawn ] ++ systems;
 }

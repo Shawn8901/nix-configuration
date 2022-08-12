@@ -1,5 +1,9 @@
 _:
-{ pkgs, lib, ... }: {
+{ pkgs, lib, config, ... }: {
+
+  age.secrets.github_access_token = {
+    file = ../../secrets/github_access_token.age;
+  };
 
   environment.systemPackages = [ pkgs.cachix ];
   nix = {
@@ -28,4 +32,5 @@ _:
       options = "--delete-older-than 7d";
     };
   };
+  systemd.services.nix-daemon.serviceConfig.EnvironmentFile = config.age.secrets.github_access_token.path;
 }
