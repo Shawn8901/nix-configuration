@@ -25,8 +25,6 @@ in
       "vscode-extension-MS-python-vscode-pylance"
     ];
 
-  nixpkgs.config.permittedInsecurePackages = [ "NoiseTorch-0.11.5" ];
-
   networking = {
     firewall =
       let
@@ -117,7 +115,6 @@ in
   services = {
     udev = {
       packages = [ pkgs.libmtp.out ];
-      extraRules = "";
     };
     xserver = {
       enable = true;
