@@ -8,45 +8,29 @@ in
     home.packages = with pkgs;
       with fPkgs;
       [
-        # Administration
         remmina
         samba
         chromium
-
-        # Finance
         portfolio
         jameica
-
         libreoffice
         inkscape
         gimp
-
-        # Password and Sync
         nextcloud-client
         keepassxc
-
-        # Social
         (discord.override { nss = pkgs.nss_latest; withOpenASAR = true; })
         teamspeak_client
         signal-desktop
-
-        # Moonlander
         wally-cli
-
-        # Entertainment
         vlc
-
-        # Games
         proton-ge-custom
         wineWowPackages.unstableFull
-        virt-manager
-        scrcpy
         s25rttr
-
-        # Shell
-        stfc
         nas
 
+        # virt-manager
+        # scrcpy
+        # stfc
       ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     home.sessionVariables = {
@@ -68,7 +52,7 @@ in
         enable = true;
         pinentryFlavor = "qt";
       };
-      autoadb.enable = true;
+      autoadb.enable = false;
       noisetorch = {
         enable = true;
         package = config.programs.noisetorch.package;
