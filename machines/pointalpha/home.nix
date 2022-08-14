@@ -26,7 +26,7 @@ in
         keepassxc
 
         # Social
-        (discord.override { nss = pkgs.nss_latest; })
+        (discord.override { nss = pkgs.nss_latest; withOpenASAR = true; })
         teamspeak_client
         signal-desktop
 
