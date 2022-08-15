@@ -18,7 +18,7 @@ in
         gimp
         nextcloud-client
         keepassxc
-        (discord.override { nss = pkgs.nss_latest; withOpenASAR = true; })
+        (discord.override { nss = pkgs.nss_latest; })
         teamspeak_client
         signal-desktop
         wally-cli
