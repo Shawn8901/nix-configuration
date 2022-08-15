@@ -28,6 +28,7 @@ in
         s25rttr
         nas
 
+        sqlitebrowser
         # virt-manager
         # scrcpy
         # stfc
