@@ -374,6 +374,10 @@ in
     ssh.startAgent = true;
     iotop.enable = true;
     haguichi.enable = false;
+    ausweisapp = {
+      enable = true;
+      openFirewall = true;
+    };
   };
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
