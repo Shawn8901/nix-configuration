@@ -40,14 +40,14 @@ in
         allowedTCPPorts = [ config.services.prometheus.port stronghold_tcp ] ++ zreplServePorts;
         allowedTCPPortRanges = [ stronghold_range ];
       };
-    networkmanager.enable = false;
+    networkmanager.enable = true;
     dhcpcd.enable = false;
-    useNetworkd = true;
+    useNetworkd = false;
     useDHCP = false;
   };
-
+  services.resolved.enable = false;
   systemd.network = {
-    enable = true;
+    enable = false;
     netdevs = {
       "br0" = {
         netdevConfig = {
@@ -154,8 +154,6 @@ in
         }
       ];
     };
-    resolved.enable = true;
-
     zfs.trim.enable = true;
     zfs.autoScrub.enable = true;
     zfs.autoScrub.pools = [ "rpool" ];
@@ -397,6 +395,6 @@ in
   };
 
   users.users.shawn = {
-    extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" ];
+    extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" "networkmanager" ];
   };
 }
