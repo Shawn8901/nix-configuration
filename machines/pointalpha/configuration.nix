@@ -33,10 +33,11 @@ in
           to = 2400;
         };
         stronghold_tcp = 47624;
+        zreplServePorts = inputs.lib.zrepl.servePorts config.services.zrepl;
       in
       {
         allowedUDPPortRanges = [ stronghold_range ];
-        allowedTCPPorts = [ config.services.prometheus.port stronghold_tcp ];
+        allowedTCPPorts = [ config.services.prometheus.port stronghold_tcp ] ++ zreplServePorts;
         allowedTCPPortRanges = [ stronghold_range ];
       };
     networkmanager.enable = false;
@@ -273,7 +274,7 @@ in
         };
         jobs = [{
           name = "pointalpha_safe";
-          type = "push";
+          type = "source";
           filesystems = { "rpool/safe<" = true; };
           snapshotting = {
             type = "periodic";
@@ -281,32 +282,13 @@ in
             prefix = "zrepl_";
           };
           send = { encrypted = false; };
-          connect = {
+          serve = {
             type = "tls";
-            address = "tank:8888";
+            listen = ":8888";
             ca = "/etc/zrepl/tank.crt";
             cert = "/etc/zrepl/pointalpha.crt";
             key = "/etc/zrepl/pointalpha.key";
-            server_cn = "tank";
-          };
-          pruning = {
-            keep_sender = [
-              { type = "not_replicated"; }
-              {
-                type = "last_n";
-                count = 10;
-              }
-              {
-                type = "grid";
-                grid = "1x1h(keep=all) | 2x3h | 7x1d";
-                regex = "^pointalpha_safe_.*";
-              }
-            ];
-            keep_receiver = [{
-              type = "grid";
-              grid = "1x1h(keep=all) | 2x3h | 7x1d | 6x30d";
-              regex = "^zrepl_.*";
-            }];
+            client_cns = [ "tank" ];
           };
         }];
       };

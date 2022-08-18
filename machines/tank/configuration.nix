@@ -146,25 +146,35 @@ in
             };
           }
           {
-            name = "pointalpha_sink";
-            type = "sink";
-            root_fs = "ztank/backup";
-
-            serve = {
+            name = "pointalpha";
+            type = "pull";
+            root_fs = "ztank/backup/pointalpha";
+            interval = "1h";
+            connect = {
               type = "tls";
-              listen = ":8888";
+              address = "pointalpha:8888";
               ca = "/etc/zrepl/pointalpha.crt";
               cert = "/etc/zrepl/tank.crt";
               key = "/etc/zrepl/tank.key";
-
-              client_cns = [ "pointalpha" ];
+              server_cn = "pointalpha";
             };
             recv = { placeholder = { encryption = "inherit"; }; };
+            pruning = {
+              keep_sender = [{
+                type = "regex";
+                regex = ".*";
+              }];
+              keep_receiver = [{
+                type = "grid";
+                grid = "7x1d(keep=all) | 3x30d";
+                regex = "^auto_daily.*";
+              }];
+            };
           }
           {
-            name = "sapsrv01_pull";
+            name = "sapsrv01";
             type = "pull";
-            root_fs = "ztank/sapsrv01";
+            root_fs = "ztank/backup/sapsrv01";
             interval = "1h";
             connect = {
               type = "tls";
@@ -188,9 +198,9 @@ in
             };
           }
           {
-            name = "sapsrv02_pull";
+            name = "sapsrv02";
             type = "pull";
-            root_fs = "ztank/sapsrv02";
+            root_fs = "ztank/backup/sapsrv02";
             interval = "1h";
             connect = {
               type = "tls";
