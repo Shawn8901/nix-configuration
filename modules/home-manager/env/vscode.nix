@@ -34,12 +34,6 @@ with lib; {
           version = "0.6.1";
           sha256 = "sha256-5/Tqpn/7byl+z2ATflgKV1+rhdqj+XMEZNbGwDmGwLQ=";
         }
-        {
-          name = "nix-develop";
-          publisher = "jamesottaway";
-          version = "0.0.1";
-          sha256 = "sha256-ldD907spPCgHQ10XphaRAbgkNcYdzACqUOr2Cf5o8zU=";
-        }
       ];
       keybindings = [
         {
@@ -78,6 +72,11 @@ with lib; {
         "diffEditor.ignoreTrimWhitespace" = false;
         "editor.formatOnSave" = true;
         "nix.enableLanguageServer" = true;
+        "terminal.integrated.profiles.linux" = {
+          "zsh" = {
+            "path" = "${pkgs.zsh}/bin/zsh";
+          };
+        };
       };
     };
   };
