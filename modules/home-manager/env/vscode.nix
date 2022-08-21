@@ -72,11 +72,6 @@ with lib; {
         "diffEditor.ignoreTrimWhitespace" = false;
         "editor.formatOnSave" = true;
         "nix.enableLanguageServer" = true;
-        "terminal.integrated.profiles.linux" = {
-          "zsh" = {
-            "path" = "${pkgs.zsh}/bin/zsh";
-          };
-        };
       };
     };
   };
