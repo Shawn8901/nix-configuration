@@ -8,7 +8,7 @@ nixpkgs.lib.nixosSystem (
     bootloader = "${configFolder}/bootloader.nix";
     hardware = import "${configFolder}/hardware.nix" inputs;
     home = "${configFolder}/home.nix";
-    darlings = "${configFolder}/erase-darlings.nix";
+    darlings = "${configFolder}/save-darlings.nix";
   in
   {
     inherit (inputs) system;

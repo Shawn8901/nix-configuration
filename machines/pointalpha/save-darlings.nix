@@ -9,6 +9,12 @@
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
+  fileSystems."/var/lib/NetworkManager" = {
+    device = "/persist//var/lib/NetworkManager";
+    options = [ "bind" "noauto" "x-systemd.automount" ];
+  };
+
+
   fileSystems."/var/lib/libvirt" = {
     device = "/persist/var/lib/libvirt";
     options = [ "bind" "noauto" "x-systemd.automount" ];
