@@ -11,7 +11,7 @@
     initrd.systemd.enable = true;
     kernelModules = [ ];
     kernelParams = [ "elevator=none" ];
-    kernelPackages = pkgs.linuxPackages;
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [ ];
     zfs.devNodes = "/dev/";
     zfs.extraPools = [ "zbackup" ];

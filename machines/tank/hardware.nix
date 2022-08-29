@@ -13,7 +13,7 @@ in
     initrd.systemd.enable = true;
     kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
     kernelParams = [ "elevator=none" ];
-    kernelPackages = pkgs.linuxPackages;
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=10737418240
