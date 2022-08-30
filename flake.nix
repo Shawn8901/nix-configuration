@@ -27,13 +27,14 @@
         overlays = [ inputs.nur.outputs.overlay ];
       });
       sPkgs = (import inputs.nixpkgs-stable { inherit system; });
-      lib = import ./lib (inputs // { inherit lib nPkgs sPkgs system; });
+      uPkgs = (import inputs.nixpkgs-unstable { inherit system; });
+      lib = import ./lib (inputs // { inherit lib nPkgs sPkgs uPkgs system; });
     in
     {
       nixosModules = import ./modules/nixos (inputs // { inherit lib system; });
-      nixosConfigurations = import ./machines (inputs // { inherit lib nPkgs sPkgs system; });
+      nixosConfigurations = import ./machines (inputs // { inherit lib nPkgs sPkgs uPkgs system; });
 
-      packages.${system} = (import ./packages (inputs // { inherit system; pkgs = sPkgs; }))
+      packages.${system} = (import ./packages (inputs // { inherit system sPkgs uPkgs; }))
         // lib.nixosConfigurationsAsPackages.configs;
 
       devShells.${system}.default = sPkgs.mkShell {

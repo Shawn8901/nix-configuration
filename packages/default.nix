@@ -1,16 +1,16 @@
-{ self, system, pkgs, ... }@inputs:
+{ self, system, uPkgs, sPkgs, ... }@inputs:
 {
-  s25rttr = pkgs.callPackage ./s25rttr {
-    SDL2 = pkgs.SDL2.override { withStatic = true; };
+  s25rttr = uPkgs.callPackage ./s25rttr {
+    SDL2 = uPkgs.SDL2.override { withStatic = true; };
   };
-  proton-ge-custom = pkgs.callPackage ./proton-ge-custom { };
-  stfc = pkgs.callPackage ./shellscripts/stfc.nix { };
-  rtc-helper = pkgs.callPackage ./shellscripts/rtc-helper.nix { };
-  nas = pkgs.callPackage ./shellscripts/nas.nix { };
-  usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
-  noisetorch = pkgs.callPackage ./noisetorch { };
+  proton-ge-custom = uPkgs.callPackage ./proton-ge-custom { };
+  #stfc = pkgs.callPackage ./shellscripts/stfc.nix { };
+  rtc-helper = sPkgs.callPackage ./shellscripts/rtc-helper.nix { };
+  nas = sPkgs.callPackage ./shellscripts/nas.nix { };
+  usb-backup = sPkgs.callPackage ./shellscripts/usb-backup.nix { };
+  noisetorch = uPkgs.callPackage ./noisetorch { };
 
-  jameica = pkgs.callPackage ./jameica {
+  jameica = uPkgs.callPackage ./jameica {
     Cocoa = null;
   };
 
