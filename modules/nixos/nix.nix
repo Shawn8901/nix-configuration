@@ -22,10 +22,11 @@ _:
       ];
       cores = lib.mkDefault 8;
       max-jobs = lib.mkDefault 8;
+      experimental-features = "nix-command flakes";
     };
+    nrBuildUsers = lib.mkForce 16;
     daemonIOSchedClass = "idle";
     daemonCPUSchedPolicy = "idle";
-    extraOptions = "experimental-features = nix-command flakes";
     gc = {
       automatic = true;
       dates = "daily";
