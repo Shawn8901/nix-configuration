@@ -5,6 +5,9 @@ let
   fPkgs = self.packages.${system};
 in
 {
+  disabledModules = [ "services/x11/display-managers/sddm.nix" ];
+  imports = [ ../../modules/nixos/sddm.nix ];
+
   age.secrets = {
     zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };
     shawn_samba_credentials = {
@@ -124,12 +127,15 @@ in
       displayManager.sddm = {
         enable = true;
         autoNumlock = true;
+        package = fPkgs.sddm-git;
         settings = {
           General = {
-            DisplayServer = "wayland";
+            #DisplayServer = "wayland";
             GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
           };
-          Wayland = { CompositorCommand = "kwin_wayland --no-lockscreen"; };
+          Wayland = {
+            CompositorCommand = "kwin_wayland --no-lockscreen --inputmethod qt5-virtualkeyboard";
+          };
         };
       };
       displayManager.defaultSession = "plasmawayland";
@@ -355,7 +361,7 @@ in
 
   virtualisation = {
     libvirtd = {
-      enable = true;
+      enable = false;
       onBoot = "start";
       qemu.package = pkgs.qemu_kvm;
     };
@@ -376,12 +382,13 @@ in
       enable = true;
       openFirewall = true;
     };
+    xwayland.enable = true;
   };
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
     variables.NIXOS_OZONE_WL = "1";
     variables.SDL_VIDEODRIVER = "wayland";
-    variables.QT_QPA_PLATFORM = "wayland";
+    variables.QT_QPA_PLATFORM = "wayland-egl";
     variables.QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     variables._JAVA_AWT_WM_NONREPARENTING = "1";
     etc."samba/credentials_shawn".source =
