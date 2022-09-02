@@ -16,5 +16,7 @@
     age
     self.packages.${system}.agenix
     ncdu
+    graphviz
+    nix-du
   ];
 }
