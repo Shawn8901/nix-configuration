@@ -5,8 +5,8 @@ let
   fPkgs = self.packages.${system};
 in
 {
-  disabledModules = [ "services/x11/display-managers/sddm.nix" ];
-  imports = [ ../../modules/nixos/sddm.nix ];
+  disabledModules = [ "services/x11/display-managers/sddm.nix" "programs/steam.nix" ];
+  imports = [ ../../modules/nixos/sddm.nix ../../modules/nixos/steam.nix ];
 
   age.secrets = {
     zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };
@@ -370,7 +370,10 @@ in
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
   programs = {
-    steam.enable = true;
+    steam = {
+      enable = true;
+      extraCompatPackages = [ fPkgs.proton-ge-custom ];
+    };
     dconf.enable = true;
     adb.enable = true;
     noisetorch.enable = true;

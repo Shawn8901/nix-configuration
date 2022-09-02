@@ -23,7 +23,6 @@ in
         signal-desktop
         wally-cli
         vlc
-        proton-ge-custom
         wineWowPackages.unstableFull
         s25rttr
         nas
@@ -33,10 +32,6 @@ in
         # scrcpy
         # stfc
       ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
-
-    home.sessionVariables = {
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${fPkgs.proton-ge-custom}";
-    };
 
     env = {
       vscode.enable = true;
