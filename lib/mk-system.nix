@@ -1,4 +1,4 @@
-{ self, ... }@inputs:
+{ self, agenix, home-manager, ... }@inputs:
 name: nixpkgs:
 
 nixpkgs.lib.nixosSystem (
@@ -31,14 +31,14 @@ nixpkgs.lib.nixosSystem (
       bootloader
       hardware
 
-      inputs.agenix.nixosModule
+      agenix.nixosModule
 
 
     ] ++ builtins.attrValues self.nixosModules
     ++ nixpkgs.lib.optionals (builtins.pathExists home)
 
       [
-        inputs.home-manager.nixosModule
+        home-manager.nixosModule
 
         {
           home-manager = {

@@ -1,4 +1,4 @@
-{ self, system, ... }@inputs:
+{ self, system, agenix, ... }@inputs:
 { pkgs, ... }:
 
 {
@@ -14,9 +14,9 @@
     nano
     unzip
     age
-    self.packages.${system}.agenix
     ncdu
     graphviz
     nix-du
+    agenix.defaultPackage.${system}
   ];
 }

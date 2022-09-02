@@ -25,6 +25,4 @@
 
     patches = [ ];
   });
-
-  agenix = inputs.agenix.defaultPackage.${system};
 }
