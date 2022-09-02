@@ -13,6 +13,10 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
+    nix-vscode-marketplace = {
+      url = "github:AmeerTaweel/nix-vscode-marketplace";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs = { self, ... }@inputs:
