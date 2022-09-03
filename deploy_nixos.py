@@ -7,16 +7,16 @@
 #
 ###############################################################################
 
-import os
-from contextlib import contextmanager
-from shlex import quote
-from typing import List, Dict, Tuple, IO, Iterator, Optional, Callable, Any, Union, Text
-from threading import Thread
-import subprocess
 import fcntl
+import os
 import select
-from contextlib import ExitStack
+import subprocess
+from contextlib import ExitStack, contextmanager
 from enum import Enum
+from shlex import quote
+from threading import Thread
+from typing import (IO, Any, Callable, Dict, Iterator, List, Optional, Text,
+                    Tuple, Union)
 
 
 @contextmanager
@@ -226,7 +226,7 @@ class DeployGroup:
     ) -> DeployResults:
         return self._run(cmd, local=True, stdout=stdout, stderr=stderr)
 
-    def run_function(self, func: Callable) -> None:
+    def run_function(self, func: Callable[[DeployHost], None]) -> None:
         threads = []
         for host in self.hosts:
             thread = Thread(
