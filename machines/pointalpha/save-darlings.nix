@@ -1,9 +1,15 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
-    echo "Doing rollback"
-    zfs rollback -r rpool/local/root@blank
-  '';
+  boot.initrd.systemd.services.initrd-rollback-root = {
+    after = [ "zfs-import-rpool.service" ];
+    wantedBy = [ "sysroot.mount" ];
+    before = [ "sysroot.mount" ];
+    description = "Rollback root fs";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${config.boot.zfs.package}/sbin/zfs rollback -r rpool/local/root@blank";
+    };
+  };
 
   environment.etc."machine-id".source = "/persist/etc/machine-id";
 
