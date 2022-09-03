@@ -78,7 +78,7 @@ in
     # Append the extra compatibility packages to whatever else the env variable was populated with.
     # For more information see https://github.com/ValveSoftware/steam-for-linux/issues/6310.
     environment.sessionVariables = mkIf (cfg.extraCompatPackages != [ ]) {
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS = concatStringsSep ":" cfg.extraCompatPackages;
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = makeBinPath cfg.extraCompatPackages;
     };
 
     environment.systemPackages = [ steam steam.run ] ++ cfg.extraCompatPackages;
