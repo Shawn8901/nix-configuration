@@ -12,6 +12,7 @@
   };
 
   environment.etc."machine-id".source = "/persist/etc/machine-id";
+  environment.etc."/etc/nixos".source = "/persist/etc/nixos";
 
   fileSystems."/var/lib/systemd" = {
     device = "/persist/var/lib/systemd";
@@ -43,8 +44,4 @@
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
-  fileSystems."/etc/nixos" = {
-    device = "/persist/etc/nixos";
-    options = [ "bind" "noauto" "x-systemd.automount" ];
-  };
 }
