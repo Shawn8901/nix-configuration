@@ -44,6 +44,10 @@ in
         allowedTCPPortRanges = [ stronghold_range ];
       };
     networkmanager.enable = true;
+    extraHosts = ''
+      2a01:8740:1:e4::2cd3 shelter
+      78.128.127.235 shelter
+    '';
     dhcpcd.enable = false;
     useNetworkd = false;
     useDHCP = false;
