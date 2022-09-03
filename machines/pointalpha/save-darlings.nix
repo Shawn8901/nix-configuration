@@ -1,8 +1,11 @@
 { lib, ... }:
 {
   boot.initrd.postDeviceCommands = lib.mkAfter ''
+    echo "Doing rollback"
     zfs rollback -r rpool/local/root@blank
   '';
+
+  environment.etc."machine-id".source = "/persist/etc/machine-id";
 
   fileSystems."/var/lib/bluetooth" = {
     device = "/persist/var/lib/bluetooth";
@@ -10,10 +13,9 @@
   };
 
   fileSystems."/var/lib/NetworkManager" = {
-    device = "/persist//var/lib/NetworkManager";
+    device = "/persist/var/lib/NetworkManager";
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
-
 
   fileSystems."/var/lib/libvirt" = {
     device = "/persist/var/lib/libvirt";
@@ -44,4 +46,5 @@
     device = "/persist/etc/nixos";
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
+
 }
