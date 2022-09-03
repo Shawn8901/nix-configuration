@@ -386,6 +386,7 @@ in
       openFirewall = true;
     };
     xwayland.enable = true;
+    nix-ld.enable = true;
   };
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
