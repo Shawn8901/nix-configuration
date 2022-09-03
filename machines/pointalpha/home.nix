@@ -10,7 +10,6 @@ in
       [
         remmina
         samba
-        chromium
         portfolio
         jameica
         libreoffice
