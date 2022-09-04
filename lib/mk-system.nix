@@ -23,7 +23,10 @@ nixpkgs.lib.nixosSystem (
           enable = true;
           generateCaches = true;
         };
-        nix.registry.nixpkgs.flake = nixpkgs;
+        nix.registry = {
+          nixpkgs.flake = nixpkgs;
+          system.flake = inputs.self;
+        };
         nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
         system.stateVersion = "22.05";
       }
