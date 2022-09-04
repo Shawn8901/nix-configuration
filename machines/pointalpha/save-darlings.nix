@@ -12,6 +12,7 @@
   };
 
   environment.etc."machine-id".source = "/persist/etc/machine-id";
+  environment.etc."nixos".source = "/persist/etc/nixos";
 
   fileSystems."/var/lib/bluetooth" = {
     device = "/persist/var/lib/bluetooth";
@@ -50,11 +51,6 @@
 
   fileSystems."/var/lib/upower" = {
     device = "/persist/var/lib/upower";
-    options = [ "bind" "noauto" "x-systemd.automount" ];
-  };
-
-  fileSystems."/etc/nixos" = {
-    device = "/persist/etc/nixos";
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
