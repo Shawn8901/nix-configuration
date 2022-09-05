@@ -19,11 +19,6 @@
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
-  fileSystems."/var/db" = {
-    device = "/persist/var/db";
-    options = [ "bind" "noauto" "x-systemd.automount" ];
-  };
-
   fileSystems."/var/lib/NetworkManager" = {
     device = "/persist/var/lib/NetworkManager";
     options = [ "bind" "noauto" "x-systemd.automount" ];
