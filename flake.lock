@@ -77,6 +77,26 @@
         "type": "github"
       }
     },
+    "nixinate": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-stable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1661180311,
+        "narHash": "sha256-eNxtJdSKvGuorxEBidSuv5sAOIy7yl4+fEAOs+cmTRQ=",
+        "owner": "matthewcroughan",
+        "repo": "nixinate",
+        "rev": "65584f4d1c8dfa47e86cae773b4a6ffa16ab132c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "matthewcroughan",
+        "repo": "nixinate",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1662099760,
@@ -129,6 +149,7 @@
         "agenix": "agenix",
         "home-manager": "home-manager",
         "nix-vscode-marketplace": "nix-vscode-marketplace",
+        "nixinate": "nixinate",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur"
