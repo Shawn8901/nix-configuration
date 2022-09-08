@@ -30,16 +30,6 @@ nixpkgs.lib.nixosSystem (
         nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
         system.stateVersion = "22.05";
       }
-      {
-        _module.args.nixinate = nixpkgs.lib.mkDefault {
-          host = name;
-          sshUser = "shawn";
-          buildOn = "remote";
-          substituteOnTarget = false;
-          hermetic = false;
-        };
-      }
-
       entryPoint
       bootloader
       hardware
