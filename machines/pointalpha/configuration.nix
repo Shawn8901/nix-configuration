@@ -14,6 +14,12 @@ in
       file = ../../secrets/shawn_samba_credentials.age;
     };
     ela_samba_credentials = { file = ../../secrets/ela_samba_credentials.age; };
+    github_access_token_user = {
+      file = ../../secrets/github_access_token.age;
+      path = "/home/shawn/.config/nix/nix.conf";
+      owner = "shawn";
+      group = "users";
+    };
   };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -347,7 +353,6 @@ in
     teamviewer.enable = true;
   };
   security.rtkit.enable = true;
-  security.pam.services.shawn.enableKwallet = true;
   security.auditd.enable = false;
   security.audit.enable = false;
 
@@ -408,6 +413,12 @@ in
     etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
   };
+
+
+
+
+
+  security.pam.services.shawn.enableKwallet = true;
 
   users.users.shawn = {
     extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" "networkmanager" ];

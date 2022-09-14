@@ -2,7 +2,8 @@
 { config, lib, pkgs, ... }:
 
 let cfg = config.services.usb-backup;
-in {
+in
+{
   options = {
     services.backup-nextcloud = {
       enable = lib.mkEnableOption "service to save personal files to dropbox";
@@ -16,8 +17,7 @@ in {
           serviceConfig = {
             Type = "oneshot";
             User = "shawn";
-            ExecStart =
-              "${pkgs.rclone}/bin/rclone copy /var/lib/nextcloud/data/shawn/files/ dropbox:";
+            ExecStart = "${pkgs.rclone}/bin/rclone copy /var/lib/nextcloud/data/shawn/files/ dropbox:";
           };
         };
         timers.backup-nextcloud = {

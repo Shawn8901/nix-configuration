@@ -3,6 +3,7 @@ _:
 
   age.secrets.github_access_token = {
     file = ../../secrets/github_access_token.age;
+    path = "/root/.config/nix/nix.conf";
   };
 
   environment.systemPackages = [ pkgs.cachix ];
@@ -20,6 +21,7 @@ _:
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA="
       ];
+      trusted-users = [ "root" "shawn" ];
       cores = lib.mkDefault 8;
       max-jobs = lib.mkDefault 8;
       experimental-features = "nix-command flakes";
@@ -33,5 +35,4 @@ _:
       options = "--delete-older-than 7d";
     };
   };
-  systemd.services.nix-daemon.serviceConfig.EnvironmentFile = config.age.secrets.github_access_token.path;
 }

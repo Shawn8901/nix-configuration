@@ -19,22 +19,14 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.flake-utils.follows = "flake-utils";
     };
-    mach-nix = {
-      url = "github:DavHau/mach-nix/3.5.0";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-      inputs.pypi-deps-db.follows = "pypi-deps-db";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    pypi-deps-db = {
-      url = github:DavHau/pypi-deps-db;
-      inputs.mach-nix.follows = "mach-nix";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
-
     flake-utils.url = "github:numtide/flake-utils";
+    stfc-bot = {
+      url = "github:shawn8901/stfc-bot";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
   };
 
-  outputs = { self, mach-nix, ... }@inputs:
+  outputs = { self, ... }@inputs:
     let
       system = "x86_64-linux";
       nPkgs = (import inputs.nixpkgs-unstable {
@@ -45,13 +37,12 @@
       sPkgs = (import inputs.nixpkgs-stable { inherit system; });
       uPkgs = (import inputs.nixpkgs-unstable { inherit system; });
       lib = import ./lib (inputs // { inherit lib nPkgs sPkgs uPkgs system; });
-      machNix = import mach-nix { inherit sPkgs; };
     in
     {
       nixosModules = import ./modules/nixos (inputs // { inherit lib system; });
       nixosConfigurations = import ./machines (inputs // { inherit lib nPkgs sPkgs uPkgs system; });
 
-      packages.${system} = import ./packages (inputs // { inherit system sPkgs uPkgs machNix; })
+      packages.${system} = import ./packages (inputs // { inherit system sPkgs uPkgs; })
         // lib.nixosConfigurationsAsPackages.configs;
 
       devShells.${system}.default = sPkgs.mkShell {

@@ -6,6 +6,4 @@ inputs: {
   shutdown-wakeup = import ./shutdown-wakeup.nix inputs;
   usb-backup = import ./usb-backup.nix inputs;
   nextcloud-backup = import ./nextcloud-backup.nix inputs;
-
-  ausweisapp = import ./ausweisapp.nix inputs;
 }
