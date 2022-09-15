@@ -18,7 +18,6 @@ nixpkgs.lib.nixosSystem (
         networking.hostName = name;
         networking.hostId = builtins.substring 0 8 (builtins.hashString "md5" "${name}");
         system.configurationRevision = self.rev or "dirty";
-        documentation.nixos.enable = false;
         documentation.man = {
           enable = true;
           generateCaches = true;

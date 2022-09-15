@@ -414,10 +414,6 @@ in
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
   };
 
-
-
-
-
   security.pam.services.shawn.enableKwallet = true;
 
   users.users.shawn = {
