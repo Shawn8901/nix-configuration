@@ -35,20 +35,19 @@ nixpkgs.lib.nixosSystem (
       hardware
 
       agenix.nixosModule
-      home-manager.nixosModule
-      {
-        home-manager = {
-          useGlobalPkgs = true;
-          useUserPackages = true;
-        };
-        home-manager.users.root = {
-          home.stateVersion = "22.05";
-        };
-      }
-
     ] ++ builtins.attrValues self.nixosModules
     ++ nixpkgs.lib.optionals (builtins.pathExists home)
       [
+        home-manager.nixosModule
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+          };
+          home-manager.users.root = {
+            home.stateVersion = "22.05";
+          };
+        }
         {
           home-manager = {
             sharedModules = [ (import ../modules/home-manager inputs) ];
