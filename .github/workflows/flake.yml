@@ -58,6 +58,7 @@ jobs:
       run: |
         git config user.email git@pointjig.de
         git config user.name "Git Bot"
+        cat /etc/nix/nix.conf
     - name: Update the flake
       run: nix flake update
     - name: Store flake.lock
