@@ -88,8 +88,7 @@ def run_command(host:DeployHost, command: NixosRebuildCommand, log:str):
 def boot(_, hosts="localhost"):
     g: DeployGroup = parse_host_arg(hosts)
     def run(h: DeployHost) -> None:
-        print ("🤞 Setting configuration as boot.")
-        run_command(h, NixosRebuildCommand.BOOT)
+        run_command(h, NixosRebuildCommand.BOOT,"🤞 Setting configuration as boot.")
 
     g.run_function(run)
 
