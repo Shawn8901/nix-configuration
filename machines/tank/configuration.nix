@@ -1,10 +1,12 @@
-{ self, ... }@inputs:
+{ self, stfc-bot, ... }@inputs:
 { config, pkgs, lib, ... }:
 let
   hosts = self.nixosConfigurations;
   secrets = config.age.secrets;
 in
 {
+  imports = [ stfc-bot.nixosModule ];
+
   age.secrets = {
     ztank_key = { file = ../../secrets/ztank_key.age; };
     zrepl_tank = { file = ../../secrets/zrepl_tank.age; };
@@ -43,6 +45,11 @@ in
       file = ../../secrets/grafana_secret_key_file.age;
       owner = "grafana";
       group = "grafana";
+    };
+    stfc-env = {
+      file = ../../secrets/stfc-env.age;
+      owner = "stfc-bot";
+      group = "stfc-bot";
     };
   };
 
@@ -324,6 +331,7 @@ in
       ensureDatabases = [
         "${config.services.nextcloud.config.dbname}"
         "${config.services.grafana.database.name}"
+        "stfcbot"
       ];
       ensureUsers = [
         {
@@ -338,6 +346,12 @@ in
           ensurePermissions = {
             "DATABASE ${config.services.grafana.database.name}" =
               "ALL PRIVILEGES";
+          };
+        }
+        {
+          name = "stfcbot";
+          ensurePermissions = {
+            "DATABASE stfcbot" = "ALL PRIVILEGES";
           };
         }
       ];
@@ -562,6 +576,11 @@ in
       SystemMaxUse=500M
       SystemMaxFileSize=100M
     '';
+    stfc-bot = {
+      enable = true;
+      package = inputs.stfc-bot.packages.x86_64-linux.default;
+      envFile = config.age.secrets.stfc-env.path;
+    };
   };
   security.rtkit.enable = true;
   security.acme = {

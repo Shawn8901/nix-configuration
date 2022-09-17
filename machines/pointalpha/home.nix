@@ -27,9 +27,6 @@ in
         nas
 
         sqlitebrowser
-        # virt-manager
-        # scrcpy
-        # stfc
       ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     env = {

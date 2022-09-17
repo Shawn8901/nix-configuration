@@ -36,4 +36,5 @@ in
   "grafana_secret_key_file.age".publicKeys = [ shawn tank ];
 
   "github_access_token.age".publicKeys = [ shawn ] ++ systems;
+  "stfc-env.age".publicKeys = [ shawn tank ];
 }
