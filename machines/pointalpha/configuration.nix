@@ -14,12 +14,6 @@ in
       file = ../../secrets/shawn_samba_credentials.age;
     };
     ela_samba_credentials = { file = ../../secrets/ela_samba_credentials.age; };
-    github_access_token_user = {
-      file = ../../secrets/github_access_token.age;
-      path = "/home/shawn/.config/nix/nix.conf";
-      owner = "shawn";
-      group = "users";
-    };
   };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -350,7 +344,7 @@ in
       SystemMaxUse=500M
       SystemMaxFileSize=100M
     '';
-    teamviewer.enable = true;
+    teamviewer.enable = false;
   };
   security.rtkit.enable = true;
   security.auditd.enable = false;
@@ -417,6 +411,6 @@ in
   security.pam.services.shawn.enableKwallet = true;
 
   users.users.shawn = {
-    extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" "networkmanager" ];
+    extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" "networkmanager" "nixbld" ];
   };
 }

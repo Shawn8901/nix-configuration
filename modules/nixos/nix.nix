@@ -3,7 +3,8 @@ _:
 
   age.secrets.github_access_token = {
     file = ../../secrets/github_access_token.age;
-    path = "/root/.config/nix/nix.conf";
+    group = "nixbld";
+    mode = "0440";
   };
 
   environment.systemPackages = [ pkgs.cachix ];
@@ -26,6 +27,9 @@ _:
       max-jobs = lib.mkDefault 8;
       experimental-features = "nix-command flakes";
     };
+    extraOptions = ''
+      !include ${config.age.secrets.github_access_token.path}
+    '';
     nrBuildUsers = lib.mkForce 16;
     daemonIOSchedClass = "idle";
     daemonCPUSchedPolicy = "idle";
