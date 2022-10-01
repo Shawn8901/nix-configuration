@@ -24,7 +24,7 @@ in
     environment.systemPackages = with pkgs; [ cifs-utils ];
     services = {
       udev.extraRules = ''
-        SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="04fc", ATTRS{idProduct}=="0c25", ATTR{partition}=="2", TAG+="systemd", ENV{SYSTEMD_WANTS}="usb-backup-ela@%k.service"
+        SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="04fc", ATTRS{idProduct}=="0c25", ATTR{partition}=="2", TAG+="systemd", ENV{SYSTEMD_WANTS}="usb-backup@%k.service"
       '';
     };
 
@@ -38,7 +38,6 @@ in
         serviceConfig = {
           Type = "simple";
           GuessMainPID = false;
-          WorkingDirectory = "${cfg.mountPoint}";
           ExecStart = "${usbBackup}/bin/usb-backup %I";
         };
       };
