@@ -7,10 +7,12 @@ in
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot = {
-    initrd.availableKernelModules =
-      [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-    initrd.kernelModules = [ ];
-    initrd.systemd.enable = true;
+    initrd = {
+      availableKernelModules =
+        [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
+      systemd.enable = true;
+      systemd.contents = { "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source; };
+    };
     kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
     kernelParams = [ "elevator=none" ];
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;

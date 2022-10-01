@@ -5,10 +5,13 @@
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
   boot = {
-    initrd.availableKernelModules =
-      [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_blk" ];
-    initrd.kernelModules = [ ];
-    initrd.systemd.enable = true;
+    initrd = {
+      availableKernelModules =
+        [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_blk" ];
+      kernelModules = [ ];
+      systemd.enable = true;
+      systemd.contents = { "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source; };
+    };
     kernelModules = [ ];
     kernelParams = [ "elevator=none" ];
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
