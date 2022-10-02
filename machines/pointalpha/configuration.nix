@@ -125,6 +125,16 @@ in
   services = {
     udev = {
       packages = [ pkgs.libmtp.out ];
+      extraRules = ''
+        # Rules for Oryx web flashing and live training
+        KERNEL=="hidraw*", ATTRS{idVendor}=="3297", MODE="0664", GROUP="plugdev"
+        # Rule for all ZSA keyboards
+        SUBSYSTEM=="usb", ATTR{idVendor}=="3297", GROUP="plugdev"
+        # Rule for the Moonlander
+        SUBSYSTEM=="usb", ATTR{idVendor}=="3297", ATTR{idProduct}=="1969", GROUP="plugdev"
+        # Wally Flashing rules for the Moonlander and Planck EZ
+        SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE:="0664", SYMLINK+="stm32_dfu"
+      '';
     };
     xserver = {
       enable = true;
@@ -355,7 +365,7 @@ in
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;
   hardware.sane.enable = true;
-  hardware.keyboard.zsa.enable = true;
+  hardware.keyboard.zsa.enable = false;
   sound.enable = false;
 
   hardware.opengl = {
@@ -380,6 +390,7 @@ in
       enable = true;
       extraCompatPackages = [ fPkgs.proton-ge-custom ];
     };
+    chromium.enable = true;
     dconf.enable = true;
     adb.enable = true;
     noisetorch.enable = true;
@@ -413,6 +424,7 @@ in
 
   security.pam.services.shawn.enableKwallet = true;
 
+  users.groups.plugdev = { };
   users.users.shawn = {
     extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" "networkmanager" "nixbld" ];
   };
