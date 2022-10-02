@@ -355,6 +355,7 @@ in
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;
   hardware.sane.enable = true;
+  hardware.keyboard.zsa.enable = true;
   sound.enable = false;
 
   hardware.opengl = {
