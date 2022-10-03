@@ -13,6 +13,7 @@
 
   environment.etc."machine-id".source = "/persist/etc/machine-id";
   environment.etc."nixos".source = "/persist/etc/nixos";
+  environment.etc."NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections";
 
   security.sudo.extraConfig = ''
     Defaults lecture = never
