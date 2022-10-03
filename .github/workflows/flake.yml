@@ -7,7 +7,7 @@ on:
 
 jobs:
   generate_matrix:
-    needs: [ check_flake ]
+    needs: [ update_flake ]
     runs-on: ubuntu-22.04
     outputs:
       packages: ${{ steps.gen_packages.outputs.packages }}
@@ -66,7 +66,7 @@ jobs:
 
   build_packages:
     runs-on: ubuntu-22.04
-    needs: [generate_matrix, check_flake]
+    needs: [generate_matrix, update_flake]
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -166,4 +166,4 @@ jobs:
           --title "Auto update $(date -I)")
         gh pr merge $PR --merge --delete-branch
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
