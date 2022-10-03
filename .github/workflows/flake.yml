@@ -53,13 +53,11 @@ jobs:
           experimental-features = nix-command flakes
           substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
-    - name: Set up git
-      run: |
-        git config user.email git@pointjig.de
-        git config user.name "Git Bot"
-        nix show-config | grep access
     - name: Update the flake
       run: nix flake update
+    - name: Check flake
+      run: |
+        nix flake check --keep-going
     - name: Store flake.lock
       uses: actions/upload-artifact@v3
       with:
@@ -134,33 +132,7 @@ jobs:
       with:
         name: flake_lock
     - name: Build everything
-      run: nix build .#${{ matrix.machine }}   
-
-  check_flake:
-    runs-on: ubuntu-20.04
-    needs: [update_flake]
-    continue-on-error: true
-    steps:
-    - name: Clone repository
-      uses: actions/checkout@v3
-      with:
-        token: '${{ secrets.GH_TOKEN }}'
-    - name: Install nix
-      uses: cachix/install-nix-action@v17
-      with:
-        extra_nix_config: |
-          auto-optimise-store = true
-          access-tokens = github.com=${{ secrets.GH_TOKEN }}
-          experimental-features = nix-command flakes
-          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
-    - name: Restore flake.lock
-      uses: actions/download-artifact@v3
-      with:
-        name: flake_lock
-    - name: Build everything
-      run: |
-        nix flake check --keep-going
+      run: nix build .#${{ matrix.machine }}
         
   push_update:
     runs-on: ubuntu-20.04
