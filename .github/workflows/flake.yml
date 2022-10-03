@@ -6,7 +6,8 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  update_flake:
+  generate_matrix:
+    needs: [ check_flake ]
     runs-on: ubuntu-22.04
     outputs:
       packages: ${{ steps.gen_packages.outputs.packages }}
@@ -25,11 +26,6 @@ jobs:
           experimental-features = nix-command flakes
           substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
-    - name: Update the flake
-      run: nix flake update
-    - name: Check flake
-      run: |
-        nix flake check --keep-going
     - name: Generate flake.json
       run: nix flake show --allow-import-from-derivation --json > flake.json
     - id: gen_packages
@@ -40,6 +36,25 @@ jobs:
       run: |
         machines=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") ))' < flake.json)
         printf "::set-output name=machines::%s" "$machines"
+
+  update_flake:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+      with:
+        token: '${{ secrets.GH_TOKEN }}'
+    - name: Install nix
+      uses: cachix/install-nix-action@v17
+      with:
+        extra_nix_config: |
+          auto-optimise-store = true
+          access-tokens = github.com=${{ secrets.GH_TOKEN }}
+          experimental-features = nix-command flakes
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
+    - name: Update the flake
+      run: nix flake update
     - name: Store flake.lock
       uses: actions/upload-artifact@v3
       with:
@@ -48,12 +63,12 @@ jobs:
 
   build_packages:
     runs-on: ubuntu-22.04
-    needs: [update_flake]
+    needs: [generate_matrix, check_flake]
     strategy:
       fail-fast: false
-      max-parallel: 10
+      max-parallel: 5
       matrix:
-        package: ${{fromJson(needs.update_flake.outputs.packages)}}
+        package: ${{fromJson(needs.generate_matrix.outputs.packages)}}
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -83,12 +98,12 @@ jobs:
    
   build_machines:
     runs-on: ubuntu-22.04
-    needs: [build_packages]
+    needs: [generate_matrix, build_packages]
     strategy:
       fail-fast: false
       max-parallel: 5
       matrix:
-        machine: ${{fromJson(needs.update_flake.outputs.machines)}}
+        machine: ${{fromJson(needs.generate_matrix.outputs.machines)}}
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -114,12 +129,38 @@ jobs:
       with:
         name: flake_lock
     - name: Build everything
-      run: nix build .#${{ matrix.machine }}
+      run: nix build .#${{ matrix.machine }}   
+
+  check_flake:
+    runs-on: ubuntu-20.04
+    needs: [update_flake]
+    continue-on-error: true
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+      with:
+        token: '${{ secrets.GH_TOKEN }}'
+    - name: Install nix
+      uses: cachix/install-nix-action@v17
+      with:
+        extra_nix_config: |
+          auto-optimise-store = true
+          access-tokens = github.com=${{ secrets.GH_TOKEN }}
+          experimental-features = nix-command flakes
+          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
+    - name: Restore flake.lock
+      uses: actions/download-artifact@v3
+      with:
+        name: flake_lock
+    - name: Build everything
+      run: |
+        nix flake check --keep-going
         
   push_update:
     runs-on: ubuntu-20.04
     permissions: write-all
-    needs: [build_packages,build_machines]
+    needs: [build_packages, build_machines]
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -148,4 +189,4 @@ jobs:
           --title "Auto update $(date -I)")
         gh pr merge $PR --merge --delete-branch
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
