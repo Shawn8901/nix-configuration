@@ -7,6 +7,7 @@ on:
 
 jobs:
   generate_matrix:
+    needs: [ check_flake ]
     runs-on: ubuntu-22.04
     outputs:
       packages: ${{ steps.gen_packages.outputs.packages }}
@@ -164,7 +165,7 @@ jobs:
   push_update:
     runs-on: ubuntu-20.04
     permissions: write-all
-    needs: [update_flake, check_flake, build_packages, build_machines]
+    needs: [build_packages, build_machines]
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
