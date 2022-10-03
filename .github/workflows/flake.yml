@@ -67,7 +67,7 @@ jobs:
 
   build_packages:
     runs-on: ubuntu-22.04
-    needs: [generate_matrix, update_flake]
+    needs: [generate_matrix, check_flake]
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -102,7 +102,7 @@ jobs:
    
   build_machines:
     runs-on: ubuntu-22.04
-    needs: [generate_matrix, build_packages, update_flake]
+    needs: [generate_matrix, build_packages]
     strategy:
       fail-fast: false
       max-parallel: 5
