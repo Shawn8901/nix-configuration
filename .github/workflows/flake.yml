@@ -6,39 +6,11 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  generate_matrix:
-    needs: [ update_flake ]
+  update_flake:
     runs-on: ubuntu-22.04
     outputs:
       packages: ${{ steps.gen_packages.outputs.packages }}
       machines: ${{ steps.gen_machines.outputs.machines }}
-    steps:
-    - name: Clone repository
-      uses: actions/checkout@v3
-      with:
-        token: '${{ secrets.GH_TOKEN }}'
-    - name: Install nix
-      uses: cachix/install-nix-action@v17
-      with:
-        extra_nix_config: |
-          auto-optimise-store = true
-          access-tokens = github.com=${{ secrets.GH_TOKEN }}
-          experimental-features = nix-command flakes
-          substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
-    - name: Generate flake.json
-      run: nix flake show --allow-import-from-derivation --json > flake.json
-    - id: gen_packages
-      run: |
-        packages=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
-        printf "::set-output name=packages::%s" "$packages"
-    - id: gen_machines
-      run: |
-        machines=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") ))' < flake.json)
-        printf "::set-output name=machines::%s" "$machines"
-
-  update_flake:
-    runs-on: ubuntu-22.04
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -58,6 +30,16 @@ jobs:
     - name: Check flake
       run: |
         nix flake check --keep-going
+    - name: Generate flake.json
+      run: nix flake show --allow-import-from-derivation --json > flake.json
+    - id: gen_packages
+      run: |
+        packages=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
+        printf "::set-output name=packages::%s" "$packages"
+    - id: gen_machines
+      run: |
+        machines=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") ))' < flake.json)
+        printf "::set-output name=machines::%s" "$machines"
     - name: Store flake.lock
       uses: actions/upload-artifact@v3
       with:
@@ -66,7 +48,7 @@ jobs:
 
   build_packages:
     runs-on: ubuntu-22.04
-    needs: [generate_matrix, update_flake]
+    needs: [update_flake]
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -101,7 +83,7 @@ jobs:
    
   build_machines:
     runs-on: ubuntu-22.04
-    needs: [generate_matrix, build_packages]
+    needs: [build_packages]
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -137,7 +119,7 @@ jobs:
   push_update:
     runs-on: ubuntu-20.04
     permissions: write-all
-    needs: [build_packages, build_machines]
+    needs: [build_machines]
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
