@@ -5,14 +5,8 @@ let
 in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
-
   boot = {
-    initrd = {
-      availableKernelModules =
-        [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-      systemd.enable = true;
-      systemd.contents = { "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source; };
-    };
+    initrd.availableKernelModules = [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
     kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [ ];
@@ -26,7 +20,7 @@ in
     zfs.requestEncryptionCredentials = [ "ztank" ];
 
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 10; };
-    postBootCommands = ''
+    postBootCommands = lib.mkAfter ''
       ${pkgs.zfs}/bin/zfs mount -a
     '';
   };

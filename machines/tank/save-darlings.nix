@@ -1,15 +1,8 @@
 { lib, config, ... }:
 {
-  boot.initrd.systemd.services.initrd-rollback-root = {
-    after = [ "zfs-import-rpool.service" ];
-    wantedBy = [ "sysroot.mount" ];
-    before = [ "sysroot.mount" ];
-    description = "Rollback root fs";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${config.boot.zfs.package}/sbin/zfs rollback -r rpool/local/root@blank";
-    };
-  };
+  boot.initrd.postDeviceCommands = lib.mkAfter ''
+    zfs rollback -r rpool/local/root@blank
+  '';
 
   security.sudo.extraConfig = ''
     Defaults lecture = never
