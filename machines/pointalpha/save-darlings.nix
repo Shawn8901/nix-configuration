@@ -11,6 +11,10 @@
     };
   };
 
+  # boot.initrd.postDeviceCommands = lib.mkAfter ''
+  #   zfs rollback -r rpool/local/root@blank
+  # '';
+
   environment.etc."machine-id".source = "/persist/etc/machine-id";
   environment.etc."nixos".source = "/persist/etc/nixos";
 

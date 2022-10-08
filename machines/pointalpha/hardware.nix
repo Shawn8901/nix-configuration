@@ -10,13 +10,10 @@ in
       availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod" ];
       kernelModules = [ "amdgpu" ];
       systemd.enable = true;
-      systemd.contents = { "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source; };
     };
     kernelModules = [ "amdgpu" "kvm-amd" "cifs" "usb_storage" ];
     kernelPackages = pkgs.linuxPackages_xanmod;
     extraModulePackages = [ ];
-
-
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944
       options zfs zfs_vdev_scheduler=deadline
