@@ -13,7 +13,6 @@ in
       systemd.contents = { "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source; };
     };
     kernelModules = [ "amdgpu" "kvm-amd" "cifs" "usb_storage" ];
-    kernelParams = [ "elevator=none" ];
     kernelPackages = pkgs.linuxPackages_xanmod;
     extraModulePackages = [ ];
 

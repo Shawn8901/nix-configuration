@@ -13,7 +13,6 @@
       systemd.contents = { "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source; };
     };
     kernelModules = [ ];
-    kernelParams = [ "elevator=none" ];
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [ ];
     zfs.devNodes = "/dev/";
