@@ -2,8 +2,7 @@
 {
   boot.initrd.systemd.services.initrd-rollback-root = {
     after = [ "zfs-import-rpool.service" ];
-    wantedBy = [ "sysroot.mount" ];
-    before = [ "sysroot.mount" ];
+    before = [ "sysroot.mount" "local-fs.target" ];
     description = "Rollback root fs";
     serviceConfig = {
       Type = "oneshot";
