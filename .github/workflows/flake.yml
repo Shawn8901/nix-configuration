@@ -31,11 +31,11 @@ jobs:
     - id: gen_packages
       run: |
         packages=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
-        printf "::set-output name=packages::%s" "$packages"
+        echo packages=$packages >> $GITHUB_OUTPUT
     - id: gen_machines
       run: |
         machines=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") ))' < flake.json)
-        printf "::set-output name=machines::%s" "$machines"
+        echo machines=$machines >> $GITHUB_OUTPUT
 
   update_flake:
     runs-on: ubuntu-22.04
