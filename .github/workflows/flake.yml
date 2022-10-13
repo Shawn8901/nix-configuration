@@ -18,7 +18,7 @@ jobs:
       with:
         token: '${{ secrets.GH_TOKEN }}'
     - name: Install nix
-      uses: cachix/install-nix-action@v17
+      uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
           auto-optimise-store = true
@@ -45,7 +45,7 @@ jobs:
       with:
         token: '${{ secrets.GH_TOKEN }}'
     - name: Install nix
-      uses: cachix/install-nix-action@v17
+      uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
           auto-optimise-store = true
@@ -75,7 +75,7 @@ jobs:
       with:
         token: '${{ secrets.GH_TOKEN }}'
     - name: Install nix
-      uses: cachix/install-nix-action@v17
+      uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
           auto-optimise-store = true
@@ -110,7 +110,7 @@ jobs:
       with:
         token: '${{ secrets.GH_TOKEN }}'
     - name: Install nix
-      uses: cachix/install-nix-action@v17
+      uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
           auto-optimise-store = true
@@ -141,7 +141,7 @@ jobs:
       with:
         token: '${{ secrets.GH_TOKEN }}'
     - name: Install nix
-      uses: cachix/install-nix-action@v17
+      uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
           auto-optimise-store = true
