@@ -13,7 +13,6 @@
     htop
     nano
     unzip
-    age
     ncdu
     graphviz
     nix-du
