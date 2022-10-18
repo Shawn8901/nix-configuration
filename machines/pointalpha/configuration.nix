@@ -22,6 +22,7 @@ in
       "discord"
       "logmein-hamachi"
       "steam"
+      "steam-run"
       "steam-original"
       "teamspeak-client"
       "teamviewer"
