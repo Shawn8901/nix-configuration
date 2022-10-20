@@ -22,6 +22,7 @@ with lib; {
         editorconfig.editorconfig
         jnoortheen.nix-ide
         mkhl.direnv
+        mhutchie.git-graph
       ]);
       keybindings = [
         {
