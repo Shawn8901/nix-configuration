@@ -36,6 +36,7 @@ in
     programs.direnv.enable = true;
     programs.direnv.nix-direnv.enable = true;
     programs.direnv.enableZshIntegration = true;
+    programs.gh.enable = true;
     xdg.enable = true;
     xdg.mime.enable = true;
 
