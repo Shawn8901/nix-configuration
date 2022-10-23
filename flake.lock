@@ -3,7 +3,7 @@
     "agenix": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -38,7 +38,7 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-unstable"
+          "nixpkgs"
         ],
         "utils": [
           "flake-utils"
@@ -58,13 +58,53 @@
         "type": "github"
       }
     },
+    "mimir": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1666556633,
+        "narHash": "sha256-US4ESTnhz912P3c4ah/HBPjpYiYtNMjJeQCfZBH8ekA=",
+        "owner": "shawn8901",
+        "repo": "mimir",
+        "rev": "3563534458be2b76b53a1bc82d4685481a906d60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shawn8901",
+        "repo": "mimir",
+        "type": "github"
+      }
+    },
+    "mimir-client": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1666545616,
+        "narHash": "sha256-vNgteQMpSEgFP+o0sXjmPb+6hZzWR79Fgmftlk9cTpo=",
+        "owner": "shawn8901",
+        "repo": "mimir-client",
+        "rev": "719a1ea72a443649d58cfce525f1dc91c493f44f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shawn8901",
+        "repo": "mimir-client",
+        "type": "github"
+      }
+    },
     "nix-vscode-marketplace": {
       "inputs": {
         "flake-utils": [
           "flake-utils"
         ],
         "nixpkgs": [
-          "nixpkgs-unstable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -81,29 +121,13 @@
         "type": "github"
       }
     },
-    "nixpkgs-stable": {
+    "nixpkgs": {
       "locked": {
-        "lastModified": 1666401273,
-        "narHash": "sha256-AG3MoIjcWwz1SPjJ2nymWu4NmeVj9P40OpB1lsmxFtg=",
+        "lastModified": 1666447894,
+        "narHash": "sha256-i9WHX4w/et4qPMzEXd9POmnO0/bthjr7R4cblKNHGms=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "3933d8bb9120573c0d8d49dc5e890cb211681490",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-22.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-unstable": {
-      "locked": {
-        "lastModified": 1666377499,
-        "narHash": "sha256-dZZCGvWcxc7oGnUgFVf0UeNHsJ4VhkTM0v5JRe8EwR8=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "301aada7a64812853f2e2634a530ef5d34505048",
+        "rev": "95aeaf83c247b8f5aa561684317ecd860476fcd6",
         "type": "github"
       },
       "original": {
@@ -133,9 +157,10 @@
         "agenix": "agenix",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
+        "mimir": "mimir",
+        "mimir-client": "mimir-client",
         "nix-vscode-marketplace": "nix-vscode-marketplace",
-        "nixpkgs-stable": "nixpkgs-stable",
-        "nixpkgs-unstable": "nixpkgs-unstable",
+        "nixpkgs": "nixpkgs",
         "nur": "nur",
         "stfc-bot": "stfc-bot"
       }
@@ -143,15 +168,15 @@
     "stfc-bot": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1666041011,
-        "narHash": "sha256-sAP2ylBL0/uf+f2WW0/yDJYVb+KzDla1Kc6378AJ6Oo=",
+        "lastModified": 1666543002,
+        "narHash": "sha256-78MYiDVpvpVpfaNDX4MXOROU6MC1uA3Hu/FDx2s4Pw8=",
         "owner": "shawn8901",
         "repo": "stfc-bot",
-        "rev": "62a2266d07a7d6f68e52d78dae7bd9c51c68bc52",
+        "rev": "2f246dc70e84c5b5dda803ffaf27eecf7632244b",
         "type": "github"
       },
       "original": {

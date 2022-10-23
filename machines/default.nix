@@ -1,5 +1,5 @@
 { self, lib, ... }@inputs: {
-  pointalpha = lib.mkSystem "pointalpha" inputs.nixpkgs-unstable;
-  shelter = lib.mkSystem "shelter" inputs.nixpkgs-unstable;
-  tank = lib.mkSystem "tank" inputs.nixpkgs-unstable;
+  pointalpha = lib.mkSystem "pointalpha" inputs.nixpkgs;
+  shelter = lib.mkSystem "shelter" inputs.nixpkgs;
+  tank = lib.mkSystem "tank" inputs.nixpkgs;
 }

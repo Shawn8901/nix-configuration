@@ -1,4 +1,4 @@
-{ self, sPkgs, system, ... }@inputs:
+{ self, system, ... }@inputs:
 { pkgs, lib, config, ... }:
 
 let
@@ -284,7 +284,7 @@ in
     };
     zrepl = {
       enable = true;
-      package = sPkgs.zrepl;
+      package = pkgs.zrepl;
       settings = {
         global = {
           monitoring = [{
