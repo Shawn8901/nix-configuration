@@ -1,11 +1,11 @@
-{ self, stfc-bot, ... }@inputs:
+{ self, stfc-bot, mimir, ... }@inputs:
 { config, pkgs, lib, ... }:
 let
   hosts = self.nixosConfigurations;
   secrets = config.age.secrets;
 in
 {
-  imports = [ stfc-bot.nixosModule ];
+  imports = [ stfc-bot.nixosModule mimir.nixosModule ];
 
   age.secrets = {
     ztank_key = { file = ../../secrets/ztank_key.age; };
@@ -50,6 +50,11 @@ in
       file = ../../secrets/stfc-env.age;
       owner = "stfc-bot";
       group = "stfc-bot";
+    };
+    mimir-env = {
+      file = ../../secrets/mimir-env.age;
+      owner = "mimir";
+      group = "mimir";
     };
   };
 
@@ -370,6 +375,12 @@ in
           http3 = true;
           kTLS = true;
         };
+        "${config.services.stne-mimir.domain}" = {
+          enableACME = true;
+          forceSSL = true;
+          http3 = true;
+          kTLS = true;
+        };
         "${config.services.grafana.domain}" = {
           enableACME = true;
           forceSSL = true;
@@ -580,6 +591,14 @@ in
       enable = true;
       package = inputs.stfc-bot.packages.x86_64-linux.default;
       envFile = config.age.secrets.stfc-env.path;
+    };
+    stne-mimir = {
+      enable = true;
+      domain = "mimir.tank.pointjig.de";
+      clientPackage = inputs.mimir-client.packages.x86_64-linux.default;
+      package = inputs.mimir.packages.x86_64-linux.default;
+      envFile = config.age.secrets.mimir-env.path;
+      unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
   };
   security.rtkit.enable = true;
