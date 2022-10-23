@@ -4,9 +4,9 @@
     SDL2 = uPkgs.SDL2.override { withStatic = true; };
   };
   proton-ge-custom = uPkgs.callPackage ./proton-ge-custom { };
-  rtc-helper = sPkgs.callPackage ./shellscripts/rtc-helper.nix { };
-  nas = sPkgs.callPackage ./shellscripts/nas.nix { };
-  usb-backup = sPkgs.callPackage ./shellscripts/usb-backup.nix { };
+  rtc-helper = uPkgs.callPackage ./shellscripts/rtc-helper.nix { };
+  nas = uPkgs.callPackage ./shellscripts/nas.nix { };
+  usb-backup = uPkgs.callPackage ./shellscripts/usb-backup.nix { };
   noisetorch = uPkgs.callPackage ./noisetorch { };
 
   jameica = uPkgs.callPackage ./jameica {
