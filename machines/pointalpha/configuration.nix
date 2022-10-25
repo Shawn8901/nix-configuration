@@ -393,7 +393,7 @@ in
     };
     chromium.enable = true;
     dconf.enable = true;
-    adb.enable = true;
+    adb.enable = false;
     noisetorch.enable = true;
     noisetorch.package = fPkgs.noisetorch;
     ssh.startAgent = true;
