@@ -14,15 +14,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.sessionVariables = {
-      MOZ_ENABLE_WAYLAND = 1;
-      MOZ_DISABLE_RDD_SANDBOX = 1;
-    };
-
     programs.firefox = {
       enable = true;
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-        forceWayland = true;
         extraNativeMessagingHosts = with nur.repos.wolfangaukang; [ vdhcoapp ];
       };
       extensions = with nur.repos.rycee.firefox-addons; [
@@ -37,8 +31,7 @@ in
           pname = "Video-DownloadHelper";
           version = "7.6.0";
           addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-          url =
-            "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
+          url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
           sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
           meta = { };
         })

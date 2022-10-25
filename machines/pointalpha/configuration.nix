@@ -144,18 +144,7 @@ in
       displayManager.sddm = {
         enable = true;
         autoNumlock = true;
-        package = fPkgs.sddm-git;
-        settings = {
-          General = {
-            #DisplayServer = "wayland";
-            GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
-          };
-          Wayland = {
-            CompositorCommand = "kwin_wayland --no-lockscreen --inputmethod qt5-virtualkeyboard";
-          };
-        };
       };
-      displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5 = {
         enable = true;
         phononBackend = "vlc";
@@ -386,6 +375,14 @@ in
 
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    steam = pkgs.steam.override {
+      extraPkgs = pkgs: with pkgs; [
+        ncurses
+      ];
+    };
+  };
+
   programs = {
     steam = {
       enable = true;
@@ -403,16 +400,11 @@ in
       enable = true;
       openFirewall = true;
     };
-    xwayland.enable = true;
-    nix-ld.enable = true;
   };
+  env.system-wayland.enable = false;
+
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";
-    variables.NIXOS_OZONE_WL = "1";
-    variables.SDL_VIDEODRIVER = "wayland";
-    variables.QT_QPA_PLATFORM = "wayland-egl";
-    variables.QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    variables._JAVA_AWT_WM_NONREPARENTING = "1";
     etc."samba/credentials_shawn".source =
       config.age.secrets.shawn_samba_credentials.path;
     etc."samba/credentials_ela".source =
