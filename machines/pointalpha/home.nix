@@ -12,6 +12,7 @@ in
         samba
         portfolio
         jameica
+        pytr
         libreoffice
         inkscape
         gimp

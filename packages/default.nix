@@ -8,6 +8,7 @@
   nas = pkgs.callPackage ./shellscripts/nas.nix { };
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
   noisetorch = pkgs.callPackage ./noisetorch { };
+  pytr = pkgs.python3.pkgs.callPackage ./pytr { };
 
   jameica = pkgs.callPackage ./jameica {
     Cocoa = null;
