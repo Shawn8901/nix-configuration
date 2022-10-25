@@ -378,7 +378,7 @@ in
 
   virtualisation = {
     libvirtd = {
-      enable = false;
+      enable = true;
       onBoot = "start";
       qemu.package = pkgs.qemu_kvm;
     };

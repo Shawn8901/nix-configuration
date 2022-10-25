@@ -26,6 +26,8 @@ in
         s25rttr
         nas
 
+        virt-manager
+
         sqlitebrowser
       ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
