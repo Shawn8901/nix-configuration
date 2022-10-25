@@ -401,7 +401,7 @@ in
       openFirewall = true;
     };
   };
-  env.system-wayland.enable = false;
+  env.wayland.enable = true;
 
   environment = {
     variables.AMD_VULKAN_ICD = "RADV";

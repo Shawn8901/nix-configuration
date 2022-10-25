@@ -5,6 +5,5 @@ inputs:
     (import ./services/noisetorch.nix inputs)
     (import ./env/vscode.nix inputs)
     (import ./env/browser.nix inputs)
-    (import ./env/user-wayland.nix inputs)
   ];
 }

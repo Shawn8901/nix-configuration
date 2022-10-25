@@ -2,11 +2,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.env.system-wayland;
+  cfg = config.env.wayland;
 in
 {
   options = {
-    env.system-wayland = {
+    env.wayland = {
       enable = lib.mkEnableOption "Use wayland on system";
     };
   };
@@ -33,7 +33,10 @@ in
       };
       displayManager.defaultSession = "plasmawayland";
     };
+
     environment = {
+      variables.MOZ_ENABLE_WAYLAND = "1";
+      variables.MOZ_DISABLE_RDD_SANDBOX = "1";
       variables.NIXOS_OZONE_WL = "1";
       variables.SDL_VIDEODRIVER = "wayland";
       variables.QT_QPA_PLATFORM = "wayland-egl";

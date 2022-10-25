@@ -34,7 +34,6 @@ in
     env = {
       vscode.enable = true;
       browser.enable = true;
-      user-wayland.enable = false;
     };
     programs.direnv.enable = true;
     programs.direnv.nix-direnv.enable = true;
