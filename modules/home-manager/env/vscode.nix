@@ -11,7 +11,7 @@ with lib; {
 
   config = mkIf cfg.enable {
 
-    home.packages = with pkgs; [ nixpkgs-fmt rnix-lsp python3.pkgs.isort python3.pkgs.autopep8 pkgs.pur ];
+    home.packages = with pkgs; [ nixpkgs-fmt rnix-lsp python3.pkgs.isort python3.pkgs.autopep8 ];
 
     programs.vscode = {
       enable = true;
