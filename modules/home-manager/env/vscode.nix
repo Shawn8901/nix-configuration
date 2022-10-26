@@ -55,6 +55,9 @@ with lib; {
           "editor.formatOnPaste" = true;
           "editor.formatOnType" = false;
         };
+        "[python]" = {
+          "editor.formatOnType" = true;
+        };
         "editor.tabSize" = 2;
         "files.trimFinalNewlines" = true;
         "files.insertFinalNewline" = true;
