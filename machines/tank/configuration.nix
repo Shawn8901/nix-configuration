@@ -540,29 +540,33 @@ in
         };
       };
     };
-    grafana = rec {
+    grafana = {
       enable = true;
-      domain = "status.tank.pointjig.de";
-      rootUrl = "https://${domain}/";
       dataDir = "/persist/var/lib/grafana";
       declarativePlugins = with pkgs.grafanaPlugins; [
         grafana-polystat-panel
         grafana-clock-panel
       ];
-      database = {
-        type = "postgres";
-        host = "/run/postgresql";
-        user = "grafana";
-        passwordFile = secrets.grafana_db_file.path;
+      settings = {
+        server = rec {
+          domain = "status.tank.pointjig.de";
+          rootUrl = "https://${domain}/";
+        };
+        database = {
+          type = "postgres";
+          host = "/run/postgresql";
+          user = "grafana";
+          password = "$__file{${secrets.grafana_db_file.path}}";
+        };
+        security = {
+          admin_password = "$__file{${secrets.grafana_admin_password_file.path}}";
+          secret_key = "$__file{${secrets.grafana_secret_key_file.path}}";
+        };
+        analytics.reporting_enabled = false;
       };
-      security = {
-        adminPasswordFile = secrets.grafana_admin_password_file.path;
-        secretKeyFile = secrets.grafana_secret_key_file.path;
-      };
-      analytics.reporting.enable = false;
       provision = {
         enable = true;
-        datasources = [{
+        datasources.settings.datasources = [{
           name = "Prometheus";
           type = "prometheus";
           url = "http://localhost:${
