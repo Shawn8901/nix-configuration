@@ -311,7 +311,7 @@ in
     };
     nextcloud = {
       enable = true;
-      package = pkgs.nextcloud24;
+      package = pkgs.nextcloud25;
       https = true;
       hostName = "next.tank.pointjig.de";
       home = "/persist/var/lib/nextcloud";
