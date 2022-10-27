@@ -1,8 +1,7 @@
-{ nPkgs, ... }@inputs:
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, nPkgs, ... }:
 with lib;
 let
-  inherit (nPkgs) nur;
+  inherit (pkgs) nur;
   inherit (nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
   cfg = config.env.browser;
 in

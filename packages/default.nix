@@ -1,4 +1,4 @@
-{ self, system, pkgs, ... }@inputs:
+{ self, pkgs, ... }@inputs:
 {
   s25rttr = pkgs.callPackage ./s25rttr {
     SDL2 = pkgs.SDL2.override { withStatic = true; };

@@ -1,6 +1,7 @@
-{ self, system, agenix, ... }@inputs:
-{ pkgs, ... }:
-
+{ pkgs, inputs, ... }:
+let
+  system = pkgs.hostPlatform.system;
+in
 {
   environment.systemPackages = with pkgs; [
     nvd
@@ -16,6 +17,6 @@
     ncdu
     graphviz
     nix-du
-    agenix.defaultPackage.${system}
+    inputs.agenix.defaultPackage.${system}
   ];
 }

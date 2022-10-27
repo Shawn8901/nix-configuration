@@ -1,5 +1,4 @@
-{ self, ... }@inputs:
-{ config, ... }:
+{ config, inputs, ... }:
 
 {
   age.secrets = {
@@ -8,7 +7,7 @@
 
   networking = {
     firewall =
-      let zrepl = inputs.lib.zrepl.servePorts config.services.zrepl;
+      let zrepl = inputs.zrepl.servePorts config.services.zrepl;
       in
       {
         allowedUDPPorts = [ ];

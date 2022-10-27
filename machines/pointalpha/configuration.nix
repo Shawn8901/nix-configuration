@@ -1,9 +1,9 @@
-{ self, system, ... }@inputs:
-{ pkgs, lib, config, ... }:
+{ self, pkgs, lib, config, inputs, ... }:
 
 let
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
+  system = pkgs.hostPlatform.system;
 in
 {
   disabledModules = [ "services/x11/display-managers/sddm.nix" "programs/steam.nix" ];
@@ -17,6 +17,8 @@ in
     ela_samba_credentials = { file = ../../secrets/ela_samba_credentials.age; };
   };
 
+  nixpkgs.overlays = [ inputs.nur.outputs.overlay ];
+
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
       "discord"
@@ -28,6 +30,8 @@ in
       "teamviewer"
       "vscode"
       "vscode-extension-MS-python-vscode-pylance"
+      "tampermonkey"
+      "betterttv"
     ];
 
   networking = {
@@ -38,7 +42,7 @@ in
           to = 2400;
         };
         stronghold_tcp = 47624;
-        zreplServePorts = inputs.lib.zrepl.servePorts config.services.zrepl;
+        zreplServePorts = inputs.zrepl.servePorts config.services.zrepl;
       in
       {
         allowedUDPPortRanges = [ stronghold_range ];
@@ -310,7 +314,7 @@ in
         nodePort = config.services.prometheus.exporters.node.port;
         zreplPort = (builtins.head
           (
-            inputs.lib.zrepl.monitoringPorts
+            inputs.zrepl.monitoringPorts
               config.services.zrepl
           ));
       in

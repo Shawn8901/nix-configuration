@@ -1,8 +1,9 @@
-{ self, system, ... }:
-{ config, lib, pkgs, ... }:
+{ self, config, lib, pkgs, ... }:
 
 let
+
   cfg = config.services.shutdown-wakeup;
+  system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
 in
 {

@@ -1,9 +1,8 @@
-inputs:
 {
   imports = [
-    (import ./services/autoadb.nix inputs)
-    (import ./services/noisetorch.nix inputs)
-    (import ./env/vscode.nix inputs)
-    (import ./env/browser.nix inputs)
+    ./services/autoadb.nix
+    ./services/noisetorch.nix
+    ./env/vscode.nix
+    ./env/browser.nix
   ];
 }

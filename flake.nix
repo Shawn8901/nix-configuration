@@ -36,23 +36,22 @@
   outputs = { self, nixpkgs, ... }@inputs:
     let
       system = "x86_64-linux";
-      nPkgs = (import inputs.nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-        overlays = [ inputs.nur.outputs.overlay ];
-      });
-      pkgs = (import inputs.nixpkgs { inherit system; });
-      lib = import ./lib (inputs // { inherit lib nPkgs pkgs system; });
+      lib = import ./lib inputs;
     in
     {
-      nixosModules = import ./modules/nixos (inputs // { inherit lib system; });
-      nixosConfigurations = import ./machines (inputs // { inherit lib nPkgs pkgs system; });
+      nixosModules = import ./modules/nixos;
+      nixosConfigurations = import ./machines (inputs // { inherit lib; });
 
-      packages.${system} = import ./packages (inputs // { inherit system pkgs; })
+      packages.${system} = import ./packages (inputs // { pkgs = nixpkgs.legacyPackages.${system}; })
         // lib.nixosConfigurationsAsPackages.configs;
 
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [ python3.pkgs.invoke direnv nix-direnv nix-diff ];
+      devShells.${system}.default = nixpkgs.legacyPackages.${system}.mkShell {
+        packages = with nixpkgs.legacyPackages.${system}; [
+          python3.pkgs.invoke
+          direnv
+          nix-direnv
+          nix-diff
+        ];
       };
     };
 }

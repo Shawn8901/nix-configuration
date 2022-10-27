@@ -1,8 +1,8 @@
-{ self, system, ... }:
-{ config, lib, pkgs, ... }:
+{ self, config, lib, pkgs, ... }:
 
 let
   cfg = config.services.usb-backup;
+  system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
 in
 {

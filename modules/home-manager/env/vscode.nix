@@ -1,6 +1,7 @@
-inputs:
-{ config, lib, pkgs, ... }:
-let cfg = config.env.vscode;
+{ config, lib, pkgs, inputs, ... }:
+let
+  cfg = config.env.vscode;
+  system = pkgs.hostPlatform.system;
 in
 with lib; {
   options = {
@@ -15,7 +16,7 @@ with lib; {
 
     programs.vscode = {
       enable = true;
-      extensions = (with inputs.nix-vscode-marketplace.packages.${inputs.system}.vscode; [
+      extensions = (with inputs.nix-vscode-marketplace.packages.${system}.vscode; [
         ms-python.python
         ms-python.isort
         ms-python.vscode-pylance

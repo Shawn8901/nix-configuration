@@ -1,8 +1,8 @@
-{ self, stfc-bot, mimir, ... }@inputs:
-{ config, pkgs, lib, ... }:
+{ self, config, pkgs, lib, inputs, ... }:
 let
   hosts = self.nixosConfigurations;
   secrets = config.age.secrets;
+  inherit (inputs) stfc-bot mimir;
 in
 {
   imports = [ stfc-bot.nixosModule mimir.nixosModule ];
@@ -60,7 +60,7 @@ in
 
   networking = {
     firewall =
-      let zreplServePorts = inputs.lib.zrepl.servePorts config.services.zrepl;
+      let zreplServePorts = inputs.zrepl.servePorts config.services.zrepl;
       in
       {
         allowedUDPPorts = [ 443 ];
@@ -270,7 +270,7 @@ in
             };
             connect =
               let
-                zreplPort = (builtins.head (inputs.lib.zrepl.servePorts hosts.shelter.config.services.zrepl));
+                zreplPort = (builtins.head (inputs.zrepl.servePorts hosts.shelter.config.services.zrepl));
               in
               {
                 type = "tls";
@@ -471,8 +471,7 @@ in
           nodePort = config.services.prometheus.exporters.node.port;
           zreplPort = (builtins.head
             (
-              inputs.lib.zrepl.monitoringPorts
-                config.services.zrepl
+              inputs.zrepl.monitoringPorts config.services.zrepl
             ));
           postgresPort = config.services.prometheus.exporters.postgres.port;
           nextcloudPort = config.services.prometheus.exporters.nextcloud.port;

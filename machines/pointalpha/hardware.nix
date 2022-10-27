@@ -1,10 +1,12 @@
-{ self, ... }@inputs:
-{ config, lib, pkgs, modulesPath, flip, concatMapStrings, ... }:
+{ pkgs, lib, modulesPath, ... }:
 let
   zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
 in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+
+  nixpkgs.hostPlatform = "x86_64-linux";
+
   boot = {
     initrd = {
       availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod" ];

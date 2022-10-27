@@ -1,6 +1,6 @@
-{ self, system, nPkgs, ... }@inputs:
-{ config, pkgs, ... }:
+{ self, config, pkgs, nPkgs, ... }:
 let
+  system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
 in
 {
@@ -30,7 +30,7 @@ in
         virt-manager
 
         sqlitebrowser
-      ] ++ (with nPkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
+      ] ++ (with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     env = {
       vscode.enable = true;
