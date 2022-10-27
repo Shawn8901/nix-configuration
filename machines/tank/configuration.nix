@@ -614,8 +614,6 @@ in
   security.audit.enable = false;
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
-  # Used by nas_backup
-  sound.enable = true;
 
   users.users = {
     ela = {

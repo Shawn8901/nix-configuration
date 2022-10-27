@@ -21,6 +21,7 @@ in
   };
   config = lib.mkIf cfg.enable {
 
+    sound.enable = true;
     environment.systemPackages = with pkgs; [ cifs-utils ];
     services = {
       udev.extraRules = ''
