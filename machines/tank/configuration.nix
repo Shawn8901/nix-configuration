@@ -335,7 +335,7 @@ in
       dataDir = "/persist/var/lib/postgres/14";
       ensureDatabases = [
         "${config.services.nextcloud.config.dbname}"
-        "${config.services.grafana.database.name}"
+        "${config.services.grafana.settings.database.name}"
         "stfcbot"
       ];
       ensureUsers = [
@@ -347,9 +347,9 @@ in
           };
         }
         {
-          name = "${config.services.grafana.database.user}";
+          name = "${config.services.grafana.settings.database.user}";
           ensurePermissions = {
-            "DATABASE ${config.services.grafana.database.name}" =
+            "DATABASE ${config.services.grafana.settings.database.name}" =
               "ALL PRIVILEGES";
           };
         }
@@ -381,13 +381,13 @@ in
           http3 = true;
           kTLS = true;
         };
-        "${config.services.grafana.domain}" = {
+        "${config.services.grafana.settings.server.domain}" = {
           enableACME = true;
           forceSSL = true;
           http3 = true;
           kTLS = true;
           locations."/" = {
-            proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
+            proxyPass = "http://127.0.0.1:${toString config.services.grafana.settings.server.http_port}";
             proxyWebsockets = true;
           };
         };
