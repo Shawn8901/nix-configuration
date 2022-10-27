@@ -7,7 +7,7 @@ let
 in
 {
   disabledModules = [ "services/x11/display-managers/sddm.nix" "programs/steam.nix" ];
-  imports = [ ../../modules/nixos/sddm.nix ../../modules/nixos/steam.nix ];
+  imports = [ ../../modules/nixos/overriden/sddm.nix ../../modules/nixos/overriden/steam.nix ];
 
   age.secrets = {
     zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };

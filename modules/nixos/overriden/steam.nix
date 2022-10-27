@@ -81,7 +81,7 @@ in
       STEAM_EXTRA_COMPAT_TOOLS_PATHS = makeBinPath cfg.extraCompatPackages;
     };
 
-    environment.systemPackages = [ steam steam.run ] ++ cfg.extraCompatPackages;
+    environment.systemPackages = [ steam steam.run ];
   };
 
   meta.maintainers = with maintainers; [ mkg20001 ];
