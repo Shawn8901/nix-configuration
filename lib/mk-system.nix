@@ -37,8 +37,8 @@ nixpkgs.lib.nixosSystem
         hardware
 
         inputs.agenix.nixosModule
-        self.nixosModules
       ]
+      ++ builtins.attrValues self.nixosModules
       ++ nixpkgs.lib.optionals (builtins.pathExists home)
         [
           home-manager.nixosModule

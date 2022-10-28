@@ -1,12 +1,10 @@
 {
-  imports = [
-    ./locale.nix
-    ./nix.nix
-    ./build-tools.nix
-    ./user-config.nix
-    ./shutdown-wakeup.nix
-    ./usb-backup.nix
-    ./nextcloud-backup.nix
-    ./wayland.nix
-  ];
+  locale = import ./locale.nix;
+  nix-config = import ./nix.nix;
+  build-tools = import ./build-tools.nix;
+  user-config = import ./user-config.nix;
+  shutdown-wakeup = import ./shutdown-wakeup.nix;
+  usb-backup = import ./usb-backup.nix;
+  nextcloud-backup = import ./nextcloud-backup.nix;
+  wayland = import ./wayland.nix;
 }
