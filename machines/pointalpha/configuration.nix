@@ -130,16 +130,16 @@ in
   services = {
     udev = {
       packages = [ pkgs.libmtp.out ];
-      extraRules = ''
-        # Rules for Oryx web flashing and live training
-        KERNEL=="hidraw*", ATTRS{idVendor}=="3297", MODE="0664", GROUP="plugdev"
-        # Rule for all ZSA keyboards
-        SUBSYSTEM=="usb", ATTR{idVendor}=="3297", GROUP="plugdev"
-        # Rule for the Moonlander
-        SUBSYSTEM=="usb", ATTR{idVendor}=="3297", ATTR{idProduct}=="1969", GROUP="plugdev"
-        # Wally Flashing rules for the Moonlander and Planck EZ
-        SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE:="0664", SYMLINK+="stm32_dfu"
-      '';
+      # extraRules = ''
+      #   # Rules for Oryx web flashing and live training
+      #   KERNEL=="hidraw*", ATTRS{idVendor}=="3297", MODE="0664", GROUP="plugdev"
+      #   # Rule for all ZSA keyboards
+      #   SUBSYSTEM=="usb", ATTR{idVendor}=="3297", GROUP="plugdev"
+      #   # Rule for the Moonlander
+      #   SUBSYSTEM=="usb", ATTR{idVendor}=="3297", ATTR{idProduct}=="1969", GROUP="plugdev"
+      #   # Wally Flashing rules for the Moonlander and Planck EZ
+      #   SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE:="0664", SYMLINK+="stm32_dfu"
+      # '';
     };
     xserver = {
       enable = true;
@@ -359,7 +359,7 @@ in
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;
   hardware.sane.enable = true;
-  hardware.keyboard.zsa.enable = false;
+  hardware.keyboard.zsa.enable = true;
   sound.enable = false;
 
   hardware.opengl = {
