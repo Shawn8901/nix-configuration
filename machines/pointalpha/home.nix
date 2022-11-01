@@ -30,6 +30,7 @@ in
         virt-manager
 
         sqlitebrowser
+        generate-zrepl-ssl
       ] ++ (with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
 
     env = {
