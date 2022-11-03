@@ -383,6 +383,7 @@ in
     steam = pkgs.steam.override {
       extraPkgs = pkgs: with pkgs; [
         ncurses
+        binutils
       ];
     };
   };
