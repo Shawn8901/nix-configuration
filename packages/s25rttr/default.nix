@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "s25rttr";
-  version = "0.9.5";
+  version = "v0.9.5";
 
   message = ''
     Copy the S2 folder of the Settler 2 Gold Edition to /var/lib/s25rttr/S2/".
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Return-To-The-Roots";
     repo = "s25client";
-    rev = "397f2b2315e997504d4958bfbdea0af815ce559a";
+    rev = version;
     fetchSubmodules = true;
     sha256 = "sha256-6gBvWYP08eoT2i8kco/3nXnTKwVa20DWtv6fLaoH07M=";
   };
@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
     "-DRTTR_INSTALL_PLACEHOLDER=OFF"
     "-DRTTR_GAMEDIR=/var/lib/s25rttr/S2/"
   ];
+
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Return To The Roots (Settlers II(R) Clone)";
