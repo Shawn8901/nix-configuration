@@ -25,6 +25,12 @@ in
   };
 
   networking = {
+    firewall = {
+      allowedUDPPorts = [ 443 ];
+      allowedUDPPortRanges = [ ];
+      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPortRanges = [ ];
+    };
     networkmanager.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;
