@@ -78,15 +78,6 @@ in
     postgresql = {
       enable = true;
       package = pkgs.postgresql_14;
-      ensureDatabases = [
-        "stfcbot"
-      ];
-      ensureUsers = [
-        {
-          name = "stfcbot";
-          ensurePermissions = { "DATABASE stfcbot" = "ALL PRIVILEGES"; };
-        }
-      ];
     };
     nginx = {
       enable = true;
