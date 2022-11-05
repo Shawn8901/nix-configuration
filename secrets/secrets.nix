@@ -4,7 +4,7 @@ let
   pointalpha =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILzWsbvSeDXhbrhEr+NLvG087/ahHJ0JV7a5gGtIr58l";
   pointjig =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB/mOOPSGuN9nikbteB8pZhKAE7i8K5/B214/UoBy0nU";
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8lC09BhCwsbqawejuRFA5gs/qhzZQiRdUH3LRXAkOW";
   tank =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsh4IWvnMlQTfU9N1BpcE0b4KzxDYrjh+k8TTqj07Gw";
   shelter =
@@ -38,7 +38,7 @@ in
   "github_access_token.age".publicKeys = [ shawn ] ++ systems;
   "stfc-env-dev.age".publicKeys = [ shawn tank ];
   "mimir-env-dev.age".publicKeys = [ shawn tank ];
-  "stfc-env.age".publicKeys = [ shawn ];
-  "mimir-env.age".publicKeys = [ shawn ];
-  "sms-shawn-passwd.age".publicKeys = [ shawn tank ];
+  "stfc-env.age".publicKeys = [ shawn pointjig ];
+  "mimir-env.age".publicKeys = [ shawn pointjig ];
+  "sms-shawn-passwd.age".publicKeys = [ shawn pointjig ];
 }
