@@ -36,7 +36,9 @@ in
   "grafana_secret_key_file.age".publicKeys = [ shawn tank ];
 
   "github_access_token.age".publicKeys = [ shawn ] ++ systems;
-  "stfc-env.age".publicKeys = [ shawn tank ];
-  "mimir-env.age".publicKeys = [ shawn tank ];
+  "stfc-env-dev.age".publicKeys = [ shawn tank ];
+  "mimir-env-dev.age".publicKeys = [ shawn tank ];
+  "stfc-env.age".publicKeys = [ shawn ];
+  "mimir-env.age".publicKeys = [ shawn ];
   "sms-shawn-passwd.age".publicKeys = [ shawn tank ];
 }

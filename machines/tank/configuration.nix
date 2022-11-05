@@ -46,16 +46,17 @@ in
       owner = "grafana";
       group = "grafana";
     };
-    stfc-env = {
-      file = ../../secrets/stfc-env.age;
+    stfc-env-dev = {
+      file = ../../secrets/stfc-env-dev.age;
       owner = "stfc-bot";
       group = "stfc-bot";
     };
-    mimir-env = {
-      file = ../../secrets/mimir-env.age;
+    mimir-env-dev = {
+      file = ../../secrets/mimir-env-dev.age;
       owner = "mimir";
       group = "mimir";
     };
+    sms-shawn-passwd = { file = ../../secrets/sms-shawn-passwd.age; };
   };
 
   networking = {
@@ -593,14 +594,14 @@ in
     stfc-bot = {
       enable = true;
       package = inputs.stfc-bot.packages.x86_64-linux.default;
-      envFile = config.age.secrets.stfc-env.path;
+      envFile = config.age.secrets.stfc-env-dev.path;
     };
     stne-mimir = {
       enable = true;
       domain = "mimir.tank.pointjig.de";
       clientPackage = inputs.mimir-client.packages.x86_64-linux.default;
       package = inputs.mimir.packages.x86_64-linux.default;
-      envFile = config.age.secrets.mimir-env.path;
+      envFile = config.age.secrets.mimir-env-dev.path;
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
   };
@@ -662,4 +663,23 @@ in
           "$@"
       '')
     ];
+
+  mailserver = {
+    enable = true;
+    fqdn = "mail.tank.pointjig.de";
+    domains = [ "tank.pointjig.de" "pointjig.de" ];
+    certificateScheme = 3;
+    loginAccounts = {
+      "shawn@pointjig.de" = {
+        hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
+        aliases = [
+        ];
+      };
+      "dorman@pointjig.de" = {
+        hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
+        aliases = [
+        ];
+      };
+    };
+  };
 }
