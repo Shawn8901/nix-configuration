@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "s25rttr";
-  version = "v0.9.5";
+  version = "0.9.5";
 
   message = ''
     Copy the S2 folder of the Settler 2 Gold Edition to /var/lib/s25rttr/S2/".
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Return-To-The-Roots";
     repo = "s25client";
-    rev = version;
+    rev = "v${version}";
     fetchSubmodules = true;
     sha256 = "sha256-6gBvWYP08eoT2i8kco/3nXnTKwVa20DWtv6fLaoH07M=";
   };
