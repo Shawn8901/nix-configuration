@@ -1,4 +1,4 @@
-{ self, home-manager, ... }@inputs:
+{ self, home-manager, agenix, simple-nixos-mailserver, ... }@inputs:
 name: nixpkgs:
 
 nixpkgs.lib.nixosSystem
@@ -36,19 +36,19 @@ nixpkgs.lib.nixosSystem
         bootloader
         hardware
 
-        inputs.agenix.nixosModule
+        agenix.nixosModule
+        simple-nixos-mailserver.nixosModule
       ]
       ++ builtins.attrValues self.nixosModules
       ++ nixpkgs.lib.optionals (builtins.pathExists home)
         [
           home-manager.nixosModule
           {
-            home-manager =
-              {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                extraSpecialArgs = extraAgs;
-              };
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = extraAgs;
+            };
             home-manager.users.root = {
               home.stateVersion = "22.05";
             };

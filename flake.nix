@@ -19,6 +19,10 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     flake-utils.url = "github:numtide/flake-utils";
+    simple-nixos-mailserver = {
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     stfc-bot = {
       url = "github:shawn8901/stfc-bot";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -38,4 +38,5 @@ in
   "github_access_token.age".publicKeys = [ shawn ] ++ systems;
   "stfc-env.age".publicKeys = [ shawn tank ];
   "mimir-env.age".publicKeys = [ shawn tank ];
+  "sms-shawn-passwd.age".publicKeys = [ shawn tank ];
 }
