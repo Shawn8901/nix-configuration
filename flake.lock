@@ -244,11 +244,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1667756425,
-        "narHash": "sha256-LNIZboLCpT3BwslxROE/CAet+uzO9YO8K4sEMXfEujM=",
+        "lastModified": 1667760424,
+        "narHash": "sha256-xQE53qZU7SrPEL+ApwWoqM+kwcfmuwyE7CiRQYvXXMg=",
         "owner": "shawn8901",
         "repo": "stfc-bot",
-        "rev": "9a6ca4bd5023327ae446dd50ce9ae38a9fd4e8ab",
+        "rev": "ded7154b88fda04d12966bb146e8cca45be0c9ab",
         "type": "github"
       },
       "original": {
