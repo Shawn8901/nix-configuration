@@ -6,7 +6,7 @@
   nixpkgs.hostPlatform = "x86_64-linux";
 
   boot = {
-    initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "ahci" "sd_mod" "sr_mod" ];
+    initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
     kernelModules = [ ];
     kernelPackages = pkgs.linuxPackages;
     extraModulePackages = [ ];

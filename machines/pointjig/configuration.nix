@@ -42,7 +42,7 @@ in
       enable = true;
       networks = {
         "20-wired" = {
-          matchConfig.Name = "ens18";
+          matchConfig.Name = "enp6s18";
           networkConfig.Address =
             [ "134.255.226.114/28" "2a05:bec0:1:16::114/64" ];
           networkConfig.DNS = "8.8.8.8";
