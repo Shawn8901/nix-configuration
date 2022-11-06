@@ -12,7 +12,7 @@ with lib; {
 
   config = mkIf cfg.enable {
 
-    home.packages = with pkgs; [ nixpkgs-fmt rnix-lsp python3.pkgs.isort python3.pkgs.autopep8 ];
+    home.packages = with pkgs; [ nixpkgs-fmt nil ];
 
     programs.vscode = {
       enable = true;
@@ -56,16 +56,15 @@ with lib; {
           "editor.formatOnPaste" = true;
           "editor.formatOnType" = false;
         };
-        "[python]" = {
-          "editor.formatOnType" = true;
-        };
+        "[python]" = { };
         "editor.tabSize" = 2;
         "files.trimFinalNewlines" = true;
         "files.insertFinalNewline" = true;
         "diffEditor.ignoreTrimWhitespace" = false;
         "editor.formatOnSave" = true;
         "nix.enableLanguageServer" = true;
-        "nix.formatterPath" = "nixpkgs-fmt";
+        "nix.formatterPath" = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
+        "nix.serverPath" = "${pkgs.nil}/bin/nil";
       };
     };
   };
