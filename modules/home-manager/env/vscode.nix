@@ -24,6 +24,7 @@ with lib; {
         jnoortheen.nix-ide
         mkhl.direnv
         mhutchie.git-graph
+        esbenp.prettier-vscode
       ]);
       keybindings = [
         {
