@@ -13,6 +13,7 @@ in
     tree
     htop
     nano
+    vim
     unzip
     ncdu
     graphviz
