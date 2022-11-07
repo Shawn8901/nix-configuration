@@ -56,6 +56,7 @@
       devShells.${system}.default = nixpkgs.legacyPackages.${system}.mkShell {
         packages = with nixpkgs.legacyPackages.${system}; [
           python3.pkgs.invoke
+          python3.pkgs.autopep8
           direnv
           nix-direnv
           nix-diff
