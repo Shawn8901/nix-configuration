@@ -58,6 +58,9 @@ with lib; {
           "editor.formatOnType" = false;
         };
         "[python]" = { };
+        "[typescript]" = {
+          "editor.defaultFormatter" = "esbenp.prettier-vscode";
+        };
         "editor.tabSize" = 2;
         "files.trimFinalNewlines" = true;
         "files.insertFinalNewline" = true;
