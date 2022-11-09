@@ -1,6 +1,5 @@
 { pkgs, lib, config, ... }:
 {
-
   age.secrets.github_access_token = {
     file = ../../secrets/github_access_token.age;
     group = "nixbld";

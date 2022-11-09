@@ -90,6 +90,7 @@
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
   sound.enable = false;
+  env.auto-upgrade.enable = true;
 
   environment = {
     etc."zrepl/shelter.key".source = config.age.secrets.zrepl_shelter.path;

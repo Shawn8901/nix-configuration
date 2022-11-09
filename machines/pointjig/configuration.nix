@@ -172,4 +172,5 @@ in
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
   sound.enable = false;
+  env.auto-upgrade.enable = true;
 }

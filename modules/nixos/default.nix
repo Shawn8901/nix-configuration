@@ -7,4 +7,5 @@
   usb-backup = import ./usb-backup.nix;
   nextcloud-backup = import ./nextcloud-backup.nix;
   wayland = import ./wayland.nix;
+  auto-upgrade = import ./auto-upgrade.nix;
 }
