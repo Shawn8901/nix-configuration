@@ -6,6 +6,7 @@
     root_password_file = { file = ../../secrets/root_password.age; };
   };
 
+  programs.command-not-found.enable = false;
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -15,7 +16,7 @@
     autosuggestions.enable = true;
     ohMyZsh = {
       enable = true;
-      plugins = [ "git" "command-not-found" "cp" "zsh-interactive-cd" ];
+      plugins = [ "git" "cp" "zsh-interactive-cd" ];
       theme = "fletcherm";
     };
   };
