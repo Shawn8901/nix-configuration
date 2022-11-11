@@ -43,12 +43,11 @@ in
         };
         stronghold_tcp = 47624;
         zreplServePorts = inputs.zrepl.servePorts config.services.zrepl;
-      in
-      {
+    in {
         allowedUDPPortRanges = [ stronghold_range ];
         allowedTCPPorts = [ config.services.prometheus.port stronghold_tcp ] ++ zreplServePorts;
         allowedTCPPortRanges = [ stronghold_range ];
-      };
+    };
     networkmanager.enable = true;
     extraHosts = ''
       2a01:8740:1:e4::2cd3 shelter
