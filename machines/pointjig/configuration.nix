@@ -68,10 +68,6 @@ in
       kbdInteractiveAuthentication = false;
     };
     resolved.enable = true;
-    zfs = {
-      autoScrub.enable = true;
-      autoScrub.pools = [ "zbackup" ];
-    };
     fail2ban = {
       enable = true;
       maxretry = 5;
