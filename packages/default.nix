@@ -8,6 +8,7 @@
   nas = pkgs.callPackage ./shellscripts/nas.nix { };
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix { };
   generate-zrepl-ssl = pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix { };
+  update-packages = pkgs.callPackage ./shellscripts/update-packages.nix { };
   noisetorch = pkgs.callPackage ./noisetorch { };
   pytr = pkgs.python3.pkgs.callPackage ./pytr { };
 
@@ -27,4 +28,6 @@
 
     patches = [ ];
   });
+
+
 }

@@ -45,16 +45,22 @@
     let
       system = "x86_64-linux";
       lib = import ./lib inputs;
+      pkgs = nixpkgs.legacyPackages.${system};
     in
     {
+      apps.${system}."update-packages" = {
+        type = "app";
+        program = "${self.packages.x86_64-linux.update-packages}/bin/update-packages";
+      };
+
       nixosModules = import ./modules/nixos;
       nixosConfigurations = import ./machines (inputs // { inherit lib; });
 
-      packages.${system} = import ./packages (inputs // { pkgs = nixpkgs.legacyPackages.${system}; })
+      packages.${system} = import ./packages (inputs // { inherit pkgs; })
         // lib.nixosConfigurationsAsPackages.configs;
 
-      devShells.${system}.default = nixpkgs.legacyPackages.${system}.mkShell {
-        packages = with nixpkgs.legacyPackages.${system}; [
+      devShells.${system}.default = pkgs.mkShell {
+        packages = with pkgs; [
           python3.pkgs.invoke
           python3.pkgs.autopep8
           direnv
