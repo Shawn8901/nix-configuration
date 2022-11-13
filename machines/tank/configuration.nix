@@ -614,6 +614,7 @@ in
   security.audit.enable = false;
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
+  env.user-config.enable = true;
 
   users.users = {
     ela = {
@@ -637,8 +638,7 @@ in
     etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
   };
 
-  environment.systemPackages = with pkgs;
-    [
+  environment.systemPackages = [
       (pkgs.writeScriptBin "upgrade-pg-cluster" ''
         set -eux
         # XXX it's perhaps advisable to stop all services that depend on postgresql
@@ -662,24 +662,5 @@ in
           --old-bindir $OLDBIN --new-bindir $NEWBIN \
           "$@"
       '')
-    ];
-
-  mailserver = {
-    enable = true;
-    fqdn = "mail.tank.pointjig.de";
-    domains = [ "tank.pointjig.de" "pointjig.de" ];
-    certificateScheme = 3;
-    loginAccounts = {
-      "shawn@pointjig.de" = {
-        hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
-        aliases = [
-        ];
-      };
-      "dorman@pointjig.de" = {
-        hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
-        aliases = [
-        ];
-      };
-    };
-  };
+  ];
 }

@@ -407,6 +407,7 @@ in
       openFirewall = true;
     };
   };
+  env.user-config.enable = true;
   env.wayland.enable = true;
 
   environment = {

@@ -169,4 +169,5 @@ in
   hardware.bluetooth.enable = false;
   sound.enable = false;
   env.auto-upgrade.enable = true;
+  env.user-config.enable = true;
 }
