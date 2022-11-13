@@ -1,14 +1,10 @@
 let
-  shawn =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM";
-  pointalpha =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILzWsbvSeDXhbrhEr+NLvG087/ahHJ0JV7a5gGtIr58l";
-  pointjig =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8lC09BhCwsbqawejuRFA5gs/qhzZQiRdUH3LRXAkOW";
-  tank =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsh4IWvnMlQTfU9N1BpcE0b4KzxDYrjh+k8TTqj07Gw";
-  shelter =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDg8wKBWXd+v9FeoujUAppfFp4FUX4IobYNujKO8PBGL";
+  shawn = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM";
+  pointalpha = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILzWsbvSeDXhbrhEr+NLvG087/ahHJ0JV7a5gGtIr58l";
+  pointjig = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8lC09BhCwsbqawejuRFA5gs/qhzZQiRdUH3LRXAkOW";
+  tank = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsh4IWvnMlQTfU9N1BpcE0b4KzxDYrjh+k8TTqj07Gw";
+  shelter = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDg8wKBWXd+v9FeoujUAppfFp4FUX4IobYNujKO8PBGL";
+  next = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOXIWr2IzBmFBqcLZ503WFiKt1jcxZcn2oklGcnv9F8W";
 
   systems = [ pointalpha pointjig tank shelter ];
 in
@@ -35,10 +31,13 @@ in
   "grafana_admin_password_file.age".publicKeys = [ shawn tank ];
   "grafana_secret_key_file.age".publicKeys = [ shawn tank ];
 
-  "github_access_token.age".publicKeys = [ shawn ] ++ systems;
+  "github_access_token.age".publicKeys = [ shawn next ] ++ systems;
   "stfc-env-dev.age".publicKeys = [ shawn tank ];
   "mimir-env-dev.age".publicKeys = [ shawn tank ];
   "stfc-env.age".publicKeys = [ shawn pointjig ];
   "mimir-env.age".publicKeys = [ shawn pointjig ];
   "sms-shawn-passwd.age".publicKeys = [ shawn tank pointjig ];
+
+  "ffm_root_password.age".publicKeys = [ shawn next ];
+  "ffm_nextcloud_db.age".publicKeys = [ shawn next ];
 }
