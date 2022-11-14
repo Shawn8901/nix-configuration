@@ -65,6 +65,8 @@ in
       autoUpdateApps.enable = true;
       autoUpdateApps.startAt = "Sun 14:00:00";
       phpOptions."opcache.interned_strings_buffer" = "16";
+      phpOptions."opcache.enable" = "1";
+      phpOptions."opcache.save_comments" = "1";
       config = {
         dbtype = "pgsql";
         dbuser = "nextcloud";
@@ -75,7 +77,16 @@ in
         adminpassFile = secrets.ffm_root_password_file.path;
         defaultPhoneRegion = "DE";
       };
-      caching.apcu = true;
+      caching = {
+        apcu = true;
+      };
+      poolSettings = {
+        "pm" = "dynamic";
+        "pm.max_children" = 120;
+        "pm.start_servers" = 12;
+        "pm.min_spare_servers" = 6;
+        "pm.max_spare_servers" = 18;
+      };
     };
     postgresql = {
       enable = true;
