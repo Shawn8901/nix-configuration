@@ -57,7 +57,11 @@ with lib; {
           "editor.formatOnPaste" = true;
           "editor.formatOnType" = false;
         };
-        "[python]" = { };
+        "[python]" = {
+          "editor.formatOnSave" = true;
+          "editor.formatOnPaste" = true;
+          "editor.formatOnType" = false;
+        };
         "[typescript]" = {
           "editor.defaultFormatter" = "esbenp.prettier-vscode";
         };
