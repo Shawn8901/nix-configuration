@@ -116,6 +116,7 @@ in
       SystemMaxUse=500M
       SystemMaxFileSize=100M
     '';
+    acpid.enable = true;
   };
   security.acme = {
     acceptTerms = true;

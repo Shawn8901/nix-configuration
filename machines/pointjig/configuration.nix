@@ -77,6 +77,7 @@ in
       SystemMaxUse=500M
       SystemMaxFileSize=100M
     '';
+    acpid.enable = true;
     postgresql = {
       enable = true;
       package = pkgs.postgresql_14;

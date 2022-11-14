@@ -351,6 +351,7 @@ in
       SystemMaxUse=500M
       SystemMaxFileSize=100M
     '';
+    acpid.enable = true;
     teamviewer.enable = false;
   };
   security.rtkit.enable = true;

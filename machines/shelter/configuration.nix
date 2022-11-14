@@ -84,6 +84,7 @@
       SystemMaxUse=500M
       SystemMaxFileSize=100M
     '';
+    acpid.enable = true;
   };
   security.auditd.enable = false;
   security.audit.enable = false;
