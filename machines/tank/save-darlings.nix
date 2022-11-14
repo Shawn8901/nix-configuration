@@ -41,4 +41,10 @@
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
+  fileSystems."/var/lib/nixos" = {
+    device = "/persist/var/lib/nixos";
+    noCheck = true;
+    options = [ "bind" ];
+  };
+
 }
