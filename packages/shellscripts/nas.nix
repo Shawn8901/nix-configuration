@@ -1,6 +1,6 @@
 { stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "nas_mount";
   version = "0.0.1-dev";
   src = ./nas;
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/etc/config/
-    cp ${src}/* $out/bin/
+    cp ${finalAttrs.src}/* $out/bin/
 
     chmod +x $out/bin/*
   '';
-}
+})
