@@ -64,6 +64,7 @@ in
       hostName = "next2.clansap.org";
       autoUpdateApps.enable = true;
       autoUpdateApps.startAt = "Sun 14:00:00";
+      phpOptions."opcache.interned_strings_buffer" = "16";
       config = {
         dbtype = "pgsql";
         dbuser = "nextcloud";
