@@ -181,7 +181,7 @@ in
               keep_receiver = [{
                 type = "grid";
                 grid = "7x1d(keep=all) | 3x30d";
-                regex = "^auto_daily.*";
+                regex = "^zrepl_.*";
               }];
             };
           }
