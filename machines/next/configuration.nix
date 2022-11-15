@@ -37,7 +37,7 @@ in
       networks = {
         "20-wired" = {
           matchConfig.Name = "enp6s18";
-          networkConfig.Address = [ "134.255.226.117/28" "2a05:bec0:1:16::117/64" ];
+          networkConfig.Address = [ "134.255.226.115/28" "2a05:bec0:1:16::115/64" ];
           networkConfig.DNS = "8.8.8.8";
           networkConfig.Gateway = "134.255.226.113";
           routes = [{
@@ -62,7 +62,7 @@ in
       enable = true;
       package = pkgs.nextcloud25;
       https = true;
-      hostName = "next2.clansap.org";
+      hostName = "next.clansap.org";
       autoUpdateApps.enable = true;
       autoUpdateApps.startAt = "Sun 14:00:00";
       phpOptions."opcache.interned_strings_buffer" = "16";
@@ -76,7 +76,7 @@ in
         dbpassFile = secrets.ffm_nextcloud_db_file.path;
         adminuser = "admin";
         adminpassFile = secrets.ffm_root_password_file.path;
-        trustedProxies = [ "134.255.226.117" "2a05:bec0:1:16::117" ];  # Fixme, setting the ipv6 here is somehow now what is wanted
+        trustedProxies = [ "134.255.226.115" "2a05:bec0:1:16::115" ];  # Fixme, setting the ipv6 here is somehow now what is wanted
         defaultPhoneRegion = "DE";
       };
       poolSettings = {
