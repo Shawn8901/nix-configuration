@@ -84,7 +84,7 @@ in
         "pm.max_children" = 120;
         "pm.start_servers" = 12;
         "pm.min_spare_servers" = 6;
-        "pm.max_spare_servers" = 18;
+        "pm.max_spare_servers" = 24;
       };
       caching = {
         apcu = false;
