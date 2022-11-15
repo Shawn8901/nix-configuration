@@ -296,7 +296,7 @@ in
             interval = "1h";
             prefix = "zrepl_";
           };
-          send = { encrypted = false; };
+          send = { encrypted = false; compressed = true; };
           serve = {
             type = "tls";
             listen = ":8888";

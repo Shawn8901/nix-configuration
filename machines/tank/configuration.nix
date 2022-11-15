@@ -282,7 +282,7 @@ in
                 key = "/etc/zrepl/tank.key";
                 server_cn = "shelter";
               };
-            send = { encrypted = true; };
+            send = { encrypted = true; compressed = true; };
             pruning = {
               keep_sender = [
                 { type = "not_replicated"; }
