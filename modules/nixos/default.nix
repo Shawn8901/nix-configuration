@@ -8,4 +8,5 @@
   nextcloud-backup = import ./nextcloud-backup.nix;
   wayland = import ./wayland.nix;
   auto-upgrade = import ./auto-upgrade.nix;
+  notify_push = import ./notify_push.nix;
 }

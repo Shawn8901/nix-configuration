@@ -11,6 +11,8 @@
   update-packages = pkgs.callPackage ./shellscripts/update-packages.nix { };
   noisetorch = pkgs.callPackage ./noisetorch { };
   pytr = pkgs.python3.pkgs.callPackage ./pytr { };
+  notify_push = pkgs.callPackage ./notify_push { };
+
 
   jameica = pkgs.callPackage ./jameica {
     Cocoa = null;
