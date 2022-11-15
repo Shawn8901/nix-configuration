@@ -2,6 +2,7 @@
 let
   hosts = self.nixosConfigurations;
   secrets = config.age.secrets;
+  system = pkgs.hostPlatform.system;
   inherit (inputs) stfc-bot mimir;
 in
 {
@@ -310,7 +311,7 @@ in
         ];
       };
     };
-    nextcloud = {
+    nextcloud = rec {
       enable = true;
       package = pkgs.nextcloud25;
       https = true;
@@ -326,10 +327,27 @@ in
         dbpassFile = secrets.nextcloud_db_file.path;
         adminuser = "admin";
         adminpassFile = secrets.nextcloud_admin_file.path;
+        trustedProxies = ["2003:ee:c703:5900:1ac0:4dff:fe8f:5b2a"];  # Fixme, setting the ipv6 here is somehow now what is wanted
         defaultPhoneRegion = "DE";
       };
-      caching.apcu = true;
+      caching = {
+        apcu = false;
+        redis = true;
+        memcached = false;
+      };
+      extraOptions.redis = {
+        host = "127.0.0.1";
+        port = 6379;
+        dbindex = 0;
+        timeout = 1.5;
+      };
+      extraOptions."overwrite.cli.url" = "https://${hostName}";
+      extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
+      extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
     };
+    nextcloud-notify_push = { enable = true; package = self.packages.${system}.notify_push; };
+    redis.servers."nextcloud".enable = true;
+    redis.servers."nextcloud".port = 6379;
     postgresql = {
       enable = true;
       package = pkgs.postgresql_14;

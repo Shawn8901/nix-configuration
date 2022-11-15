@@ -1,6 +1,7 @@
 { self, config, pkgs, lib, inputs, ... }:
 let
   secrets = config.age.secrets;
+  system = pkgs.hostPlatform.system;
 in
 {
   age.secrets = {
@@ -57,7 +58,7 @@ in
       kbdInteractiveAuthentication = false;
     };
     resolved.enable = true;
-    nextcloud = {
+    nextcloud = rec {
       enable = true;
       package = pkgs.nextcloud25;
       https = true;
@@ -75,10 +76,8 @@ in
         dbpassFile = secrets.ffm_nextcloud_db_file.path;
         adminuser = "admin";
         adminpassFile = secrets.ffm_root_password_file.path;
+        trustedProxies = [ "134.255.226.117" "2a05:bec0:1:16::117" ];  # Fixme, setting the ipv6 here is somehow now what is wanted
         defaultPhoneRegion = "DE";
-      };
-      caching = {
-        apcu = true;
       };
       poolSettings = {
         "pm" = "dynamic";
@@ -87,7 +86,24 @@ in
         "pm.min_spare_servers" = 6;
         "pm.max_spare_servers" = 18;
       };
+      caching = {
+        apcu = false;
+        redis = true;
+        memcached = false;
+      };
+      extraOptions.redis = {
+        host = "127.0.0.1";
+        port = 6379;
+        dbindex = 0;
+        timeout = 1.5;
+      };
+      extraOptions."overwrite.cli.url" = "https://${hostName}";
+      extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
+      extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
     };
+    nextcloud-notify_push = { enable = true; package = self.packages.${system}.notify_push; };
+    redis.servers."nextcloud".enable = true;
+    redis.servers."nextcloud".port = 6379;
     postgresql = {
       enable = true;
       package = pkgs.postgresql_14;
