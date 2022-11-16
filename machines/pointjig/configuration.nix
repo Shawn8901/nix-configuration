@@ -30,6 +30,7 @@ in
       allowedUDPPortRanges = [ ];
       allowedTCPPorts = [ 80 443 ];
       allowedTCPPortRanges = [ ];
+      logRefusedConnections = false;
     };
     networkmanager.enable = false;
     dhcpcd.enable = false;

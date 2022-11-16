@@ -18,13 +18,13 @@ in
   };
 
   networking = {
-    firewall =
-      {
-        allowedUDPPorts = [ 443 ];
-        allowedUDPPortRanges = [ ];
-        allowedTCPPorts = [ 80 443 ];
-        allowedTCPPortRanges = [ ];
-      };
+    firewall = {
+      allowedUDPPorts = [ 443 ];
+      allowedUDPPortRanges = [ ];
+      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPortRanges = [ ];
+      logRefusedConnections = false;
+    };
     networkmanager.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;
@@ -48,7 +48,7 @@ in
           }];
         };
       };
-      };
+    };
   };
 
   services = {
@@ -76,7 +76,7 @@ in
         dbpassFile = secrets.ffm_nextcloud_db_file.path;
         adminuser = "admin";
         adminpassFile = secrets.ffm_root_password_file.path;
-        trustedProxies = [ "134.255.226.115" "2a05:bec0:1:16::115" ];  # Fixme, setting the ipv6 here is somehow now what is wanted
+        trustedProxies = [ "134.255.226.115" "2a05:bec0:1:16::115" ]; # Fixme, setting the ipv6 here is somehow now what is wanted
         defaultPhoneRegion = "DE";
       };
       poolSettings = {
@@ -167,28 +167,28 @@ in
   };
 
   environment.systemPackages = [
-      (pkgs.writeScriptBin "upgrade-pg-cluster" ''
-        set -eux
-        # XXX it's perhaps advisable to stop all services that depend on postgresql
-        systemctl stop postgresql
+    (pkgs.writeScriptBin "upgrade-pg-cluster" ''
+      set -eux
+      # XXX it's perhaps advisable to stop all services that depend on postgresql
+      systemctl stop postgresql
 
-        # XXX replace `<new version>` with the psqlSchema here
-        export NEWDATA="/var/lib/postgresql/14"
+      # XXX replace `<new version>` with the psqlSchema here
+      export NEWDATA="/var/lib/postgresql/14"
 
-        # XXX specify the postgresql package you'd like to upgrade to
-        export NEWBIN="${pkgs.postgresql_14}/bin"
+      # XXX specify the postgresql package you'd like to upgrade to
+      export NEWBIN="${pkgs.postgresql_14}/bin"
 
-        export OLDDATA="${config.services.postgresql.dataDir}"
-        export OLDBIN="${config.services.postgresql.package}/bin"
+      export OLDDATA="${config.services.postgresql.dataDir}"
+      export OLDBIN="${config.services.postgresql.package}/bin"
 
-        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-        cd "$NEWDATA"
-        sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+      install -d -m 0700 -o postgres -g postgres "$NEWDATA"
+      cd "$NEWDATA"
+      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
 
-        sudo -u postgres $NEWBIN/pg_upgrade \
-          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-          --old-bindir $OLDBIN --new-bindir $NEWBIN \
-          "$@"
-      '')
+      sudo -u postgres $NEWBIN/pg_upgrade \
+        --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
+        --old-bindir $OLDBIN --new-bindir $NEWBIN \
+        "$@"
+    '')
   ];
 }

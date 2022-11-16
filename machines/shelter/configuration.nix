@@ -8,12 +8,12 @@
   networking = {
     firewall =
       let zrepl = inputs.zrepl.servePorts config.services.zrepl;
-      in
-      {
+      in {
         allowedUDPPorts = [ ];
         allowedUDPPortRanges = [ ];
         allowedTCPPorts = [ ] ++ zrepl;
         allowedTCPPortRanges = [ ];
+        logRefusedConnections = false;
       };
     networkmanager.enable = false;
     dhcpcd.enable = false;
