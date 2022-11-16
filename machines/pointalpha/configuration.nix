@@ -49,13 +49,13 @@ in
         allowedTCPPortRanges = [ stronghold_range ];
     };
     networkmanager.enable = true;
-    extraHosts = ''
-      2a01:8740:1:e4::2cd3 shelter
-      78.128.127.235 shelter
-      2a05:bec0:1:16::114 pointjig
-      134.255.226.114 pointjig
-      ${builtins.concatStringsSep "\n"  (map (name: "192.168.11.31 " + name) (lib.attrNames hosts.tank.config.services.nginx.virtualHosts))}
-    '';
+    hosts = {
+      "192.168.11.31" = lib.attrNames hosts.tank.config.services.nginx.virtualHosts;
+      "134.255.226.114" = [ "pointjig" ];
+      "2a05:bec0:1:16::114" = [ "pointjig" ];
+      "78.128.127.235" = [ "shelter" ];
+      "2a01:8740:1:e4::2cd3" = [ "shelter" ];
+    };
     dhcpcd.enable = false;
     useNetworkd = false;
     useDHCP = false;
