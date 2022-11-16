@@ -97,11 +97,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1668583520,
-        "narHash": "sha256-NLJGq0qVN1UacyDYJ8HpjRdNfTNofOEBkL+dvnN+O20=",
+        "lastModified": 1668623993,
+        "narHash": "sha256-QujqjIs61A5xzxiv8cqeLz0NcrRj2jKu6oNd02H/jh4=",
         "owner": "shawn8901",
         "repo": "mimir",
-        "rev": "d2d9845e928199ca5045c8eca7db64b5c03d6d03",
+        "rev": "310003eb0350696cce3a6c2923ad4d07e31e1d22",
         "type": "github"
       },
       "original": {
