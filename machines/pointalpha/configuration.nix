@@ -34,6 +34,16 @@ in
       "betterttv"
     ];
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    steam = pkgs.steam.override {
+      extraPkgs = pkgs: with pkgs; [
+        ncurses6
+        binutils
+      ];
+    };
+  };
+
+
   networking = {
     firewall =
       let
@@ -380,15 +390,6 @@ in
   };
 
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
-
-  nixpkgs.config.packageOverrides = pkgs: {
-    steam = pkgs.steam.override {
-      extraPkgs = pkgs: with pkgs; [
-        ncurses
-        binutils
-      ];
-    };
-  };
 
   programs = {
     steam = {
