@@ -20,15 +20,19 @@
 
   sddm-git = pkgs.sddm.overrideAttrs (oldAttrs: {
     name = "sddm-git";
-    version = "unstable-2022-03-21";
+    version = "unstable-2022-11-17";
 
     src = pkgs.fetchgit {
       url = "https://github.com/sddm/sddm";
-      rev = "e67307e4103a8606d57a0c2fd48a378e40fcef06";
-      sha256 = "1rcs8mkykvhlygiv6fs07q67q9bigywi5hz0m4g66fjrbsbyh7gp";
+      rev = "ebe6110bd2bb5047ca09d4446fe739da468086e1";
+      sha256 = "sha256-ovx4G+AIfghOSHtIroOJh9hzXiyVx8MCsBM6h+Vvpv8=";
     };
 
     patches = [ ];
+    buildInputs = pkgs.libsForQt5.sddm.buildInputs ++ [
+        pkgs.libsForQt5.layer-shell-qt
+        pkgs.libsForQt5.qt5.qtvirtualkeyboard
+    ];
   });
 
 

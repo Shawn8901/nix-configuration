@@ -4,6 +4,7 @@ let
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
   system = pkgs.hostPlatform.system;
+  secrets = config.age.secrets;
 in
 {
   disabledModules = [ "services/x11/display-managers/sddm.nix" "programs/steam.nix" ];
@@ -37,8 +38,7 @@ in
   nixpkgs.config.packageOverrides = pkgs: {
     steam = pkgs.steam.override {
       extraPkgs = pkgs: with pkgs; [
-        ncurses6
-        binutils
+        ncurses
       ];
     };
   };
@@ -159,7 +159,19 @@ in
       displayManager.sddm = {
         enable = true;
         autoNumlock = true;
+        #package = self.packages.${system}.sddm-git;
+#         settings = {
+#           General = {
+#             InputMethod = "";
+# #            DisplayServer = "wayland";
+#             GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
+#           };
+#           Wayland = {
+#             CompositorCommand = "/run/wrappers/bin/kwin_wayland --no-lockscreen";
+#           };
+#         };
       };
+      displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5 = {
         enable = true;
         phononBackend = "vlc";
@@ -410,18 +422,22 @@ in
     };
   };
   env.user-config.enable = true;
-  env.wayland.enable = true;
 
   environment = {
-    variables.AMD_VULKAN_ICD = "RADV";
-    etc."samba/credentials_shawn".source =
-      config.age.secrets.shawn_samba_credentials.path;
-    etc."samba/credentials_ela".source =
-      config.age.secrets.ela_samba_credentials.path;
-    etc."zrepl/pointalpha.key".source =
-      config.age.secrets.zrepl_pointalpha.path;
+    etc."samba/credentials_shawn".source = secrets.shawn_samba_credentials.path;
+    etc."samba/credentials_ela".source = secrets.ela_samba_credentials.path;
+    etc."zrepl/pointalpha.key".source = secrets.zrepl_pointalpha.path;
     etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
+
+    variables.AMD_VULKAN_ICD = "RADV";
+    variables.MOZ_ENABLE_WAYLAND = "1";
+    variables.MOZ_DISABLE_RDD_SANDBOX = "1";
+    variables.NIXOS_OZONE_WL = "1";
+    variables.SDL_VIDEODRIVER = "wayland";
+    variables.QT_QPA_PLATFORM = "wayland-egl";
+    variables.QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    variables._JAVA_AWT_WM_NONREPARENTING = "1";
   };
 
   security.pam.services.shawn.enableKwallet = true;
