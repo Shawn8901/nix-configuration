@@ -568,7 +568,7 @@ in
       settings = {
         server = rec {
           domain = "status.tank.pointjig.de";
-          rootUrl = "https://${domain}/";
+          root_url = "https://${domain}/";
         };
         database = {
           type = "postgres";
