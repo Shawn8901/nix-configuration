@@ -26,6 +26,7 @@ in
 
   "nextcloud_prometheus.age".publicKeys = [ shawn tank next ];
   "fritzbox_prometheus.age".publicKeys = [ shawn tank ];
+  "pve_prometheus.age".publicKeys = [ shawn tank ];
   "web_config_pointalpha_prometheus.age".publicKeys = [ shawn  pointalpha ];
   "web_config_next_prometheus.age".publicKeys = [ shawn next ];
   "scrape_pointalpha_prometheus.age".publicKeys = [ shawn tank ];

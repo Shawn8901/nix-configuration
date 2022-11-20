@@ -42,6 +42,10 @@ in
       owner = config.services.prometheus.exporters.fritzbox.user;
       group = config.services.prometheus.exporters.fritzbox.group;
     };
+    pve_prometheus = {
+      file = ../../secrets/pve_prometheus.age;
+      mode = "0444";
+    };
     grafana_db_file = {
       file = ../../secrets/grafana_db.age;
       owner = "grafana";
@@ -505,6 +509,7 @@ in
           postgresPort = config.services.prometheus.exporters.postgres.port;
           nextcloudPort = config.services.prometheus.exporters.nextcloud.port;
           fritzboxPort = config.services.prometheus.exporters.fritzbox.port;
+          pvePort = config.services.prometheus.exporters.pve.port;
           prometheusPort = hosts.pointalpha.config.services.prometheus.port;
           labels = { machine = "${config.networking.hostName}"; };
         in
@@ -530,6 +535,16 @@ in
             static_configs = [{ targets = [ "localhost:${toString fritzboxPort}" ]; labels = { machine = "fritz.box"; }; }];
           }
           {
+            job_name = "proxmox";
+            metrics_path = "/pve";
+            params = { "target" = ["wi.clansap.org"]; };
+            static_configs = [
+              {
+                targets = [ "localhost:${toString pvePort}" ];
+              }
+            ];
+          }
+          {
             job_name = "${pointalphaHostname}";
             honor_labels = true;
             metrics_path = "/federate";
@@ -551,7 +566,7 @@ in
                 [ "{machine='${nextHostname}'}" ];
             };
             static_configs = [{
-              targets = [ "${nextHostname}.clansap.org:${toString prometheusPort}" ];
+              targets = [ "status.${nextHostname}.clansap.org" ];
             }];
             basic_auth = { username = "admin"; password_file = secrets.scrape_next_prometheus.path; };
           }
@@ -583,6 +598,12 @@ in
           listenAddress = "localhost";
           port = 9187;
           runAsLocalSuperUser = true;
+        };
+        pve = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9221;
+          configFile = secrets.pve_prometheus.path;
         };
       };
     };
