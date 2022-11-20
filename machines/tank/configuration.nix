@@ -17,6 +17,11 @@ in
       owner = "prometheus";
       group = "prometheus";
     };
+    scrape_next_prometheus = {
+      file = ../../secrets/scrape_next_prometheus.age;
+      owner = "prometheus";
+      group = "prometheus";
+    };
     nextcloud_db_file = {
       file = ../../secrets/nextcloud_db.age;
       owner = "nextcloud";
@@ -490,8 +495,8 @@ in
       };
       scrapeConfigs =
         let
-          ownHostname = config.networking.hostName;
           pointalphaHostname = hosts.pointalpha.config.networking.hostName;
+          nextHostname = hosts.next.config.networking.hostName;
           nodePort = config.services.prometheus.exporters.node.port;
           zreplPort = (builtins.head
             (
@@ -501,7 +506,7 @@ in
           nextcloudPort = config.services.prometheus.exporters.nextcloud.port;
           fritzboxPort = config.services.prometheus.exporters.fritzbox.port;
           prometheusPort = hosts.pointalpha.config.services.prometheus.port;
-          labels = { machine = "${ownHostname}"; };
+          labels = { machine = "${config.networking.hostName}"; };
         in
         [
           {
@@ -536,6 +541,19 @@ in
               targets = [ "${pointalphaHostname}:${toString prometheusPort}" ];
             }];
             basic_auth = { username = "admin"; password_file = secrets.scrape_pointalpha_prometheus.path; };
+          }
+          {
+            job_name = "${nextHostname}";
+            honor_labels = true;
+            metrics_path = "/federate";
+            params = {
+              "match[]" =
+                [ "{machine='${nextHostname}'}" ];
+            };
+            static_configs = [{
+              targets = [ "${nextHostname}.clansap.org:${toString prometheusPort}" ];
+            }];
+            basic_auth = { username = "admin"; password_file = secrets.scrape_next_prometheus.path; };
           }
         ];
       exporters = {

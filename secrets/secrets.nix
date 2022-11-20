@@ -24,10 +24,12 @@ in
   "nextcloud_db.age".publicKeys = [ shawn tank ];
   "nextcloud_admin.age".publicKeys = [ shawn tank ];
 
-  "nextcloud_prometheus.age".publicKeys = [ shawn tank ];
+  "nextcloud_prometheus.age".publicKeys = [ shawn tank next ];
   "fritzbox_prometheus.age".publicKeys = [ shawn tank ];
-  "web_config_pointalpha_prometheus.age".publicKeys = [ shawn tank pointalpha ];
+  "web_config_pointalpha_prometheus.age".publicKeys = [ shawn  pointalpha ];
+  "web_config_next_prometheus.age".publicKeys = [ shawn next ];
   "scrape_pointalpha_prometheus.age".publicKeys = [ shawn tank ];
+  "scrape_next_prometheus.age".publicKeys = [ shawn tank ];
 
   "grafana_db.age".publicKeys = [ shawn tank ];
   "grafana_admin_password_file.age".publicKeys = [ shawn tank ];

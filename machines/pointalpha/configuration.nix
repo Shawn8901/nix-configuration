@@ -338,8 +338,7 @@ in
       };
     };
 
-    prometheus =
-      let
+    prometheus = let
         labels = { machine = "${config.networking.hostName}"; };
         nodePort = config.services.prometheus.exporters.node.port;
         zreplPort = (builtins.head
@@ -347,33 +346,32 @@ in
             inputs.zrepl.monitoringPorts
               config.services.zrepl
           ));
-      in
-      {
-        enable = true;
-        port = 9001;
-        retentionTime = "30d";
-        globalConfig = {
-          external_labels = labels;
-        };
-        web_config_file = secrets.prometheus_web_config.path;
-        scrapeConfigs = [
-          {
-            job_name = "node";
-            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
-          }
-          {
-            job_name = "zrepl";
-            static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
-          }
-        ];
-        exporters = {
-          node = {
-            enable = true;
-            enabledCollectors = [ "systemd" ];
-            port = 9100;
-          };
+    in {
+      enable = true;
+      port = 9001;
+      retentionTime = "30d";
+      globalConfig = {
+        external_labels = labels;
+      };
+      web_config_file = secrets.prometheus_web_config.path;
+      scrapeConfigs = [
+        {
+          job_name = "node";
+          static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+        }
+        {
+          job_name = "zrepl";
+          static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
+        }
+      ];
+      exporters = {
+        node = {
+          enable = true;
+          enabledCollectors = [ "systemd" ];
+          port = 9100;
         };
       };
+    };
     avahi.enable = true;
     avahi.nssmdns = true;
 

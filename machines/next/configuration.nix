@@ -4,6 +4,10 @@ let
   system = pkgs.hostPlatform.system;
 in
 {
+  disabledModules = [ "services/monitoring/prometheus/default.nix" ];
+  imports = [ ../../modules/nixos/overriden/prometheus.nix ];
+
+
   age.secrets = {
     ffm_nextcloud_db_file = {
       file = ../../secrets/ffm_nextcloud_db.age;
@@ -14,6 +18,16 @@ in
       file = ../../secrets/ffm_root_password.age;
       owner = "nextcloud";
       group = "nextcloud";
+    };
+    prometheus_web_config = {
+      file = ../../secrets/web_config_next_prometheus.age;
+      owner = "prometheus";
+      group = "prometheus";
+    };
+    nextcloud_prometheus_file = {
+      file = ../../secrets/nextcloud_prometheus.age;
+      owner = "nextcloud-exporter";
+      group = "nextcloud-exporter";
     };
   };
 
@@ -139,6 +153,57 @@ in
       enable = true;
       maxretry = 5;
     };
+
+    prometheus = let
+        labels = { machine = "${config.networking.hostName}"; };
+        nodePort = config.services.prometheus.exporters.node.port;
+        postgresPort = config.services.prometheus.exporters.postgres.port;
+        nextcloudPort = config.services.prometheus.exporters.nextcloud.port;
+    in {
+      enable = true;
+      port = 9001;
+      retentionTime = "30d";
+      globalConfig = {
+        external_labels = labels;
+      };
+      web_config_file = secrets.prometheus_web_config.path;
+      scrapeConfigs = [
+        {
+          job_name = "node";
+          static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+        }
+        {
+          job_name = "postgres";
+          static_configs = [{ targets = [ "localhost:${toString postgresPort}" ]; inherit labels; }];
+        }
+        {
+          job_name = "nextcloud";
+          static_configs = [{ targets = [ "localhost:${toString nextcloudPort}" ]; inherit labels; }];
+        }
+      ];
+      exporters = {
+        node = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9100;
+          enabledCollectors = [ "systemd" ];
+        };
+        nextcloud = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9205;
+          url = "https://${config.services.nextcloud.hostName}";
+          passwordFile = secrets.nextcloud_prometheus_file.path;
+        };
+        postgres = {
+          enable = true;
+          listenAddress = "127.0.0.1";
+          port = 9187;
+          runAsLocalSuperUser = true;
+        };
+      };
+    };
+
     vnstat.enable = true;
     journald.extraConfig = ''
       SystemMaxUse=500M
