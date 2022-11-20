@@ -147,6 +147,16 @@ in
           http3 = true;
           kTLS = true;
         };
+        "status.${config.services.nextcloud.hostName}" = {
+          enableACME = true;
+          forceSSL = true;
+          http3 = true;
+          kTLS = true;
+
+          locations."/" = {
+            proxyPass = "http://localhost:9001";
+          };
+        };
       };
     };
     fail2ban = {

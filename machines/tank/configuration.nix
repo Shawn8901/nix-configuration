@@ -34,13 +34,13 @@ in
     };
     nextcloud_prometheus_file = {
       file = ../../secrets/nextcloud_prometheus.age;
-      owner = "nextcloud-exporter";
-      group = "nextcloud-exporter";
+      owner = config.services.prometheus.exporters.nextcloud.user;
+      group = config.services.prometheus.exporters.nextcloud.group;
     };
     fritzbox_prometheus_file = {
       file = ../../secrets/fritzbox_prometheus.age;
-      owner = "fritzbox-exporter";
-      group = "fritzbox-exporter";
+      owner = config.services.prometheus.exporters.fritzbox.user;
+      group = config.services.prometheus.exporters.fritzbox.group;
     };
     grafana_db_file = {
       file = ../../secrets/grafana_db.age;
@@ -77,7 +77,7 @@ in
       {
         allowedUDPPorts = [ 443 ];
         allowedUDPPortRanges = [ ];
-        allowedTCPPorts = [ 80 443 ] ++ zreplServePorts;
+        allowedTCPPorts = [ 80 443 9001 ] ++ zreplServePorts;
         allowedTCPPortRanges = [ ];
       };
     networkmanager.enable = false;
