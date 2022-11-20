@@ -367,8 +367,9 @@ in
       exporters = {
         node = {
           enable = true;
-          enabledCollectors = [ "systemd" ];
+          listenAddress = "localhost";
           port = 9100;
+          enabledCollectors = [ "systemd" ];
         };
       };
     };

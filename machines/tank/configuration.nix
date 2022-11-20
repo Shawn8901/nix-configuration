@@ -559,11 +559,13 @@ in
       exporters = {
         node = {
           enable = true;
-          enabledCollectors = [ "systemd" ];
+          listenAddress = "localhost";
           port = 9100;
+          enabledCollectors = [ "systemd" ];
         };
         fritzbox = {
           enable = true;
+          listenAddress = "localhost";
           extraFlags = [
             "-username prometheus"
             "-password ${lib.escapeShellArg "@${secrets.fritzbox_prometheus_file.path}"}"
@@ -571,12 +573,14 @@ in
         };
         nextcloud = {
           enable = true;
+          listenAddress = "localhost";
           port = 9205;
           url = "https://${config.services.nextcloud.hostName}";
           passwordFile = secrets.nextcloud_prometheus_file.path;
         };
         postgres = {
           enable = true;
+          listenAddress = "localhost";
           port = 9187;
           runAsLocalSuperUser = true;
         };
