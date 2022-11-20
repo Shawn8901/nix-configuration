@@ -26,6 +26,8 @@ in
 
   "nextcloud_prometheus.age".publicKeys = [ shawn tank ];
   "fritzbox_prometheus.age".publicKeys = [ shawn tank ];
+  "web_config_pointalpha_prometheus.age".publicKeys = [ shawn tank pointalpha ];
+  "scrape_pointalpha_prometheus.age".publicKeys = [ shawn tank ];
 
   "grafana_db.age".publicKeys = [ shawn tank ];
   "grafana_admin_password_file.age".publicKeys = [ shawn tank ];

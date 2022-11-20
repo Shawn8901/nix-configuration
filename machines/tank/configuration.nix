@@ -12,6 +12,11 @@ in
     ztank_key = { file = ../../secrets/ztank_key.age; };
     zrepl_tank = { file = ../../secrets/zrepl_tank.age; };
     ela_password_file = { file = ../../secrets/ela_password.age; };
+    scrape_pointalpha_prometheus = {
+      file = ../../secrets/scrape_pointalpha_prometheus.age;
+      owner = "prometheus";
+      group = "prometheus";
+    };
     nextcloud_db_file = {
       file = ../../secrets/nextcloud_db.age;
       owner = "nextcloud";
@@ -530,6 +535,7 @@ in
             static_configs = [{
               targets = [ "${pointalphaHostname}:${toString prometheusPort}" ];
             }];
+            basic_auth = { username = "admin"; password_file = secrets.scrape_pointalpha_prometheus.path; };
           }
         ];
       exporters = {
@@ -587,10 +593,10 @@ in
         datasources.settings.datasources = [{
           name = "Prometheus";
           type = "prometheus";
-          url = "http://localhost:${
-              builtins.toString config.services.prometheus.port
-            }";
+          url = "http://localhost:${builtins.toString config.services.prometheus.port}";
           isDefault = true;
+          user = "admin";
+          basicAuthPassword = "$__file{${secrets.scrape_pointalpha_prometheus.path}}";
         }];
       };
     };

@@ -1,7 +1,7 @@
 {
   description = "Flake from a random person on the internet";
 
-  inputs = rec {
+  inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
