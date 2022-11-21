@@ -38,6 +38,7 @@ in
       "vscode-extension-MS-python-vscode-pylance"
       "tampermonkey"
       "betterttv"
+      "Oracle_VM_VirtualBox_Extension_Pack"
     ];
 
   nixpkgs.config.packageOverrides = pkgs: {
@@ -407,6 +408,8 @@ in
       qemu.package = pkgs.qemu_kvm;
     };
   };
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
 
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
