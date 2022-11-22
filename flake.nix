@@ -35,6 +35,10 @@
       url = "github:shawn8901/mimir-client";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
