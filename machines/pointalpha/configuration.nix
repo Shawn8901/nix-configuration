@@ -45,6 +45,7 @@ in
     steam = pkgs.steam.override {
       extraPkgs = pkgs: with pkgs; [
         ncurses
+        fontconfig
       ];
     };
     zsa-udev-rules = pkgs.zsa-udev-rules.overrideAttrs(oldAttrs: {
@@ -120,6 +121,7 @@ in
     xdg-utils
     libva-utils
 
+    qt5.qtwayland
     plasma5Packages.skanlite
     plasma5Packages.ark
     plasma5Packages.kate
@@ -445,7 +447,7 @@ in
     variables.MOZ_DISABLE_RDD_SANDBOX = "1";
     variables.NIXOS_OZONE_WL = "1";
     variables.SDL_VIDEODRIVER = "wayland";
-    variables.QT_QPA_PLATFORM = "wayland-egl";
+    variables.QT_QPA_PLATFORM = "wayland";
     variables.QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     variables._JAVA_AWT_WM_NONREPARENTING = "1";
   };
