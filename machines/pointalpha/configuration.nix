@@ -410,8 +410,8 @@ in
       qemu.package = pkgs.qemu_kvm;
     };
   };
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.virtualbox.host.enable = false;
+  virtualisation.virtualbox.host.enableExtensionPack = false;
 
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
