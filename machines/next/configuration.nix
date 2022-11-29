@@ -63,6 +63,7 @@ in
         };
       };
     };
+    services.nextcloud-setup.after = [ "postgresql.service" ];
   };
 
   services = {

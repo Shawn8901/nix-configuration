@@ -115,6 +115,7 @@ in
         ExecStart = "systemctl restart phpfpm-nextcloud.service";
       };
     };
+    services.nextcloud-setup.after = [ "postgresql.service" ];
   };
 
   services = {
