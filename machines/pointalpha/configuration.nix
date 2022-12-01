@@ -48,16 +48,6 @@ in
         fontconfig
       ];
     };
-    zsa-udev-rules = pkgs.zsa-udev-rules.overrideAttrs(oldAttrs: {
-      version = "unstable-2022-10-26";
-      src = pkgs.fetchFromGitHub {
-        owner = "zsa";
-        repo = "wally";
-        rev = "623a50d0e0b90486e42ad8ad42b0a7313f7a37b3";
-        hash = "sha256-meR2V7T4hrJFXFPLENHoAgmOILxxynDBk0BLqzsAZvQ=";
-      };
-    });
-
   };
 
 
