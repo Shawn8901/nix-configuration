@@ -31,9 +31,6 @@ nixpkgs.lib.nixosSystem
           };
           nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
           system.stateVersion = "22.05";
-          nixpkgs.config.packageOverrides = pkgs: {
-            nix-zsh-completions = pkgs.nix-zsh-completions.overrideAttrs (old: {  postPatch = "rm _nix"; });
-          };
         }
         entryPoint
         bootloader
