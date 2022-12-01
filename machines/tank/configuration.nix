@@ -44,7 +44,6 @@ in
     };
     pve_prometheus = {
       file = ../../secrets/pve_prometheus.age;
-      mode = "0444";
     };
     grafana_db_file = {
       file = ../../secrets/grafana_db.age;
