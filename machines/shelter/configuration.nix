@@ -1,5 +1,8 @@
-{ config, inputs, ... }:
-
+{ config, pkgs,inputs, ... }:
+let
+  system = pkgs.hostPlatform.system;
+  uPkgs = inputs.nixpkgs.legacyPackages.${system};
+in
 {
   age.secrets = {
     zrepl_shelter = { file = ../../secrets/zrepl_shelter.age; };
@@ -58,6 +61,7 @@
     };
     zrepl = {
       enable = true;
+      package = uPkgs.zrepl;
       settings = {
         jobs = [{
           name = "ztank_sink";

@@ -140,6 +140,7 @@ in
     };
     zrepl = {
       enable = true;
+      package = pkgs.zrepl;
       settings = {
         global = {
           monitoring = [{
@@ -328,6 +329,7 @@ in
     nextcloud = rec {
       enable = true;
       package = pkgs.nextcloud25;
+      enableBrokenCiphersForSSE = false;
       https = true;
       hostName = "next.tank.pointjig.de";
       home = "/persist/var/lib/nextcloud";

@@ -76,6 +76,7 @@ in
     nextcloud = rec {
       enable = true;
       package = pkgs.nextcloud25;
+      enableBrokenCiphersForSSE = false;
       https = true;
       hostName = "next.clansap.org";
       autoUpdateApps.enable = true;

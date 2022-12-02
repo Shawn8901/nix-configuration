@@ -184,6 +184,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-22_11": {
+      "locked": {
+        "lastModified": 1669834992,
+        "narHash": "sha256-YnhZGHgb4C3Q7DSGisO/stc50jFb9F/MzHeKS4giotg=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "596a8e828c5dfa504f91918d0fa4152db3ab5502",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-22.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1669805596,
@@ -209,6 +225,7 @@
         "mimir-client": "mimir-client",
         "nix-vscode-marketplace": "nix-vscode-marketplace",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-22_11": "nixpkgs-22_11",
         "nur": "nur",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "stfc-bot": "stfc-bot"
