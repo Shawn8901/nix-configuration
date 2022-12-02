@@ -22,8 +22,8 @@
         "shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA="
       ];
       trusted-users = [ "root" "shawn" ];
-      cores = lib.mkDefault 8;
-      max-jobs = lib.mkDefault 8;
+      cores = lib.mkDefault 3;
+      max-jobs = lib.mkDefault 2;
       experimental-features = "nix-command flakes";
     };
     extraOptions = ''
