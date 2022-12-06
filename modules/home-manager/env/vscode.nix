@@ -73,6 +73,16 @@ with lib; {
         "nix.enableLanguageServer" = true;
         "nix.formatterPath" = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
         "nix.serverPath" = "${pkgs.nil}/bin/nil";
+        "nix.serverSettings" = {
+          "nil" = {
+            "diagnostics" = {
+              "ignored" = [ "unused_binding" "unused_with" ];
+            };
+            "formatting" = {
+              "command" = [ "nixpkgs-fmt" ];
+            };
+          };
+        };
       };
     };
   };
