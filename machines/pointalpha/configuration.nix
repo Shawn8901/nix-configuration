@@ -50,7 +50,6 @@ in
     };
   };
 
-
   networking = {
     firewall =
       let
@@ -60,11 +59,12 @@ in
         };
         stronghold_tcp = 47624;
         zreplServePorts = inputs.zrepl.servePorts config.services.zrepl;
-    in {
+      in
+      {
         allowedUDPPortRanges = [ stronghold_range ];
         allowedTCPPorts = [ config.services.prometheus.port stronghold_tcp ] ++ zreplServePorts;
         allowedTCPPortRanges = [ stronghold_range ];
-    };
+      };
     networkmanager.enable = true;
     hosts = {
       "192.168.11.31" = lib.attrNames hosts.tank.config.services.nginx.virtualHosts;
@@ -160,16 +160,16 @@ in
         enable = true;
         autoNumlock = true;
         #package = self.packages.${system}.sddm-git;
-#         settings = {
-#           General = {
-#             InputMethod = "";
-# #            DisplayServer = "wayland";
-#             GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
-#           };
-#           Wayland = {
-#             CompositorCommand = "/run/wrappers/bin/kwin_wayland --no-lockscreen";
-#           };
-#         };
+        #         settings = {
+        #           General = {
+        #             InputMethod = "";
+        # #            DisplayServer = "wayland";
+        #             GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
+        #           };
+        #           Wayland = {
+        #             CompositorCommand = "/run/wrappers/bin/kwin_wayland --no-lockscreen";
+        #           };
+        #         };
       };
       displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5 = {
@@ -331,7 +331,8 @@ in
       };
     };
 
-    prometheus = let
+    prometheus =
+      let
         labels = { machine = "${config.networking.hostName}"; };
         nodePort = config.services.prometheus.exporters.node.port;
         zreplPort = (builtins.head
@@ -339,33 +340,34 @@ in
             inputs.zrepl.monitoringPorts
               config.services.zrepl
           ));
-    in {
-      enable = true;
-      port = 9001;
-      retentionTime = "30d";
-      globalConfig = {
-        external_labels = labels;
-      };
-      web_config_file = secrets.prometheus_web_config.path;
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
-        }
-        {
-          job_name = "zrepl";
-          static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
-        }
-      ];
-      exporters = {
-        node = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9100;
-          enabledCollectors = [ "systemd" ];
+      in
+      {
+        enable = true;
+        port = 9001;
+        retentionTime = "30d";
+        globalConfig = {
+          external_labels = labels;
+        };
+        web_config_file = secrets.prometheus_web_config.path;
+        scrapeConfigs = [
+          {
+            job_name = "node";
+            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "zrepl";
+            static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
+          }
+        ];
+        exporters = {
+          node = {
+            enable = true;
+            listenAddress = "localhost";
+            port = 9100;
+            enabledCollectors = [ "systemd" ];
+          };
         };
       };
-    };
     avahi.enable = true;
     avahi.nssmdns = true;
 
