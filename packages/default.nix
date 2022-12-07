@@ -1,5 +1,5 @@
 { self, pkgs, ... }@inputs:
-{
+rec {
   s25rttr = pkgs.callPackage ./s25rttr {
     SDL2 = pkgs.SDL2.override { withStatic = true; };
   };
@@ -18,6 +18,10 @@
     Cocoa = null;
   };
 
+  libcapi = pkgs.callPackage ./libcapi { };
+  librm = pkgs.callPackage ./librm { inherit libcapi; };
+  rogerrouter = pkgs.callPackage ./rogerrouter { inherit librm; };
+
   sddm-git = pkgs.sddm.overrideAttrs (oldAttrs: {
     name = "sddm-git";
     version = "unstable-2022-11-17";
@@ -30,8 +34,8 @@
 
     patches = [ ];
     buildInputs = pkgs.libsForQt5.sddm.buildInputs ++ [
-        pkgs.libsForQt5.layer-shell-qt
-        pkgs.libsForQt5.qt5.qtvirtualkeyboard
+      pkgs.libsForQt5.layer-shell-qt
+      pkgs.libsForQt5.qt5.qtvirtualkeyboard
     ];
   });
 
