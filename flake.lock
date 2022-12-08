@@ -140,11 +140,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1670136503,
-        "narHash": "sha256-w4pTXeBvyn5puhqWDsYllpN5ZIx5KJZ8sk88MxlJ7kI=",
+        "lastModified": 1670395808,
+        "narHash": "sha256-GQcqf7gNlFCL9wHSAzepAA3VPHshVksk6HxyhLN1hvo=",
         "owner": "AmeerTaweel",
         "repo": "nix-vscode-marketplace",
-        "rev": "72e94403fe2f21a18d35c4e6637ec0fc4f874b00",
+        "rev": "5b773331aead58a0563b8b956dd2459d4a575982",
         "type": "github"
       },
       "original": {
@@ -200,6 +200,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-x86_64-v2": {
+      "locked": {
+        "lastModified": 1670359118,
+        "narHash": "sha256-dVLKoTdw8/vazpvoRwmZm2Nfc/YHdF+Pdorsdx62OXs=",
+        "owner": "SuperSandro2000",
+        "repo": "nixpkgs",
+        "rev": "de06df9241d65d2633c31c2125d19857a808ae29",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SuperSandro2000",
+        "ref": "nixos-unstable-simd",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1670315682,
@@ -226,6 +242,7 @@
         "nix-vscode-marketplace": "nix-vscode-marketplace",
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
+        "nixpkgs-x86_64-v2": "nixpkgs-x86_64-v2",
         "nur": "nur",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "stfc-bot": "stfc-bot"

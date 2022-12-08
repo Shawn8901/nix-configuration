@@ -5,7 +5,13 @@ in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  nixpkgs.hostPlatform = "x86_64-linux";
+  nixpkgs.hostPlatform.system = "x86_64-linux";
+  # nixpkgs.hostPlatform.gcc = {
+  #   arch = "znver2";
+  #   tune = "znver2";
+  # };
+  # nix.gc.automatic = lib.mkForce false;
+  # nix.settings.system-features = [ "gccarch-znver2" ];
 
   boot = {
     initrd = {
