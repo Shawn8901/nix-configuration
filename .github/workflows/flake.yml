@@ -98,7 +98,7 @@ jobs:
    
   build_machines:
     runs-on: ubuntu-22.04
-    needs: [generate_matrix, build_packages, check_flake]
+    needs: [build_packages, check_flake]
     strategy:
       fail-fast: false
       max-parallel: 5
