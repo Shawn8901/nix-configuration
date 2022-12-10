@@ -24,6 +24,8 @@ in
     };
   };
 
+  nix.gc.options = "--delete-older-than 3d";
+
   networking = {
     firewall = {
       allowedUDPPorts = [ 443 ];

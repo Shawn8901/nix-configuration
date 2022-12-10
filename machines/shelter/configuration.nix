@@ -1,4 +1,4 @@
-{ config, pkgs,inputs, ... }:
+{ config, pkgs, inputs, ... }:
 let
   system = pkgs.hostPlatform.system;
   uPkgs = inputs.nixpkgs.legacyPackages.${system};
@@ -7,6 +7,8 @@ in
   age.secrets = {
     zrepl_shelter = { file = ../../secrets/zrepl_shelter.age; };
   };
+
+  nix.gc.options = "--delete-older-than 3d";
 
   networking = {
     firewall =
