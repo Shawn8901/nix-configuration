@@ -201,7 +201,7 @@ in
           node = {
             enable = true;
             listenAddress = "localhost";
-            port = 9100;
+            port = 9101;
             enabledCollectors = [ "systemd" ];
           };
           nextcloud = {
