@@ -48,11 +48,6 @@ in
         fontconfig
       ];
     };
-    # Disable the tests for this package, as their test files includes non utf-8 chars which we reject being created due utf8only on zfs
-    # jpylyzer = pkgs.jpylyzer.overrideAttrs (oldAttrs: {
-    #   preCheck = '''';
-    #   doChecks = false;
-    # });
   };
   services.flatpak.enable = true;
 
