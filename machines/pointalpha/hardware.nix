@@ -7,11 +7,11 @@ in
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
   # nixpkgs.hostPlatform.gcc = {
-  #   arch = "znver2";
-  #   tune = "znver2";
+  # arch = "znver1";
+  # tune = "znver1";
   # };
-  # nix.gc.automatic = lib.mkForce false;
-  # nix.settings.system-features = [ "gccarch-znver2" ];
+  nix.settings.system-features = [ "benchmark" "big-parallel" "kvm" "nixos-test" "gccarch-znver1" ];
+  nix.gc.automatic = lib.mkForce false;
 
   boot = {
     initrd = {
