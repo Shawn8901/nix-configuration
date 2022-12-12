@@ -373,8 +373,8 @@ in
     avahi.nssmdns = true;
 
     journald.extraConfig = ''
-      SystemMaxUse=500M
-      SystemMaxFileSize=100M
+      SystemMaxUse=100M
+      SystemMaxFileSize=50M
     '';
     acpid.enable = true;
     teamviewer.enable = false;
