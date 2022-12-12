@@ -200,6 +200,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-x86_64-v2": {
+      "locked": {
+        "lastModified": 1670712603,
+        "narHash": "sha256-zpEeK0QTShmVUP9Km7x8ASnDnTmzGlKJWYLnY/uAkQc=",
+        "owner": "SuperSandro2000",
+        "repo": "nixpkgs",
+        "rev": "2a7697bbe541fac23987612d2f087067167468f6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SuperSandro2000",
+        "ref": "nixos-unstable-simd",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1670779394,
@@ -226,6 +242,7 @@
         "nix-vscode-marketplace": "nix-vscode-marketplace",
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
+        "nixpkgs-x86_64-v2": "nixpkgs-x86_64-v2",
         "nur": "nur",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "stfc-bot": "stfc-bot"
