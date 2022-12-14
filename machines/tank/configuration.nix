@@ -428,8 +428,11 @@ in
         };
       };
     };
-    avahi.enable = true;
-    avahi.nssmdns = true;
+    avahi = {
+      enable = true;
+      nssmdns = true;
+      openFirewall = true;
+    };
     samba = {
       enable = true;
       openFirewall = true;

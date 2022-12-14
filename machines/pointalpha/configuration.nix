@@ -369,9 +369,11 @@ in
           };
         };
       };
-    avahi.enable = true;
-    avahi.nssmdns = true;
-
+    avahi = {
+      enable = true;
+      nssmdns = true;
+      openFirewall = true;
+    };
     journald.extraConfig = ''
       SystemMaxUse=100M
       SystemMaxFileSize=50M
