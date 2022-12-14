@@ -1,4 +1,19 @@
-{ stdenv, lib, fetchFromGitLab, meson, pkg-config, cmake, ninja, ghostscript, gettext, gtk3, libhandy, librm }:
+{ stdenv
+, lib
+, fetchFromGitLab
+, meson
+, cmake
+, pkg-config
+, ninja
+, desktop-file-utils
+, wrapGAppsHook
+, ghostscript
+, gettext
+, gtk3
+, libhandy
+, libsoup
+, librm
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rogerrouter";
@@ -11,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-9Ct+7/MEK7ji/7WVkkTrjUW2DY2kBaLF9xriRIFKf2c=";
   };
 
-  nativeBuildInputs = [ meson cmake pkg-config ninja ];
+  nativeBuildInputs = [ meson pkg-config cmake ninja desktop-file-utils wrapGAppsHook ];
 
   buildInputs = [
     gettext
@@ -19,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     ghostscript
     libhandy
     librm
-    librm.dev
+    libsoup
   ];
 
   meta = {

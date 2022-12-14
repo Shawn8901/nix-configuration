@@ -21,6 +21,7 @@ in
         (discord.override { nss = pkgs.nss_latest; })
         teamspeak_client
         signal-desktop
+        rogerrouter
         wally-cli
         vlc
         wineWowPackages.unstableFull

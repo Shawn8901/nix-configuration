@@ -20,7 +20,7 @@ rec {
 
   libcapi = pkgs.callPackage ./libcapi { };
   librm = pkgs.callPackage ./librm { inherit libcapi; };
-  #rogerrouter = pkgs.callPackage ./rogerrouter { inherit librm; };
+  rogerrouter = pkgs.callPackage ./rogerrouter { inherit librm; };
 
   sddm-git = pkgs.sddm.overrideAttrs (oldAttrs: {
     name = "sddm-git";
