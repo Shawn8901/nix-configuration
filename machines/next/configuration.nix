@@ -182,7 +182,7 @@ in
         globalConfig = {
           external_labels = labels;
         };
-        web_config_file = secrets.prometheus_web_config.path;
+        webConfigFile = secrets.prometheus_web_config.path;
         scrapeConfigs = [
           {
             job_name = "node";

@@ -7,7 +7,7 @@ let
   cfg = config.services.prometheus;
   checkConfigEnabled =
     (lib.isBool cfg.checkConfig && cfg.checkConfig)
-      || cfg.checkConfig == "syntax-only";
+    || cfg.checkConfig == "syntax-only";
 
   workingDir = "/var/lib/" + cfg.stateDir;
 
@@ -72,8 +72,8 @@ let
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
   ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
     ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
-    ++ optional (cfg.web_config_file != null) "--web.config.file=${cfg.web_config_file}"
-    ;
+    ++ optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}"
+  ;
 
   filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
   filterAttrsListRecursive = pred: x:
@@ -1725,8 +1725,8 @@ in
       '';
     };
 
-    web_config_file = mkOption {
-      type =  types.path;
+    webConfigFile = mkOption {
+      type = types.path;
       default = null;
       description = lib.mdDoc "Path to web.config.file";
     };

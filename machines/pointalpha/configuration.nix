@@ -7,8 +7,8 @@ let
   secrets = config.age.secrets;
 in
 {
-  disabledModules = [ "services/x11/display-managers/sddm.nix" "programs/steam.nix" "services/monitoring/prometheus/default.nix" ];
-  imports = [ ../../modules/nixos/overriden/sddm.nix ../../modules/nixos/overriden/steam.nix ../../modules/nixos/overriden/prometheus.nix ];
+  disabledModules = [ "services/x11/display-managers/sddm.nix" "services/monitoring/prometheus/default.nix" ];
+  imports = [ ../../modules/nixos/overriden/sddm.nix ../../modules/nixos/overriden/prometheus.nix ../../modules/nixos/steam-compat-tools.nix ];
 
   age.secrets = {
     zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };
@@ -349,7 +349,7 @@ in
         globalConfig = {
           external_labels = labels;
         };
-        web_config_file = secrets.prometheus_web_config.path;
+        webConfigFile = secrets.prometheus_web_config.path;
         scrapeConfigs = [
           {
             job_name = "node";
