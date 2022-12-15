@@ -65,6 +65,7 @@ in
   services = {
     xserver.enable = false;
     qemuGuest.enable = true;
+    fstrim.enable = true;
     openssh = {
       enable = true;
       passwordAuthentication = false;

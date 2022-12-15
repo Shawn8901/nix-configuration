@@ -57,9 +57,9 @@ in
       kbdInteractiveAuthentication = false;
     };
     resolved.enable = true;
-    zfs = {
-      autoScrub.enable = true;
-      autoScrub.pools = [ "zbackup" ];
+    zfs.autoScrub = {
+      enable = true;
+      pools = [ "zbackup" ];
     };
     zrepl = {
       enable = true;

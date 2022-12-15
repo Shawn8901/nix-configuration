@@ -135,8 +135,10 @@ in
     resolved.enable = true;
     zfs = {
       trim.enable = true;
-      autoScrub.enable = true;
-      autoScrub.pools = [ "rpool" "ztank" ];
+      autoScrub = {
+        enable = true;
+        pools = [ "rpool" "ztank" ];
+      };
     };
     zrepl = {
       enable = true;

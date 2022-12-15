@@ -195,9 +195,13 @@ in
         }
       ];
     };
-    zfs.trim.enable = true;
-    zfs.autoScrub.enable = true;
-    zfs.autoScrub.pools = [ "rpool" ];
+    zfs = {
+      trim.enable = true;
+      autoScrub = {
+        enable = true;
+        pools = [ "rpool" ];
+      };
+    };
 
     pipewire =
       let
