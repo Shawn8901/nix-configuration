@@ -176,6 +176,7 @@ in
       desktopManager.plasma5 = {
         enable = true;
         phononBackend = "vlc";
+        excludePackages = with pkgs.libsForQt5; [ kwrited elisa ktnef ];
       };
       desktopManager.xterm.enable = false;
       excludePackages = [ pkgs.xterm ];
