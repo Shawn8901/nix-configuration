@@ -13,7 +13,7 @@ in
         portfolio
         jameica
         pytr
-        libreoffice
+        # libreoffice
         inkscape
         gimp
         nextcloud-client
@@ -24,7 +24,7 @@ in
         rogerrouter
         wally-cli
         vlc
-        wineWowPackages.unstableFull
+        # wineWowPackages.unstableFull
         s25rttr
         nas
 
@@ -38,9 +38,15 @@ in
       vscode.enable = true;
       browser.enable = true;
     };
-    programs.direnv.enable = true;
-    programs.direnv.nix-direnv.enable = true;
-    programs.direnv.enableZshIntegration = true;
+    programs.direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      enableZshIntegration = true;
+    };
+    programs.dircolors = {
+      enable = true;
+      enableZshIntegration = true;
+    };
     programs.gh.enable = true;
     xdg.enable = true;
     xdg.mime.enable = true;
