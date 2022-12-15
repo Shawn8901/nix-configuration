@@ -10,6 +10,7 @@
 , ghostscript
 , gettext
 , gtk3
+, glib-networking
 , libhandy
 , libsoup
 , librm
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ meson pkg-config cmake ninja desktop-file-utils wrapGAppsHook ];
 
   buildInputs = [
+    glib-networking
     gettext
     gtk3
     ghostscript
