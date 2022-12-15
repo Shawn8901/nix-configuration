@@ -328,42 +328,50 @@ in
         ];
       };
     };
-    nextcloud = rec {
-      enable = true;
-      package = pkgs.nextcloud25;
-      enableBrokenCiphersForSSE = false;
-      https = true;
-      hostName = "next.tank.pointjig.de";
-      home = "/persist/var/lib/nextcloud";
-      autoUpdateApps.enable = true;
-      autoUpdateApps.startAt = "Sun 14:00:00";
-      config = {
-        dbtype = "pgsql";
-        dbuser = "nextcloud";
-        dbhost = "/run/postgresql";
-        dbname = "nextcloud";
-        dbpassFile = secrets.nextcloud_db_file.path;
-        adminuser = "admin";
-        adminpassFile = secrets.nextcloud_admin_file.path;
-        trustedProxies = [ "2003:ee:c703:5900:1ac0:4dff:fe8f:5b2a" ]; # Fixme, setting the ipv6 here is somehow now what is wanted
-        defaultPhoneRegion = "DE";
+    nextcloud =
+      let
+        hostName = "next.tank.pointjig.de";
+      in
+      {
+        inherit hostName;
+        notify_push = {
+          enable = true;
+          package = self.packages.${system}.notify_push;
+          logLevel = "debug";
+        };
+        enable = true;
+        package = pkgs.nextcloud25;
+        enableBrokenCiphersForSSE = false;
+        https = true;
+        home = "/persist/var/lib/nextcloud";
+        autoUpdateApps.enable = true;
+        autoUpdateApps.startAt = "Sun 14:00:00";
+        config = {
+          dbtype = "pgsql";
+          dbuser = "nextcloud";
+          dbhost = "/run/postgresql";
+          dbname = "nextcloud";
+          #dbpassFile = secrets.nextcloud_db_file.path;
+          adminuser = "admin";
+          adminpassFile = secrets.nextcloud_admin_file.path;
+          trustedProxies = [ "2003:ee:c708:3e00:1ac0:4dff:fe8f:5b2a" ]; # Fixme, setting the ipv6 here is somehow now what is wanted
+          defaultPhoneRegion = "DE";
+        };
+        caching = {
+          apcu = false;
+          redis = true;
+          memcached = false;
+        };
+        extraOptions.redis = {
+          host = "127.0.0.1";
+          port = 6379;
+          dbindex = 0;
+          timeout = 1.5;
+        };
+        extraOptions."overwrite.cli.url" = "https://${hostName}";
+        extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
+        extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
       };
-      caching = {
-        apcu = false;
-        redis = true;
-        memcached = false;
-      };
-      extraOptions.redis = {
-        host = "127.0.0.1";
-        port = 6379;
-        dbindex = 0;
-        timeout = 1.5;
-      };
-      extraOptions."overwrite.cli.url" = "https://${hostName}";
-      extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
-      extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
-    };
-    nextcloud-notify_push = { enable = true; package = self.packages.${system}.notify_push; };
     redis.servers."nextcloud".enable = true;
     redis.servers."nextcloud".port = 6379;
     postgresql = {

@@ -76,51 +76,54 @@ in
       kbdInteractiveAuthentication = false;
     };
     resolved.enable = true;
-    nextcloud = rec {
-      enable = true;
-      package = pkgs.nextcloud25;
-      enableBrokenCiphersForSSE = false;
-      https = true;
-      hostName = "next.clansap.org";
-      autoUpdateApps.enable = true;
-      autoUpdateApps.startAt = "Sun 14:00:00";
-      phpOptions."opcache.interned_strings_buffer" = "16";
-      phpOptions."opcache.enable" = "1";
-      phpOptions."opcache.save_comments" = "1";
-      config = {
-        dbtype = "pgsql";
-        dbuser = "nextcloud";
-        dbhost = "/run/postgresql";
-        dbname = "nextcloud";
-        dbpassFile = secrets.ffm_nextcloud_db_file.path;
-        adminuser = "admin";
-        adminpassFile = secrets.ffm_root_password_file.path;
-        trustedProxies = [ "134.255.226.115" "2a05:bec0:1:16::115" ]; # Fixme, setting the ipv6 here is somehow now what is wanted
-        defaultPhoneRegion = "DE";
+    nextcloud =
+      let
+        hostName = "next.clansap.org";
+      in
+      {
+        inherit hostName;
+        notify_push = { enable = true; package = self.packages.${system}.notify_push; };
+        enable = true;
+        package = pkgs.nextcloud25;
+        enableBrokenCiphersForSSE = false;
+        https = true;
+        autoUpdateApps.enable = true;
+        autoUpdateApps.startAt = "Sun 14:00:00";
+        phpOptions."opcache.interned_strings_buffer" = "16";
+        phpOptions."opcache.enable" = "1";
+        phpOptions."opcache.save_comments" = "1";
+        config = {
+          dbtype = "pgsql";
+          dbuser = "nextcloud";
+          dbhost = "/run/postgresql";
+          dbname = "nextcloud";
+          adminuser = "admin";
+          adminpassFile = secrets.ffm_root_password_file.path;
+          trustedProxies = [ "134.255.226.115" "2a05:bec0:1:16::115" ];
+          defaultPhoneRegion = "DE";
+        };
+        poolSettings = {
+          "pm" = "dynamic";
+          "pm.max_children" = 120;
+          "pm.start_servers" = 12;
+          "pm.min_spare_servers" = 6;
+          "pm.max_spare_servers" = 24;
+        };
+        caching = {
+          apcu = false;
+          redis = true;
+          memcached = false;
+        };
+        extraOptions.redis = {
+          host = "127.0.0.1";
+          port = 6379;
+          dbindex = 0;
+          timeout = 1.5;
+        };
+        extraOptions."overwrite.cli.url" = "https://${hostName}";
+        extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
+        extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
       };
-      poolSettings = {
-        "pm" = "dynamic";
-        "pm.max_children" = 120;
-        "pm.start_servers" = 12;
-        "pm.min_spare_servers" = 6;
-        "pm.max_spare_servers" = 24;
-      };
-      caching = {
-        apcu = false;
-        redis = true;
-        memcached = false;
-      };
-      extraOptions.redis = {
-        host = "127.0.0.1";
-        port = 6379;
-        dbindex = 0;
-        timeout = 1.5;
-      };
-      extraOptions."overwrite.cli.url" = "https://${hostName}";
-      extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
-      extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
-    };
-    nextcloud-notify_push = { enable = true; package = self.packages.${system}.notify_push; };
     redis.servers."nextcloud".enable = true;
     redis.servers."nextcloud".port = 6379;
     postgresql = {

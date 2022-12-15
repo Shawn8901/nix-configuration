@@ -1,49 +1,59 @@
-{ self, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  cfg = config.services.nextcloud-notify_push;
+  cfg = config.services.nextcloud.notify_push;
 in
 {
-  options = {
-    services.nextcloud-notify_push = {
-      enable = lib.mkEnableOption "Notify push";
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.notify_push;
-        defaultText = lib.literalExpression "pkgs.notify_push";
-        description = "Which package to use for notify_push";
-      };
-      port = lib.mkOption {
-        type = lib.types.int;
-        default = 7867;
-        description = "Port to use for notify_push";
-      };
+  options.services.nextcloud.notify_push = {
+    enable = lib.mkEnableOption (lib.mkDoc "Notify push");
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.nextcloud-notify_push;
+      defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
+      description = lib.mdDoc "Which package to use for notify_push";
+    };
+    socketPath = lib.mkOption {
+      type = lib.types.str;
+      default = "/run/nextcloud-notify_push/sock";
+      description = lib.mdDoc "Socket path to use for notify_push";
+    };
+    logLevel = lib.mkOption {
+      type = lib.types.enum [ "error" "warn" "info" "debug" "trace" ];
+      default = "error";
+      description = lib.mdDoc "Log level";
     };
   };
-  config = lib.mkIf cfg.enable {
 
-    systemd.services."notify_push" = {
+  config = lib.mkIf cfg.enable {
+    systemd.services.nextcloud-notify_push =
+      let
+        nextcloudUrl = "http${lib.optionalString config.services.nextcloud.https "s"}://${config.services.nextcloud.hostName}";
+      in
+      {
         description = "Push daemon for Nextcloud clients";
         documentation = [ "https://github.com/nextcloud/notify_push" ];
-        after = [ "network.target" "postgresql.service" ];
+        after = [ "phpfpm-nextcloud.service" ];
         wantedBy = [ "multi-user.target" ];
         environment = {
-          PORT = "${toString cfg.port}";
-          NEXTCLOUD_URL = "https://${config.services.nextcloud.hostName}";
+          NEXTCLOUD_URL = nextcloudUrl;
+          SOCKET_PATH = cfg.socketPath;
+          LOG = cfg.logLevel;
         };
+        postStart = ''
+          ${config.services.nextcloud.occ}/bin/nextcloud-occ notify_push:setup ${nextcloudUrl}/push
+        '';
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/notify_push ${config.services.nextcloud.datadir}/config/config.php";
+          ExecStart = "${cfg.package}/bin/notify_push --glob-config ${config.services.nextcloud.datadir}/config/config.php";
           User = "nextcloud";
+          Group = "nextcloud";
+          RuntimeDirectory = [ "nextcloud-notify_push" ];
         };
       };
 
     services.nginx.virtualHosts.${config.services.nextcloud.hostName}.locations."^~ /push/" = {
-      proxyPass = "http://127.0.0.1:${toString cfg.port}/";
+      proxyPass = "http://unix:${cfg.socketPath}";
       proxyWebsockets = true;
-      extraConfig = ''
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      '';
+      recommendedProxySettings = true;
     };
   };
 }
