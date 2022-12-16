@@ -81,6 +81,10 @@ in
         allowedTCPPorts = [ 80 443 9001 ] ++ zreplServePorts;
         allowedTCPPortRanges = [ ];
       };
+    hosts = {
+      "127.0.01" = lib.attrNames config.services.nginx.virtualHosts;
+      "::1" = lib.attrNames config.services.nginx.virtualHosts;
+    };
     networkmanager.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;
@@ -335,7 +339,6 @@ in
         notify_push = {
           enable = true;
           package = self.packages.${system}.notify_push;
-          logLevel = "debug";
         };
         enable = true;
         package = pkgs.nextcloud25;
@@ -349,10 +352,9 @@ in
           dbuser = "nextcloud";
           dbhost = "/run/postgresql";
           dbname = "nextcloud";
-          #dbpassFile = secrets.nextcloud_db_file.path;
           adminuser = "admin";
           adminpassFile = secrets.nextcloud_admin_file.path;
-          trustedProxies = [ "2003:ee:c708:3e00:1ac0:4dff:fe8f:5b2a" ]; # Fixme, setting the ipv6 here is somehow now what is wanted
+          trustedProxies = [ "::1" "127.0.0.1" ];
           defaultPhoneRegion = "DE";
         };
         caching = {
