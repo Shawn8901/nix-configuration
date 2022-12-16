@@ -34,7 +34,7 @@ jobs:
         echo packages=$packages >> $GITHUB_OUTPUT
     - id: gen_machines
       run: |
-        machines=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") ))' < flake.json)
+        machines=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") and (contains ("pointalpha") | not) ))' < flake.json)
         echo machines=$machines >> $GITHUB_OUTPUT
 
   update_flake:
