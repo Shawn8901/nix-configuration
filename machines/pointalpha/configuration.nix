@@ -49,7 +49,6 @@ in
       ];
     };
   };
-  services.flatpak.enable = true;
 
   networking = {
     firewall =

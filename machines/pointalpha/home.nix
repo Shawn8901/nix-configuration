@@ -13,7 +13,7 @@ in
         portfolio
         jameica
         pytr
-        # libreoffice
+        libreoffice
         inkscape
         gimp
         nextcloud-client
@@ -24,7 +24,7 @@ in
         rogerrouter
         wally-cli
         vlc
-        # wineWowPackages.unstableFull
+        wineWowPackages.waylandFull
         s25rttr
         nas
 
