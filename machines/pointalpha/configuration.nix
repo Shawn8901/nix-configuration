@@ -340,6 +340,7 @@ in
       let
         labels = { machine = "${config.networking.hostName}"; };
         nodePort = config.services.prometheus.exporters.node.port;
+        smartctlPort = config.services.prometheus.exporters.smartctl.port;
         zreplPort = (builtins.head
           (
             inputs.zrepl.monitoringPorts
@@ -360,6 +361,10 @@ in
             static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
           }
           {
+            job_name = "smartctl";
+            static_configs = [{ targets = [ "localhost:${toString smartctlPort}" ]; inherit labels; }];
+          }
+          {
             job_name = "zrepl";
             static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
           }
@@ -370,6 +375,13 @@ in
             listenAddress = "localhost";
             port = 9101;
             enabledCollectors = [ "systemd" ];
+          };
+          smartctl = {
+            enable = true;
+            listenAddress = "localhost";
+            port = 9102;
+            devices = [ "/dev/sda" ];
+            maxInterval = "5m";
           };
         };
       };
@@ -383,6 +395,7 @@ in
       SystemMaxFileSize=50M
     '';
     acpid.enable = true;
+    smartd.enable = true;
     teamviewer.enable = false;
   };
   security.rtkit.enable = true;

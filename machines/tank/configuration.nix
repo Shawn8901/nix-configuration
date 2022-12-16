@@ -517,6 +517,7 @@ in
           pointalphaHostname = hosts.pointalpha.config.networking.hostName;
           nextHostname = hosts.next.config.networking.hostName;
           nodePort = config.services.prometheus.exporters.node.port;
+          smartctlPort = config.services.prometheus.exporters.smartctl.port;
           zreplPort = (builtins.head
             (
               inputs.zrepl.monitoringPorts config.services.zrepl
@@ -532,6 +533,10 @@ in
           {
             job_name = "node";
             static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "smartctl";
+            static_configs = [{ targets = [ "localhost:${toString smartctlPort}" ]; inherit labels; }];
           }
           {
             job_name = "zrepl";
@@ -592,6 +597,13 @@ in
           listenAddress = "localhost";
           port = 9101;
           enabledCollectors = [ "systemd" ];
+        };
+        smartctl = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9102;
+          devices = [ "/dev/sda" ];
+          maxInterval = "5m";
         };
         fritzbox = {
           enable = true;
