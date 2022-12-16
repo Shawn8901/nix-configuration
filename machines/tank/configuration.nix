@@ -39,8 +39,6 @@ in
     };
     fritzbox_prometheus_file = {
       file = ../../secrets/fritzbox_prometheus.age;
-      owner = config.services.prometheus.exporters.fritzbox.user;
-      group = config.services.prometheus.exporters.fritzbox.group;
     };
     pve_prometheus = {
       file = ../../secrets/pve_prometheus.age;
@@ -608,10 +606,6 @@ in
         fritzbox = {
           enable = true;
           listenAddress = "localhost";
-          extraFlags = [
-            "-username prometheus"
-            "-password ${lib.escapeShellArg "@${secrets.fritzbox_prometheus_file.path}"}"
-          ];
         };
         nextcloud = {
           enable = true;
@@ -699,6 +693,9 @@ in
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
   };
+  # TODO: Prepare a PR to fix/make it configurable that upstream
+  systemd.services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
+
   security.rtkit.enable = true;
   security.acme = {
     acceptTerms = true;
