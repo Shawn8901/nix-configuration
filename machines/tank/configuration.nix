@@ -515,6 +515,7 @@ in
       scrapeConfigs =
         let
           pointalphaHostname = hosts.pointalpha.config.networking.hostName;
+          pointjigHostname = hosts.pointjig.config.networking.hostName;
           nextHostname = hosts.next.config.networking.hostName;
           nodePort = config.services.prometheus.exporters.node.port;
           smartctlPort = config.services.prometheus.exporters.smartctl.port;
@@ -576,6 +577,19 @@ in
               targets = [ "${pointalphaHostname}:${toString prometheusPort}" ];
             }];
             basic_auth = { username = "admin"; password_file = secrets.scrape_pointalpha_prometheus.path; };
+          }
+          {
+            job_name = "${pointjigHostname}";
+            honor_labels = true;
+            metrics_path = "/federate";
+            params = {
+              "match[]" =
+                [ "{machine='${pointjigHostname}'}" ];
+            };
+            static_configs = [{
+              targets = [ "status.${pointjigHostname}.de" ];
+            }];
+            basic_auth = { username = "admin"; password_file = secrets.scrape_next_prometheus.path; };
           }
           {
             job_name = "${nextHostname}";

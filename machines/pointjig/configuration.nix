@@ -4,7 +4,8 @@ let
   inherit (inputs) stfc-bot mimir;
 in
 {
-  imports = [ stfc-bot.nixosModule mimir.nixosModule ];
+  disabledModules = [ "services/monitoring/prometheus/default.nix" ];
+  imports = [ stfc-bot.nixosModule mimir.nixosModule ../../modules/nixos/overriden/prometheus.nix ];
 
   age.secrets = {
     sms-shawn-passwd = {
@@ -21,6 +22,11 @@ in
       file = ../../secrets/mimir-env.age;
       owner = "mimir";
       group = "mimir";
+    };
+    prometheus_web_config = {
+      file = ../../secrets/web_config_public_prometheus.age;
+      owner = "prometheus";
+      group = "prometheus";
     };
   };
 
@@ -85,6 +91,9 @@ in
     postgresql = {
       enable = true;
       package = pkgs.postgresql_14;
+      settings = {
+        max_connections = 200;
+      };
     };
     nginx = {
       enable = true;
@@ -100,8 +109,57 @@ in
           http3 = true;
           kTLS = true;
         };
+        "status.${config.networking.hostName}.de" = {
+          enableACME = true;
+          forceSSL = true;
+          http3 = true;
+          kTLS = true;
+
+          locations."/" = {
+            proxyPass = "http://localhost:9001";
+          };
+        };
       };
     };
+    prometheus =
+      let
+        labels = { machine = "${config.networking.hostName}"; };
+        nodePort = config.services.prometheus.exporters.node.port;
+        postgresPort = config.services.prometheus.exporters.postgres.port;
+      in
+      {
+        enable = true;
+        port = 9001;
+        retentionTime = "30d";
+        globalConfig = {
+          external_labels = labels;
+        };
+        webConfigFile = secrets.prometheus_web_config.path;
+        scrapeConfigs = [
+          {
+            job_name = "node";
+            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "postgres";
+            static_configs = [{ targets = [ "localhost:${toString postgresPort}" ]; inherit labels; }];
+          }
+        ];
+        exporters = {
+          node = {
+            enable = true;
+            listenAddress = "localhost";
+            port = 9101;
+            enabledCollectors = [ "systemd" ];
+          };
+          postgres = {
+            enable = true;
+            listenAddress = "127.0.0.1";
+            port = 9187;
+            runAsLocalSuperUser = true;
+          };
+        };
+      };
     stfc-bot = {
       enable = true;
       package = inputs.stfc-bot.packages.x86_64-linux.default;

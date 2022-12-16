@@ -19,7 +19,7 @@ in
       group = "nextcloud";
     };
     prometheus_web_config = {
-      file = ../../secrets/web_config_next_prometheus.age;
+      file = ../../secrets/web_config_public_prometheus.age;
       owner = "prometheus";
       group = "prometheus";
     };
