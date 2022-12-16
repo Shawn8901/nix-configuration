@@ -65,6 +65,7 @@ in
       };
     };
     services.nextcloud-setup.after = [ "postgresql.service" ];
+    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" ];
   };
 
   services = {

@@ -18,7 +18,7 @@ in
       group = "prometheus";
     };
     scrape_next_prometheus = {
-      file = ../../secrets/scrape_next_prometheus.age;
+      file = ../../secrets/scrape_public_prometheus.age;
       owner = "prometheus";
       group = "prometheus";
     };
@@ -103,20 +103,8 @@ in
       };
       wait-online = { ignoredInterfaces = [ "enp4s0" ]; };
     };
-
-    paths."nextcloud-secret-watcher" = {
-      wantedBy = [ "multi-user.target" ];
-      pathConfig = {
-        PathModified = secrets.nextcloud_db_file.path;
-      };
-    };
-    services."nextcloud-secret-watcher" = {
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "systemctl restart phpfpm-nextcloud.service";
-      };
-    };
     services.nextcloud-setup.after = [ "postgresql.service" ];
+    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" ];
   };
 
   services = {
