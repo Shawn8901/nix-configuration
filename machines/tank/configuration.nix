@@ -505,6 +505,7 @@ in
           pointalphaHostname = hosts.pointalpha.config.networking.hostName;
           pointjigHostname = hosts.pointjig.config.networking.hostName;
           nextHostname = hosts.next.config.networking.hostName;
+          shelterHostname = hosts.shelter.config.networking.hostName;
           nodePort = config.services.prometheus.exporters.node.port;
           smartctlPort = config.services.prometheus.exporters.smartctl.port;
           zreplPort = (builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl));
@@ -573,6 +574,19 @@ in
             };
             static_configs = [{
               targets = [ "status.${pointjigHostname}.de" ];
+            }];
+            basic_auth = { username = "admin"; password_file = secrets.scrape_public_prometheus.path; };
+          }
+          {
+            job_name = "${shelterHostname}";
+            honor_labels = true;
+            metrics_path = "/federate";
+            params = {
+              "match[]" =
+                [ "{machine='${shelterHostname}'}" ];
+            };
+            static_configs = [{
+              targets = [ "status.shelter.pointjig.de" ];
             }];
             basic_auth = { username = "admin"; password_file = secrets.scrape_public_prometheus.path; };
           }

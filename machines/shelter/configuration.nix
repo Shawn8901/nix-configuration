@@ -2,6 +2,7 @@
 let
   system = pkgs.hostPlatform.system;
   uPkgs = inputs.nixpkgs.legacyPackages.${system};
+  secrets = config.age.secrets;
 in
 {
   # FIXME: Remove with 23.05
@@ -10,6 +11,11 @@ in
 
   age.secrets = {
     zrepl_shelter = { file = ../../secrets/zrepl_shelter.age; };
+    prometheus_web_config = {
+      file = ../../secrets/web_config_public_prometheus.age;
+      owner = "prometheus";
+      group = "prometheus";
+    };
   };
 
   nix.gc.options = "--delete-older-than 3d";
@@ -69,6 +75,13 @@ in
       enable = true;
       package = uPkgs.zrepl;
       settings = {
+        global = {
+          monitoring = [{
+            type = "prometheus";
+            listen = ":9811";
+            listen_freebind = true;
+          }];
+        };
         jobs = [{
           name = "ztank_sink";
           type = "sink";
@@ -85,6 +98,63 @@ in
         }];
       };
     };
+
+    nginx = {
+      enable = true;
+      package = pkgs.nginxQuic;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+      virtualHosts = {
+        "status.shelter.pointjig.de" = {
+          enableACME = true;
+          forceSSL = true;
+          http3 = true;
+          kTLS = true;
+
+          locations."/" = {
+            proxyPass = "http://localhost:9001";
+          };
+        };
+      };
+    };
+
+
+    prometheus =
+      let
+        labels = { machine = "${config.networking.hostName}"; };
+        nodePort = config.services.prometheus.exporters.node.port;
+        zreplPort = (builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl));
+      in
+      {
+        enable = true;
+        port = 9001;
+        retentionTime = "30d";
+        globalConfig = {
+          external_labels = labels;
+        };
+        webConfigFile = secrets.prometheus_web_config.path;
+        scrapeConfigs = [
+          {
+            job_name = "node";
+            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "zrepl";
+            static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
+          }
+        ];
+        exporters = {
+          node = {
+            enable = true;
+            listenAddress = "localhost";
+            port = 9101;
+            enabledCollectors = [ "systemd" ];
+          };
+        };
+      };
+
     fail2ban = {
       enable = true;
       maxretry = 5;
@@ -95,6 +165,10 @@ in
       SystemMaxFileSize=50M
     '';
     acpid.enable = true;
+  };
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "shawn@pointjig.de";
   };
   security.auditd.enable = false;
   security.audit.enable = false;
