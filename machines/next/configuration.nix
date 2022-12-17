@@ -253,6 +253,7 @@ in
     ];
   };
 
+  environment.noXlibs = true;
   environment.systemPackages = [
     (pkgs.writeScriptBin "upgrade-pg-cluster" ''
       set -eux

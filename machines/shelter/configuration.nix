@@ -179,6 +179,7 @@ in
   env.user-config.enable = true;
 
   environment = {
+    noXlibs = true;
     etc."zrepl/shelter.key".source = config.age.secrets.zrepl_shelter.path;
     etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;

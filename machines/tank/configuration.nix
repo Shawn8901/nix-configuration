@@ -735,6 +735,7 @@ in
   };
 
   environment = {
+    noXlibs = true;
     etc.".ztank_key".source = secrets.ztank_key.path;
     etc."zrepl/tank.key".source = secrets.zrepl_tank.path;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
