@@ -104,7 +104,7 @@ in
       wait-online = { ignoredInterfaces = [ "enp4s0" ]; };
     };
     services.nextcloud-setup.after = [ "postgresql.service" ];
-    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" ];
+    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nginx.service" ];
   };
 
   services = {
@@ -360,8 +360,7 @@ in
         extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
         extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
       };
-    redis.servers."nextcloud".enable = true;
-    redis.servers."nextcloud".port = 6379;
+    redis.servers."nextcloud" = { enable = true; port = 6379; };
     postgresql = {
       enable = true;
       package = pkgs.postgresql_14;
@@ -711,6 +710,10 @@ in
   # TODO: Prepare a PR to fix/make it configurable that upstream
   systemd.services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
 
+  boot.kernel.sysctl = {
+    "vm.overcommit_memory" = "1";
+  };
+
   security.rtkit.enable = true;
   security.acme = {
     acceptTerms = true;
@@ -743,31 +746,30 @@ in
     etc."zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
     etc."zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
     etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
+    systemPackages = [
+      (pkgs.writeScriptBin "upgrade-pg-cluster" ''
+        set -eux
+        # XXX it's perhaps advisable to stop all services that depend on postgresql
+        systemctl stop postgresql
+
+        # XXX replace `<new version>` with the psqlSchema here
+        export NEWDATA="/var/lib/postgresql/${pkgs.postgresql_15.psqlSchema}"
+
+        # XXX specify the postgresql package you'd like to upgrade to
+        export NEWBIN="${pkgs.postgresql_15}/bin"
+
+        export OLDDATA="/var/lib/postgresql/${pkgs.postgresql_14.psqlSchema}"
+        export OLDBIN="${pkgs.postgresql_14}/bin"
+
+        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
+        cd "$NEWDATA"
+        sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+
+        sudo -u postgres $NEWBIN/pg_upgrade \
+          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
+          --old-bindir $OLDBIN --new-bindir $NEWBIN \
+          "$@"
+      '')
+    ];
   };
-
-  environment.systemPackages = [
-    (pkgs.writeScriptBin "upgrade-pg-cluster" ''
-      set -eux
-      # XXX it's perhaps advisable to stop all services that depend on postgresql
-      systemctl stop postgresql
-
-      # XXX replace `<new version>` with the psqlSchema here
-      export NEWDATA="/var/lib/postgresql/14"
-
-      # XXX specify the postgresql package you'd like to upgrade to
-      export NEWBIN="${pkgs.postgresql_14}/bin"
-
-      export OLDDATA="${config.services.postgresql.dataDir}"
-      export OLDBIN="${config.services.postgresql.package}/bin"
-
-      install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-      cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
-
-      sudo -u postgres $NEWBIN/pg_upgrade \
-        --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-        --old-bindir $OLDBIN --new-bindir $NEWBIN \
-        "$@"
-    '')
-  ];
 }

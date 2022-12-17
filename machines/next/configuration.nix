@@ -66,7 +66,7 @@ in
       };
     };
     services.nextcloud-setup.after = [ "postgresql.service" ];
-    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" ];
+    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nginx.service" ];
   };
 
   services = {
@@ -126,8 +126,7 @@ in
         extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
         extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
       };
-    redis.servers."nextcloud".enable = true;
-    redis.servers."nextcloud".port = 6379;
+    redis.servers."nextcloud" = { enable = true; port = 6379; };
     postgresql = {
       enable = true;
       package = pkgs.postgresql_14;
@@ -233,6 +232,9 @@ in
     '';
     acpid.enable = true;
   };
+  boot.kernel.sysctl = {
+    "vm.overcommit_memory" = "1";
+  };
   security.acme = {
     acceptTerms = true;
     defaults.email = "info@clansap.org";
@@ -253,30 +255,32 @@ in
     ];
   };
 
-  environment.noXlibs = true;
-  environment.systemPackages = [
-    (pkgs.writeScriptBin "upgrade-pg-cluster" ''
-      set -eux
-      # XXX it's perhaps advisable to stop all services that depend on postgresql
-      systemctl stop postgresql
+  environment = {
+    noXlibs = true;
+    systemPackages = [
+      (pkgs.writeScriptBin "upgrade-pg-cluster" ''
+        set -eux
+        # XXX it's perhaps advisable to stop all services that depend on postgresql
+        systemctl stop postgresql
 
-      # XXX replace `<new version>` with the psqlSchema here
-      export NEWDATA="/var/lib/postgresql/14"
+        # XXX replace `<new version>` with the psqlSchema here
+        export NEWDATA="/var/lib/postgresql/${pkgs.postgresql_15.psqlSchema}"
 
-      # XXX specify the postgresql package you'd like to upgrade to
-      export NEWBIN="${pkgs.postgresql_14}/bin"
+        # XXX specify the postgresql package you'd like to upgrade to
+        export NEWBIN="${pkgs.postgresql_15}/bin"
 
-      export OLDDATA="${config.services.postgresql.dataDir}"
-      export OLDBIN="${config.services.postgresql.package}/bin"
+        export OLDDATA="/var/lib/postgresql/${pkgs.postgresql_14.psqlSchema}"
+        export OLDBIN="${pkgs.postgresql_14}/bin"
 
-      install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-      cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
+        cd "$NEWDATA"
+        sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
 
-      sudo -u postgres $NEWBIN/pg_upgrade \
-        --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-        --old-bindir $OLDBIN --new-bindir $NEWBIN \
-        "$@"
-    '')
-  ];
+        sudo -u postgres $NEWBIN/pg_upgrade \
+          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
+          --old-bindir $OLDBIN --new-bindir $NEWBIN \
+          "$@"
+      '')
+    ];
+  };
 }
