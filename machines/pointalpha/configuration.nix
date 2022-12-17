@@ -78,29 +78,6 @@ in
     useDHCP = false;
   };
   services.resolved.enable = false;
-  systemd.network = {
-    enable = false;
-    netdevs = {
-      "br0" = {
-        netdevConfig = {
-          Kind = "bridge";
-          Name = "br0";
-          MACAddress = "02:49:35:0E:B9:39";
-        };
-      };
-    };
-    networks = {
-      "br0" = {
-        matchConfig.Name = "enp*";
-        networkConfig.Bridge = "br0";
-      };
-      "bridge-br0" = {
-        matchConfig.Name = "br0";
-        networkConfig.DHCP = "yes";
-        networkConfig.Domains = "fritz.box ~box ~.";
-      };
-    };
-  };
   systemd.network.wait-online.anyInterface = true;
 
   environment.systemPackages = with pkgs; [
