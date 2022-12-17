@@ -96,7 +96,6 @@ in
     plasma5Packages.kmail
     plasma5Packages.kdeplasma-addons
 
-    python39
     sysstat
     nixpkgs-review
   ];
