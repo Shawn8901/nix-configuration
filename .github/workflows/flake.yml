@@ -7,7 +7,7 @@ on:
 
 jobs:
   generate_matrix:
-    needs: [ update_flake ]
+    needs: [ check_flake ]
     runs-on: ubuntu-22.04
     outputs:
       packages: ${{ steps.gen_packages.outputs.packages }}
@@ -99,7 +99,7 @@ jobs:
   build_machines:
     runs-on: ubuntu-22.04
     # Matrix has to be referenced here, otherwise we can not reference its output.
-    needs: [generate_matrix, build_packages, check_flake]
+    needs: [generate_matrix, build_packages]
     strategy:
       fail-fast: false
       max-parallel: 5
