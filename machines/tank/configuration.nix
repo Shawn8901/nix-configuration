@@ -17,7 +17,7 @@ in
       owner = "prometheus";
       group = "prometheus";
     };
-    scrape_next_prometheus = {
+    scrape_public_prometheus = {
       file = ../../secrets/scrape_public_prometheus.age;
       owner = "prometheus";
       group = "prometheus";
@@ -82,7 +82,7 @@ in
         allowedTCPPortRanges = [ ];
       };
     hosts = {
-      "127.0.01" = lib.attrNames config.services.nginx.virtualHosts;
+      "127.0.0.1" = lib.attrNames config.services.nginx.virtualHosts;
       "::1" = lib.attrNames config.services.nginx.virtualHosts;
     };
     networkmanager.enable = false;
@@ -507,10 +507,7 @@ in
           nextHostname = hosts.next.config.networking.hostName;
           nodePort = config.services.prometheus.exporters.node.port;
           smartctlPort = config.services.prometheus.exporters.smartctl.port;
-          zreplPort = (builtins.head
-            (
-              inputs.zrepl.monitoringPorts config.services.zrepl
-            ));
+          zreplPort = (builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl));
           postgresPort = config.services.prometheus.exporters.postgres.port;
           nextcloudPort = config.services.prometheus.exporters.nextcloud.port;
           fritzboxPort = config.services.prometheus.exporters.fritzbox.port;
@@ -577,7 +574,7 @@ in
             static_configs = [{
               targets = [ "status.${pointjigHostname}.de" ];
             }];
-            basic_auth = { username = "admin"; password_file = secrets.scrape_next_prometheus.path; };
+            basic_auth = { username = "admin"; password_file = secrets.scrape_public_prometheus.path; };
           }
           {
             job_name = "${nextHostname}";
@@ -590,7 +587,7 @@ in
             static_configs = [{
               targets = [ "status.${nextHostname}.clansap.org" ];
             }];
-            basic_auth = { username = "admin"; password_file = secrets.scrape_next_prometheus.path; };
+            basic_auth = { username = "admin"; password_file = secrets.scrape_public_prometheus.path; };
           }
         ];
       exporters = {
