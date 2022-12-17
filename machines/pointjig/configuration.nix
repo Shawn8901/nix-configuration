@@ -4,6 +4,7 @@ let
   inherit (inputs) stfc-bot mimir;
 in
 {
+  # FIXME: Remove with 23.05
   disabledModules = [ "services/monitoring/prometheus/default.nix" ];
   imports = [ stfc-bot.nixosModule mimir.nixosModule ../../modules/nixos/overriden/prometheus.nix ];
 

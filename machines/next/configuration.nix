@@ -4,6 +4,7 @@ let
   system = pkgs.hostPlatform.system;
 in
 {
+  # FIXME: Remove with 23.05
   disabledModules = [ "services/monitoring/prometheus/default.nix" ];
   imports = [ ../../modules/nixos/overriden/prometheus.nix ];
 

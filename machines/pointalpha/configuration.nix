@@ -7,8 +7,8 @@ let
   secrets = config.age.secrets;
 in
 {
-  disabledModules = [ "services/x11/display-managers/sddm.nix" "services/monitoring/prometheus/default.nix" ];
-  imports = [ ../../modules/nixos/overriden/sddm.nix ../../modules/nixos/overriden/prometheus.nix ../../modules/nixos/steam-compat-tools.nix ];
+  disabledModules = [ "services/x11/display-managers/sddm.nix" ];
+  imports = [ ../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix ];
 
   age.secrets = {
     zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };

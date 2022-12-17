@@ -4,6 +4,10 @@ let
   uPkgs = inputs.nixpkgs.legacyPackages.${system};
 in
 {
+  # FIXME: Remove with 23.05
+  disabledModules = [ "services/monitoring/prometheus/default.nix" ];
+  imports = [ ../../modules/nixos/overriden/prometheus.nix ];
+
   age.secrets = {
     zrepl_shelter = { file = ../../secrets/zrepl_shelter.age; };
   };
