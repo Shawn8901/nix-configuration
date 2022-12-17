@@ -94,6 +94,9 @@ in
       package = pkgs.postgresql_14;
       settings = {
         max_connections = 200;
+        track_activities = true;
+        track_counts = true;
+        track_io_timing = true;
       };
     };
     nginx = {
