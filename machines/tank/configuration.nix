@@ -12,15 +12,10 @@ in
     ztank_key = { file = ../../secrets/ztank_key.age; };
     zrepl_tank = { file = ../../secrets/zrepl_tank.age; };
     ela_password_file = { file = ../../secrets/ela_password.age; };
-    scrape_pointalpha_prometheus = {
-      file = ../../secrets/scrape_pointalpha_prometheus.age;
-      owner = "prometheus";
-      group = "prometheus";
-    };
-    scrape_public_prometheus = {
-      file = ../../secrets/scrape_public_prometheus.age;
-      owner = "prometheus";
-      group = "prometheus";
+    grafana_env_file = {
+      file = ../../secrets/grafana_env_file.age;
+      owner = "grafana";
+      group = "grafana";
     };
     nextcloud_db_file = {
       file = ../../secrets/nextcloud_db.age;
@@ -42,21 +37,6 @@ in
     };
     pve_prometheus = {
       file = ../../secrets/pve_prometheus.age;
-    };
-    grafana_db_file = {
-      file = ../../secrets/grafana_db.age;
-      owner = "grafana";
-      group = "grafana";
-    };
-    grafana_admin_password_file = {
-      file = ../../secrets/grafana_admin_password_file.age;
-      owner = "grafana";
-      group = "grafana";
-    };
-    grafana_secret_key_file = {
-      file = ../../secrets/grafana_secret_key_file.age;
-      owner = "grafana";
-      group = "grafana";
     };
     stfc-env-dev = {
       file = ../../secrets/stfc-env-dev.age;
@@ -494,6 +474,7 @@ in
     smartd.enable = true;
     prometheus = {
       enable = true;
+      listenAddress = "127.0.0.1";
       port = 9001;
       retentionTime = "30d";
       globalConfig = {
@@ -501,106 +482,45 @@ in
       };
       scrapeConfigs =
         let
-          pointalphaHostname = hosts.pointalpha.config.networking.hostName;
-          pointjigHostname = hosts.pointjig.config.networking.hostName;
-          nextHostname = hosts.next.config.networking.hostName;
-          shelterHostname = hosts.shelter.config.networking.hostName;
-          nodePort = config.services.prometheus.exporters.node.port;
-          smartctlPort = config.services.prometheus.exporters.smartctl.port;
-          zreplPort = (builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl));
-          postgresPort = config.services.prometheus.exporters.postgres.port;
-          nextcloudPort = config.services.prometheus.exporters.nextcloud.port;
-          fritzboxPort = config.services.prometheus.exporters.fritzbox.port;
-          pvePort = config.services.prometheus.exporters.pve.port;
-          prometheusPort = hosts.pointalpha.config.services.prometheus.port;
+          nodePort = toString config.services.prometheus.exporters.node.port;
+          smartctlPort = toString config.services.prometheus.exporters.smartctl.port;
+          zreplPort = toString (builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl));
+          postgresPort = toString config.services.prometheus.exporters.postgres.port;
+          nextcloudPort = toString config.services.prometheus.exporters.nextcloud.port;
+          fritzboxPort = toString config.services.prometheus.exporters.fritzbox.port;
+          pvePort = toString config.services.prometheus.exporters.pve.port;
           labels = { machine = "${config.networking.hostName}"; };
         in
         [
           {
             job_name = "node";
-            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+            static_configs = [{ targets = [ "localhost:${nodePort}" ]; inherit labels; }];
           }
           {
             job_name = "smartctl";
-            static_configs = [{ targets = [ "localhost:${toString smartctlPort}" ]; inherit labels; }];
+            static_configs = [{ targets = [ "localhost:${smartctlPort}" ]; inherit labels; }];
           }
           {
             job_name = "zrepl";
-            static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
+            static_configs = [{ targets = [ "localhost:${zreplPort}" ]; inherit labels; }];
           }
           {
             job_name = "postgres";
-            static_configs = [{ targets = [ "localhost:${toString postgresPort}" ]; inherit labels; }];
+            static_configs = [{ targets = [ "localhost:${postgresPort}" ]; inherit labels; }];
           }
           {
             job_name = "nextcloud";
-            static_configs = [{ targets = [ "localhost:${toString nextcloudPort}" ]; inherit labels; }];
+            static_configs = [{ targets = [ "localhost:${nextcloudPort}" ]; inherit labels; }];
           }
           {
             job_name = "fritzbox";
-            static_configs = [{ targets = [ "localhost:${toString fritzboxPort}" ]; labels = { machine = "fritz.box"; }; }];
+            static_configs = [{ targets = [ "localhost:${fritzboxPort}" ]; labels = { machine = "fritz.box"; }; }];
           }
           {
             job_name = "proxmox";
             metrics_path = "/pve";
             params = { "target" = [ "wi.clansap.org" ]; };
-            static_configs = [
-              {
-                targets = [ "localhost:${toString pvePort}" ];
-              }
-            ];
-          }
-          {
-            job_name = "${pointalphaHostname}";
-            honor_labels = true;
-            metrics_path = "/federate";
-            params = {
-              "match[]" =
-                [ "{machine='${pointalphaHostname}'}" ];
-            };
-            static_configs = [{
-              targets = [ "${pointalphaHostname}:${toString prometheusPort}" ];
-            }];
-            basic_auth = { username = "admin"; password_file = secrets.scrape_pointalpha_prometheus.path; };
-          }
-          {
-            job_name = "${pointjigHostname}";
-            honor_labels = true;
-            metrics_path = "/federate";
-            params = {
-              "match[]" =
-                [ "{machine='${pointjigHostname}'}" ];
-            };
-            static_configs = [{
-              targets = [ "status.${pointjigHostname}.de" ];
-            }];
-            basic_auth = { username = "admin"; password_file = secrets.scrape_public_prometheus.path; };
-          }
-          {
-            job_name = "${shelterHostname}";
-            honor_labels = true;
-            metrics_path = "/federate";
-            params = {
-              "match[]" =
-                [ "{machine='${shelterHostname}'}" ];
-            };
-            static_configs = [{
-              targets = [ "status.shelter.pointjig.de" ];
-            }];
-            basic_auth = { username = "admin"; password_file = secrets.scrape_public_prometheus.path; };
-          }
-          {
-            job_name = "${nextHostname}";
-            honor_labels = true;
-            metrics_path = "/federate";
-            params = {
-              "match[]" =
-                [ "{machine='${nextHostname}'}" ];
-            };
-            static_configs = [{
-              targets = [ "status.${nextHostname}.clansap.org" ];
-            }];
-            basic_auth = { username = "admin"; password_file = secrets.scrape_public_prometheus.path; };
+            static_configs = [{ targets = [ "localhost:${toString pvePort}" ]; }];
           }
         ];
       exporters = {
@@ -645,10 +565,6 @@ in
     grafana = {
       enable = true;
       dataDir = "/persist/var/lib/grafana";
-      declarativePlugins = with pkgs.grafanaPlugins; [
-        grafana-polystat-panel
-        grafana-clock-panel
-      ];
       settings = {
         server = rec {
           domain = "status.tank.pointjig.de";
@@ -658,24 +574,77 @@ in
           type = "postgres";
           host = "/run/postgresql";
           user = "grafana";
-          password = "$__file{${secrets.grafana_db_file.path}}";
+          password = "$__env{DB_PASSWORD}";
         };
         security = {
-          admin_password = "$__file{${secrets.grafana_admin_password_file.path}}";
-          secret_key = "$__file{${secrets.grafana_secret_key_file.path}}";
+          admin_password = "$__env{ADMIN_PASSWORD}";
+          secret_key = "$__env{SECRET_KEY}";
         };
+        alerting.enabled = false;
+        unified_alerting.enabled = true;
         analytics.reporting_enabled = false;
       };
       provision = {
         enable = true;
-        datasources.settings.datasources = [{
-          name = "Prometheus";
-          type = "prometheus";
-          url = "http://localhost:${builtins.toString config.services.prometheus.port}";
-          isDefault = true;
-          user = "admin";
-          basicAuthPassword = "$__file{${secrets.scrape_pointalpha_prometheus.path}}";
-        }];
+        datasources.settings.datasources =
+          let
+            pointalphaHostname = hosts.pointalpha.config.networking.hostName;
+            pointalphaPrometheusPort = toString hosts.pointalpha.config.services.prometheus.port;
+            pointjigHostname = hosts.pointjig.config.networking.hostName;
+            pointjigPrometheusPort = toString hosts.pointjig.config.services.prometheus.port;
+            shelterHostname = hosts.shelter.config.networking.hostName;
+            shelterPrometheusPort = toString hosts.shelter.config.services.prometheus.port;
+            nextHostname = hosts.next.config.networking.hostName;
+            nextPrometheusPort = toString hosts.next.config.services.prometheus.port;
+          in
+          [
+            {
+              name = "tank";
+              type = "prometheus";
+              url = "http://localhost:${toString config.services.prometheus.port}";
+            }
+            {
+              name = "pointalpha";
+              type = "prometheus";
+              url = "http://${pointalphaHostname}:${pointalphaPrometheusPort}";
+              basicAuth = true;
+              withCredentials = true;
+              basicAuthUser = "admin";
+              secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
+              jsonData.prometheusType = "Prometheus";
+            }
+            {
+              name = "pointjig";
+              type = "prometheus";
+              url = "https://status.pointjig.de";
+              basicAuth = true;
+              withCredentials = true;
+              basicAuthUser = "admin";
+              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
+              jsonData.prometheusType = "Prometheus";
+            }
+            {
+
+              name = "shelter";
+              type = "prometheus";
+              url = "https://status.shelter.pointjig.de";
+              basicAuth = true;
+              withCredentials = true;
+              basicAuthUser = "admin";
+              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
+              jsonData.prometheusType = "Prometheus";
+            }
+            {
+              name = "next";
+              type = "prometheus";
+              url = "https://status.next.clansap.org";
+              basicAuth = true;
+              withCredentials = true;
+              basicAuthUser = "admin";
+              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
+              jsonData.prometheusType = "Prometheus";
+            }
+          ];
       };
     };
     shutdown-wakeup = {
@@ -709,6 +678,10 @@ in
   };
   # TODO: Prepare a PR to fix/make it configurable that upstream
   systemd.services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
+  systemd.services.grafana.serviceConfig.EnvironmentFile = [
+    secrets.grafana_env_file.path
+  ];
+
 
   boot.kernel.sysctl = {
     "vm.overcommit_memory" = "1";

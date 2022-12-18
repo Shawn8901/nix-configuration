@@ -27,15 +27,9 @@ in
   "nextcloud_prometheus.age".publicKeys = [ shawn tank next ];
   "fritzbox_prometheus.age".publicKeys = [ shawn tank ];
   "pve_prometheus.age".publicKeys = [ shawn tank ];
-  "web_config_pointalpha_prometheus.age".publicKeys = [ shawn pointalpha ];
-  "web_config_public_prometheus.age".publicKeys = [ shawn next pointjig ];
-  "scrape_pointalpha_prometheus.age".publicKeys = [ shawn tank ];
-  "scrape_public_prometheus.age".publicKeys = [ shawn tank ];
-
-  "grafana_db.age".publicKeys = [ shawn tank ];
-  "grafana_admin_password_file.age".publicKeys = [ shawn tank ];
-  "grafana_secret_key_file.age".publicKeys = [ shawn tank ];
-
+  "prometheus_internal_web_config.age".publicKeys = [ shawn pointalpha ];
+  "prometheus_public_web_config.age".publicKeys = [ shawn next pointjig shelter ];
+  "grafana_env_file.age".publicKeys = [ shawn tank ];
   "github_access_token.age".publicKeys = [ shawn next ] ++ systems;
   "stfc-env-dev.age".publicKeys = [ shawn tank ];
   "mimir-env-dev.age".publicKeys = [ shawn tank ];

@@ -17,7 +17,7 @@ in
     };
     ela_samba_credentials = { file = ../../secrets/ela_samba_credentials.age; };
     prometheus_web_config = {
-      file = ../../secrets/web_config_pointalpha_prometheus.age;
+      file = ../../secrets/prometheus_internal_web_config.age;
       owner = "prometheus";
       group = "prometheus";
     };

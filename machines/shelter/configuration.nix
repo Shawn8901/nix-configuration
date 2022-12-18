@@ -12,7 +12,7 @@ in
   age.secrets = {
     zrepl_shelter = { file = ../../secrets/zrepl_shelter.age; };
     prometheus_web_config = {
-      file = ../../secrets/web_config_public_prometheus.age;
+      file = ../../secrets/prometheus_public_web_config.age;
       owner = "prometheus";
       group = "prometheus";
     };
@@ -24,9 +24,9 @@ in
     firewall =
       let zrepl = inputs.zrepl.servePorts config.services.zrepl;
       in {
-        allowedUDPPorts = [ ];
+        allowedUDPPorts = [ 443 ];
         allowedUDPPortRanges = [ ];
-        allowedTCPPorts = [ ] ++ zrepl;
+        allowedTCPPorts = [ 80 443 9001 ] ++ zrepl;
         allowedTCPPortRanges = [ ];
         logRefusedConnections = false;
       };
@@ -119,7 +119,6 @@ in
         };
       };
     };
-
 
     prometheus =
       let
