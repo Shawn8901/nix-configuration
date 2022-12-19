@@ -35,6 +35,9 @@ in
           meta = { };
         })
       ];
+      # https://github.com/NixOS/nixpkgs/pull/206698
+      #languagePacks = [ "de" ];
+
       profiles."shawn" = {
         settings = {
           "app.update.auto" = false;
