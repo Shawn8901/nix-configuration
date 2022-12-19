@@ -377,6 +377,7 @@ in
   security.rtkit.enable = true;
   security.auditd.enable = false;
   security.audit.enable = false;
+  security.pam.services.shawn.enableKwallet = true;
 
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;
@@ -430,20 +431,24 @@ in
     etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
 
-    variables.AMD_VULKAN_ICD = "RADV";
-    variables.MOZ_ENABLE_WAYLAND = "1";
-    variables.MOZ_DISABLE_RDD_SANDBOX = "1";
-    variables.NIXOS_OZONE_WL = "1";
-    variables.SDL_VIDEODRIVER = "wayland";
-    variables.QT_QPA_PLATFORM = "wayland";
-    variables.QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    variables._JAVA_AWT_WM_NONREPARENTING = "1";
+    variables = {
+      AMD_VULKAN_ICD = "RADV";
+      DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
+      VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+      mesa_glthread = "true";
+      WINEESYNC = "1";
+      WINEFSYNC = "1";
+      MOZ_ENABLE_WAYLAND = "1";
+      MOZ_DISABLE_RDD_SANDBOX = "1";
+      NIXOS_OZONE_WL = "1";
+      SDL_VIDEODRIVER = "wayland";
+      QT_QPA_PLATFORM = "wayland";
+      QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+      _JAVA_AWT_WM_NONREPARENTING = "1";
+    };
   };
 
-  security.pam.services.shawn.enableKwallet = true;
-
-  users.groups.plugdev = { };
   users.users.shawn = {
-    extraGroups = [ "video" "audio" "libvirtd" "plugdev" "adbusers" "scanner" "lp" "networkmanager" "nixbld" ];
+    extraGroups = [ "video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld" ];
   };
 }
