@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.env.vscode;
   system = pkgs.hostPlatform.system;
@@ -16,20 +16,21 @@ with lib; {
 
     programs.vscode = {
       enable = true;
+      enableExtensionUpdateCheck = false;
+      enableUpdateCheck = false;
       # https://github.com/NixOS/nixpkgs/pull/206695
       package = pkgs.vscode.overrideAttrs (old: {
         runtimeDependencies = old.runtimeDependencies ++ [ pkgs.wayland ];
       });
-      extensions = (with inputs.nix-vscode-marketplace.packages.${system}.vscode; [
-        ms-python.python
-        ms-python.isort
-        ms-python.vscode-pylance
+      extensions = with pkgs.vscode-extensions; [
         editorconfig.editorconfig
+        esbenp.prettier-vscode
         jnoortheen.nix-ide
         mkhl.direnv
+        ms-python.python
+        ms-python.vscode-pylance
         mhutchie.git-graph
-        esbenp.prettier-vscode
-      ]);
+      ];
       keybindings = [
         {
           "key" = "ctrl+d";

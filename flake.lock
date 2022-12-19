@@ -130,29 +130,6 @@
         "type": "github"
       }
     },
-    "nix-vscode-marketplace": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1671344417,
-        "narHash": "sha256-oS1oM7Ba25lM93EU2oacPi7JHR1frp/mG39thiuSpyE=",
-        "owner": "AmeerTaweel",
-        "repo": "nix-vscode-marketplace",
-        "rev": "1e607285ecafbddeb5c82a9a7e9fc45ab40d3e5a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AmeerTaweel",
-        "repo": "nix-vscode-marketplace",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1671271357,
@@ -223,7 +200,6 @@
         "home-manager": "home-manager",
         "mimir": "mimir",
         "mimir-client": "mimir-client",
-        "nix-vscode-marketplace": "nix-vscode-marketplace",
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
         "nur": "nur",
