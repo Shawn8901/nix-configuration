@@ -16,6 +16,10 @@ with lib; {
 
     programs.vscode = {
       enable = true;
+      # https://github.com/NixOS/nixpkgs/pull/206695
+      package = pkgs.vscode.overrideAttrs (old: {
+        runtimeDependencies = old.runtimeDependencies ++ [ pkgs.wayland ];
+      });
       extensions = (with inputs.nix-vscode-marketplace.packages.${system}.vscode; [
         ms-python.python
         ms-python.isort

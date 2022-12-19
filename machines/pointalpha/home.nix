@@ -51,6 +51,12 @@ in
     xdg.enable = true;
     xdg.mime.enable = true;
 
+    # https://github.com/NixOS/nixpkgs/pull/206737
+    xdg.configFile."chromium-flags.conf".text = ''
+      --ozone-platform-hint=auto
+      --enable-features=WaylandWindowDecorations
+    '';
+
     services = {
       nextcloud-client = { startInBackground = true; };
       gpg-agent = {
