@@ -10,6 +10,7 @@
     kernelModules = [ "kvm-intel" ];
     kernelPackages = pkgs.linuxPackages;
     extraModulePackages = [ ];
+    kernelParams = [ "memhp_default_state=online" ];
   };
 
   fileSystems."/" =
