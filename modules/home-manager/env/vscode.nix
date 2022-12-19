@@ -66,6 +66,8 @@ with lib; {
           "editor.defaultFormatter" = "esbenp.prettier-vscode";
         };
         "editor.tabSize" = 2;
+        "terminal.integrated.persistentSessionReviveProcess" = "never";
+        "terminal.integrated.enablePersistentSessions" = false;
         "files.trimFinalNewlines" = true;
         "files.insertFinalNewline" = true;
         "diffEditor.ignoreTrimWhitespace" = false;
