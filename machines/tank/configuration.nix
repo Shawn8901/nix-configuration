@@ -6,7 +6,7 @@ let
   inherit (inputs) stfc-bot mimir;
 in
 {
-  imports = [ stfc-bot.nixosModule mimir.nixosModule ];
+  imports = [ stfc-bot.nixosModules.default mimir.nixosModule ];
 
   age.secrets = {
     ztank_key = { file = ../../secrets/ztank_key.age; };
