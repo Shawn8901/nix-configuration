@@ -18,7 +18,8 @@ with lib; {
       enable = true;
       enableExtensionUpdateCheck = false;
       enableUpdateCheck = false;
-      # https://github.com/NixOS/nixpkgs/pull/206695
+      # https://nixpk.gs/pr-tracker.html?pr=206695
+      # https://nixpk.gs/pr-tracker.html?pr=206978
       package = pkgs.vscode.overrideAttrs (old: {
         runtimeDependencies = old.runtimeDependencies ++ [ pkgs.wayland ];
       });

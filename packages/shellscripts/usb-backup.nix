@@ -9,7 +9,6 @@ writeShellScriptBin "usb-backup" ''
   BACKUP_DEVICE="/dev/$1"
   MOUNT_POINT="${mountPoint}"
 
-  #check if mount point directory exists, if not create it
   if [ ! -d "$MOUNT_POINT" ] ; then
     ${pkgs.coreutils-full}/bin/mkdir "$MOUNT_POINT";
   fi
@@ -18,7 +17,6 @@ writeShellScriptBin "usb-backup" ''
 
   echo "Starting RSYNC"
   ${pkgs.rsync}/bin/rsync -Pauvi "$BACKUP_SOURCE" "$MOUNT_POINT"
-
   ${pkgs.coreutils-full}/bin/sync
 
   echo "Unmount $BACKUP_DEVICE"
