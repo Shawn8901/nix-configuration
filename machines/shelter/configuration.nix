@@ -134,6 +134,7 @@ in
           external_labels = labels;
         };
         webConfigFile = secrets.prometheus_web_config.path;
+        webExternalUrl = "https://status.shelter.pointjig.de";
         scrapeConfigs = [
           {
             job_name = "node";

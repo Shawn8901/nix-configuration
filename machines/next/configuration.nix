@@ -188,6 +188,7 @@ in
           external_labels = labels;
         };
         webConfigFile = secrets.prometheus_web_config.path;
+        webExternalUrl = "https://status.${config.services.nextcloud.hostName}";
         scrapeConfigs = [
           {
             job_name = "node";

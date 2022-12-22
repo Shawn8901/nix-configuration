@@ -141,6 +141,7 @@ in
           external_labels = labels;
         };
         webConfigFile = secrets.prometheus_web_config.path;
+        webExternalUrl = "https://status.pointjig.de";
         scrapeConfigs = [
           {
             job_name = "node";
