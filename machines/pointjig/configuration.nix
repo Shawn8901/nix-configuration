@@ -228,11 +228,13 @@ in
     };
   };
 
-  security.auditd.enable = false;
-  security.audit.enable = false;
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "shawn@pointjig.de";
+  security = {
+    auditd.enable = false;
+    audit.enable = false;
+    acme = {
+      acceptTerms = true;
+      defaults.email = "shawn@pointjig.de";
+    };
   };
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;

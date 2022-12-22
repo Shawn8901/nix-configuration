@@ -165,12 +165,14 @@ in
     '';
     acpid.enable = true;
   };
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "shawn@pointjig.de";
+  security = {
+    acme = {
+      acceptTerms = true;
+      defaults.email = "shawn@pointjig.de";
+    };
+    auditd.enable = false;
+    audit.enable = false;
   };
-  security.auditd.enable = false;
-  security.audit.enable = false;
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
   sound.enable = false;

@@ -374,23 +374,25 @@ in
     smartd.enable = true;
     teamviewer.enable = false;
   };
-  security.rtkit.enable = true;
-  security.auditd.enable = false;
-  security.audit.enable = false;
-  security.pam.services.shawn.enableKwallet = true;
-
-  hardware.pulseaudio.enable = false;
-  hardware.bluetooth.enable = true;
-  hardware.sane.enable = true;
-  hardware.keyboard.zsa.enable = true;
-  sound.enable = false;
-
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [ libva rocm-opencl-icd rocm-opencl-runtime ];
+  security = {
+    rtkit.enable = true;
+    auditd.enable = false;
+    audit.enable = false;
+    pam.services.shawn.enableKwallet = true;
   };
+  hardware = {
+    bluetooth.enable = true;
+    sane.enable = true;
+    keyboard.zsa.enable = true;
+    pulseaudio.enable = false;
+    opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
+      extraPackages = with pkgs; [ libva rocm-opencl-icd rocm-opencl-runtime ];
+    };
+  };
+  sound.enable = false;
 
   virtualisation = {
     libvirtd = {
@@ -425,12 +427,13 @@ in
   env.user-config.enable = true;
 
   environment = {
-    etc."samba/credentials_shawn".source = secrets.shawn_samba_credentials.path;
-    etc."samba/credentials_ela".source = secrets.ela_samba_credentials.path;
-    etc."zrepl/pointalpha.key".source = secrets.zrepl_pointalpha.path;
-    etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
-    etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
-
+    etc = {
+      "samba/credentials_shawn".source = secrets.shawn_samba_credentials.path;
+      "samba/credentials_ela".source = secrets.ela_samba_credentials.path;
+      "zrepl/pointalpha.key".source = secrets.zrepl_pointalpha.path;
+      "zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
+      "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
+    };
     variables = {
       AMD_VULKAN_ICD = "RADV";
       DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";

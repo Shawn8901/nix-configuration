@@ -682,15 +682,19 @@ in
     "vm.overcommit_memory" = "1";
   };
 
-  security.rtkit.enable = true;
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "shawn@pointjig.de";
+  security = {
+    rtkit.enable = true;
+    acme = {
+      acceptTerms = true;
+      defaults.email = "shawn@pointjig.de";
+    };
   };
   security.auditd.enable = false;
   security.audit.enable = false;
-  hardware.pulseaudio.enable = false;
-  hardware.bluetooth.enable = false;
+  hardware = {
+    pulseaudio.enable = false;
+    bluetooth.enable = false;
+  };
   env.user-config.enable = true;
 
   users.users = {

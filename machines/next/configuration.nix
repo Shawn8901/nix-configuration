@@ -235,12 +235,14 @@ in
   boot.kernel.sysctl = {
     "vm.overcommit_memory" = "1";
   };
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "info@clansap.org";
+  security = {
+    acme = {
+      acceptTerms = true;
+      defaults.email = "info@clansap.org";
+    };
+    auditd.enable = false;
+    audit.enable = false;
   };
-  security.auditd.enable = false;
-  security.audit.enable = false;
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
 
