@@ -1,4 +1,4 @@
-{ pkgs, lib, modulesPath, ... }:
+{ config, pkgs, lib, modulesPath, ... }:
 let
   zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
 in
@@ -15,7 +15,10 @@ in
     };
     kernelModules = [ "amdgpu" "kvm-amd" "cifs" "usb_storage" ];
     kernelPackages = pkgs.linuxPackages_xanmod;
-    extraModulePackages = [ ];
+    extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
+    blacklistedKernelModules = [
+      "k10temp"
+    ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944
       options zfs zfs_vdev_scheduler=deadline
