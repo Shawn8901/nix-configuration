@@ -35,9 +35,7 @@ in
           meta = { };
         })
       ];
-      # https://nixpk.gs/pr-tracker.html?pr=206698
-      #languagePacks = [ "de" ];
-
+      languagePacks = [ "de" ];
       profiles."shawn" = {
         settings = {
           "app.update.auto" = false;

@@ -20,10 +20,7 @@ in
         keepassxc
         (discord.override { nss = pkgs.nss_latest; })
         teamspeak_client
-        # https://nixpk.gs/pr-tracker.html?pr=206978
-        (signal-desktop.overrideAttrs (old: {
-          runtimeDependencies = old.runtimeDependencies ++ [ pkgs.wayland ];
-        }))
+        signal-desktop
         rogerrouter
         wally-cli
         vlc
