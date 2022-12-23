@@ -441,6 +441,7 @@ in
       mesa_glthread = "true";
       WINEESYNC = "1";
       WINEFSYNC = "1";
+      WINEDEBUG = "-all";
       MOZ_ENABLE_WAYLAND = "1";
       MOZ_DISABLE_RDD_SANDBOX = "1";
       NIXOS_OZONE_WL = "1";
