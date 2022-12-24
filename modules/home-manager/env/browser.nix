@@ -35,7 +35,7 @@ in
           meta = { };
         })
       ];
-      languagePacks = [ "de" ];
+
       profiles."shawn" = {
         settings = {
           "app.update.auto" = false;
