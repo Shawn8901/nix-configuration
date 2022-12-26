@@ -31,10 +31,6 @@
       url = "github:shawn8901/mimir-client";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
-    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -44,11 +40,6 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in
     {
-      apps.${system}."update-packages" = {
-        type = "app";
-        program = "${self.packages.x86_64-linux.update-packages}/bin/update-packages";
-      };
-
       nixosModules = import ./modules/nixos;
       nixosConfigurations = import ./machines (inputs // { inherit lib; });
 
