@@ -18,7 +18,8 @@ jobs:
       - name: Install nix
         uses: ./.github/actions/setup-env
         with:
-          setup-cachix: false
+          github_token: "${{ secrets.GH_TOKEN }}"
+          setup_cachix: false
       - name: Generate packages.json
         run: |
           nix eval --json .#packages.x86_64-linux --apply 'builtins.mapAttrs(name: value: builtins.hasAttr "updateScript" value)' > packages.json
@@ -42,8 +43,14 @@ jobs:
           token: "${{ secrets.GH_TOKEN }}"
       - name: Install nix
         uses: ./.github/actions/setup-env
+        with:
+          github_token: "${{ secrets.GH_TOKEN }}"
+          cachix_token: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      - name: Install dependencies
+        run: |
+          nix profile install nixpkgs#nix-update
       - name: Update package
-        run: nix-shell -p nix-update -- --format --build --test --commit --flake ${{ matrix.package }}
+        run: nix-update --format --build --commit --flake ${{ matrix.package }}
       - name: create PR
         uses: ./.github/actions/create-pr
         with:

@@ -7,14 +7,19 @@ inputs:
   body:
     description: "Body for the PR"
     required: true
+  github_token:
+    description: "Token to be used for Github"
+    required: true
 runs:
   using: "composite"
   steps:
     - name: Set up git
+      shell: bash
       run: |
         git config user.email git@pointjig.de
         git config user.name "Git Bot"
     - name: Create and merge PR
+      shell: bash
       run: |
         git switch -c updates-${{ github.run_id }}
         git diff-index --quiet HEAD -- && echo "no changes" && exit 0
@@ -29,4 +34,4 @@ runs:
           --title "${{ inputs.title }}")
         gh pr merge $PR --merge --delete-branch
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: "${{ inputs.github_token }}"
