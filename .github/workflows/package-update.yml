@@ -1,4 +1,4 @@
-name: Updater
+name: Package Updater
 
 on:
   schedule:
@@ -27,24 +27,25 @@ jobs:
           packages=$(jq -c 'map_values(select (.)) | keys' < packages.json)
           echo packages=$packages >> $GITHUB_OUTPUT
 
-update_packages:
-  runs-on: ubuntu-22.04
-  needs: [generate_matrix]
-  strategy:
-    fail-fast: false
-    max-parallel: 10
-    matrix:
-      package: ${{fromJson(needs.generate_matrix.outputs.packages)}}
-  steps:
-    - name: Clone repository
-      uses: actions/checkout@v3
-      with:
-        token: "${{ secrets.GH_TOKEN }}"
-    - name: Install nix
-      uses: ./.github/actions/setup-env
-    - name: Update package
-      run: nix-shell -p nix-update -- --format --build --test --commit --flake ${{ matrix.package }}
-    - name: create PR
+  update_packages:
+    runs-on: ubuntu-22.04
+    needs: [generate_matrix]
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        package: ${{fromJson(needs.generate_matrix.outputs.packages)}}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+        with:
+          token: "${{ secrets.GH_TOKEN }}"
+      - name: Install nix
+        uses: ./.github/actions/setup-env
+      - name: Update package
+        run: nix-shell -p nix-update -- --format --build --test --commit --flake ${{ matrix.package }}
+      - name: create PR
+        uses: ./.github/actions/create-pr
         with:
           title: "Package update for ${{ matrix.package }} $(date -I)"
           body: "Automatic package update for ${{ matrix.package }} on $(date -I)"
