@@ -84,7 +84,7 @@ in
       wait-online = { ignoredInterfaces = [ "enp4s0" ]; };
     };
     services.nextcloud-setup.after = [ "postgresql.service" ];
-    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nginx.service" ];
+    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nginx.service" "nextcloud-setup.service" ];
   };
 
   services = {
