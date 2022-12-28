@@ -1,0 +1,19 @@
+name: Nixpkgs Updater
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  sync_fork:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Sync fork
+        shell: bash
+        run: |
+          gh repo sync Shawn8901/nixpkgs --source NixOS/nixpkgs --branch master
+          gh repo sync Shawn8901/nixpkgs --source NixOS/nixpkgs --branch nixos-unstable
+          gh repo sync Shawn8901/nixpkgs --source NixOS/nixpkgs --branch nixos-22.05
+        env:
+          GH_TOKEN: "${{ secrets.GH_TOKEN }}"
