@@ -423,6 +423,7 @@ in
       enable = true;
       openFirewall = true;
     };
+    partition-manager.enable = true;
   };
   env.user-config.enable = true;
 
