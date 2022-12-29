@@ -471,6 +471,7 @@ in
         let
           nodePort = toString config.services.prometheus.exporters.node.port;
           smartctlPort = toString config.services.prometheus.exporters.smartctl.port;
+          zfsPort = toString config.services.prometheus.exporters.zfs.port;
           zreplPort = toString (builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl));
           postgresPort = toString config.services.prometheus.exporters.postgres.port;
           nextcloudPort = toString config.services.prometheus.exporters.nextcloud.port;
@@ -482,6 +483,10 @@ in
           {
             job_name = "node";
             static_configs = [{ targets = [ "localhost:${nodePort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "zfs";
+            static_configs = [{ targets = [ "localhost:${zfsPort}" ]; inherit labels; }];
           }
           {
             job_name = "smartctl";
@@ -546,6 +551,11 @@ in
           listenAddress = "localhost";
           port = 9221;
           configFile = secrets.pve_prometheus.path;
+        };
+        zfs = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9134;
         };
       };
     };

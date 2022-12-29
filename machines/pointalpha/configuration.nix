@@ -317,6 +317,7 @@ in
       let
         labels = { machine = "${config.networking.hostName}"; };
         nodePort = config.services.prometheus.exporters.node.port;
+        zfsPort = toString config.services.prometheus.exporters.zfs.port;
         smartctlPort = config.services.prometheus.exporters.smartctl.port;
         zreplPort = (builtins.head
           (
@@ -336,6 +337,10 @@ in
           {
             job_name = "node";
             static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
+          }
+          {
+            job_name = "zfs";
+            static_configs = [{ targets = [ "localhost:${zfsPort}" ]; inherit labels; }];
           }
           {
             job_name = "smartctl";
@@ -359,6 +364,11 @@ in
             port = 9102;
             devices = [ "/dev/sda" ];
             maxInterval = "5m";
+          };
+          zfs = {
+            enable = true;
+            listenAddress = "localhost";
+            port = 9134;
           };
         };
       };
