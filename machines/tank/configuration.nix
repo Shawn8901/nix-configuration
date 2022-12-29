@@ -66,6 +66,7 @@ in
       "::1" = lib.attrNames config.services.nginx.virtualHosts;
     };
     networkmanager.enable = false;
+    nftables.enable = true;
     dhcpcd.enable = false;
     useNetworkd = true;
     useDHCP = false;

@@ -31,6 +31,8 @@ in
         logRefusedConnections = false;
       };
     networkmanager.enable = false;
+    # FIXME: Enable with 23.05
+    nftables.enable = false;
     dhcpcd.enable = false;
     useNetworkd = true;
     useDHCP = false;

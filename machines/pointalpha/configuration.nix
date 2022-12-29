@@ -66,6 +66,7 @@ in
         allowedTCPPortRanges = [ stronghold_range ];
       };
     networkmanager.enable = true;
+    nftables.enable = true;
     hosts = {
       "192.168.11.31" = lib.attrNames hosts.tank.config.services.nginx.virtualHosts;
       "134.255.226.114" = [ "pointjig" ];
