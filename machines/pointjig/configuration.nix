@@ -9,6 +9,7 @@ in
   imports = [ stfc-bot.nixosModules.default mimir.nixosModule ../../modules/nixos/overriden/prometheus.nix ];
 
   age.secrets = {
+    sms-technical-passwd = { file = ../../secrets/sms-technical-passwd.age; };
     sms-shawn-passwd = {
       file = ../../secrets/sms-shawn-passwd.age;
       owner = "stfc-bot";
@@ -227,6 +228,9 @@ in
         aliases = [
           "ninjatrader@pointjig.de"
         ];
+      };
+      "noreply@pointjig.de" = {
+        hashedPasswordFile = "${secrets.sms-technical-passwd.path}";
       };
     };
   };

@@ -48,7 +48,6 @@ in
       owner = "mimir";
       group = "mimir";
     };
-    sms-shawn-passwd = { file = ../../secrets/sms-shawn-passwd.age; };
   };
 
   networking = {
@@ -575,6 +574,13 @@ in
         security = {
           admin_password = "$__env{ADMIN_PASSWORD}";
           secret_key = "$__env{SECRET_KEY}";
+        };
+        smtp = {
+          enabled = true;
+          host = "pointjig.de:465";
+          user = "noreply@pointjig.de";
+          password = "$__env{SMTP_PASSWORD}";
+          from_address = "noreply@pointjig.de";
         };
         alerting.enabled = false;
         unified_alerting.enabled = true;

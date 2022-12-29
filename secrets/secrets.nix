@@ -35,7 +35,8 @@ in
   "mimir-env-dev.age".publicKeys = [ shawn tank ];
   "stfc-env.age".publicKeys = [ shawn pointjig ];
   "mimir-env.age".publicKeys = [ shawn pointjig ];
-  "sms-shawn-passwd.age".publicKeys = [ shawn tank pointjig ];
+  "sms-shawn-passwd.age".publicKeys = [ shawn pointjig ];
+  "sms-technical-passwd.age".publicKeys = [ shawn tank pointjig ];
 
   "ffm_root_password.age".publicKeys = [ shawn next ];
   "ffm_nextcloud_db.age".publicKeys = [ shawn next ];
