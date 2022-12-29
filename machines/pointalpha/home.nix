@@ -47,7 +47,10 @@ in
       enable = true;
       enableZshIntegration = true;
     };
-    programs.gh.enable = true;
+    programs.gh = {
+      enable = true;
+      extensions = [ fPkgs.gh-poi ];
+    };
     xdg.enable = true;
     xdg.mime.enable = true;
     xdg.configFile."chromium-flags.conf".text = ''

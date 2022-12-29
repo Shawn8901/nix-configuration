@@ -13,6 +13,7 @@ rec {
   pytr = pkgs.python3.pkgs.callPackage ./pytr { };
   notify_push = pkgs.callPackage ./notify_push { };
 
+  gh-poi = pkgs.callPackage ./gh-poi { };
 
   jameica = pkgs.callPackage ./jameica {
     Cocoa = null;
