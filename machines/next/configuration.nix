@@ -185,7 +185,7 @@ in
       {
         enable = true;
         port = 9001;
-        retentionTime = "30d";
+        retentionTime = "90d";
         globalConfig = {
           external_labels = labels;
         };

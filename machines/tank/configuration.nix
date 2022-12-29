@@ -472,7 +472,7 @@ in
       enable = true;
       listenAddress = "127.0.0.1";
       port = 9001;
-      retentionTime = "30d";
+      retentionTime = "90d";
       globalConfig = {
         external_labels = { machine = "${config.networking.hostName}"; };
       };
