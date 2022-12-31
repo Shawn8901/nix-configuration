@@ -28,5 +28,6 @@ buildGoModule rec {
     description = "Safely clean up your local branches";
     license = licenses.mit;
     maintainers = with maintainers; [ shawn8901 ];
+    platforms = [ "x86_64-linux" ];
   };
 }

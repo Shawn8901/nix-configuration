@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
     description = "Update notifications for nextcloud clients";
     homepage = "https://github.com/nextcloud/notify_push";
     license = licenses.agpl3Plus;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ ajs124 ];
   };
 }
