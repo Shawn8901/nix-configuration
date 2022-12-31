@@ -21,6 +21,12 @@
     options = [ "bind" "noauto" "x-systemd.automount" ];
   };
 
+
+  fileSystems."/var/lib/hydra" = {
+    device = "/persist/var/lib/hydra";
+    options = [ "bind" "noauto" "x-systemd.automount" ];
+  };
+
   fileSystems."/var/lib/samba" = {
     device = "/persist/var/lib/samba";
     options = [ "bind" "noauto" "x-systemd.automount" ];
