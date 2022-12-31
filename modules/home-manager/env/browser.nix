@@ -1,6 +1,6 @@
-{ config, lib, pkgs, nPkgs, ... }:
-with lib;
+{ config, lib, pkgs, fPkgs, ... }:
 let
+  inherit (lib) mkEnableOption mkIf;
   inherit (pkgs) nur;
   inherit (nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
   cfg = config.env.browser;
@@ -16,7 +16,7 @@ in
     programs.firefox = {
       enable = true;
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-        extraNativeMessagingHosts = with nur.repos.wolfangaukang; [ vdhcoapp ];
+        extraNativeMessagingHosts = [ fPkgs.vdhcoapp ];
       };
       extensions = with nur.repos.rycee.firefox-addons; [
         ublock-origin

@@ -1,4 +1,4 @@
-{ self, config, pkgs, nPkgs, ... }:
+{ self, config, pkgs, ... }:
 let
   system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
@@ -32,7 +32,8 @@ in
 
         sqlitebrowser
         generate-zrepl-ssl
-      ] ++ (with pkgs.nur.repos.wolfangaukang; [ vdhcoapp ]);
+        vdhcoapp
+      ];
 
     env = {
       vscode.enable = true;
