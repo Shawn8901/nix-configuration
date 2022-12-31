@@ -689,6 +689,8 @@ in
     hydra = {
       enable = true;
       port = 3001;
+      minimumDiskFree = 15;
+      minimumDiskFreeEvaluator = 10;
       hydraURL = "http://tank.fritz.box"; # externally visible URL
       notificationSender = "hydra@pointjig.de"; # e-mail of hydra service
       # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
