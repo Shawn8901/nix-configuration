@@ -232,6 +232,9 @@ in
       "noreply@pointjig.de" = {
         hashedPasswordFile = "${secrets.sms-technical-passwd.path}";
       };
+      "hydra@pointjig.de" = {
+        hashedPasswordFile = "${secrets.sms-technical-passwd.path}";
+      };
     };
   };
 
