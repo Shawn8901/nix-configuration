@@ -83,8 +83,6 @@ in
       };
       wait-online = { ignoredInterfaces = [ "enp4s0" ]; };
     };
-    services.nextcloud-setup.after = [ "postgresql.service" ];
-    services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nginx.service" "nextcloud-setup.service" ];
   };
 
   services = {
@@ -698,8 +696,12 @@ in
       # you will probably also want, otherwise *everything* will be built from scratch
       useSubstitutes = true;
     };
-
   };
+
+  systemd.services.nextcloud-setup.after = [ "postgresql.service" ];
+  systemd.services.nextcloud-notify_push.preStart = "sleep 2";
+  systemd.services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nginx.service" "nextcloud-setup.service" ];
+
   # TODO: Prepare a PR to fix/make it configurable that upstream
   systemd.services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
   systemd.services.grafana.serviceConfig.EnvironmentFile = [
