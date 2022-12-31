@@ -14,6 +14,7 @@ rec {
   notify_push = pkgs.callPackage ./notify_push { };
 
   gh-poi = pkgs.callPackage ./gh-poi { };
+  vdhcoapp = pkgs.callPackage ./vdhcoapp { };
 
   jameica = pkgs.callPackage ./jameica {
     Cocoa = null;
