@@ -39,6 +39,4 @@ rec {
       pkgs.libsForQt5.layer-shell-qt
     ];
   });
-
-
 }

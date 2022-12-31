@@ -23,8 +23,6 @@ in
     };
   };
 
-  nixpkgs.overlays = [ inputs.nur.outputs.overlay ];
-
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
       "discord"

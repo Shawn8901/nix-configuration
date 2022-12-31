@@ -1,9 +1,10 @@
-{ config, lib, pkgs, fPkgs, ... }:
+{ self, config, lib, pkgs, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  inherit (pkgs) nur;
-  inherit (nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
+  system = pkgs.hostPlatform.system;
+  fPkgs = self.packages.${system};
   cfg = config.env.browser;
+  mozilla-addons = import ../../../packages/mozilla-addons { inherit pkgs; inherit (pkgs) lib fetchurl stdenv; };
 in
 {
   options = {
@@ -18,7 +19,8 @@ in
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         extraNativeMessagingHosts = [ fPkgs.vdhcoapp ];
       };
-      extensions = with nur.repos.rycee.firefox-addons; [
+      extensions = with mozilla-addons; [
+        vdh
         ublock-origin
         umatrix
         keepassxc-browser
@@ -26,14 +28,6 @@ in
         tampermonkey
         betterttv
         h264ify
-        (buildFirefoxXpiAddon {
-          pname = "Video-DownloadHelper";
-          version = "7.6.0";
-          addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-          url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
-          sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
-          meta = { };
-        })
       ];
 
       profiles."shawn" = {

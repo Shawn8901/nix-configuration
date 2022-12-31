@@ -33,6 +33,7 @@ in
         sqlitebrowser
         generate-zrepl-ssl
         vdhcoapp
+        plasma-integration
       ];
 
     env = {

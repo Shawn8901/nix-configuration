@@ -161,21 +161,6 @@
         "type": "indirect"
       }
     },
-    "nur": {
-      "locked": {
-        "lastModified": 1672451966,
-        "narHash": "sha256-+iHE+4ebDmMGD7Dizg07WNviVWPNz8f+w8S6YgDuTzU=",
-        "owner": "nix-community",
-        "repo": "NUR",
-        "rev": "39126995ec54a144c8e73785e6a0fadc70174b1e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "NUR",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -185,7 +170,6 @@
         "mimir-client": "mimir-client",
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
-        "nur": "nur",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "stfc-bot": "stfc-bot"
       }
