@@ -35,13 +35,21 @@
 
   outputs = { self, nixpkgs, ... }@inputs:
     let
+      inherit (nixpkgs.lib) filterAttrs;
+      inherit (builtins) mapAttrs elem;
+      notBroken = x: !(x.meta.broken or false);
       system = "x86_64-linux";
       lib = import ./lib inputs;
       pkgs = nixpkgs.legacyPackages.${system};
     in
-    {
+    rec {
       nixosModules = import ./modules/nixos;
       nixosConfigurations = import ./machines (inputs // { inherit lib; });
+
+      hydraJobs = {
+        packages = mapAttrs (sys: filterAttrs (_: pkg: (elem sys pkg.meta.platforms && notBroken pkg))) packages;
+        nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
+      };
 
       packages.${system} = import ./packages (inputs // { inherit pkgs; })
         // lib.nixosConfigurationsAsPackages.configs;
