@@ -373,6 +373,12 @@ in
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       virtualHosts = {
+        "tank.fritz.box" = {
+          enableACME = false;
+          locations."/" = {
+            proxyPass = "http://localhost:3001";
+          };
+        };
         "${config.services.nextcloud.hostName}" = {
           enableACME = true;
           forceSSL = true;
@@ -679,6 +685,18 @@ in
       envFile = config.age.secrets.mimir-env-dev.path;
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
+
+    hydra = {
+      enable = true;
+      port = 3001;
+      hydraURL = "http://tank.fritz.box"; # externally visible URL
+      notificationSender = "hydra@pointjig.de"; # e-mail of hydra service
+      # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
+      buildMachinesFiles = [ ];
+      # you will probably also want, otherwise *everything* will be built from scratch
+      useSubstitutes = true;
+    };
+
   };
   # TODO: Prepare a PR to fix/make it configurable that upstream
   systemd.services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
