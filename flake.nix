@@ -47,12 +47,12 @@
       nixosConfigurations = import ./machines (inputs // { inherit lib; });
 
       hydraJobs = {
-        packages = mapAttrs (sys: filterAttrs (_: pkg: (elem sys pkg.meta.platforms && notBroken pkg))) packages;
-        nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
+        packages = packages;
+        nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (filterAttrs (name: config: name != "pointalpha") nixosConfigurations);
       };
 
-      packages.${system} = import ./packages (inputs // { inherit pkgs; })
-        // lib.nixosConfigurationsAsPackages.configs;
+      packages.${system} = import ./packages (inputs // { inherit pkgs; });
+      #// lib.nixosConfigurationsAsPackages.configs;
 
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
