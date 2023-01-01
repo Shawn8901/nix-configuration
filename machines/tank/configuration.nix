@@ -684,6 +684,7 @@ in
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
 
+    # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
     hydra = {
       enable = true;
       port = 3001;
@@ -697,6 +698,8 @@ in
       useSubstitutes = true;
     };
   };
+  # GitHub access token is stored on all systems with group right for nixbld
+  users.users.hydra-queue-runner.extraGroups = [ "nixbld" ];
 
   systemd.services.nextcloud-setup.after = [ "postgresql.service" ];
   systemd.services.nextcloud-notify_push.preStart = "sleep 2";
