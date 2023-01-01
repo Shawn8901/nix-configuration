@@ -708,8 +708,8 @@ in
   '';
 
   systemd.services.nextcloud-setup.after = [ "postgresql.service" ];
-  systemd.services.nextcloud-notify_push.preStart = "sleep 2";
-  systemd.services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nginx.service" "nextcloud-setup.service" ];
+  systemd.services.nextcloud-notify_push.preStart = "sleep 5";
+  systemd.services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nextcloud-setup.service" ];
 
   # TODO: Prepare a PR to fix/make it configurable that upstream
   systemd.services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
