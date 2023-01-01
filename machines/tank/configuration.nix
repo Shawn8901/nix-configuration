@@ -687,6 +687,7 @@ in
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
     hydra = {
       enable = true;
+      listenHost = "localhost";
       port = 3001;
       minimumDiskFree = 15;
       minimumDiskFreeEvaluator = 10;
