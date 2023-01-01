@@ -701,6 +701,11 @@ in
   # GitHub access token is stored on all systems with group right for nixbld
   users.users.hydra-queue-runner.extraGroups = [ "nixbld" ];
 
+  # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
+  nix.extraOptions = ''
+    extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd
+  '';
+
   systemd.services.nextcloud-setup.after = [ "postgresql.service" ];
   systemd.services.nextcloud-notify_push.preStart = "sleep 2";
   systemd.services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nginx.service" "nextcloud-setup.service" ];
