@@ -59,7 +59,7 @@ in
       --ozone-platform-hint=auto
       --enable-features=WaylandWindowDecorations
     '';
-    manual.manpages.enable = false;
+
     services = {
       nextcloud-client = { startInBackground = true; };
       gpg-agent = {
