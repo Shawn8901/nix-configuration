@@ -724,8 +724,8 @@ in
       defaults.email = "shawn@pointjig.de";
     };
   };
-  security.auditd.enable = false;
-  security.audit.enable = false;
+  security.auditd.enable = true;
+  security.audit.enable = true;
   hardware = {
     pulseaudio.enable = false;
     bluetooth.enable = false;
