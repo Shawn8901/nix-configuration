@@ -24,7 +24,7 @@ jobs:
       - name: Update flake
         run: nix flake update
       - name: Check Flake
-        run: nix flake check
+        run: nix flake check --allow-import-from-derivation
       - name: Generate flake.json
         run: nix flake show --allow-import-from-derivation --json > flake.json
       - id: gen_packages
