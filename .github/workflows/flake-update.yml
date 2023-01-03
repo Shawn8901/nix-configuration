@@ -28,10 +28,12 @@ jobs:
       - name: Generate flake.json
         run: nix flake show --allow-import-from-derivation --json > flake.json
       - id: gen_packages
+        name: Generate Package Matrix
         run: |
           packages=$(jq -c '.hydraJobs.packages."x86_64-linux" | keys' < flake.json)
           echo packages=$packages >> $GITHUB_OUTPUT
       - id: gen_machines
+        name: Generate Machines Matrix
         run: |
           machines=$(jq -c '.hydraJobs.nixos | keys' < flake.json)
           echo machines=$machines >> $GITHUB_OUTPUT
