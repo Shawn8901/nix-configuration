@@ -391,6 +391,7 @@ in
           locations."/" = {
             proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
             proxyWebsockets = true;
+            recommendedProxySettings = true;
           };
         };
       };
@@ -563,6 +564,7 @@ in
       settings = {
         server = rec {
           domain = "status.tank.pointjig.de";
+          http_port = 3001;
           root_url = "https://${domain}/";
         };
         database = {
