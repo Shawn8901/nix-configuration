@@ -29,11 +29,11 @@ jobs:
         run: nix flake show --allow-import-from-derivation --json > flake.json
       - id: gen_packages
         run: |
-          packages=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") | not))' < flake.json)
+          packages=$(jq -c '.hydraJobs.packages."x86_64-linux" | keys' < flake.json)
           echo packages=$packages >> $GITHUB_OUTPUT
       - id: gen_machines
         run: |
-          machines=$(jq -c '.packages."x86_64-linux" | keys | map(select(. | contains ("machines/") and (contains ("pointalpha") | not) ))' < flake.json)
+          machines=$(jq -c '.hydraJobs.nixos | keys' < flake.json)
           echo machines=$machines >> $GITHUB_OUTPUT
       - name: Store flake.lock
         uses: actions/upload-artifact@v3
@@ -64,7 +64,7 @@ jobs:
         with:
           name: flake_lock
       - name: Build everything
-        run: nix build .#${{ matrix.package }}
+        run: nix build .#hydraJobs.packages."x86_64-linux".${{ matrix.package }}
 
   build_machines:
     runs-on: ubuntu-22.04
@@ -90,7 +90,7 @@ jobs:
         with:
           name: flake_lock
       - name: Build everything
-        run: nix build .#${{ matrix.machine }}
+        run: nix build .#hydraJobs.nixos.${{ matrix.machine }}
 
   push_update:
     runs-on: ubuntu-20.04
