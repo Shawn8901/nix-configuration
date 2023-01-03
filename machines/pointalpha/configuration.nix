@@ -5,6 +5,14 @@ let
   hosts = self.nixosConfigurations;
   system = pkgs.hostPlatform.system;
   secrets = config.age.secrets;
+
+  # https://github.com/NixOS/nixpkgs/pull/195521/files
+  fontsPkg = pkgs: (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
+    mkdir -p "$out/share/fonts"
+    font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+    find ${toString (config.fonts.fonts)} -regex "$font_regexp" \
+      -exec ln -sf -t "$out/share/fonts" '{}' \;
+  '');
 in
 {
   disabledModules = [ "services/x11/display-managers/sddm.nix" ];
@@ -44,6 +52,8 @@ in
       extraPkgs = pkgs: with pkgs; [
         # Victoria 3
         ncurses
+        # Universim
+        (fontsPkg pkgs)
       ];
     };
   };
