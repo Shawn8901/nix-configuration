@@ -13,18 +13,18 @@ in
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [ ];
     extraModprobeConfig = ''
-      options zfs zfs_arc_max=10737418240
+      options zfs zfs_arc_min=1073741824
+      options zfs zfs_arc_max=2147483648
     '';
 
     supportedFilesystems = [ "zfs" "ntfs" ];
     zfs.devNodes = "/dev/disk/by-id";
     zfs.extraPools = [ "ztank" ];
     zfs.requestEncryptionCredentials = [ "ztank" ];
-
-    kernel.sysctl = { "vm.swappiness" = lib.mkDefault 10; };
     postBootCommands = lib.mkAfter ''
       ${pkgs.zfs}/bin/zfs mount -a
     '';
+    consoleLogLevel = 7;
   };
 
   fileSystems."/" = {
