@@ -48,6 +48,10 @@ in
       owner = "mimir";
       group = "mimir";
     };
+    # GitHub access token is stored on all systems with group right for nixbld
+    # but hydra-queue-runner has to be able to read them but can not be added
+    # to nixbld (it then crashes as soon as its writing to the store).
+    github_access_token.mode = lib.mkForce "0777";
   };
 
   networking = {
@@ -715,8 +719,7 @@ in
       '';
     };
   };
-  # GitHub access token is stored on all systems with group right for nixbld
-  users.users.hydra-queue-runner.extraGroups = [ "nixbld" ];
+
 
   # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
   nix.extraOptions = ''
