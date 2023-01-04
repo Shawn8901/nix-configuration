@@ -37,7 +37,7 @@ nixpkgs.lib.nixosSystem
         hardware
 
         agenix.nixosModule
-        simple-nixos-mailserver.nixosModule
+
       ]
       ++ builtins.attrValues self.nixosModules
       ++ nixpkgs.lib.optionals (builtins.pathExists home)

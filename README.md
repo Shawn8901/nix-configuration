@@ -1,15 +1,6 @@
 # My systems configuration for nixos system from a random person on the internet
 
-Special thanks to [NobbZ](https://github.com/NobbZ/nixos-config/) and [Mic92](https://github.com/Mic92/dotfiles) public configurations, which heavily inspired this.
+This flake hosts different boxes (1 Desktop, some servers), some custom packages, some nixos and home mananger modules and it uses agenix for secrets.
+Two boxes have RootFS on ZFS and do rollback their root fs similar to the blog post from [grahamc](https://grahamc.com/blog/erase-your-darlings).
 
-## Useful commands
-List of useful commands which are required on maintenance jobs.
-
-### zrepl certificate generation
-
-This configuraton uses tls authentication for zrepl. The following command, executed on the target host, will generate a usable RSA-4k keypair.
-The pair must then be placed in `secrets` (encryption done via agenix) and `public_certs`.
-
-```bash
-(name=$(hostname); nix run nixpkgs#openssl -- req -x509 -sha256 -nodes  -newkey rsa:4096  -days 365  -keyout $name.key  -out $name.crt -addext "subjectAltName = DNS:$name" -subj "/CN=$name")
-```
+The some structural inspiration was taken from [NobbZ](https://github.com/NobbZ/nixos-config) (old) public flake configuraton.

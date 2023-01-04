@@ -10,6 +10,7 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
+indent_style = space
 
 # Ignore diffs/patches
 [*.{diff,patch}]
@@ -17,11 +18,6 @@ end_of_line = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
-# see https://nixos.org/nixpkgs/manual/#chap-conventions
-
-# Match json/lockfiles/markdown/nix/perl/python/ruby/shell/docbook files, set indent to spaces
-[*.{json,lock,md,nix,pl,pm,py,rb,sh,xml}]
-indent_style = space
 
 # Match docbook files, set indent width of one
 [*.xml]
@@ -35,48 +31,5 @@ indent_size = 2
 [*.{pl,pm,py,sh}]
 indent_size = 4
 
-# Match gemfiles, set indent to spaces with width of two
-[Gemfile]
-indent_size = 2
-indent_style = space
-
-# Disable file types or individual files
-# some of these files may be auto-generated and/or require significant changes
-
-[*.{c,h}]
-insert_final_newline = unset
-trim_trailing_whitespace = unset
-
-[*.{asc,key,ovpn}]
-insert_final_newline = unset
-end_of_line = unset
-trim_trailing_whitespace = unset
-
 [*.lock]
 indent_size = unset
-
-[eggs.nix]
-trim_trailing_whitespace = unset
-
-[nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
-trim_trailing_whitespace = unset
-
-[pkgs/build-support/dotnetenv/Wrapper/**]
-end_of_line = unset
-indent_style = unset
-insert_final_newline = unset
-trim_trailing_whitespace = unset
-
-[pkgs/development/compilers/elm/registry.dat]
-end_of_line = unset
-insert_final_newline = unset
-
-[pkgs/development/haskell-modules/hackage-packages.nix]
-indent_style = unset
-trim_trailing_whitespace = unset
-
-[pkgs/servers/dict/wordnet_structures.py]
-trim_trailing_whitespace = unset
-
-[pkgs/tools/misc/timidity/timidity.cfg]
-trim_trailing_whitespace = unset
