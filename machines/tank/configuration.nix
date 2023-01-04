@@ -713,9 +713,18 @@ in
       extraConfig = ''
         evaluator_max_memory_size = 4096
         evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
-        max_output_size = ${toString (16 * 1024 * 1024 * 1024)}
-        max_concurrent_evals = 3
+        max_output_size = ${toString (4 * 1024 * 1024 * 1024)}
+        max_concurrent_evals = 1
         evaluator_workers = 4
+        max_db_connections = 150
+        queue_runner_metrics_address = localhost:9198
+
+        <hydra_notify>
+          <prometheus>
+            listen_address = localhost
+            port = 9199
+          </prometheus>
+        </hydra_notify>
       '';
     };
   };
