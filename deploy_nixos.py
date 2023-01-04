@@ -135,7 +135,8 @@ class DeployHost:
                     stdout_write.close()
                 if stderr == subprocess.PIPE:
                     stderr_write.close()
-                stdout_data, stderr_data = self._prefix_output(read_fd, stdout_read, stderr_read)
+                stdout_data, stderr_data = self._prefix_output(
+                    read_fd, stdout_read, stderr_read)
                 ret = p.wait()
                 return subprocess.CompletedProcess(
                     cmd, ret, stdout=stdout_data, stderr=stderr_data
@@ -167,6 +168,7 @@ class DeployHost:
             + ssh_opts
             + ["--", f"{sudo} bash -c {quote(cmd)}"]
         )
+        print(f"[\033[95m{self.command_prefix}\033[0m] {' ' .join(ssh_cmd)}")
         return self._run(ssh_cmd, shell=False, stdout=stdout, stderr=stderr)
 
 
@@ -185,7 +187,8 @@ class DeployGroup:
         stdout: FILE = None,
         stderr: FILE = None,
     ) -> None:
-        results.append((host, host.run_local(cmd, stdout=stdout, stderr=stderr)))
+        results.append((host, host.run_local(
+            cmd, stdout=stdout, stderr=stderr)))
 
     def _run_remote(
         self,
