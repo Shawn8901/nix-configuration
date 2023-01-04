@@ -564,8 +564,10 @@ in
       settings = {
         server = rec {
           domain = "status.tank.pointjig.de";
+          http_addr = "127.0.0.1";
           http_port = 3001;
           root_url = "https://${domain}/";
+          enable_gzip = true;
         };
         database = {
           type = "postgres";
@@ -576,6 +578,8 @@ in
         security = {
           admin_password = "$__env{ADMIN_PASSWORD}";
           secret_key = "$__env{SECRET_KEY}";
+          cookie_secure = true;
+          content_security_policy = true;
         };
         smtp = {
           enabled = true;
@@ -584,9 +588,12 @@ in
           password = "$__env{SMTP_PASSWORD}";
           from_address = "noreply@pointjig.de";
         };
+        analytics = {
+          check_for_updates = false;
+          reporting_enabled = false;
+        };
         alerting.enabled = false;
         unified_alerting.enabled = true;
-        analytics.reporting_enabled = false;
       };
       provision = {
         enable = true;
