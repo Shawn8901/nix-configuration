@@ -17,3 +17,26 @@ jobs:
           gh repo sync Shawn8901/nixpkgs --source NixOS/nixpkgs --branch nixos-22.05
         env:
           GH_TOKEN: "${{ secrets.GH_TOKEN }}"
+  update-branch:
+    runs-on: ubuntu-22.04
+    needs: [sync_fork]
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+        with:
+          repository: "Shawn8901/nixpkgs"
+          ref: "nixos-unstable-custom"
+          fetch-depth: 0
+          token: "${{ secrets.GH_TOKEN }}"
+      - name: Set up git
+        shell: bash
+        run: |
+          git config user.email git@pointjig.de
+          git config user.name "Git Bot"
+      - name: Update custom branch
+        shell: bash
+        run: |
+          git rebase origin/nixos-unstable
+          git push --force-with-lease
+        env:
+          GH_TOKEN: "${{ secrets.GH_TOKEN }}"
