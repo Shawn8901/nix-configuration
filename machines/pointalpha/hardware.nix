@@ -5,7 +5,11 @@ in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  nixpkgs.hostPlatform.system = "x86_64-linux";
+  nix.settings.system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "x86-64" "x86-64-v2" "x86-64-v3" ];
+  nixpkgs.hostPlatform = {
+    #gcc.arch = "x86-64-v3";
+    system = "x86_64-linux";
+  };
 
   boot = {
     initrd = {

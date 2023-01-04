@@ -161,6 +161,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-cpu-level": {
+      "locked": {
+        "lastModified": 1672783306,
+        "narHash": "sha256-5vHvsr+rt1vYJkHNJRkn8CM44ci0xJdKRb5zA97l/FU=",
+        "owner": "Shawn8901",
+        "repo": "nixpkgs",
+        "rev": "b75fb7e29053e409fcd626f0789b054400ca0f90",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Shawn8901",
+        "ref": "nixos-unstable-custom",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -170,6 +186,7 @@
         "mimir-client": "mimir-client",
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
+        "nixpkgs-cpu-level": "nixpkgs-cpu-level",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "stfc-bot": "stfc-bot"
       }
