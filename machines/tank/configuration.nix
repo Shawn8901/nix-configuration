@@ -371,6 +371,13 @@ in
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       virtualHosts = {
+        "tank.fritz.box" = {
+          enableACME = false;
+          locations."/" = {
+            proxyPass = "http://localhost:3000";
+            recommendedProxySettings = true;
+          };
+        };
         "${config.services.nextcloud.hostName}" = {
           enableACME = true;
           forceSSL = true;
@@ -686,7 +693,36 @@ in
       envFile = config.age.secrets.mimir-env-dev.path;
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
+    # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
+    hydra = {
+      enable = true;
+      listenHost = "localhost";
+      port = 3000;
+      #minimumDiskFree = 15;
+      #minimumDiskFreeEvaluator = 10;
+      hydraURL = "http://tank.fritz.box"; # externally visible URL
+      notificationSender = "hydra@pointjig.de"; # e-mail of hydra service
+      # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
+      buildMachinesFiles = [ ];
+      # you will probably also want, otherwise *everything* will be built from scratch
+      useSubstitutes = true;
+      extraConfig = ''
+        evaluator_max_memory_size = 4096
+        evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
+        max_output_size = ${toString (16 * 1024 * 1024 * 1024)}
+        max_concurrent_evals = 3
+        evaluator_workers = 4
+      '';
+    };
   };
+  # GitHub access token is stored on all systems with group right for nixbld
+  users.users.hydra-queue-runner.extraGroups = [ "nixbld" ];
+
+  # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
+  nix.extraOptions = ''
+    extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd
+  '';
+
 
   systemd.services.nextcloud-setup.after = [ "postgresql.service" ];
   systemd.services.nextcloud-notify_push.preStart = "sleep 5";
