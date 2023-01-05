@@ -5,7 +5,10 @@ in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  nix.settings.system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "x86-64" "x86-64-v2" "x86-64-v3" ];
+  nix.settings = {
+    system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "x86-64" "x86-64-v2" "x86-64-v3" ];
+    substituters = [ "http://tank.fritz.box/" ];
+  };
   nixpkgs.hostPlatform = {
     #gcc.arch = "x86-64-v3";
     system = "x86_64-linux";
