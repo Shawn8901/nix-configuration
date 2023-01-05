@@ -13,7 +13,6 @@
       auto-optimise-store = true;
       #allow-import-from-derivation = false;
       substituters = [
-        "https://cache.nixos.org/"
         "https://nix-community.cachix.org"
         "https://shawn8901.cachix.org"
       ];
