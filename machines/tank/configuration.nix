@@ -395,7 +395,7 @@ in
         "tank.fritz.box" = {
           enableACME = false;
           locations."/" = {
-            proxyPass = "http://localhost:3000";
+            proxyPass = "http://127.0.0.1:3000";
             recommendedProxySettings = true;
           };
         };
@@ -717,7 +717,7 @@ in
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
     hydra = {
       enable = true;
-      listenHost = "localhost";
+      listenHost = "127.0.0.1";
       port = 3000;
       #minimumDiskFree = 15;
       #minimumDiskFreeEvaluator = 10;
