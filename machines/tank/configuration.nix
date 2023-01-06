@@ -56,6 +56,7 @@ in
       file = ../../secrets/hydra-signing-key.age;
       owner = "hydra";
       group = "hydra";
+      mode = "0440";
     };
   };
 
