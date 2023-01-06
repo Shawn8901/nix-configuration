@@ -19,6 +19,7 @@
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA="
+        "tank.fritz.box:v/WMtn4qf54RdDRweNrAfpf0p7EX5MiUejvVq2ofrLY="
       ];
       trusted-users = [ "root" "shawn" ];
       cores = lib.mkDefault 4;

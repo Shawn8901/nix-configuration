@@ -52,6 +52,11 @@ in
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
     github_access_token.mode = lib.mkForce "0777";
+    hydra-signing-key = {
+      file = ../../secrets/hydra-signing-key.age;
+      owner = "hydra";
+      group = "hydra";
+    };
   };
 
   networking = {
@@ -729,6 +734,7 @@ in
         evaluator_workers = 4
         max_db_connections = 150
         queue_runner_metrics_address = localhost:9198
+        binary_cache_secret_key_file =  ${secrets.hydra-signing-key.path}
 
         <hydra_notify>
           <prometheus>

@@ -40,4 +40,6 @@ in
 
   "ffm_root_password.age".publicKeys = [ shawn next ];
   "ffm_nextcloud_db.age".publicKeys = [ shawn next ];
+
+  "hydra-signing-key.age".publicKeys = [ shawn tank ];
 }
