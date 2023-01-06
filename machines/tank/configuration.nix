@@ -87,6 +87,17 @@ in
       };
       wait-online = { ignoredInterfaces = [ "enp4s0" ]; };
     };
+    services.nextcloud-setup.after = [ "postgresql.service" ];
+    services.nextcloud-notify_push = {
+      after = [ "redis-nextcloud.service" ];
+      serviceConfig = { Restart = "on-failure"; RestartSec = "5s"; };
+    };
+    # TODO: Prepare a PR to fix/make it configurable that upstream
+    services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
+
+    services.grafana.serviceConfig.EnvironmentFile = [
+      secrets.grafana_env_file.path
+    ];
   };
 
   services = {
@@ -735,16 +746,6 @@ in
     extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd
   '';
 
-
-  systemd.services.nextcloud-setup.after = [ "postgresql.service" ];
-  systemd.services.nextcloud-notify_push.preStart = "sleep 5";
-  systemd.services.nextcloud-notify_push.after = [ "redis-nextcloud.service" "nextcloud-setup.service" ];
-
-  # TODO: Prepare a PR to fix/make it configurable that upstream
-  systemd.services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
-  systemd.services.grafana.serviceConfig.EnvironmentFile = [
-    secrets.grafana_env_file.path
-  ];
 
   security = {
     rtkit.enable = true;
