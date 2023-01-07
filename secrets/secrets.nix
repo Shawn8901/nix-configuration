@@ -42,4 +42,5 @@ in
   "ffm_nextcloud_db.age".publicKeys = [ shawn next ];
 
   "hydra-signing-key.age".publicKeys = [ shawn tank ];
+  "builder-ssh-key.age".publicKeys = [ shawn ];
 }
