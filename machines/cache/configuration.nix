@@ -52,12 +52,17 @@ in
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
+      clientMaxBodySize = "1G";
       virtualHosts = {
         "cache.pointjig.de" = {
           enableACME = true;
           forceSSL = true;
-          http3 = true;
+          http3 = false;
+          http2 = false;
           kTLS = true;
+          extraConfig = ''
+            client_header_buffer_size 64k;
+          '';
           locations."/" = {
             proxyPass = "http://127.0.0.1:8080";
             recommendedProxySettings = true;
