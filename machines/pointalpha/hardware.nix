@@ -9,6 +9,7 @@ in
     system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86-64-v2" "gccarch-x86-64-v3" ];
     substituters = [ "http://tank.fritz.box/" ];
   };
+  nix.gc.automatic = lib.mkForce false;
   nixpkgs.hostPlatform = {
     #gcc.arch = "x86-64-v3";
     system = "x86_64-linux";

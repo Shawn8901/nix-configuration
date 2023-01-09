@@ -5,8 +5,9 @@ let
   tank = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIsh4IWvnMlQTfU9N1BpcE0b4KzxDYrjh+k8TTqj07Gw";
   shelter = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDg8wKBWXd+v9FeoujUAppfFp4FUX4IobYNujKO8PBGL";
   next = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOXIWr2IzBmFBqcLZ503WFiKt1jcxZcn2oklGcnv9F8W";
+  cache = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsbOU2fH6DUf3MTnMJuMU6PLT7sugH7s1cC2i0ob2pY";
 
-  systems = [ pointalpha pointjig tank shelter ];
+  systems = [ pointalpha pointjig tank shelter cache ];
 in
 {
   "shawn_password.age".publicKeys = [ shawn ] ++ systems;
@@ -31,6 +32,8 @@ in
   "prometheus_public_web_config.age".publicKeys = [ shawn next pointjig shelter ];
   "grafana_env_file.age".publicKeys = [ shawn tank ];
   "github_access_token.age".publicKeys = [ shawn next ] ++ systems;
+  "nix-netrc-ro.age".publicKeys = [ shawn next ] ++ systems;
+  "nix-netrc-rw.age".publicKeys = [ shawn tank pointalpha ];
   "stfc-env-dev.age".publicKeys = [ shawn tank ];
   "mimir-env-dev.age".publicKeys = [ shawn tank ];
   "stfc-env.age".publicKeys = [ shawn pointjig ];
@@ -41,6 +44,7 @@ in
   "ffm_root_password.age".publicKeys = [ shawn next ];
   "ffm_nextcloud_db.age".publicKeys = [ shawn next ];
 
-  "hydra-signing-key.age".publicKeys = [ shawn tank ];
-  "builder-ssh-key.age".publicKeys = [ shawn ];
+  "cache-signing-key.age".publicKeys = [ shawn tank cache ];
+  "builder-ssh-key.age".publicKeys = [ shawn cache ];
+  "attic_env.age".publicKeys = [ shawn cache ];
 }

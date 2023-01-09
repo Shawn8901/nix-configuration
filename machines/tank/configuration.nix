@@ -58,6 +58,11 @@ in
       group = "hydra";
       mode = "0440";
     };
+    nix-netrc = lib.mkForce {
+      file = ../../secrets/nix-netrc-rw.age;
+      group = "nixbld";
+      mode = "0440";
+    };
   };
 
   networking = {
@@ -663,7 +668,6 @@ in
               jsonData.prometheusType = "Prometheus";
             }
             {
-
               name = "shelter";
               type = "prometheus";
               url = "https://status.shelter.pointjig.de";
@@ -749,9 +753,29 @@ in
 
 
   # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
-  nix.extraOptions = ''
-    extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd
-  '';
+  nix.extraOptions =
+    let
+      atticPkg = inputs.attic.packages.${system}.attic-client;
+      upload_to_attic = pkgs.writeScriptBin "upload-to-attic" ''
+        #!/bin/sh
+        set -eu
+        set -f # disable globbing
+
+        # skip push if the declarative job spec
+        OUT_END=$(echo ''${OUT_PATHS: -10})
+        if [ "$OUT_END" == "-spec.json" ]; then
+        exit 0
+        fi
+
+        export HOME=/root
+        exec ${atticPkg}/bin/attic push nixos $OUT_PATHS > /tmp/hydra_attix 2>&1
+      '';
+    in
+    ''
+      extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd
+      builders-use-substitutes = true
+      post-build-hook = ${upload_to_attic}/bin/upload-to-attic
+    '';
 
 
   security = {
@@ -779,16 +803,8 @@ in
     };
     nologin = { isNormalUser = false; isSystemUser = true; group = "users"; };
     shawn = { extraGroups = [ "nextcloud" ]; };
-    builder = {
-      isNormalUser = true;
-      uid = 1002;
-      group = "users";
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDq/Q8yXUc9MlrhNkmrj6OAIElyzQdEgMvT++NciaPV7"
-      ];
-    };
   };
-  nix.settings.trusted-users = [ "builder" ];
+  nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
 
   environment = {
     noXlibs = true;

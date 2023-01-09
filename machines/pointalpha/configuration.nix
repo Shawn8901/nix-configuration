@@ -29,6 +29,11 @@ in
       owner = "prometheus";
       group = "prometheus";
     };
+    nix-netrc = lib.mkForce {
+      file = ../../secrets/nix-netrc-rw.age;
+      group = "nixbld";
+      mode = "0440";
+    };
   };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -81,6 +86,7 @@ in
       "2a05:bec0:1:16::114" = [ "pointjig" ];
       "78.128.127.235" = [ "shelter" ];
       "2a01:8740:1:e4::2cd3" = [ "shelter" ];
+      "132.145.224.161" = [ "hydra.pointjig.de" ];
     };
     dhcpcd.enable = false;
     useNetworkd = false;
@@ -468,6 +474,8 @@ in
       _JAVA_AWT_WM_NONREPARENTING = "1";
     };
   };
+  nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
+
 
   users.users.shawn = {
     extraGroups = [ "video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld" ];
