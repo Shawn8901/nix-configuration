@@ -474,7 +474,7 @@ in
       _JAVA_AWT_WM_NONREPARENTING = "1";
     };
   };
-  nix.settings.netrc = lib.mkForce secrets.nix-netrc.path;
+  nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
 
 
   users.users.shawn = {

@@ -58,6 +58,11 @@ in
       group = "hydra";
       mode = "0440";
     };
+    nix-netrc = lib.mkForce {
+      file = ../../secrets/nix-netrc-rw.age;
+      group = "nixbld";
+      mode = "0440";
+    };
   };
 
   networking = {
@@ -663,7 +668,6 @@ in
               jsonData.prometheusType = "Prometheus";
             }
             {
-
               name = "shelter";
               type = "prometheus";
               url = "https://status.shelter.pointjig.de";
@@ -779,16 +783,8 @@ in
     };
     nologin = { isNormalUser = false; isSystemUser = true; group = "users"; };
     shawn = { extraGroups = [ "nextcloud" ]; };
-    builder = {
-      isNormalUser = true;
-      uid = 1002;
-      group = "users";
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDq/Q8yXUc9MlrhNkmrj6OAIElyzQdEgMvT++NciaPV7"
-      ];
-    };
   };
-  nix.settings.trusted-users = [ "builder" ];
+  nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
 
   environment = {
     noXlibs = true;
