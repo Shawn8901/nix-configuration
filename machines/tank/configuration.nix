@@ -767,8 +767,9 @@ in
         exit 0
         fi
 
+        echo "Pushing \"''${OUT_PATHS}\"" > /tmp/hydra_attix 2>&1
         export HOME=/root
-        exec ${atticPkg}/bin/attic push nixos $OUT_PATHS > /tmp/hydra_attix 2>&1
+        exec ${atticPkg}/bin/attic push nixos $OUT_PATHS >> /tmp/hydra_attix 2>&1
       '';
     in
     ''

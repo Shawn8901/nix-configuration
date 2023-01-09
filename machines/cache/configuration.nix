@@ -52,7 +52,7 @@ in
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
-      clientMaxBodySize = "1G";
+      clientMaxBodySize = "2G";
       virtualHosts = {
         "cache.pointjig.de" = {
           enableACME = true;
