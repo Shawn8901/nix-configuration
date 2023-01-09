@@ -29,6 +29,11 @@ in
       owner = "prometheus";
       group = "prometheus";
     };
+    nix-netrc = lib.mkForce {
+      file = ../../secrets/nix-netrc-rw.age;
+      group = "nixbld";
+      mode = "0440";
+    };
   };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -469,6 +474,8 @@ in
       _JAVA_AWT_WM_NONREPARENTING = "1";
     };
   };
+  nix.settings.netrc = lib.mkForce secrets.nix-netrc.path;
+
 
   users.users.shawn = {
     extraGroups = [ "video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld" ];

@@ -1,30 +1,34 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
+let
+  system = pkgs.hostPlatform.system;
+in
 {
-  age.secrets.github_access_token = {
-    file = ../../secrets/github_access_token.age;
-    group = "nixbld";
-    mode = "0440";
+  age.secrets = {
+    github_access_token = {
+      file = ../../secrets/github_access_token.age;
+      group = "nixbld";
+      mode = "0440";
+    };
+    nix-netrc = {
+      file = ../../secrets/nix-netrc-ro.age;
+      group = "nixbld";
+      mode = "0440";
+    };
   };
 
-  environment.systemPackages = [ pkgs.cachix ];
+  environment.systemPackages = [ inputs.attic.packages.${system}.attic-client ];
   nix = {
     package = pkgs.nix;
     settings = {
       auto-optimise-store = true;
       #allow-import-from-derivation = false;
-      substituters = [
-        "https://nix-community.cachix.org"
-        "https://shawn8901.cachix.org"
-      ];
-      trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA="
-        "tank.fritz.box:v/WMtn4qf54RdDRweNrAfpf0p7EX5MiUejvVq2ofrLY="
-      ];
+      substituters = [ "https://cache.pointjig.de/nixos" ];
+      trusted-public-keys = [ "nixos:vjrrtYYXDQx4qWPPQ0BeO2cr/O/VCkqOWgbFe2bPfi4=" ];
       trusted-users = [ "root" "shawn" ];
       cores = lib.mkDefault 4;
       max-jobs = lib.mkDefault 2;
       experimental-features = "nix-command flakes";
+      netrc-file = lib.mkForce config.age.secrets.nix-netrc.path;
     };
     extraOptions = ''
       !include ${config.age.secrets.github_access_token.path}

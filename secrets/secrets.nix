@@ -32,6 +32,8 @@ in
   "prometheus_public_web_config.age".publicKeys = [ shawn next pointjig shelter ];
   "grafana_env_file.age".publicKeys = [ shawn tank ];
   "github_access_token.age".publicKeys = [ shawn next ] ++ systems;
+  "nix-netrc-ro.age".publicKeys = [ shawn next ] ++ systems;
+  "nix-netrc-rw.age".publicKeys = [ shawn tank pointalpha ];
   "stfc-env-dev.age".publicKeys = [ shawn tank ];
   "mimir-env-dev.age".publicKeys = [ shawn tank ];
   "stfc-env.age".publicKeys = [ shawn pointjig ];
