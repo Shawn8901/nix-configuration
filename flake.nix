@@ -53,7 +53,7 @@
 
       hydraJobs = {
         packages = packages;
-        nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (lib.filterAttrs (_: cfg: cfg.config.nixpkgs.hostPlatform.isx86) nixosConfigurations);
+        nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (filterAttrs (_: cfg: cfg.config.nixpkgs.hostPlatform.isx86) nixosConfigurations);
       };
 
       packages.${system} = import ./packages (inputs // { inherit pkgs; });
