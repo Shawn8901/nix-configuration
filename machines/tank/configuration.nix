@@ -772,7 +772,7 @@ in
       '';
     in
     ''
-      extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd
+      extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://github.com/zhaofengli/nix-base32.git
       builders-use-substitutes = true
       post-build-hook = ${upload_to_attic}/bin/upload-to-attic
     '';
