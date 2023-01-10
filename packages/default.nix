@@ -15,9 +15,7 @@ rec {
   gh-poi = pkgs.callPackage ./gh-poi { };
   vdhcoapp = pkgs.callPackage ./vdhcoapp { };
 
-  jameica = pkgs.callPackage ./jameica {
-    Cocoa = null;
-  };
+  jameica-fhs = pkgs.callPackage ./jameica/fhsenv.nix { };
 
   libcapi = pkgs.callPackage ./libcapi { };
   librm = pkgs.callPackage ./librm { inherit libcapi; };

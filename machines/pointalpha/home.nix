@@ -11,7 +11,7 @@ in
         remmina
         samba
         portfolio
-        jameica
+        jameica-fhs
         pytr
         libreoffice-qt
         inkscape
