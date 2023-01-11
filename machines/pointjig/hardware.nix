@@ -3,7 +3,7 @@
 {
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
-  nixpkgs.hostPlatform = "x86_64-linux";
+  nixpkgs.hostPlatform.system = "x86_64-linux";
 
   boot = {
     initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];

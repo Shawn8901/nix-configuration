@@ -6,10 +6,7 @@ in
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   nix.settings.system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86-64-v2" "gccarch-x86-64-v3" ];
-  nixpkgs.hostPlatform = {
-    #gcc.arch = "x86-64-v3";
-    system = "x86_64-linux";
-  };
+  nixpkgs.hostPlatform.system = "x86_64-linux";
 
   boot = {
     initrd.availableKernelModules = [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
