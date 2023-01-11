@@ -397,8 +397,11 @@ in
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       virtualHosts = {
-        "tank.fritz.box" = {
-          enableACME = false;
+        "hydra.pointjig.de" = {
+          enableACME = true;
+          forceSSL = true;
+          http3 = true;
+          kTLS = true;
           locations."/" = {
             proxyPass = "http://127.0.0.1:3000";
             recommendedProxySettings = true;
@@ -725,7 +728,7 @@ in
       port = 3000;
       #minimumDiskFree = 15;
       #minimumDiskFreeEvaluator = 10;
-      hydraURL = "http://tank.fritz.box"; # externally visible URL
+      hydraURL = "https://hydra.pointjig.de"; # externally visible URL
       notificationSender = "hydra@pointjig.de"; # e-mail of hydra service
       # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
       buildMachinesFiles = [ ];
