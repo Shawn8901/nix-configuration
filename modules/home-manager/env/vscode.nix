@@ -27,6 +27,8 @@ with lib; {
         ms-python.python
         ms-python.vscode-pylance
         mhutchie.git-graph
+        usernamehw.errorlens
+        eamodio.gitlens
       ];
       keybindings = [
         {
