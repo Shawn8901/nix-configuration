@@ -1,10 +1,13 @@
-{ self, config, lib, pkgs, ... }:
+{ self, config, lib, pkgs, inputs, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
+  inherit (inputs) firefox-addons;
+  inherit (firefox-addons.lib.${system}) buildFirefoxXpiAddon;
+
   system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
   cfg = config.env.browser;
-  mozilla-addons = import ../../../packages/mozilla-addons { inherit pkgs; inherit (pkgs) lib fetchurl stdenv; };
+  firefox-addon-packages = firefox-addons.packages.${system};
 in
 {
   options = {
@@ -19,15 +22,26 @@ in
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         extraNativeMessagingHosts = [ fPkgs.vdhcoapp ];
       };
-      extensions = with mozilla-addons; [
-        vdh
+      extensions = with firefox-addon-packages; [
         ublock-origin
         umatrix
         keepassxc-browser
         plasma-integration
-        tampermonkey
+        # Tampermonkey has an unfree lisence and some can not pass a
+        # nixpkgs.config.allowUnfreePredicate to a flake input.
+        # So overriding the stdenv is the only solution here to use the hosts
+        # nixpkgs.config.allowUnfreePredicate.
+        (tampermonkey.override { inherit (pkgs) stdenv fetchurl; })
         betterttv
         h264ify
+        (buildFirefoxXpiAddon {
+          pname = "Video-DownloadHelper";
+          version = "7.6.0";
+          addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
+          url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
+          sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
+          meta = { };
+        })
       ];
 
       profiles."shawn" = {
