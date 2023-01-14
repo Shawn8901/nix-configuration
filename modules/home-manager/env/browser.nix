@@ -27,13 +27,16 @@ in
         umatrix
         keepassxc-browser
         plasma-integration
+        h264ify
+
         # Tampermonkey has an unfree lisence and some can not pass a
         # nixpkgs.config.allowUnfreePredicate to a flake input.
         # So overriding the stdenv is the only solution here to use the hosts
         # nixpkgs.config.allowUnfreePredicate.
         (tampermonkey.override { inherit (pkgs) stdenv fetchurl; })
-        betterttv
-        h264ify
+        (betterttv.override { inherit (pkgs) stdenv fetchurl; })
+
+        # Download all plugins which are not in the repo manually
         (buildFirefoxXpiAddon {
           pname = "Video-DownloadHelper";
           version = "7.6.0";
