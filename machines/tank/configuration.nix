@@ -722,65 +722,57 @@ in
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
-    hydra = {
-      enable = true;
-      listenHost = "127.0.0.1";
-      port = 3000;
-      package = (pkgs.hydra_unstable.overrideAttrs (oldAttrs: { doCheck = false; }));
-      #minimumDiskFree = 15;
-      #minimumDiskFreeEvaluator = 10;
-      hydraURL = "https://hydra.pointjig.de"; # externally visible URL
-      notificationSender = "hydra@pointjig.de"; # e-mail of hydra service
-      # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
-      buildMachinesFiles = [ ];
-      # you will probably also want, otherwise *everything* will be built from scratch
-      useSubstitutes = true;
-      extraConfig = ''
-        evaluator_max_memory_size = 4096
-        evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
-        max_output_size = ${toString (4 * 1024 * 1024 * 1024)}
-        max_concurrent_evals = 1
-        evaluator_workers = 4
-        max_db_connections = 150
-        queue_runner_metrics_address = localhost:9198
-        binary_cache_secret_key_file =  ${secrets.hydra-signing-key.path}
+    hydra =
+      let
+        atticPkg = inputs.attic.packages.${system}.attic-client;
+        upload_to_attic = pkgs.writeScriptBin "upload-to-attic" ''
+          pathToPush=$(${pkgs.jq}/bin/jq -r '.outputs | .[] | .path' < $HYDRA_JSON)
+          ${atticPkg}/bin/attic push nixos $pathToPush
+        '';
+      in
+      {
+        enable = true;
+        listenHost = "127.0.0.1";
+        port = 3000;
+        package = (pkgs.hydra_unstable.overrideAttrs (oldAttrs: { doCheck = false; }));
+        #minimumDiskFree = 15;
+        #minimumDiskFreeEvaluator = 10;
+        hydraURL = "https://hydra.pointjig.de"; # externally visible URL
+        notificationSender = "hydra@pointjig.de"; # e-mail of hydra service
+        # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
+        buildMachinesFiles = [ ];
+        # you will probably also want, otherwise *everything* will be built from scratch
+        useSubstitutes = true;
+        extraConfig = ''
+          evaluator_max_memory_size = 4096
+          evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
+          max_output_size = ${toString (4 * 1024 * 1024 * 1024)}
+          max_concurrent_evals = 1
+          evaluator_workers = 4
+          max_db_connections = 150
+          queue_runner_metrics_address = localhost:9198
+          binary_cache_secret_key_file =  ${secrets.hydra-signing-key.path}
 
-        <hydra_notify>
-          <prometheus>
-            listen_address = localhost
-            port = 9199
-          </prometheus>
-        </hydra_notify>
-      '';
-    };
+          <hydra_notify>
+            <prometheus>
+              listen_address = localhost
+              port = 9199
+            </prometheus>
+          </hydra_notify>
+
+          <runcommand>
+            command = ${upload_to_attic}/bin/upload-to-attic
+          </runcommand>
+        '';
+      };
   };
 
 
   # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
-  nix.extraOptions =
-    let
-      atticPkg = inputs.attic.packages.${system}.attic-client;
-      upload_to_attic = pkgs.writeScriptBin "upload-to-attic" ''
-        #!/bin/sh
-        set -eu
-        set -f # disable globbing
-
-        # skip push if the declarative job spec
-        OUT_END=$(echo ''${OUT_PATHS: -10})
-        if [ "$OUT_END" == "-spec.json" ]; then
-        exit 0
-        fi
-
-        echo "Pushing \"''${OUT_PATHS}\"" > /tmp/hydra_attix 2>&1
-        export HOME=/root
-        exec ${atticPkg}/bin/attic push nixos $OUT_PATHS >> /tmp/hydra_attix 2>&1
-      '';
-    in
-    ''
-      extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://github.com/zhaofengli/nix-base32.git
-      builders-use-substitutes = true
-      post-build-hook = ${upload_to_attic}/bin/upload-to-attic
-    '';
+  nix.extraOptions = ''
+    extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://github.com/zhaofengli/nix-base32.git
+    builders-use-substitutes = true
+  '';
 
 
   security = {
@@ -820,6 +812,7 @@ in
     etc."zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
     etc."zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
     etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
+
     systemPackages = [
       (pkgs.writeScriptBin "upgrade-pg-cluster" ''
         set -eux
