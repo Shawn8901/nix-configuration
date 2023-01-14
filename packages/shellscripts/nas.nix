@@ -2,7 +2,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "nas_mount";
-  version = "0.0.1-dev";
+  version = "0.0.1";
   src = ./nas;
   phases = "installPhase fixupPhase";
   installPhase = ''
