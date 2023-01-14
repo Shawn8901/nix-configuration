@@ -726,6 +726,7 @@ in
       enable = true;
       listenHost = "127.0.0.1";
       port = 3000;
+      package = (pkgs.hydra_unstable.overrideAttrs (oldAttrs: { doCheck = false; }));
       #minimumDiskFree = 15;
       #minimumDiskFreeEvaluator = 10;
       hydraURL = "https://hydra.pointjig.de"; # externally visible URL
