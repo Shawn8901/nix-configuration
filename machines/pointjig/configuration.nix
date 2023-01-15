@@ -97,8 +97,9 @@ in
       package = pkgs.postgresql_14;
       settings = {
         max_connections = 200;
-        shared_buffers = "128MB";
-        work_mem = "8MB";
+        effective_cache_size = "256MB";
+        shared_buffers = "256MB";
+        work_mem = "16MB";
         track_activities = true;
         track_counts = true;
         track_io_timing = true;
