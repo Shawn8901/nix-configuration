@@ -10,7 +10,7 @@ in
   };
   nix.gc.automatic = lib.mkForce false;
   nixpkgs.hostPlatform = {
-    #gcc.arch = "x86-64-v3";
+    gcc.arch = "x86-64-v3";
     system = "x86_64-linux";
   };
 
