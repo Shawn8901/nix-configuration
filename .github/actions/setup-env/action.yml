@@ -11,9 +11,15 @@ inputs:
   cachix_token:
     description: "Token to be used for cachix"
     required: false
+  netrc_content:
+    description: "Content for the netrc"
+    required: true
 runs:
   using: "composite"
   steps:
+    - name: Generate netrc
+      shell: bash
+      run: echo ${{ inputs.netrc_content }} > /home/runner/.netrc
     - name: Install nix
       uses: cachix/install-nix-action@v18
       with:
@@ -21,6 +27,7 @@ runs:
           auto-optimise-store = true
           access-tokens = github.com=${{ inputs.github_token }}
           experimental-features = nix-command flakes
+          netrc-file = /home/runner/.netrc
           substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://shawn8901.cachix.org
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= shawn8901.cachix.org-1:7RAYBGET4e+szLrg86T9PP1vwDp+T99Fq0sTDt3B2DA=
     - name: Set up cachix

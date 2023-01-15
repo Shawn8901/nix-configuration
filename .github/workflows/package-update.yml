@@ -19,6 +19,7 @@ jobs:
         uses: ./.github/actions/setup-env
         with:
           github_token: "${{ secrets.GH_TOKEN }}"
+          netrc_content: "${{ secrets.NETRC_CONTENT }}"
           setup_cachix: false
       - name: Generate packages.json
         run: |
@@ -45,6 +46,7 @@ jobs:
         uses: ./.github/actions/setup-env
         with:
           github_token: "${{ secrets.GH_TOKEN }}"
+          netrc_content: "${{ secrets.NETRC_CONTENT }}"
           cachix_token: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Install dependencies
         run: |
