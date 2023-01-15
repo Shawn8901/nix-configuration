@@ -748,7 +748,7 @@ in
           evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
           max_output_size = ${toString (4 * 1024 * 1024 * 1024)}
           max_concurrent_evals = 1
-          evaluator_workers = 4
+          evaluator_workers = 1
           max_db_connections = 150
           queue_runner_metrics_address = localhost:9198
           binary_cache_secret_key_file =  ${secrets.hydra-signing-key.path}
@@ -766,7 +766,7 @@ in
         '';
       };
   };
-  systemd.services.hydra-evaluator.serviceConfig.OOMScoreAdjust = -999;
+  systemd.services.hydra-evaluator.serviceConfig.OOMScoreAdjust = -1000;
 
   # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
   nix.extraOptions = ''
