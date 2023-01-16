@@ -36,7 +36,7 @@ jobs:
       - id: gen_machines
         name: Generate Machines Matrix
         run: |
-          machines=$(jq -c '.hydraJobs.nixos | keys' < flake.json)
+          machines=$(jq -c '.hydraJobs.nixos | keys | map (. | select ( . | contains ("pointalpha") | not ))' < flake.json)
           echo machines=$machines >> $GITHUB_OUTPUT
       - name: Store flake.lock
         uses: actions/upload-artifact@v3
