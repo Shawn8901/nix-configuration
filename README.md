@@ -14,3 +14,4 @@ atticadm -f <path to config file> make-token --sub 'ro' --validity '1 month'  --
 # Root Token
 atticadm -f <path to config file> make-token --sub 'root' --validity '1 month' --push '*' --pull '*' --delete '*' --create-cache '*' --destroy-cache '*' --configure-cache '*' --configure-cache-retention '*'
 ```
+t
