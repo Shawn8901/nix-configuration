@@ -766,6 +766,7 @@ in
         '';
       };
   };
+  systemd.services.hydra-init.after = [ "network-online.target" ];
   systemd.services.hydra-evaluator.serviceConfig.OOMScoreAdjust = -1000;
 
   # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
