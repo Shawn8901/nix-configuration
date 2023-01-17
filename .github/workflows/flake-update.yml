@@ -26,92 +26,14 @@ jobs:
         run: nix flake update
       - name: Check Flake
         run: nix flake check --allow-import-from-derivation
-      - name: Generate flake.json
-        run: nix flake show --allow-import-from-derivation --json > flake.json
-      - id: gen_packages
-        name: Generate Package Matrix
+      - name: Set up git
+        shell: bash
         run: |
-          packages=$(jq -c '.hydraJobs.packages."x86_64-linux" | keys' < flake.json)
-          echo packages=$packages >> $GITHUB_OUTPUT
-      - id: gen_machines
-        name: Generate Machines Matrix
+          git config user.email git@pointjig.de
+          git config user.name "Git Bot"
+      - name: Create commit and push to staging branch
+        shell: bash
         run: |
-          machines=$(jq -c '.hydraJobs.nixos | keys | map (. | select ( . | contains ("pointalpha") | not ))' < flake.json)
-          echo machines=$machines >> $GITHUB_OUTPUT
-      - name: Store flake.lock
-        uses: actions/upload-artifact@v3
-        with:
-          name: flake_lock
-          path: flake.lock
-
-  build_packages:
-    runs-on: ubuntu-22.04
-    needs: [update_flake]
-    strategy:
-      fail-fast: false
-      max-parallel: 10
-      matrix:
-        package: ${{fromJson(needs.update_flake.outputs.packages)}}
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v3
-        with:
-          token: "${{ secrets.GH_TOKEN }}"
-      - name: Install nix
-        uses: ./.github/actions/setup-env
-        with:
-          github_token: "${{ secrets.GH_TOKEN }}"
-          netrc_content: "${{ secrets.NETRC_CONTENT }}"
-          cachix_token: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - name: Restore flake.lock
-        uses: actions/download-artifact@v3
-        with:
-          name: flake_lock
-      - name: Build everything
-        run: nix build .#hydraJobs.packages."x86_64-linux".${{ matrix.package }}
-
-  build_machines:
-    runs-on: ubuntu-22.04
-    # Matrix has to be referenced here, otherwise we can not reference its output.
-    needs: [update_flake, build_packages]
-    strategy:
-      fail-fast: false
-      max-parallel: 5
-      matrix:
-        machine: ${{fromJson(needs.update_flake.outputs.machines)}}
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v3
-        with:
-          token: "${{ secrets.GH_TOKEN }}"
-      - name: Install nix
-        uses: ./.github/actions/setup-env
-        with:
-          github_token: "${{ secrets.GH_TOKEN }}"
-          cachix_token: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - name: Restore flake.lock
-        uses: actions/download-artifact@v3
-        with:
-          name: flake_lock
-      - name: Build everything
-        run: nix build .#hydraJobs.nixos.${{ matrix.machine }}
-
-  push_update:
-    runs-on: ubuntu-20.04
-    permissions: write-all
-    needs: [build_packages, build_machines]
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v3
-        with:
-          token: "${{ secrets.GH_TOKEN }}"
-      - name: Restore flake.lock
-        uses: actions/download-artifact@v3
-        with:
-          name: flake_lock
-      - name: create PR
-        uses: ./.github/actions/create-pr
-        with:
-          title: "Auto update $(date -I)"
-          body: "Automatic flake update on $(date -I)"
-          github_token: "${{ secrets.GH_TOKEN }}"
+          git diff-index --quiet HEAD -- && echo "no changes" && exit 0
+          git commit -am "flake.lock: Update"
+          git push origin HEAD:refs/heads/staging
