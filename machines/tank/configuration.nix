@@ -771,7 +771,7 @@ in
 
   # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
   nix.extraOptions = ''
-    extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
+    extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://git.sr.ht/~rycee/nmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
     builders-use-substitutes = true
   '';
 
