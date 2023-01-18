@@ -729,6 +729,10 @@ in
           pathToPush=$(${pkgs.jq}/bin/jq -r '.outputs | .[] | .path' < $HYDRA_JSON)
           ${atticPkg}/bin/attic push nixos $pathToPush
         '';
+        advance_branch = pkgs.writeScriptBin "advance_branch" ''
+          echo $HYDRA_JSON
+          cat $HYDRA_JSON
+        '';
       in
       {
         enable = true;
@@ -762,6 +766,10 @@ in
 
           <runcommand>
             command = ${upload_to_attic}/bin/upload-to-attic
+          </runcommand>
+          <runcommand>
+            job = *:*:staging
+            command = ${advance_branch}/bin/advance_branch
           </runcommand>
         '';
       };
