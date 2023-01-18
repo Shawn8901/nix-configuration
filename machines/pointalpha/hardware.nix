@@ -22,10 +22,18 @@ in
     };
     kernelModules = [ "amdgpu" "kvm-amd" "cifs" "usb_storage" ];
     kernelPackages = pkgs.linuxPackages_xanmod;
-    extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
-    blacklistedKernelModules = [
-      "k10temp"
+    kernelPatches = [
+      {
+        name = "add-cpu-config";
+        patch = null;
+        extraConfig = ''
+          GENERIC_CPU n
+          GENERIC_CPU3 y
+        '';
+      }
     ];
+    extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
+    blacklistedKernelModules = [ "k10temp" ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944
       options zfs zfs_vdev_scheduler=deadline
