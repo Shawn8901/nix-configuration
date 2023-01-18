@@ -35,6 +35,5 @@ jobs:
         shell: bash
         run: |
           git diff-index --quiet HEAD -- && echo "no changes" && exit 0
-          git remote update origin
           git commit -am "flake.lock: Update"
-          git push origin HEAD:refs/heads/staging
+          git push origin HEAD:refs/heads/staging --force
