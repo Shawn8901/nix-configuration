@@ -23,7 +23,7 @@ jobs:
           setup_cachix: false
       - name: Generate packages.json
         run: |
-          nix eval --json .#packages.x86_64-linux --apply 'builtins.mapAttrs(name: value: builtins.hasAttr "updateScript" value)' > packages.json
+          nix eval --json .#packages.x86_64-linux --apply 'builtins.mapAttrs(name: value: builtins.hasAttr "runUpdate" value && value.runUpdate)' > packages.json
       - id: gen_packages
         run: |
           packages=$(jq -c 'map_values(select (.)) | keys' < packages.json)
@@ -51,10 +51,29 @@ jobs:
       - name: Install dependencies
         run: |
           nix profile install nixpkgs#nix-update
+      - name: Set up git
+        run: |
+          git config user.email git@pointjig.de
+          git config user.name "Git Bot"
       - name: Update package
         run: nix-update --format --build --commit --flake ${{ matrix.package }}
-      - name: create PR
-        uses: ./.github/actions/create-pr
-        with:
-          title: "Package update for ${{ matrix.package }} $(date -I)"
-          body: "Automatic package update for ${{ matrix.package }} on $(date -I)"
+      - name: Push branch and create PR
+        run: |
+          UPSTREAM=${1:-'@{u}'}
+          LOCAL=$(git rev-parse @)
+          REMOTE=$(git rev-parse "$UPSTREAM")
+          BASE=$(git merge-base @ "$UPSTREAM")
+          if [ $LOCAL = $REMOTE ]; then
+            exit 0
+          fi
+          git switch -c updates-${{ matrix.package }}_$(date -I)
+          git push -u origin updates-${{ matrix.package }}_$(date -I)
+          PR=$(gh pr create \
+          --assignee Shawn8901 \
+          --base main \
+          --body "Automatic package update for ${{ matrix.package }} on $(date -I)" \
+          --fill \
+          --label bot \
+          --title "Package update for ${{ matrix.package }} $(date -I)")
+        env:
+          GH_TOKEN: ${{ github.token }}

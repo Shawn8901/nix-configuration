@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup
   ];
 
+  passthru.runUpdate = true;
+
   meta = {
     description = "Roger Router is a utility to control and monitor AVM Fritz!Box Routers.";
     homepage = "https://tabos.org/projects/rogerrouter/";

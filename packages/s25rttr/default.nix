@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
 
+  passthru.runUpdate = true;
   passthru.updateScript = writeScript "update-s25rttr" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts

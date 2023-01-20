@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ];
 
+  passthru.runUpdate = true;
+
   meta = {
     description = "Modular libcapi20";
     homepage = "https://gitlab.com/tabos/libcapi";

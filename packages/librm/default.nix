@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ];
 
+  passthru.runUpdate = true;
+
   meta = {
     description = "Router Manager Library for FRITZ!Box Router";
     homepage = "https://gitlab.com/tabos/librm";
