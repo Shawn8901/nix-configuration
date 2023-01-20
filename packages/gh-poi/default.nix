@@ -22,6 +22,7 @@ buildGoModule rec {
 
   # Does try to access some test repos (?)
   doCheck = false;
+  passthru.runUpdate = true;
 
   meta = with lib; {
     homepage = "https://github.com/seachicken/gh-poi";
