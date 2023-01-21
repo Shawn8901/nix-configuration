@@ -5,9 +5,7 @@ in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  nix.settings = {
-    system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86-64-v2" "gccarch-x86-64-v3" ];
-  };
+  nix.settings.system-features = [ "gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
   nix.gc.automatic = lib.mkForce false;
   nixpkgs.hostPlatform = {
     gcc.arch = "x86-64-v3";
