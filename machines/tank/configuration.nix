@@ -373,6 +373,7 @@ in
         "${config.services.nextcloud.config.dbname}"
         "${config.services.grafana.settings.database.name}"
         "stfcbot"
+        "hydra"
       ];
       ensureUsers = [
         {
@@ -386,6 +387,10 @@ in
         {
           name = "stfcbot";
           ensurePermissions = { "DATABASE stfcbot" = "ALL PRIVILEGES"; };
+        }
+        {
+          name = "hydra";
+          ensurePermissions = { "DATABASE hydra" = "ALL PRIVILEGES"; };
         }
       ];
     };
@@ -709,18 +714,19 @@ in
       SystemMaxFileSize=50M
     '';
     stfc-bot = {
-      enable = true;
+      enable = false;
       package = inputs.stfc-bot.packages.x86_64-linux.default;
       envFile = config.age.secrets.stfc-env-dev.path;
     };
     stne-mimir = {
-      enable = true;
+      enable = false;
       domain = "mimir.tank.pointjig.de";
       clientPackage = inputs.mimir-client.packages.x86_64-linux.default;
       package = inputs.mimir.packages.x86_64-linux.default;
       envFile = config.age.secrets.mimir-env-dev.path;
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
+
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
     hydra =
       let
@@ -741,20 +747,17 @@ in
         package = (pkgs.hydra_unstable.overrideAttrs (oldAttrs: { doCheck = false; }));
         #minimumDiskFree = 15;
         #minimumDiskFreeEvaluator = 10;
-        hydraURL = "https://hydra.pointjig.de"; # externally visible URL
-        notificationSender = "hydra@pointjig.de"; # e-mail of hydra service
-        # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
+        hydraURL = "https://hydra.pointjig.de";
+        notificationSender = "hydra@pointjig.de";
         buildMachinesFiles = [ ];
-        # you will probably also want, otherwise *everything* will be built from scratch
         useSubstitutes = true;
         extraConfig = ''
           evaluator_max_memory_size = 4096
           evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
-          max_output_size = ${toString (4 * 1024 * 1024 * 1024)}
+          evaluator_workers = 4
           max_concurrent_evals = 1
-          evaluator_workers = 1
+          max_output_size = ${toString (4 * 1024 * 1024 * 1024)}
           max_db_connections = 150
-          queue_runner_metrics_address = localhost:9198
           binary_cache_secret_key_file =  ${secrets.hydra-signing-key.path}
 
           <hydra_notify>
@@ -775,22 +778,16 @@ in
       };
   };
   systemd.services.hydra-init.after = [ "network-online.target" ];
-  systemd.services.hydra-evaluator.serviceConfig.OOMScoreAdjust = -1000;
-
-  # This is needed as HM does download content, which is not a flake input, thus restricted mode does not allow it to be downloaded
   nix.extraOptions = ''
     extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://git.sr.ht/~rycee/nmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
   '';
 
-  security = {
-    rtkit.enable = true;
-    acme = {
-      acceptTerms = true;
-      defaults.email = "shawn@pointjig.de";
-    };
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "shawn@pointjig.de";
   };
-  security.auditd.enable = true;
-  security.audit.enable = true;
+  security.auditd.enable = false;
+  security.audit.enable = false;
   hardware = {
     pulseaudio.enable = false;
     bluetooth.enable = false;
