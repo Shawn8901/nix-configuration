@@ -38,16 +38,6 @@ in
     pve_prometheus = {
       file = ../../secrets/pve_prometheus.age;
     };
-    stfc-env-dev = {
-      file = ../../secrets/stfc-env-dev.age;
-      owner = "stfc-bot";
-      group = "stfc-bot";
-    };
-    mimir-env-dev = {
-      file = ../../secrets/mimir-env-dev.age;
-      owner = "mimir";
-      group = "mimir";
-    };
     # GitHub access token is stored on all systems with group right for nixbld
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
@@ -62,6 +52,16 @@ in
       file = ../../secrets/nix-netrc-rw.age;
       group = "nixbld";
       mode = "0440";
+    };
+    stfc-env-dev = {
+      file = ../../secrets/stfc-env-dev.age;
+      owner = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
+      group = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
+    };
+    mimir-env-dev = {
+      file = ../../secrets/mimir-env-dev.age;
+      owner = lib.mkIf config.services.stne-mimir.enable "mimir";
+      group = lib.mkIf config.services.stne-mimir.enable "mimir";
     };
   };
 
