@@ -12,11 +12,6 @@ in
     ztank_key = { file = ../../secrets/ztank_key.age; };
     zrepl_tank = { file = ../../secrets/zrepl_tank.age; };
     ela_password_file = { file = ../../secrets/ela_password.age; };
-    grafana_env_file = {
-      file = ../../secrets/grafana_env_file.age;
-      owner = "grafana";
-      group = "grafana";
-    };
     nextcloud_db_file = {
       file = ../../secrets/nextcloud_db.age;
       owner = "nextcloud";
@@ -34,9 +29,6 @@ in
     };
     fritzbox_prometheus_file = {
       file = ../../secrets/fritzbox_prometheus.age;
-    };
-    pve_prometheus = {
-      file = ../../secrets/pve_prometheus.age;
     };
     # GitHub access token is stored on all systems with group right for nixbld
     # but hydra-queue-runner has to be able to read them but can not be added
@@ -109,10 +101,6 @@ in
     };
     # TODO: Prepare a PR to fix/make it configurable that upstream
     services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
-
-    services.grafana.serviceConfig.EnvironmentFile = [
-      secrets.grafana_env_file.path
-    ];
   };
 
   services = {
@@ -375,7 +363,6 @@ in
       dataDir = "/persist/var/lib/postgres/14";
       ensureDatabases = [
         "${config.services.nextcloud.config.dbname}"
-        "${config.services.grafana.settings.database.name}"
         "stfcbot"
         "hydra"
       ];
@@ -383,10 +370,6 @@ in
         {
           name = "${config.services.nextcloud.config.dbuser}";
           ensurePermissions = { "DATABASE ${config.services.nextcloud.config.dbname}" = "ALL PRIVILEGES"; };
-        }
-        {
-          name = "${config.services.grafana.settings.database.user}";
-          ensurePermissions = { "DATABASE ${config.services.grafana.settings.database.name}" = "ALL PRIVILEGES"; };
         }
         {
           name = "stfcbot";
@@ -427,17 +410,6 @@ in
           forceSSL = true;
           http3 = true;
           kTLS = true;
-        };
-        "${config.services.grafana.settings.server.domain}" = {
-          enableACME = true;
-          forceSSL = true;
-          http3 = true;
-          kTLS = true;
-          locations."/" = {
-            proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
-            proxyWebsockets = true;
-            recommendedProxySettings = true;
-          };
         };
       };
     };
@@ -601,105 +573,6 @@ in
           listenAddress = "localhost";
           port = 9134;
         };
-      };
-    };
-    grafana = {
-      enable = true;
-      dataDir = "/persist/var/lib/grafana";
-      settings = {
-        server = rec {
-          domain = "status.tank.pointjig.de";
-          http_addr = "127.0.0.1";
-          http_port = 3001;
-          root_url = "https://${domain}/";
-          enable_gzip = true;
-        };
-        database = {
-          type = "postgres";
-          host = "/run/postgresql";
-          user = "grafana";
-          password = "$__env{DB_PASSWORD}";
-        };
-        security = {
-          admin_password = "$__env{ADMIN_PASSWORD}";
-          secret_key = "$__env{SECRET_KEY}";
-          cookie_secure = true;
-          content_security_policy = true;
-        };
-        smtp = {
-          enabled = true;
-          host = "pointjig.de:465";
-          user = "noreply@pointjig.de";
-          password = "$__env{SMTP_PASSWORD}";
-          from_address = "noreply@pointjig.de";
-        };
-        analytics = {
-          check_for_updates = false;
-          reporting_enabled = false;
-        };
-        alerting.enabled = false;
-        unified_alerting.enabled = true;
-      };
-      provision = {
-        enable = true;
-        datasources.settings.datasources =
-          let
-            pointalphaHostname = hosts.pointalpha.config.networking.hostName;
-            pointalphaPrometheusPort = toString hosts.pointalpha.config.services.prometheus.port;
-            pointjigHostname = hosts.pointjig.config.networking.hostName;
-            pointjigPrometheusPort = toString hosts.pointjig.config.services.prometheus.port;
-            shelterHostname = hosts.shelter.config.networking.hostName;
-            shelterPrometheusPort = toString hosts.shelter.config.services.prometheus.port;
-            nextHostname = hosts.next.config.networking.hostName;
-            nextPrometheusPort = toString hosts.next.config.services.prometheus.port;
-          in
-          [
-            {
-              name = "tank";
-              type = "prometheus";
-              url = "http://localhost:${toString config.services.prometheus.port}";
-            }
-            {
-              name = "pointalpha";
-              type = "prometheus";
-              url = "http://${pointalphaHostname}:${pointalphaPrometheusPort}";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-            {
-              name = "pointjig";
-              type = "prometheus";
-              url = "https://status.pointjig.de";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-            {
-              name = "shelter";
-              type = "prometheus";
-              url = "https://status.shelter.pointjig.de";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-            {
-              name = "next";
-              type = "prometheus";
-              url = "https://status.next.clansap.org";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-          ];
       };
     };
     shutdown-wakeup = {

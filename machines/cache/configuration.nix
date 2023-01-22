@@ -2,6 +2,7 @@
 let
   hosts = self.nixosConfigurations;
   secrets = config.age.secrets;
+  system = pkgs.hostPlatform.system;
   inherit (inputs) attic;
 in
 {
@@ -54,8 +55,10 @@ in
     resolved.enable = true;
     openssh = {
       enable = true;
-      passwordAuthentication = false;
-      kbdInteractiveAuthentication = false;
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
     };
     nginx = {
       enable = true;
@@ -95,6 +98,7 @@ in
     };
     atticd = {
       enable = true;
+      package = attic.packages.${system}.attic-nixpkgs;
       credentialsFile = secrets.attic_env.path;
       settings = {
         allowed-hosts = [ "cache.pointjig.de" ];
