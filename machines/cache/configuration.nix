@@ -55,10 +55,8 @@ in
     resolved.enable = true;
     openssh = {
       enable = true;
-      settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
+      passwordAuthentication = false;
+      kbdInteractiveAuthentication = false;
     };
     nginx = {
       enable = true;
@@ -104,6 +102,8 @@ in
         allowed-hosts = [ "cache.pointjig.de" ];
         api-endpoint = "https://cache.pointjig.de/";
         database.url = "postgresql:///attic?host=/run/postgresql";
+        chunking = { nar-size-threshold = 65536; min-size = 16384; avg-size = 65536; max-size = 262144; };
+        compression = { type = "zstd"; };
       };
     };
     postgresql = {
