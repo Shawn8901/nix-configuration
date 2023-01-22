@@ -31,7 +31,8 @@ in
   "prometheus_internal_web_config.age".publicKeys = [ shawn pointalpha ];
   "prometheus_public_web_config.age".publicKeys = [ shawn next pointjig shelter ];
   "grafana_env_file.age".publicKeys = [ shawn tank ];
-  "github_access_token.age".publicKeys = [ shawn next ] ++ systems;
+  "nix-gh-token.age".publicKeys = [ shawn next ] ++ systems;
+  "gh-write-token.age".publicKeys = [ shawn tank ];
   "nix-netrc-ro.age".publicKeys = [ shawn next ] ++ systems;
   "nix-netrc-rw.age".publicKeys = [ shawn tank pointalpha ];
   "stfc-env-dev.age".publicKeys = [ shawn tank ];
@@ -43,8 +44,6 @@ in
 
   "ffm_root_password.age".publicKeys = [ shawn next ];
   "ffm_nextcloud_db.age".publicKeys = [ shawn next ];
-
   "cache-signing-key.age".publicKeys = [ shawn tank cache ];
-  "builder-ssh-key.age".publicKeys = [ shawn cache ];
   "attic_env.age".publicKeys = [ shawn cache ];
 }

@@ -41,7 +41,11 @@ in
     # GitHub access token is stored on all systems with group right for nixbld
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
-    github_access_token.mode = lib.mkForce "0777";
+    nix-gh-token.mode = lib.mkForce "0777";
+    gh-write-token = {
+      file = ../../secrets/gh-write-token.age;
+      mode = "0777";
+    };
     hydra-signing-key = {
       file = ../../secrets/hydra-signing-key.age;
       owner = "hydra";
@@ -738,6 +742,15 @@ in
         advance_branch = pkgs.writeScriptBin "advance_branch" ''
           echo $HYDRA_JSON
           cat $HYDRA_JSON
+          set -x
+          ${pkgs.curl}/bin/curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $(<${secrets.gh-write-token.path})" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/shawn8901/nix-configuration/merges \
+          -d '{"base":"main","head":"staging","commit_message":"Built flake update!"}'
+          set +x
         '';
       in
       {

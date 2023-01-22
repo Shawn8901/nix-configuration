@@ -4,8 +4,8 @@ let
 in
 {
   age.secrets = {
-    github_access_token = {
-      file = ../../secrets/github_access_token.age;
+    nix-gh-token = {
+      file = ../../secrets/nix-gh-token.age;
       group = "nixbld";
       mode = "0440";
     };
@@ -31,7 +31,7 @@ in
       netrc-file = lib.mkForce config.age.secrets.nix-netrc.path;
     };
     extraOptions = ''
-      !include ${config.age.secrets.github_access_token.path}
+      !include ${config.age.secrets.nix-gh-token.path}
     '';
     nrBuildUsers = lib.mkForce 16;
     daemonIOSchedClass = "idle";
