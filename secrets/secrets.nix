@@ -27,10 +27,10 @@ in
 
   "nextcloud_prometheus.age".publicKeys = [ shawn tank next ];
   "fritzbox_prometheus.age".publicKeys = [ shawn tank ];
-  "pve_prometheus.age".publicKeys = [ shawn tank ];
+  "pve_prometheus.age".publicKeys = [ shawn cache ];
   "prometheus_internal_web_config.age".publicKeys = [ shawn pointalpha ];
   "prometheus_public_web_config.age".publicKeys = [ shawn next pointjig shelter ];
-  "grafana_env_file.age".publicKeys = [ shawn tank ];
+  "grafana_env_file.age".publicKeys = [ shawn cache ];
   "nix-gh-token.age".publicKeys = [ shawn next ] ++ systems;
   "gh-write-token.age".publicKeys = [ shawn tank ];
   "nix-netrc-ro.age".publicKeys = [ shawn next ] ++ systems;
@@ -46,4 +46,6 @@ in
   "ffm_nextcloud_db.age".publicKeys = [ shawn next ];
   "cache-signing-key.age".publicKeys = [ shawn tank cache ];
   "attic_env.age".publicKeys = [ shawn cache ];
+  "cache-wg-priv-key.age".publicKeys = [ shawn cache ];
+  "cache-wg-preshared-key.age".publicKeys = [ shawn cache ];
 }
