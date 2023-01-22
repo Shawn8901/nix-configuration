@@ -742,7 +742,6 @@ in
         advance_branch = pkgs.writeScriptBin "advance_branch" ''
           echo $HYDRA_JSON
           cat $HYDRA_JSON
-          set -x
           ${pkgs.curl}/bin/curl \
           -X POST \
           -H "Accept: application/vnd.github+json" \
@@ -750,7 +749,6 @@ in
           -H "X-GitHub-Api-Version: 2022-11-28" \
           https://api.github.com/repos/shawn8901/nix-configuration/merges \
           -d '{"base":"main","head":"staging","commit_message":"Built flake update!"}'
-          set +x
         '';
       in
       {
