@@ -42,6 +42,7 @@ in
         listenPort = 51820;
         privateKeyFile = secrets.cache-wg-priv-key.path;
         dns = [ "192.168.11.1" ];
+        address = [ " 192.168.11.204/24" ];
         peers = [
           {
             publicKey = "98gCbQmLB/W8Q1o1Zve/bSdZpAA1UuRvfjvXeVwEdQ4=";
@@ -55,16 +56,6 @@ in
     };
   };
   systemd = {
-    network = {
-      enable = true;
-      networks = {
-        "20-wired" = {
-          matchConfig.Name = "enp0s3";
-          networkConfig.DHCP = "yes";
-        };
-      };
-      wait-online.anyInterface = true;
-    };
     services.grafana.serviceConfig.EnvironmentFile = [
       secrets.grafana_env_file.path
     ];
@@ -235,14 +226,8 @@ in
         enable = true;
         datasources.settings.datasources =
           let
-            pointalphaHostname = hosts.pointalpha.config.networking.hostName;
             pointalphaPrometheusPort = toString hosts.pointalpha.config.services.prometheus.port;
-            pointjigHostname = hosts.pointjig.config.networking.hostName;
-            pointjigPrometheusPort = toString hosts.pointjig.config.services.prometheus.port;
-            shelterHostname = hosts.shelter.config.networking.hostName;
-            shelterPrometheusPort = toString hosts.shelter.config.services.prometheus.port;
-            nextHostname = hosts.next.config.networking.hostName;
-            nextPrometheusPort = toString hosts.next.config.services.prometheus.port;
+            tankPrometheusPort = toString hosts.tank.config.services.prometheus.port;
           in
           [
             {
@@ -253,12 +238,17 @@ in
             {
               name = "tank";
               type = "prometheus";
-              url = "http://status.tank.pointjig.de:${toString config.services.prometheus.port}";
+              url = "http://tank.fritz.box:${tankPrometheusPort}";
+              basicAuth = true;
+              withCredentials = true;
+              basicAuthUser = "admin";
+              secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
+              jsonData.prometheusType = "Prometheus";
             }
             {
               name = "pointalpha";
               type = "prometheus";
-              url = "http://${pointalphaHostname}:${pointalphaPrometheusPort}";
+              url = "http://pointalpha.fritz.box:${pointalphaPrometheusPort}";
               basicAuth = true;
               withCredentials = true;
               basicAuthUser = "admin";
