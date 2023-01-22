@@ -59,10 +59,13 @@
       hydraJobs = {
         packages = packages;
         nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (filterAttrs (_: cfg: cfg.config.nixpkgs.hostPlatform.isx86) nixosConfigurations);
+        release = pkgs.releaseTools.aggregate {
+          name = "flake-update";
+          constituents = map (n: "nixos." + n) (builtins.attrNames hydraJobs.nixos);
+        };
       };
 
       packages.${system} = import ./packages (inputs // { inherit pkgs; });
-      #// lib.nixosConfigurationsAsPackages.configs;
 
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [

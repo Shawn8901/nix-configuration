@@ -771,7 +771,7 @@ in
             command = ${upload_to_attic}/bin/upload-to-attic
           </runcommand>
           <runcommand>
-            job = *:staging:*
+            job = *:staging:release
             command = ${advance_branch}/bin/advance_branch
           </runcommand>
         '';
