@@ -28,7 +28,6 @@ in
     };
   };
 
-  networking.hostName = lib.mkForce "cache";
   networking = {
     firewall = {
       allowedUDPPorts = [ 443 51820 ];
@@ -37,10 +36,7 @@ in
       allowedTCPPortRanges = [ ];
     };
     domain = "";
-    networkmanager.enable = false;
-    dhcpcd.enable = false;
-    useNetworkd = true;
-    useDHCP = false;
+    useDHCP = true;
     wg-quick.interfaces = {
       wg0 = {
         listenPort = 51820;
