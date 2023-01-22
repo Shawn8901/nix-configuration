@@ -61,7 +61,7 @@
         nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (filterAttrs (_: cfg: cfg.config.nixpkgs.hostPlatform.isx86) nixosConfigurations);
         release = pkgs.releaseTools.aggregate {
           name = "flake-update";
-          constituents = map (n: "nixos." + n) (builtins.attrNames hydraJobs.nixos);
+          constituents = map (n: "nixos." + n) (builtins.filter (n: n != "pointalpha") (builtins.attrNames hydraJobs.nixos));
         };
       };
 
