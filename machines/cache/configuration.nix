@@ -20,12 +20,18 @@ in
       owner = "grafana";
       group = "grafana";
     };
+    cache-wg-priv-key = {
+      file = ../../secrets/cache-wg-priv-key.age;
+    };
+    cache-wg-preshared-key = {
+      file = ../../secrets/cache-wg-preshared-key.age;
+    };
   };
 
   networking.hostName = lib.mkForce "cache";
   networking = {
     firewall = {
-      allowedUDPPorts = [ 443 ];
+      allowedUDPPorts = [ 443 51820 ];
       allowedUDPPortRanges = [ ];
       allowedTCPPorts = [ 80 443 ];
       allowedTCPPortRanges = [ ];
@@ -35,6 +41,22 @@ in
     dhcpcd.enable = false;
     useNetworkd = true;
     useDHCP = false;
+    wg-quick.interfaces = {
+      wg0 = {
+        listenPort = 51820;
+        privateKeyFile = secrets.cache-wg-priv-key.path;
+        dns = [ "192.168.11.1" ];
+        peers = [
+          {
+            publicKey = "98gCbQmLB/W8Q1o1Zve/bSdZpAA1UuRvfjvXeVwEdQ4=";
+            allowedIPs = [ "192.168.11.0/24" ];
+            endpoint = "qy3w1d6525raac36.myfritz.net:54368";
+            presharedKeyFile = secrets.cache-wg-preshared-key.path;
+            persistentKeepalive = 25;
+          }
+        ];
+      };
+    };
   };
   systemd = {
     network = {
@@ -179,7 +201,6 @@ in
     };
     grafana = {
       enable = true;
-      dataDir = "/persist/var/lib/grafana";
       settings = {
         server = rec {
           domain = "grafana.pointjig.de";
@@ -229,9 +250,14 @@ in
           in
           [
             {
-              name = "tank";
+              name = "localhost";
               type = "prometheus";
               url = "http://localhost:${toString config.services.prometheus.port}";
+            }
+            {
+              name = "tank";
+              type = "prometheus";
+              url = "http://status.tank.pointjig.de:${toString config.services.prometheus.port}";
             }
             {
               name = "pointalpha";

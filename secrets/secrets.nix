@@ -46,4 +46,6 @@ in
   "ffm_nextcloud_db.age".publicKeys = [ shawn next ];
   "cache-signing-key.age".publicKeys = [ shawn tank cache ];
   "attic_env.age".publicKeys = [ shawn cache ];
+  "cache-wg-priv-key.age".publicKeys = [ shawn cache ];
+  "cache-wg-preshared-key.age".publicKeys = [ shawn cache ];
 }
