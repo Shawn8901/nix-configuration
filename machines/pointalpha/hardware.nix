@@ -8,7 +8,7 @@ in
   nix.settings.system-features = [ "gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
   nix.gc.automatic = lib.mkForce false;
   nixpkgs.hostPlatform = {
-    gcc.arch = "x86-64-v3";
+    #gcc.arch = "x86-64-v3";
     system = "x86_64-linux";
   };
 
