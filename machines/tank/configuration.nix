@@ -27,6 +27,11 @@ in
       owner = config.services.prometheus.exporters.nextcloud.user;
       group = config.services.prometheus.exporters.nextcloud.group;
     };
+    prometheus_web_config = {
+      file = ../../secrets/prometheus_internal_web_config.age;
+      owner = "prometheus";
+      group = "prometheus";
+    };
     fritzbox_prometheus_file = {
       file = ../../secrets/fritzbox_prometheus.age;
     };
@@ -477,12 +482,12 @@ in
     smartd.enable = true;
     prometheus = {
       enable = true;
-      listenAddress = "127.0.0.1";
       port = 9001;
       retentionTime = "90d";
       globalConfig = {
         external_labels = { machine = "${config.networking.hostName}"; };
       };
+      webConfigFile = secrets.prometheus_web_config.path;
       scrapeConfigs =
         let
           nodePort = toString config.services.prometheus.exporters.node.port;
@@ -561,12 +566,6 @@ in
           listenAddress = "localhost";
           port = 9187;
           runAsLocalSuperUser = true;
-        };
-        pve = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9221;
-          configFile = secrets.pve_prometheus.path;
         };
         zfs = {
           enable = true;
