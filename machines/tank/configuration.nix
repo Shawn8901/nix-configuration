@@ -3,10 +3,10 @@ let
   hosts = self.nixosConfigurations;
   secrets = config.age.secrets;
   system = pkgs.hostPlatform.system;
-  inherit (inputs) stfc-bot mimir;
+  # inherit (inputs) stfc-bot mimir;
 in
 {
-  imports = [ stfc-bot.nixosModules.default mimir.nixosModule ];
+  #imports = [ stfc-bot.nixosModules.default mimir.nixosModule ];
 
   age.secrets = {
     ztank_key = { file = ../../secrets/ztank_key.age; };
@@ -54,16 +54,16 @@ in
       group = "nixbld";
       mode = "0440";
     };
-    stfc-env-dev = {
-      file = ../../secrets/stfc-env-dev.age;
-      owner = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
-      group = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
-    };
-    mimir-env-dev = {
-      file = ../../secrets/mimir-env-dev.age;
-      owner = lib.mkIf config.services.stne-mimir.enable "mimir";
-      group = lib.mkIf config.services.stne-mimir.enable "mimir";
-    };
+    # stfc-env-dev = {
+    #   file = ../../secrets/stfc-env-dev.age;
+    #   owner = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
+    #   group = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
+    # };
+    # mimir-env-dev = {
+    #   file = ../../secrets/mimir-env-dev.age;
+    #   owner = lib.mkIf config.services.stne-mimir.enable "mimir";
+    #   group = lib.mkIf config.services.stne-mimir.enable "mimir";
+    # };
   };
 
   networking = {
@@ -410,12 +410,12 @@ in
           http3 = true;
           kTLS = true;
         };
-        "${config.services.stne-mimir.domain}" = {
-          enableACME = true;
-          forceSSL = true;
-          http3 = true;
-          kTLS = true;
-        };
+        # "${config.services.stne-mimir.domain}" = {
+        #   enableACME = true;
+        #   forceSSL = true;
+        #   http3 = true;
+        #   kTLS = true;
+        # };
       };
     };
     avahi = {
@@ -589,19 +589,19 @@ in
       SystemMaxUse=100M
       SystemMaxFileSize=50M
     '';
-    stfc-bot = {
-      enable = false;
-      package = inputs.stfc-bot.packages.x86_64-linux.default;
-      envFile = config.age.secrets.stfc-env-dev.path;
-    };
-    stne-mimir = {
-      enable = false;
-      domain = "mimir.tank.pointjig.de";
-      clientPackage = inputs.mimir-client.packages.x86_64-linux.default;
-      package = inputs.mimir.packages.x86_64-linux.default;
-      envFile = config.age.secrets.mimir-env-dev.path;
-      unixSocket = "/run/mimir-backend/mimir-backend.sock";
-    };
+    # stfc-bot = {
+    #   enable = false;
+    #   package = inputs.stfc-bot.packages.x86_64-linux.default;
+    #   envFile = config.age.secrets.stfc-env-dev.path;
+    # };
+    # stne-mimir = {
+    #   enable = false;
+    #   domain = "mimir.tank.pointjig.de";
+    #   clientPackage = inputs.mimir-client.packages.x86_64-linux.default;
+    #   package = inputs.mimir.packages.x86_64-linux.default;
+    #   envFile = config.age.secrets.mimir-env-dev.path;
+    #   unixSocket = "/run/mimir-backend/mimir-backend.sock";
+    # };
 
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
     hydra =
