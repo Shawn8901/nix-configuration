@@ -666,6 +666,7 @@ in
   nix.extraOptions = ''
     extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://git.sr.ht/~rycee/nmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
   '';
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   security.acme = {
     acceptTerms = true;
