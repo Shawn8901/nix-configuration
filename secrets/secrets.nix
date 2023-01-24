@@ -12,6 +12,7 @@ in
 {
   "shawn_password.age".publicKeys = [ shawn ] ++ systems;
   "root_password.age".publicKeys = [ shawn ] ++ systems;
+  "builder_ssh_priv.age".publicKeys = [ shawn tank ];
   "ela_password.age".publicKeys = [ shawn tank ];
 
   "shawn_samba_credentials.age".publicKeys = [ shawn pointalpha ];

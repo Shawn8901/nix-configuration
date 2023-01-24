@@ -9,6 +9,10 @@ in
   #imports = [ stfc-bot.nixosModules.default mimir.nixosModule ];
 
   age.secrets = {
+    builder_ssh_priv = {
+      file = ../../secrets/builder_ssh_priv.age;
+      owner = "hydra-queue-runner";
+    };
     ztank_key = { file = ../../secrets/ztank_key.age; };
     zrepl_tank = { file = ../../secrets/zrepl_tank.age; };
     ela_password_file = { file = ../../secrets/ela_password.age; };
@@ -630,11 +634,10 @@ in
         listenHost = "127.0.0.1";
         port = 3000;
         package = (pkgs.hydra_unstable.overrideAttrs (oldAttrs: { doCheck = false; }));
-        #minimumDiskFree = 15;
-        #minimumDiskFreeEvaluator = 10;
+        minimumDiskFree = 15;
+        minimumDiskFreeEvaluator = 10;
         hydraURL = "https://hydra.pointjig.de";
         notificationSender = "hydra@pointjig.de";
-        buildMachinesFiles = [ ];
         useSubstitutes = true;
         extraConfig = ''
           evaluator_max_memory_size = 4096
@@ -663,11 +666,35 @@ in
       };
   };
   systemd.services.hydra-init.after = [ "network-online.target" ];
+  nix.buildMachines =
+    let
+      sshUser = "root";
+      sshKey = secrets.builder_ssh_priv.path;
+    in
+    [
+      {
+        hostName = "localhost";
+        systems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+        supportedFeatures = [ "gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
+        maxJobs = 2;
+        inherit sshUser sshKey;
+      }
+      {
+        hostName = "pointalpha";
+        systems = [ "x86_64-linux" "i686-linux" ];
+        maxJobs = 2;
+        supportedFeatures = [ "gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
+        speedFactor = 2;
+        inherit sshUser sshKey;
+      }
+    ];
   nix.settings.max-jobs = 3;
   nix.extraOptions = ''
     extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://git.sr.ht/~rycee/nmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
   '';
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N" ];
+
 
   security.acme = {
     acceptTerms = true;
