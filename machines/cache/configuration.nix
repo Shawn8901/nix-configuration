@@ -35,6 +35,7 @@ in
       allowedTCPPorts = [ 80 443 ];
       allowedTCPPortRanges = [ ];
     };
+    nameservers = [ "208.67.222.222" "208.67.220.220" ];
     domain = "";
     useDHCP = true;
     wg-quick.interfaces = {
@@ -61,7 +62,6 @@ in
     ];
   };
   services = {
-    resolved.enable = true;
     openssh = {
       enable = true;
       passwordAuthentication = false;
