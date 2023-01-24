@@ -643,7 +643,7 @@ in
           evaluator_max_memory_size = 4096
           evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
           evaluator_workers = 4
-          max_concurrent_evals = 1
+          max_concurrent_evals = 2
           max_output_size = ${toString (4 * 1024 * 1024 * 1024)}
           max_db_connections = 150
           binary_cache_secret_key_file =  ${secrets.hydra-signing-key.path}
@@ -682,13 +682,13 @@ in
       {
         hostName = "pointalpha";
         systems = [ "x86_64-linux" "i686-linux" ];
-        maxJobs = 2;
+        maxJobs = 1;
         supportedFeatures = [ "gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
         speedFactor = 2;
         inherit sshUser sshKey;
       }
     ];
-  nix.settings.max-jobs = 3;
+  nix.settings.max-jobs = 4;
   nix.extraOptions = ''
     extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://git.sr.ht/~rycee/nmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
   '';
