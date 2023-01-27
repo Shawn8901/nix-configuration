@@ -60,6 +60,7 @@ in
     services.grafana.serviceConfig.EnvironmentFile = [
       secrets.grafana_env_file.path
     ];
+    services.wg-quick-wg0.serviceConfig = { Restart = "on-failure"; RestartSec = "5s"; };
   };
   services = {
     openssh = {
