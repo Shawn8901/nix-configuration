@@ -11,7 +11,7 @@ in
   boot = {
     initrd.availableKernelModules = [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
     kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
-    kernelPackages = pkgs.linuxPackages_xanmod;
+    kernelPackages = pkgs.linuxPackages_xanmod_stable;
     extraModulePackages = [ ];
     extraModprobeConfig = ''
       options zfs zfs_arc_min=1073741824
