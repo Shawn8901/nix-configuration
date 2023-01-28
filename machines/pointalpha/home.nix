@@ -13,7 +13,7 @@ in
         portfolio
         jameica-fhs
         pytr
-        libreoffice-qt
+        #libreoffice-qt
         inkscape
         gimp
         nextcloud-client
