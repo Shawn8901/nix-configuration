@@ -610,7 +610,7 @@ in
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
     hydra =
       let
-        atticPkg = inputs.attic.packages.${system}.attic-client;
+        atticPkg = inputs.attic.packages.${system}.attic-client.overrideAttrs (attr: { stdenv = pkgs.clangStdenv; });
         upload_to_attic = pkgs.writeScriptBin "upload-to-attic" ''
           pathToPush=$(${pkgs.jq}/bin/jq -r '.outputs | .[] | .path' < $HYDRA_JSON)
           ${atticPkg}/bin/attic push nixos $pathToPush
@@ -633,7 +633,7 @@ in
         enable = true;
         listenHost = "127.0.0.1";
         port = 3000;
-        package = (pkgs.hydra_unstable.overrideAttrs (oldAttrs: { doCheck = false; }));
+        package = pkgs.hydra_unstable;
         minimumDiskFree = 5;
         minimumDiskFreeEvaluator = 10;
         hydraURL = "https://hydra.pointjig.de";

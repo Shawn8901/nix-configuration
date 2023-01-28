@@ -16,7 +16,7 @@ in
     };
   };
 
-  environment.systemPackages = [ inputs.attic.packages.${system}.attic-client ];
+  environment.systemPackages = [ (inputs.attic.packages.${system}.attic-client.overrideAttrs (attr: { stdenv = pkgs.clangStdenv; })) ];
   nix = {
     package = pkgs.nix;
     settings = {
