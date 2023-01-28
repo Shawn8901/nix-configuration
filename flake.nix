@@ -61,11 +61,18 @@
         nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
         release = pkgs.releaseTools.aggregate {
           name = "flake-update";
-          constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n ["pointalpha" "cache"]) (builtins.attrNames hydraJobs.nixos));
+          constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n [ "pointalpha" "cache" ]) (builtins.attrNames hydraJobs.nixos));
         };
       };
 
-      packages.${system} = import ./packages (inputs // { inherit pkgs; });
+      packages =
+        let
+          flakePkgs = pkgInstance: (import ./packages (inputs // { pkgs = pkgInstance; }));
+        in
+        {
+          x86_64-linux = flakePkgs pkgs;
+          aarch64-linux = filterAttrs (k: v: k == "wg-reresolve-dns") (flakePkgs nixpkgs.legacyPackages."aarch64-linux");
+        };
 
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
