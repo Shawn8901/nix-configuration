@@ -106,7 +106,7 @@ in
     };
     atticd = {
       enable = true;
-      package = attic.packages.${system}.attic.overrideAttrs (attr: { stdenv = pkgs.clangStdenv; });
+      package = attic.packages.${system}.attic-nixpkgs;
       credentialsFile = secrets.attic_env.path;
       settings = {
         allowed-hosts = [ "cache.pointjig.de" ];
