@@ -38,6 +38,7 @@ in
 
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
+      "deezer"
       "discord"
       "logmein-hamachi"
       "steam"

@@ -47,10 +47,15 @@
     let
       inherit (nixpkgs.lib) filterAttrs;
       inherit (builtins) mapAttrs elem;
-      notBroken = x: !(x.meta.broken or false);
       system = "x86_64-linux";
       lib = import ./lib inputs;
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+        config.permittedInsecurePackages = [
+          "electron-13.6.9"
+        ];
+      };
     in
     rec {
       nixosModules = import ./modules/nixos;
@@ -61,7 +66,7 @@
         nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
         release = pkgs.releaseTools.aggregate {
           name = "flake-update";
-          constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n ["pointalpha" "cache"]) (builtins.attrNames hydraJobs.nixos));
+          constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n [ "pointalpha" "cache" ]) (builtins.attrNames hydraJobs.nixos));
         };
       };
 

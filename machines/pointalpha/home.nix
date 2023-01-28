@@ -5,36 +5,34 @@ let
 in
 {
   home-manager.users.shawn = {
-    home.packages = with pkgs;
-      with fPkgs;
-      [
-        remmina
-        samba
-        portfolio
-        jameica-fhs
-        pytr
-        #libreoffice-qt
-        inkscape
-        gimp
-        nextcloud-client
-        keepassxc
-        (discord.override { nss = pkgs.nss_latest; })
-        teamspeak_client
-        signal-desktop
-        rogerrouter
-        wally-cli
-        vlc
-        wineWowPackages.waylandFull
-        s25rttr
-        nas
-
-        virt-manager
-
-        sqlitebrowser
-        generate-zrepl-ssl
-        vdhcoapp
-        plasma-integration
-      ];
+    home.packages = with pkgs; [
+      remmina
+      samba
+      portfolio
+      #libreoffice-qt
+      inkscape
+      gimp
+      nextcloud-client
+      keepassxc
+      (discord.override { nss = pkgs.nss_latest; })
+      teamspeak_client
+      signal-desktop
+      wally-cli
+      vlc
+      wineWowPackages.waylandFull
+      virt-manager
+      sqlitebrowser
+      plasma-integration
+    ] ++ (with fPkgs; [
+      deezer
+      generate-zrepl-ssl
+      jameica-fhs
+      nas
+      pytr
+      rogerrouter
+      s25rttr
+      vdhcoapp
+    ]);
 
     env = {
       vscode.enable = true;

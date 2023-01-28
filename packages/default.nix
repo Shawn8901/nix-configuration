@@ -1,5 +1,7 @@
 { self, pkgs, ... }@inputs:
 rec {
+  deezer = pkgs.callPackage ./deezer { };
+
   s25rttr = pkgs.callPackage ./s25rttr {
     SDL2 = pkgs.SDL2.override { withStatic = true; };
   };
