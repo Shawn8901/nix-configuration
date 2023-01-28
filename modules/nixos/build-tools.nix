@@ -18,7 +18,6 @@ in
     ncdu
     graphviz
     nix-du
-    nix-output-monitor
     inputs.agenix.defaultPackage.${system}
   ];
 }
