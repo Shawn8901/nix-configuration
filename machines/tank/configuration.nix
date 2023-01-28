@@ -634,8 +634,8 @@ in
         listenHost = "127.0.0.1";
         port = 3000;
         package = pkgs.hydra_unstable;
-        minimumDiskFree = 5;
-        minimumDiskFreeEvaluator = 10;
+        minimumDiskFree = 2;
+        minimumDiskFreeEvaluator = 5;
         hydraURL = "https://hydra.pointjig.de";
         notificationSender = "hydra@pointjig.de";
         useSubstitutes = true;
