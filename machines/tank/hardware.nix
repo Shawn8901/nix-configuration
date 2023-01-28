@@ -25,7 +25,6 @@ in
     postBootCommands = lib.mkAfter ''
       ${pkgs.zfs}/bin/zfs mount -a
     '';
-    consoleLogLevel = 7;
   };
 
   fileSystems."/" = {
