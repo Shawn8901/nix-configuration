@@ -9,7 +9,7 @@
         "schedulingshares": 10,
         "enableemail": false,
         "emailoverride": "",
-        "keepnr": 2
+        "keepnr": 1
     },
     "main": {
         "enabled": 1,
@@ -21,6 +21,6 @@
         "schedulingshares": 10,
         "enableemail": false,
         "emailoverride": "",
-        "keepnr": 2
+        "keepnr": 1
     }
 }
