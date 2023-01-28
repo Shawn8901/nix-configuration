@@ -7,7 +7,7 @@ let
 in
 {
 
-  imports = [ attic.nixosModules.atticd ];
+  imports = [ attic.nixosModules.atticd ../../modules/nixos/wg-reresolve-dns.nix ];
 
   age.secrets = {
     root_password_file = { file = ../../secrets/root_password.age; };
@@ -63,6 +63,10 @@ in
     services.wg-quick-wg0.serviceConfig = { Restart = "on-failure"; RestartSec = "5s"; };
   };
   services = {
+    wireguard.reresolve-dns = {
+      enable = true;
+      package = self.packages.${system}.wg-reresolve-dns;
+    };
     openssh = {
       enable = true;
       passwordAuthentication = false;

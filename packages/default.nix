@@ -16,6 +16,7 @@ rec {
 
   gh-poi = pkgs.callPackage ./gh-poi { };
   vdhcoapp = pkgs.callPackage ./vdhcoapp { };
+  wg-reresolve-dns = pkgs.callPackage ./wg-reresolve-dns { };
 
   jameica-fhs = pkgs.callPackage ./jameica/fhsenv.nix { };
 
