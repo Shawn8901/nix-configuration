@@ -1,11 +1,14 @@
-{ self, config, lib, pkgs, ... }:
-
-let
+{
+  self,
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.services.usb-backup;
   system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
-in
-{
+in {
   options = {
     services.usb-backup = {
       enable = lib.mkEnableOption "automatic backup to usb disk";
@@ -20,27 +23,24 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-
     sound.enable = true;
-    environment.systemPackages = with pkgs; [ cifs-utils ];
+    environment.systemPackages = with pkgs; [cifs-utils];
     services = {
       udev.extraRules = ''
         SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="04fc", ATTRS{idProduct}=="0c25", ATTR{partition}=="2", TAG+="systemd", ENV{SYSTEMD_WANTS}="usb-backup@%k.service"
       '';
     };
 
-    systemd.services."usb-backup@" =
-      let
-        usbBackup =
-          fPkgs.usb-backup.override { inherit (cfg) backupPath mountPoint; };
-      in
-      {
-        description = "Backups ${cfg.backupPath} to usb hdd";
-        serviceConfig = {
-          Type = "simple";
-          GuessMainPID = false;
-          ExecStart = "${usbBackup}/bin/usb-backup %I";
-        };
+    systemd.services."usb-backup@" = let
+      usbBackup =
+        fPkgs.usb-backup.override {inherit (cfg) backupPath mountPoint;};
+    in {
+      description = "Backups ${cfg.backupPath} to usb hdd";
+      serviceConfig = {
+        Type = "simple";
+        GuessMainPID = false;
+        ExecStart = "${usbBackup}/bin/usb-backup %I";
       };
+    };
   };
 }

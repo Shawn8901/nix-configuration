@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
-
 buildGoModule rec {
   pname = "gh-poi";
   version = "0.9.0";
@@ -28,7 +28,7 @@ buildGoModule rec {
     homepage = "https://github.com/seachicken/gh-poi";
     description = "Safely clean up your local branches";
     license = licenses.mit;
-    maintainers = with maintainers; [ shawn8901 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [shawn8901];
+    platforms = ["x86_64-linux"];
   };
 }

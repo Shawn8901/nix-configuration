@@ -1,5 +1,25 @@
-{ stdenv, lib, fetchFromGitLab, meson, pkg-config, cmake, ninja, glib, gdk-pixbuf, gettext, libsoup, speex, spandsp, json-glib, libsndfile, gupnp, libcapi, libxml2, libtiff, libxcrypt }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  pkg-config,
+  cmake,
+  ninja,
+  glib,
+  gdk-pixbuf,
+  gettext,
+  libsoup,
+  speex,
+  spandsp,
+  json-glib,
+  libsndfile,
+  gupnp,
+  libcapi,
+  libxml2,
+  libtiff,
+  libxcrypt,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "librm";
   version = "2.2.3";
@@ -11,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-44nUlDcAwb6jV+dOThgotCFa4MVGc5ZuKhjpprVWIK4=";
   };
 
-  nativeBuildInputs = [ meson cmake pkg-config ninja ];
+  nativeBuildInputs = [meson cmake pkg-config ninja];
 
   buildInputs = [
     glib
@@ -29,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = ["out" "dev"];
 
   passthru.runUpdate = true;
 
@@ -38,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/tabos/librm";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ shawn8901 ];
+    maintainers = with lib.maintainers; [shawn8901];
   };
 })

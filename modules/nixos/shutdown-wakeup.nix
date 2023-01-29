@@ -1,12 +1,14 @@
-{ self, config, lib, pkgs, ... }:
-
-let
-
+{
+  self,
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.services.shutdown-wakeup;
   system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
-in
-{
+in {
   options = {
     services.shutdown-wakeup = {
       enable = lib.mkEnableOption "shutdown-wakeup service combo";
@@ -31,28 +33,27 @@ in
         };
       };
       timers.sched-shutdown = {
-        wantedBy = [ "timers.target" ];
-        partOf = [ "sched-shutdown.service" ];
-        timerConfig = { OnCalendar = [ "*-*-* ${cfg.shutdownTime}" ]; };
+        wantedBy = ["timers.target"];
+        partOf = ["sched-shutdown.service"];
+        timerConfig = {OnCalendar = ["*-*-* ${cfg.shutdownTime}"];};
       };
 
-      services.rtcwakeup =
-        let rtcHelper = fPkgs.rtc-helper.override { inherit (cfg) wakeupTime; };
-        in
-        {
-          description = "Automatic wakeup";
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${rtcHelper}/bin/rtc-helper";
-          };
+      services.rtcwakeup = let
+        rtcHelper = fPkgs.rtc-helper.override {inherit (cfg) wakeupTime;};
+      in {
+        description = "Automatic wakeup";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${rtcHelper}/bin/rtc-helper";
         };
+      };
       timers.rtcwakeup = {
-        wantedBy = [ "timers.target" ];
-        partOf = [ "sched-shutdown.service" ];
+        wantedBy = ["timers.target"];
+        partOf = ["sched-shutdown.service"];
         timerConfig = {
           Persistent = true;
           OnBootSec = "1min";
-          OnCalendar = [ "*-*-* ${cfg.wakeupTime}" ];
+          OnCalendar = ["*-*-* ${cfg.wakeupTime}"];
         };
       };
     };

@@ -1,5 +1,11 @@
-{ self, config, lib, pkgs, inputs, ... }:
-let
+{
+  self,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   inherit (inputs) firefox-addons;
   inherit (firefox-addons.lib.${system}) buildFirefoxXpiAddon;
@@ -8,8 +14,7 @@ let
   fPkgs = self.packages.${system};
   cfg = config.env.browser;
   firefox-addon-packages = firefox-addons.packages.${system};
-in
-{
+in {
   options = {
     env.browser = {
       enable = mkEnableOption "Enable browser on the environment";
@@ -20,7 +25,7 @@ in
     programs.firefox = {
       enable = true;
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-        extraNativeMessagingHosts = [ fPkgs.vdhcoapp ];
+        extraNativeMessagingHosts = [fPkgs.vdhcoapp];
       };
       extensions = with firefox-addon-packages; [
         ublock-origin
@@ -33,8 +38,8 @@ in
         # nixpkgs.config.allowUnfreePredicate to a flake input.
         # So overriding the stdenv is the only solution here to use the hosts
         # nixpkgs.config.allowUnfreePredicate.
-        (tampermonkey.override { inherit (pkgs) stdenv fetchurl; })
-        (betterttv.override { inherit (pkgs) stdenv fetchurl; })
+        (tampermonkey.override {inherit (pkgs) stdenv fetchurl;})
+        (betterttv.override {inherit (pkgs) stdenv fetchurl;})
 
         # Download all plugins which are not in the repo manually
         (buildFirefoxXpiAddon {
@@ -43,7 +48,7 @@ in
           addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
           url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
           sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
-          meta = { };
+          meta = {};
         })
       ];
 

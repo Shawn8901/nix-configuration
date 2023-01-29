@@ -1,8 +1,11 @@
-{ config, lib, pkgs, ... }:
-let
-  cfg = config.env.user-config;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.env.user-config;
+in {
   options = {
     env.user-config = {
       enable = lib.mkEnableOption "Use general user config on that system";
@@ -11,8 +14,8 @@ in
 
   config = lib.mkIf cfg.enable {
     age.secrets = {
-      shawn_password_file = { file = ../../secrets/shawn_password.age; };
-      root_password_file = { file = ../../secrets/root_password.age; };
+      shawn_password_file = {file = ../../secrets/shawn_password.age;};
+      root_password_file = {file = ../../secrets/root_password.age;};
     };
 
     programs.command-not-found.enable = false;
@@ -25,11 +28,11 @@ in
       autosuggestions.enable = true;
       ohMyZsh = {
         enable = true;
-        plugins = [ "git" "cp" "zsh-interactive-cd" ];
+        plugins = ["git" "cp" "zsh-interactive-cd"];
         theme = "fletcherm";
       };
     };
-    environment.pathsToLink = [ "/share/zsh" ];
+    environment.pathsToLink = ["/share/zsh"];
 
     users.mutableUsers = false;
     users.users.root = {
@@ -42,7 +45,7 @@ in
       passwordFile = config.age.secrets.shawn_password_file.path;
       isNormalUser = true;
       group = "users";
-      extraGroups = [ "wheel" ];
+      extraGroups = ["wheel"];
       uid = 1000;
       shell = pkgs.zsh;
       openssh.authorizedKeys.keys = [
@@ -50,6 +53,6 @@ in
       ];
     };
 
-    environment = { variables.EDITOR = "nano"; };
+    environment = {variables.EDITOR = "nano";};
   };
 }

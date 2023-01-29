@@ -1,5 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "NoiseTorch";
   version = "0.12.2.pre+date=2022-08-11";
@@ -16,9 +19,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.distribution=nix" ];
+  ldflags = ["-s" "-w" "-X main.version=${version}" "-X main.distribution=nix"];
 
-  subPackages = [ "." ];
+  subPackages = ["."];
 
   preBuild = ''
     make -C c/ladspa/
@@ -39,6 +42,6 @@ buildGoModule rec {
     homepage = "https://github.com/noisetorch/NoiseTorch";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ panaeon lom ];
+    maintainers = with maintainers; [panaeon lom];
   };
 }

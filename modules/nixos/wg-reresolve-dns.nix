@@ -1,8 +1,11 @@
-{ config, lib, pkgs, ... }:
-let
-  cfg = config.services.wireguard.reresolve-dns;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.services.wireguard.reresolve-dns;
+in {
   options = {
     services.wireguard.reresolve-dns = {
       enable = lib.mkEnableOption "Set up service to use reresolve-dns from wireguard-tools to detect endpoint changes for wireguard server";
@@ -22,11 +25,13 @@ in
   };
 
   config = lib.mkIf (cfg.enable) {
-    systemd.timers = lib.attrsets.mapAttrs'
-      (name: _: lib.nameValuePair "wg-reresolve-dns-${name}"
+    systemd.timers =
+      lib.attrsets.mapAttrs'
+      (name: _:
+        lib.nameValuePair "wg-reresolve-dns-${name}"
         {
-          wantedBy = [ "timers.target" ];
-          after = [ "multi-user.target" ];
+          wantedBy = ["timers.target"];
+          after = ["multi-user.target"];
           timerConfig = {
             OnCalendar = cfg.interval;
             Persistent = "yes";
@@ -34,12 +39,14 @@ in
         })
       config.networking.wg-quick.interfaces;
 
-    systemd.services = lib.attrsets.mapAttrs'
-      (name: _: lib.nameValuePair
+    systemd.services =
+      lib.attrsets.mapAttrs'
+      (name: _:
+        lib.nameValuePair
         "wg-reresolve-dns-${name}"
         {
           description = "reresolve-dns for wg-quick-${name}";
-          path = [ pkgs.wireguard-tools ];
+          path = [pkgs.wireguard-tools];
           serviceConfig = {
             Type = "oneshot";
             ExecStart = "${cfg.package}/bin/reresolve-dns.sh ${name}";

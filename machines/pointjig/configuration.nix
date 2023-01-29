@@ -1,15 +1,18 @@
-{ config, inputs, pkgs, ... }:
-let
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}: let
   secrets = config.age.secrets;
   inherit (inputs) stfc-bot mimir;
-in
-{
+in {
   # FIXME: Remove with 23.05
-  disabledModules = [ "services/monitoring/prometheus/default.nix" ];
-  imports = [ stfc-bot.nixosModules.default mimir.nixosModule ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule ];
+  disabledModules = ["services/monitoring/prometheus/default.nix"];
+  imports = [stfc-bot.nixosModules.default mimir.nixosModule ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
 
   age.secrets = {
-    sms-technical-passwd = { file = ../../secrets/sms-technical-passwd.age; };
+    sms-technical-passwd = {file = ../../secrets/sms-technical-passwd.age;};
     sms-shawn-passwd = {
       file = ../../secrets/sms-shawn-passwd.age;
       owner = "stfc-bot";
@@ -36,10 +39,10 @@ in
 
   networking = {
     firewall = {
-      allowedUDPPorts = [ 443 ];
-      allowedUDPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 ];
-      allowedTCPPortRanges = [ ];
+      allowedUDPPorts = [443];
+      allowedUDPPortRanges = [];
+      allowedTCPPorts = [80 443];
+      allowedTCPPortRanges = [];
       logRefusedConnections = false;
     };
     networkmanager.enable = false;
@@ -56,16 +59,17 @@ in
       networks = {
         "20-wired" = {
           matchConfig.Name = "enp6s18";
-          networkConfig.Address =
-            [ "134.255.226.114/28" "2a05:bec0:1:16::114/64" ];
+          networkConfig.Address = ["134.255.226.114/28" "2a05:bec0:1:16::114/64"];
           networkConfig.DNS = "8.8.8.8";
           networkConfig.Gateway = "134.255.226.113";
-          routes = [{
-            routeConfig = {
-              Gateway = "2a05:bec0:1:16::1";
-              GatewayOnLink = "yes";
-            };
-          }];
+          routes = [
+            {
+              routeConfig = {
+                Gateway = "2a05:bec0:1:16::1";
+                GatewayOnLink = "yes";
+              };
+            }
+          ];
         };
       };
       wait-online.anyInterface = true;
@@ -131,46 +135,54 @@ in
         };
       };
     };
-    prometheus =
-      let
-        labels = { machine = "${config.networking.hostName}"; };
-        nodePort = config.services.prometheus.exporters.node.port;
-        postgresPort = config.services.prometheus.exporters.postgres.port;
-      in
-      {
-        enable = true;
-        port = 9001;
-        retentionTime = "90d";
-        globalConfig = {
-          external_labels = labels;
+    prometheus = let
+      labels = {machine = "${config.networking.hostName}";};
+      nodePort = config.services.prometheus.exporters.node.port;
+      postgresPort = config.services.prometheus.exporters.postgres.port;
+    in {
+      enable = true;
+      port = 9001;
+      retentionTime = "90d";
+      globalConfig = {
+        external_labels = labels;
+      };
+      webConfigFile = secrets.prometheus_web_config.path;
+      webExternalUrl = "https://status.pointjig.de";
+      scrapeConfigs = [
+        {
+          job_name = "node";
+          static_configs = [
+            {
+              targets = ["localhost:${toString nodePort}"];
+              inherit labels;
+            }
+          ];
+        }
+        {
+          job_name = "postgres";
+          static_configs = [
+            {
+              targets = ["localhost:${toString postgresPort}"];
+              inherit labels;
+            }
+          ];
+        }
+      ];
+      exporters = {
+        node = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9101;
+          enabledCollectors = ["systemd"];
         };
-        webConfigFile = secrets.prometheus_web_config.path;
-        webExternalUrl = "https://status.pointjig.de";
-        scrapeConfigs = [
-          {
-            job_name = "node";
-            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
-          }
-          {
-            job_name = "postgres";
-            static_configs = [{ targets = [ "localhost:${toString postgresPort}" ]; inherit labels; }];
-          }
-        ];
-        exporters = {
-          node = {
-            enable = true;
-            listenAddress = "localhost";
-            port = 9101;
-            enabledCollectors = [ "systemd" ];
-          };
-          postgres = {
-            enable = true;
-            listenAddress = "127.0.0.1";
-            port = 9187;
-            runAsLocalSuperUser = true;
-          };
+        postgres = {
+          enable = true;
+          listenAddress = "127.0.0.1";
+          port = 9187;
+          runAsLocalSuperUser = true;
         };
       };
+    };
     stfc-bot = {
       enable = true;
       package = inputs.stfc-bot.packages.x86_64-linux.default;
@@ -189,7 +201,7 @@ in
   mailserver = {
     enable = true;
     fqdn = "mail.pointjig.de";
-    domains = [ "pointjig.de" ];
+    domains = ["pointjig.de"];
     certificateScheme = 3;
     loginAccounts = {
       "shawn@pointjig.de" = {

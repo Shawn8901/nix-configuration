@@ -1,38 +1,43 @@
-{ self, config, pkgs, ... }:
-let
+{
+  self,
+  config,
+  pkgs,
+  ...
+}: let
   system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
-in
-{
+in {
   home-manager.users.shawn = {
-    home.packages = with pkgs; [
-      remmina
-      samba
-      portfolio
-      #libreoffice-qt
-      inkscape
-      gimp
-      nextcloud-client
-      keepassxc
-      (discord.override { nss = pkgs.nss_latest; })
-      teamspeak_client
-      signal-desktop
-      wally-cli
-      vlc
-      wineWowPackages.waylandFull
-      virt-manager
-      sqlitebrowser
-      plasma-integration
-    ] ++ (with fPkgs; [
-      deezer
-      generate-zrepl-ssl
-      jameica-fhs
-      nas
-      pytr
-      rogerrouter
-      s25rttr
-      vdhcoapp
-    ]);
+    home.packages = with pkgs;
+      [
+        remmina
+        samba
+        portfolio
+        #libreoffice-qt
+        inkscape
+        gimp
+        nextcloud-client
+        keepassxc
+        (discord.override {nss = pkgs.nss_latest;})
+        teamspeak_client
+        signal-desktop
+        wally-cli
+        vlc
+        wineWowPackages.waylandFull
+        virt-manager
+        sqlitebrowser
+        plasma-integration
+      ]
+      ++ (with fPkgs; [
+        deezer
+        generate-zrepl-ssl
+        jameica-fhs
+        nas
+        pytr
+        rogerrouter
+        s25rttr
+        vdhcoapp
+      ]);
 
     env = {
       vscode.enable = true;
@@ -49,7 +54,7 @@ in
     };
     programs.gh = {
       enable = true;
-      extensions = [ fPkgs.gh-poi ];
+      extensions = [fPkgs.gh-poi];
     };
     xdg.enable = true;
     xdg.mime.enable = true;
@@ -59,7 +64,7 @@ in
     '';
 
     services = {
-      nextcloud-client = { startInBackground = true; };
+      nextcloud-client = {startInBackground = true;};
       gpg-agent = {
         enable = true;
         pinentryFlavor = "qt";

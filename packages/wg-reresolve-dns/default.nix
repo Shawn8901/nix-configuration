@@ -1,5 +1,8 @@
-{ stdenvNoCC, fetchzip, wireguard-tools }:
-
+{
+  stdenvNoCC,
+  fetchzip,
+  wireguard-tools,
+}:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "wg-reresolve-dns";
   version = "1.0.20210914";
@@ -23,6 +26,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-
 })

@@ -1,29 +1,33 @@
-{ self, pkgs, lib, config, inputs, ... }:
-
-let
+{
+  self,
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}: let
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
   system = pkgs.hostPlatform.system;
   secrets = config.age.secrets;
 
   # https://github.com/NixOS/nixpkgs/pull/195521/files
-  fontsPkg = pkgs: (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
+  fontsPkg = pkgs: (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
     mkdir -p "$out/share/fonts"
     font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
     find ${toString (config.fonts.fonts)} -regex "$font_regexp" \
       -exec ln -sf -t "$out/share/fonts" '{}' \;
   '');
-in
-{
-  disabledModules = [ "services/x11/display-managers/sddm.nix" ];
-  imports = [ ../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix ];
+in {
+  disabledModules = ["services/x11/display-managers/sddm.nix"];
+  imports = [../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix];
 
   age.secrets = {
-    zrepl_pointalpha = { file = ../../secrets/zrepl_pointalpha.age; };
+    zrepl_pointalpha = {file = ../../secrets/zrepl_pointalpha.age;};
     shawn_samba_credentials = {
       file = ../../secrets/shawn_samba_credentials.age;
     };
-    ela_samba_credentials = { file = ../../secrets/ela_samba_credentials.age; };
+    ela_samba_credentials = {file = ../../secrets/ela_samba_credentials.age;};
     prometheus_web_config = {
       file = ../../secrets/prometheus_internal_web_config.age;
       owner = "prometheus";
@@ -55,39 +59,38 @@ in
 
   nixpkgs.config.packageOverrides = pkgs: {
     steam = pkgs.steam.override {
-      extraPkgs = pkgs: with pkgs; [
-        # Victoria 3
-        ncurses
-        # Universim
-        (fontsPkg pkgs)
-      ];
+      extraPkgs = pkgs:
+        with pkgs; [
+          # Victoria 3
+          ncurses
+          # Universim
+          (fontsPkg pkgs)
+        ];
     };
   };
 
   networking = {
-    firewall =
-      let
-        stronghold_range = {
-          from = 2300;
-          to = 2400;
-        };
-        stronghold_tcp = 47624;
-        zreplServePorts = inputs.zrepl.servePorts config.services.zrepl;
-      in
-      {
-        allowedUDPPortRanges = [ stronghold_range ];
-        allowedTCPPorts = [ config.services.prometheus.port stronghold_tcp ] ++ zreplServePorts;
-        allowedTCPPortRanges = [ stronghold_range ];
+    firewall = let
+      stronghold_range = {
+        from = 2300;
+        to = 2400;
       };
+      stronghold_tcp = 47624;
+      zreplServePorts = inputs.zrepl.servePorts config.services.zrepl;
+    in {
+      allowedUDPPortRanges = [stronghold_range];
+      allowedTCPPorts = [config.services.prometheus.port stronghold_tcp] ++ zreplServePorts;
+      allowedTCPPortRanges = [stronghold_range];
+    };
     networkmanager.enable = true;
     nftables.enable = true;
     hosts = {
       "192.168.11.31" = lib.attrNames hosts.tank.config.services.nginx.virtualHosts;
-      "134.255.226.114" = [ "pointjig" ];
-      "2a05:bec0:1:16::114" = [ "pointjig" ];
-      "78.128.127.235" = [ "shelter" ];
-      "2a01:8740:1:e4::2cd3" = [ "shelter" ];
-      "132.145.224.161" = [ "hydra.pointjig.de" ];
+      "134.255.226.114" = ["pointjig"];
+      "2a05:bec0:1:16::114" = ["pointjig"];
+      "78.128.127.235" = ["shelter"];
+      "2a01:8740:1:e4::2cd3" = ["shelter"];
+      "132.145.224.161" = ["hydra.pointjig.de"];
     };
     dhcpcd.enable = false;
     useNetworkd = false;
@@ -131,23 +134,23 @@ in
     ];
     fontconfig = {
       defaultFonts = {
-        serif = [ "Noto Serif" ];
-        sansSerif = [ "Noto Sans" ];
-        monospace = [ "Noto Sans Mono" ];
+        serif = ["Noto Serif"];
+        sansSerif = ["Noto Sans"];
+        monospace = ["Noto Sans Mono"];
       };
     };
   };
 
   services = {
     udev = {
-      packages = [ pkgs.libmtp.out ];
+      packages = [pkgs.libmtp.out];
       extraRules = ''
       '';
     };
     xserver = {
       enable = true;
       layout = "de";
-      videoDrivers = [ "amdgpu" ];
+      videoDrivers = ["amdgpu"];
       displayManager.sddm = {
         enable = true;
         autoNumlock = true;
@@ -167,10 +170,10 @@ in
       desktopManager.plasma5 = {
         enable = true;
         phononBackend = "vlc";
-        excludePackages = with pkgs.libsForQt5; [ kwrited elisa ktnef ];
+        excludePackages = with pkgs.libsForQt5; [kwrited elisa ktnef];
       };
       desktopManager.xterm.enable = false;
-      excludePackages = [ pkgs.xterm ];
+      excludePackages = [pkgs.xterm];
     };
     openssh = {
       enable = true;
@@ -190,203 +193,227 @@ in
       trim.enable = true;
       autoScrub = {
         enable = true;
-        pools = [ "rpool" ];
+        pools = ["rpool"];
       };
     };
 
-    pipewire =
-      let
-        rate = 48000;
-        quantum = 64;
-        minQuantum = 32;
-        maxQuantum = 8192;
-        qr = "${toString quantum}/${toString rate}";
-        rtLimitSoft = 200000;
-        rtLimitHard = 300000;
-      in
-      {
-        enable = true;
-        pulse.enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        media-session.enable = false;
-        wireplumber.enable = true;
-        config.pipewire = {
-          "context.properties" = {
-            "link.max-buffers" = 16;
-            "log.level" = 2;
-            "default.clock.rate" = rate;
-            "default.clock.quantum" = quantum;
-            "default.clock.min-quantum" = minQuantum;
-            "default.clock.max-quantum" = maxQuantum;
-            "core.daemon" = true;
-            "core.name" = "pipewire-0";
-          };
-          "context.modules" = [
-            {
-              name = "libpipewire-module-rtkit";
-              args = {
-                "nice.level" = -15;
-                "rt.prio" = 88;
-                "rt.time.soft" = rtLimitSoft;
-                "rt.time.hard" = rtLimitHard;
-              };
-              flags = [ "ifexists" "nofail" ];
-            }
-            { name = "libpipewire-module-protocol-native"; }
-            { name = "libpipewire-module-profiler"; }
-            { name = "libpipewire-module-metadata"; }
-            { name = "libpipewire-module-spa-device-factory"; }
-            { name = "libpipewire-module-spa-node-factory"; }
-            { name = "libpipewire-module-client-node"; }
-            { name = "libpipewire-module-client-device"; }
-            {
-              name = "libpipewire-module-portal";
-              flags = [ "ifexists" "nofail" ];
-            }
-            {
-              name = "libpipewire-module-access";
-              args = { };
-            }
-            { name = "libpipewire-module-adapter"; }
-            { name = "libpipewire-module-link-factory"; }
-            { name = "libpipewire-module-session-manager"; }
-          ];
+    pipewire = let
+      rate = 48000;
+      quantum = 64;
+      minQuantum = 32;
+      maxQuantum = 8192;
+      qr = "${toString quantum}/${toString rate}";
+      rtLimitSoft = 200000;
+      rtLimitHard = 300000;
+    in {
+      enable = true;
+      pulse.enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      media-session.enable = false;
+      wireplumber.enable = true;
+      config.pipewire = {
+        "context.properties" = {
+          "link.max-buffers" = 16;
+          "log.level" = 2;
+          "default.clock.rate" = rate;
+          "default.clock.quantum" = quantum;
+          "default.clock.min-quantum" = minQuantum;
+          "default.clock.max-quantum" = maxQuantum;
+          "core.daemon" = true;
+          "core.name" = "pipewire-0";
         };
-        config.pipewire-pulse = {
-          "context.properties" = {
-            "log.level" = 2;
-          };
-          "context.modules" = [
-            {
-              name = "libpipewire-module-rtkit";
-              args = {
-                "nice.level" = -15;
-                "rt.prio" = 88;
-                "rt.time.soft" = rtLimitSoft;
-                "rt.time.hard" = rtLimitHard;
-              };
-              flags = [ "ifexists" "nofail" ];
-            }
-            { name = "libpipewire-module-protocol-native"; }
-            { name = "libpipewire-module-client-node"; }
-            { name = "libpipewire-module-adapter"; }
-            { name = "libpipewire-module-metadata"; }
-            {
-              name = "libpipewire-module-protocol-pulse";
-              args = {
-                "pulse.min.req" = qr;
-                "pulse.default.req" = qr;
-                "pulse.max.req" = qr;
-                "pulse.min.quantum" = qr;
-                "pulse.max.quantum" = qr;
-                "server.address" = [ "unix:native" ];
-              };
-            }
-          ];
-          "stream.properties" = {
-            "node.latency" = qr;
-            "resample.quality" = 1;
-          };
+        "context.modules" = [
+          {
+            name = "libpipewire-module-rtkit";
+            args = {
+              "nice.level" = -15;
+              "rt.prio" = 88;
+              "rt.time.soft" = rtLimitSoft;
+              "rt.time.hard" = rtLimitHard;
+            };
+            flags = ["ifexists" "nofail"];
+          }
+          {name = "libpipewire-module-protocol-native";}
+          {name = "libpipewire-module-profiler";}
+          {name = "libpipewire-module-metadata";}
+          {name = "libpipewire-module-spa-device-factory";}
+          {name = "libpipewire-module-spa-node-factory";}
+          {name = "libpipewire-module-client-node";}
+          {name = "libpipewire-module-client-device";}
+          {
+            name = "libpipewire-module-portal";
+            flags = ["ifexists" "nofail"];
+          }
+          {
+            name = "libpipewire-module-access";
+            args = {};
+          }
+          {name = "libpipewire-module-adapter";}
+          {name = "libpipewire-module-link-factory";}
+          {name = "libpipewire-module-session-manager";}
+        ];
+      };
+      config.pipewire-pulse = {
+        "context.properties" = {
+          "log.level" = 2;
+        };
+        "context.modules" = [
+          {
+            name = "libpipewire-module-rtkit";
+            args = {
+              "nice.level" = -15;
+              "rt.prio" = 88;
+              "rt.time.soft" = rtLimitSoft;
+              "rt.time.hard" = rtLimitHard;
+            };
+            flags = ["ifexists" "nofail"];
+          }
+          {name = "libpipewire-module-protocol-native";}
+          {name = "libpipewire-module-client-node";}
+          {name = "libpipewire-module-adapter";}
+          {name = "libpipewire-module-metadata";}
+          {
+            name = "libpipewire-module-protocol-pulse";
+            args = {
+              "pulse.min.req" = qr;
+              "pulse.default.req" = qr;
+              "pulse.max.req" = qr;
+              "pulse.min.quantum" = qr;
+              "pulse.max.quantum" = qr;
+              "server.address" = ["unix:native"];
+            };
+          }
+        ];
+        "stream.properties" = {
+          "node.latency" = qr;
+          "resample.quality" = 1;
         };
       };
+    };
     printing = {
       enable = true;
-      listenAddresses = [ "localhost:631" ];
-      drivers = [ pkgs.epson-escpr2 ];
+      listenAddresses = ["localhost:631"];
+      drivers = [pkgs.epson-escpr2];
     };
     zrepl = {
       enable = true;
       package = pkgs.zrepl;
       settings = {
         global = {
-          monitoring = [{
-            type = "prometheus";
-            listen = ":9811";
-            listen_freebind = true;
-          }];
+          monitoring = [
+            {
+              type = "prometheus";
+              listen = ":9811";
+              listen_freebind = true;
+            }
+          ];
         };
-        jobs = [{
-          name = "pointalpha_safe";
-          type = "source";
-          filesystems = { "rpool/safe<" = true; };
-          snapshotting = {
-            type = "periodic";
-            interval = "1h";
-            prefix = "zrepl_";
-          };
-          send = { encrypted = false; compressed = true; };
-          serve = {
-            type = "tls";
-            listen = ":8888";
-            ca = "/etc/zrepl/tank.crt";
-            cert = "/etc/zrepl/pointalpha.crt";
-            key = "/etc/zrepl/pointalpha.key";
-            client_cns = [ "tank" ];
-          };
-        }];
+        jobs = [
+          {
+            name = "pointalpha_safe";
+            type = "source";
+            filesystems = {"rpool/safe<" = true;};
+            snapshotting = {
+              type = "periodic";
+              interval = "1h";
+              prefix = "zrepl_";
+            };
+            send = {
+              encrypted = false;
+              compressed = true;
+            };
+            serve = {
+              type = "tls";
+              listen = ":8888";
+              ca = "/etc/zrepl/tank.crt";
+              cert = "/etc/zrepl/pointalpha.crt";
+              key = "/etc/zrepl/pointalpha.key";
+              client_cns = ["tank"];
+            };
+          }
+        ];
       };
     };
 
-    prometheus =
-      let
-        labels = { machine = "${config.networking.hostName}"; };
-        nodePort = config.services.prometheus.exporters.node.port;
-        zfsPort = toString config.services.prometheus.exporters.zfs.port;
-        smartctlPort = config.services.prometheus.exporters.smartctl.port;
-        zreplPort = (builtins.head
-          (
-            inputs.zrepl.monitoringPorts
-              config.services.zrepl
-          ));
-      in
-      {
-        enable = true;
-        port = 9001;
-        retentionTime = "90d";
-        globalConfig = {
-          external_labels = labels;
+    prometheus = let
+      labels = {machine = "${config.networking.hostName}";};
+      nodePort = config.services.prometheus.exporters.node.port;
+      zfsPort = toString config.services.prometheus.exporters.zfs.port;
+      smartctlPort = config.services.prometheus.exporters.smartctl.port;
+      zreplPort =
+        builtins.head
+        (
+          inputs.zrepl.monitoringPorts
+          config.services.zrepl
+        );
+    in {
+      enable = true;
+      port = 9001;
+      retentionTime = "90d";
+      globalConfig = {
+        external_labels = labels;
+      };
+      webConfigFile = secrets.prometheus_web_config.path;
+      scrapeConfigs = [
+        {
+          job_name = "node";
+          static_configs = [
+            {
+              targets = ["localhost:${toString nodePort}"];
+              inherit labels;
+            }
+          ];
+        }
+        {
+          job_name = "zfs";
+          static_configs = [
+            {
+              targets = ["localhost:${zfsPort}"];
+              inherit labels;
+            }
+          ];
+        }
+        {
+          job_name = "smartctl";
+          static_configs = [
+            {
+              targets = ["localhost:${toString smartctlPort}"];
+              inherit labels;
+            }
+          ];
+        }
+        {
+          job_name = "zrepl";
+          static_configs = [
+            {
+              targets = ["localhost:${toString zreplPort}"];
+              inherit labels;
+            }
+          ];
+        }
+      ];
+      exporters = {
+        node = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9101;
+          enabledCollectors = ["systemd"];
         };
-        webConfigFile = secrets.prometheus_web_config.path;
-        scrapeConfigs = [
-          {
-            job_name = "node";
-            static_configs = [{ targets = [ "localhost:${toString nodePort}" ]; inherit labels; }];
-          }
-          {
-            job_name = "zfs";
-            static_configs = [{ targets = [ "localhost:${zfsPort}" ]; inherit labels; }];
-          }
-          {
-            job_name = "smartctl";
-            static_configs = [{ targets = [ "localhost:${toString smartctlPort}" ]; inherit labels; }];
-          }
-          {
-            job_name = "zrepl";
-            static_configs = [{ targets = [ "localhost:${toString zreplPort}" ]; inherit labels; }];
-          }
-        ];
-        exporters = {
-          node = {
-            enable = true;
-            listenAddress = "localhost";
-            port = 9101;
-            enabledCollectors = [ "systemd" ];
-          };
-          smartctl = {
-            enable = true;
-            listenAddress = "localhost";
-            port = 9102;
-            devices = [ "/dev/sda" ];
-            maxInterval = "5m";
-          };
-          zfs = {
-            enable = true;
-            listenAddress = "localhost";
-            port = 9134;
-          };
+        smartctl = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9102;
+          devices = ["/dev/sda"];
+          maxInterval = "5m";
+        };
+        zfs = {
+          enable = true;
+          listenAddress = "localhost";
+          port = 9134;
         };
       };
+    };
     avahi = {
       enable = true;
       nssmdns = true;
@@ -415,7 +442,7 @@ in
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = with pkgs; [ libva rocm-opencl-icd rocm-opencl-runtime ];
+      extraPackages = with pkgs; [libva rocm-opencl-icd rocm-opencl-runtime];
     };
   };
   sound.enable = false;
@@ -430,12 +457,12 @@ in
   virtualisation.virtualbox.host.enable = false;
   virtualisation.virtualbox.host.enableExtensionPack = false;
 
-  systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
+  systemd.tmpfiles.rules = ["d /media/nas 0750 shawn users -"];
 
   programs = {
     steam = {
       enable = true;
-      extraCompatPackages = [ fPkgs.proton-ge-custom ];
+      extraCompatPackages = [fPkgs.proton-ge-custom];
     };
     chromium.enable = true;
     dconf.enable = true;
@@ -477,8 +504,8 @@ in
   };
   nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
 
-  users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N" ];
+  users.users.root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
   users.users.shawn = {
-    extraGroups = [ "video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld" ];
+    extraGroups = ["video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld"];
   };
 }

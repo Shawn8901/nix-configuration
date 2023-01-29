@@ -1,27 +1,31 @@
-{ config, lib, pkgs, modulesPath, ... }:
-let
-  zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
-in
 {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}: let
+  zfsOptions = ["zfsutil" "X-mount.mkdir"];
+in {
+  imports = [(modulesPath + "/installer/scan/not-detected.nix")];
 
-  nix.settings.system-features = [ "gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
+  nix.settings.system-features = ["gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
   nixpkgs.hostPlatform.system = "x86_64-linux";
 
   boot = {
-    initrd.availableKernelModules = [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-    kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
+    initrd.availableKernelModules = ["ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod"];
+    kernelModules = ["kvm-intel" "cifs" "snd_pcsp"];
     kernelPackages = pkgs.linuxPackages_xanmod_stable;
-    extraModulePackages = [ ];
+    extraModulePackages = [];
     extraModprobeConfig = ''
       options zfs zfs_arc_min=1073741824
       options zfs zfs_arc_max=2147483648
     '';
 
-    supportedFilesystems = [ "zfs" "ntfs" ];
+    supportedFilesystems = ["zfs" "ntfs"];
     zfs.devNodes = "/dev/disk/by-id";
-    zfs.extraPools = [ "ztank" ];
-    zfs.requestEncryptionCredentials = [ "ztank" ];
+    zfs.extraPools = ["ztank"];
+    zfs.requestEncryptionCredentials = ["ztank"];
     postBootCommands = lib.mkAfter ''
       ${pkgs.zfs}/bin/zfs mount -a
     '';
@@ -62,16 +66,16 @@ in
   fileSystems."/persist/var/lib/nextcloud/data" = {
     device = "ztank/replica/nextcloud";
     fsType = "zfs";
-    options = zfsOptions ++ [ "noauto" ];
+    options = zfsOptions ++ ["noauto"];
   };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/605D-0B3B";
     fsType = "vfat";
-    options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
+    options = ["x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto"];
   };
 
-  swapDevices = [{ device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee"; }];
+  swapDevices = [{device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee";}];
 
   hardware.cpu.intel.updateMicrocode = true;
 }

@@ -1,21 +1,25 @@
-{ self, home-manager, agenix, simple-nixos-mailserver, ... }@inputs:
-name: nixpkgs:
-
+{
+  self,
+  home-manager,
+  agenix,
+  simple-nixos-mailserver,
+  ...
+} @ inputs: name: nixpkgs:
 nixpkgs.lib.nixosSystem
-  (
-    let
-      configFolder = "${self}/machines/${name}";
-      entryPoint = import "${configFolder}/configuration.nix";
-      bootloader = "${configFolder}/bootloader.nix";
-      hardware = import "${configFolder}/hardware.nix";
-      home = "${configFolder}/home.nix";
-      darlings = "${configFolder}/save-darlings.nix";
+(
+  let
+    configFolder = "${self}/machines/${name}";
+    entryPoint = import "${configFolder}/configuration.nix";
+    bootloader = "${configFolder}/bootloader.nix";
+    hardware = import "${configFolder}/hardware.nix";
+    home = "${configFolder}/home.nix";
+    darlings = "${configFolder}/save-darlings.nix";
 
-      extraAgs = { inherit self inputs; };
-    in
-    {
-      specialArgs = extraAgs;
-      modules = [
+    extraAgs = {inherit self inputs;};
+  in {
+    specialArgs = extraAgs;
+    modules =
+      [
         {
           boot.cleanTmpDir = true;
           networking.hostName = name;
@@ -30,7 +34,7 @@ nixpkgs.lib.nixosSystem
             nixpkgs.flake = nixpkgs;
             system.flake = inputs.self;
           };
-          nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
+          nix.nixPath = ["nixpkgs=${nixpkgs}"];
           system.stateVersion = "22.05";
         }
         entryPoint
@@ -38,41 +42,40 @@ nixpkgs.lib.nixosSystem
         hardware
 
         agenix.nixosModules.age
-
       ]
       ++ builtins.attrValues self.nixosModules
       ++ nixpkgs.lib.optionals (builtins.pathExists home)
-        [
-          home-manager.nixosModule
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              extraSpecialArgs = extraAgs;
-            };
-            home-manager.users.root = {
+      [
+        home-manager.nixosModule
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = extraAgs;
+          };
+          home-manager.users.root = {
+            home.stateVersion = "22.05";
+          };
+        }
+        {
+          home-manager = {
+            sharedModules = [../modules/home-manager];
+            users.shawn = {
               home.stateVersion = "22.05";
-            };
-          }
-          {
-            home-manager = {
-              sharedModules = [ ../modules/home-manager ];
-              users.shawn = {
-                home.stateVersion = "22.05";
-                nix.registry.nixpkgs.flake = nixpkgs;
-                programs.zsh = { enable = true; };
-                programs.git = {
-                  enable = true;
-                  userName = "Shawn8901";
-                  userEmail = "shawn8901@googlemail.com";
-                  ignores = [ "*.swp" ];
-                  extraConfig = { init = { defaultBranch = "main"; }; };
-                };
+              nix.registry.nixpkgs.flake = nixpkgs;
+              programs.zsh = {enable = true;};
+              programs.git = {
+                enable = true;
+                userName = "Shawn8901";
+                userEmail = "shawn8901@googlemail.com";
+                ignores = ["*.swp"];
+                extraConfig = {init = {defaultBranch = "main";};};
               };
             };
-          }
-          home
-        ]
-      ++ nixpkgs.lib.optionals (builtins.pathExists darlings) [ darlings ];
-    }
-  )
+          };
+        }
+        home
+      ]
+      ++ nixpkgs.lib.optionals (builtins.pathExists darlings) [darlings];
+  }
+)

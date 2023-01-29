@@ -1,5 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, git, cmake, pkg-config, boost, bzip2, curl, gettext, libiconv, miniupnpc, SDL2, SDL2_mixer, libsamplerate, writeScript }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  git,
+  cmake,
+  pkg-config,
+  boost,
+  bzip2,
+  curl,
+  gettext,
+  libiconv,
+  miniupnpc,
+  SDL2,
+  SDL2_mixer,
+  libsamplerate,
+  writeScript,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "s25rttr";
   version = "0.9.5";
@@ -16,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-6gBvWYP08eoT2i8kco/3nXnTKwVa20DWtv6fLaoH07M=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [cmake pkg-config];
 
   buildInputs = [
     git
@@ -31,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsamplerate
   ];
 
-  patches = [ ./cmake_file_placeholder.patch ];
+  patches = [./cmake_file_placeholder.patch];
 
   cmakeBuildType = "Release";
   cmakeFlags = [
@@ -42,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DRTTR_INSTALL_PLACEHOLDER=OFF"
     "-DRTTR_GAMEDIR=/var/lib/s25rttr/S2/"
   ];
-
 
   passthru.runUpdate = true;
   passthru.updateScript = writeScript "update-s25rttr" ''
@@ -58,6 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.rttr.info/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ shawn8901 ];
+    maintainers = with lib.maintainers; [shawn8901];
   };
 })

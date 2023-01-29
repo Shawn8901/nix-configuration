@@ -1,8 +1,6 @@
-inputs:
-let
-  mkSystem = import ./mk-system.nix (inputs // { inherit zrepl; });
+inputs: let
+  mkSystem = import ./mk-system.nix (inputs // {inherit zrepl;});
   zrepl = import ./zrepl.nix inputs;
-in
-{
+in {
   inherit mkSystem zrepl;
 }

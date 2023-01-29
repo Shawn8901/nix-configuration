@@ -1,22 +1,25 @@
-{ config, pkgs, modulesPath, ... }:
-
 {
-  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+  config,
+  pkgs,
+  modulesPath,
+  ...
+}: {
+  imports = [(modulesPath + "/profiles/qemu-guest.nix")];
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
   boot = {
-    initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_blk" ];
-    kernelModules = [ ];
+    initrd.availableKernelModules = ["ata_piix" "uhci_hcd" "virtio_pci" "virtio_blk"];
+    kernelModules = [];
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-    extraModulePackages = [ ];
+    extraModulePackages = [];
     zfs.devNodes = "/dev/";
-    zfs.extraPools = [ "zbackup" ];
+    zfs.extraPools = ["zbackup"];
     zfs.requestEncryptionCredentials = false;
     extraModprobeConfig = ''
       options zfs zfs_arc_max=209715200
     '';
-    supportedFilesystems = [ "zfs" ];
+    supportedFilesystems = ["zfs"];
   };
 
   fileSystems."/" = {
@@ -24,8 +27,7 @@
     fsType = "ext4";
   };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/fdf6956a-9418-4da8-9702-45c8a670a0eb"; }];
+  swapDevices = [{device = "/dev/disk/by-uuid/fdf6956a-9418-4da8-9702-45c8a670a0eb";}];
 
   hardware.cpu.intel.updateMicrocode = true;
 }

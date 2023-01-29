@@ -1,17 +1,21 @@
-{ self, config, pkgs, lib, inputs, ... }:
-let
+{
+  self,
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: let
   hosts = self.nixosConfigurations;
   secrets = config.age.secrets;
   system = pkgs.hostPlatform.system;
   inherit (inputs) attic;
-in
-{
-
-  imports = [ attic.nixosModules.atticd ../../modules/nixos/wg-reresolve-dns.nix ];
+in {
+  imports = [attic.nixosModules.atticd ../../modules/nixos/wg-reresolve-dns.nix];
 
   age.secrets = {
-    root_password_file = { file = ../../secrets/root_password.age; };
-    attic_env = { file = ../../secrets/attic_env.age; };
+    root_password_file = {file = ../../secrets/root_password.age;};
+    attic_env = {file = ../../secrets/attic_env.age;};
     pve_prometheus = {
       file = ../../secrets/pve_prometheus.age;
     };
@@ -30,24 +34,24 @@ in
 
   networking = {
     firewall = {
-      allowedUDPPorts = [ 443 51820 ];
-      allowedUDPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 ];
-      allowedTCPPortRanges = [ ];
+      allowedUDPPorts = [443 51820];
+      allowedUDPPortRanges = [];
+      allowedTCPPorts = [80 443];
+      allowedTCPPortRanges = [];
     };
-    nameservers = [ "208.67.222.222" "208.67.220.220" ];
+    nameservers = ["208.67.222.222" "208.67.220.220"];
     domain = "";
     useDHCP = true;
     wg-quick.interfaces = {
       wg0 = {
         listenPort = 51820;
         privateKeyFile = secrets.cache-wg-priv-key.path;
-        dns = [ "192.168.11.1" "208.67.222.222" "208.67.220.220" ];
-        address = [ " 192.168.11.204/24" ];
+        dns = ["192.168.11.1" "208.67.222.222" "208.67.220.220"];
+        address = [" 192.168.11.204/24"];
         peers = [
           {
             publicKey = "98gCbQmLB/W8Q1o1Zve/bSdZpAA1UuRvfjvXeVwEdQ4=";
-            allowedIPs = [ "192.168.11.0/24" ];
+            allowedIPs = ["192.168.11.0/24"];
             endpoint = "qy3w1d6525raac36.myfritz.net:54368";
             presharedKeyFile = secrets.cache-wg-preshared-key.path;
             persistentKeepalive = 25;
@@ -60,7 +64,10 @@ in
     services.grafana.serviceConfig.EnvironmentFile = [
       secrets.grafana_env_file.path
     ];
-    services.wg-quick-wg0.serviceConfig = { Restart = "on-failure"; RestartSec = "5s"; };
+    services.wg-quick-wg0.serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = "5s";
+    };
   };
   services = {
     wireguard.reresolve-dns = {
@@ -113,11 +120,16 @@ in
       package = attic.packages.${system}.attic-nixpkgs;
       credentialsFile = secrets.attic_env.path;
       settings = {
-        allowed-hosts = [ "cache.pointjig.de" ];
+        allowed-hosts = ["cache.pointjig.de"];
         api-endpoint = "https://cache.pointjig.de/";
         database.url = "postgresql:///attic?host=/run/postgresql";
-        chunking = { nar-size-threshold = 65536; min-size = 16384; avg-size = 65536; max-size = 262144; };
-        compression = { type = "zstd"; };
+        chunking = {
+          nar-size-threshold = 65536;
+          min-size = 16384;
+          avg-size = 65536;
+          max-size = 262144;
+        };
+        compression = {type = "zstd";};
       };
     };
     postgresql = {
@@ -130,11 +142,11 @@ in
       ensureUsers = [
         {
           name = "atticd";
-          ensurePermissions = { "DATABASE attic" = "ALL PRIVILEGES"; };
+          ensurePermissions = {"DATABASE attic" = "ALL PRIVILEGES";};
         }
         {
           name = "${config.services.grafana.settings.database.user}";
-          ensurePermissions = { "DATABASE ${config.services.grafana.settings.database.name}" = "ALL PRIVILEGES"; };
+          ensurePermissions = {"DATABASE ${config.services.grafana.settings.database.name}" = "ALL PRIVILEGES";};
         }
       ];
     };
@@ -144,38 +156,46 @@ in
       port = 9001;
       retentionTime = "90d";
       globalConfig = {
-        external_labels = { machine = "${config.networking.hostName}"; };
+        external_labels = {machine = "${config.networking.hostName}";};
       };
-      scrapeConfigs =
-        let
-          nodePort = toString config.services.prometheus.exporters.node.port;
-          postgresPort = toString config.services.prometheus.exporters.postgres.port;
-          nextcloudPort = toString config.services.prometheus.exporters.nextcloud.port;
-          pvePort = toString config.services.prometheus.exporters.pve.port;
-          labels = { machine = "${config.networking.hostName}"; };
-        in
-        [
-          {
-            job_name = "node";
-            static_configs = [{ targets = [ "localhost:${nodePort}" ]; inherit labels; }];
-          }
-          {
-            job_name = "postgres";
-            static_configs = [{ targets = [ "localhost:${postgresPort}" ]; inherit labels; }];
-          }
-          {
-            job_name = "proxmox";
-            metrics_path = "/pve";
-            params = { "target" = [ "wi.clansap.org" ]; };
-            static_configs = [{ targets = [ "localhost:${toString pvePort}" ]; }];
-          }
-        ];
+      scrapeConfigs = let
+        nodePort = toString config.services.prometheus.exporters.node.port;
+        postgresPort = toString config.services.prometheus.exporters.postgres.port;
+        nextcloudPort = toString config.services.prometheus.exporters.nextcloud.port;
+        pvePort = toString config.services.prometheus.exporters.pve.port;
+        labels = {machine = "${config.networking.hostName}";};
+      in [
+        {
+          job_name = "node";
+          static_configs = [
+            {
+              targets = ["localhost:${nodePort}"];
+              inherit labels;
+            }
+          ];
+        }
+        {
+          job_name = "postgres";
+          static_configs = [
+            {
+              targets = ["localhost:${postgresPort}"];
+              inherit labels;
+            }
+          ];
+        }
+        {
+          job_name = "proxmox";
+          metrics_path = "/pve";
+          params = {"target" = ["wi.clansap.org"];};
+          static_configs = [{targets = ["localhost:${toString pvePort}"];}];
+        }
+      ];
       exporters = {
         node = {
           enable = true;
           listenAddress = "localhost";
           port = 9101;
-          enabledCollectors = [ "systemd" ];
+          enabledCollectors = ["systemd"];
         };
         postgres = {
           enable = true;
@@ -229,68 +249,66 @@ in
       };
       provision = {
         enable = true;
-        datasources.settings.datasources =
-          let
-            pointalphaPrometheusPort = toString hosts.pointalpha.config.services.prometheus.port;
-            tankPrometheusPort = toString hosts.tank.config.services.prometheus.port;
-          in
-          [
-            {
-              name = "localhost";
-              type = "prometheus";
-              url = "http://localhost:${toString config.services.prometheus.port}";
-            }
-            {
-              name = "tank";
-              type = "prometheus";
-              url = "http://tank.fritz.box:${tankPrometheusPort}";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-            {
-              name = "pointalpha";
-              type = "prometheus";
-              url = "http://pointalpha.fritz.box:${pointalphaPrometheusPort}";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-            {
-              name = "pointjig";
-              type = "prometheus";
-              url = "https://status.pointjig.de";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-            {
-              name = "shelter";
-              type = "prometheus";
-              url = "https://status.shelter.pointjig.de";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-            {
-              name = "next";
-              type = "prometheus";
-              url = "https://status.next.clansap.org";
-              basicAuth = true;
-              withCredentials = true;
-              basicAuthUser = "admin";
-              secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-              jsonData.prometheusType = "Prometheus";
-            }
-          ];
+        datasources.settings.datasources = let
+          pointalphaPrometheusPort = toString hosts.pointalpha.config.services.prometheus.port;
+          tankPrometheusPort = toString hosts.tank.config.services.prometheus.port;
+        in [
+          {
+            name = "localhost";
+            type = "prometheus";
+            url = "http://localhost:${toString config.services.prometheus.port}";
+          }
+          {
+            name = "tank";
+            type = "prometheus";
+            url = "http://tank.fritz.box:${tankPrometheusPort}";
+            basicAuth = true;
+            withCredentials = true;
+            basicAuthUser = "admin";
+            secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
+            jsonData.prometheusType = "Prometheus";
+          }
+          {
+            name = "pointalpha";
+            type = "prometheus";
+            url = "http://pointalpha.fritz.box:${pointalphaPrometheusPort}";
+            basicAuth = true;
+            withCredentials = true;
+            basicAuthUser = "admin";
+            secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
+            jsonData.prometheusType = "Prometheus";
+          }
+          {
+            name = "pointjig";
+            type = "prometheus";
+            url = "https://status.pointjig.de";
+            basicAuth = true;
+            withCredentials = true;
+            basicAuthUser = "admin";
+            secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
+            jsonData.prometheusType = "Prometheus";
+          }
+          {
+            name = "shelter";
+            type = "prometheus";
+            url = "https://status.shelter.pointjig.de";
+            basicAuth = true;
+            withCredentials = true;
+            basicAuthUser = "admin";
+            secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
+            jsonData.prometheusType = "Prometheus";
+          }
+          {
+            name = "next";
+            type = "prometheus";
+            url = "https://status.next.clansap.org";
+            basicAuth = true;
+            withCredentials = true;
+            basicAuthUser = "admin";
+            secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
+            jsonData.prometheusType = "Prometheus";
+          }
+        ];
       };
     };
   };
@@ -312,5 +330,4 @@ in
       defaults.email = "shawn@pointjig.de";
     };
   };
-
 }

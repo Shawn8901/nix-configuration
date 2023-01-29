@@ -43,50 +43,50 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
-    let
-      inherit (nixpkgs.lib) filterAttrs;
-      inherit (builtins) mapAttrs elem;
-      system = "x86_64-linux";
-      lib = import ./lib inputs;
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-        config.permittedInsecurePackages = [
-          "electron-13.6.9"
-        ];
-      };
-    in
-    rec {
-      nixosModules = import ./modules/nixos;
-      nixosConfigurations = import ./machines (inputs // { inherit lib; });
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  } @ inputs: let
+    inherit (nixpkgs.lib) filterAttrs;
+    inherit (builtins) mapAttrs elem;
+    system = "x86_64-linux";
+    lib = import ./lib inputs;
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+      config.permittedInsecurePackages = [
+        "electron-13.6.9"
+      ];
+    };
+  in rec {
+    nixosModules = import ./modules/nixos;
+    nixosConfigurations = import ./machines (inputs // {inherit lib;});
 
-      hydraJobs = {
-        packages = packages;
-        nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
-        release = pkgs.releaseTools.aggregate {
-          name = "flake-update";
-          constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n [ "pointalpha" "cache" ]) (builtins.attrNames hydraJobs.nixos));
-        };
-      };
-
-      packages =
-        let
-          flakePkgs = pkgInstance: (import ./packages (inputs // { pkgs = pkgInstance; }));
-        in
-        {
-          x86_64-linux = flakePkgs pkgs;
-          aarch64-linux = filterAttrs (k: v: k == "wg-reresolve-dns") (flakePkgs nixpkgs.legacyPackages."aarch64-linux");
-        };
-
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
-          python3.pkgs.invoke
-          python3.pkgs.autopep8
-          direnv
-          nix-direnv
-          nix-diff
-        ];
+    hydraJobs = {
+      packages = packages;
+      nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
+      release = pkgs.releaseTools.aggregate {
+        name = "flake-update";
+        constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n ["pointalpha" "cache"]) (builtins.attrNames hydraJobs.nixos));
       };
     };
+
+    packages = let
+      flakePkgs = pkgInstance: (import ./packages (inputs // {pkgs = pkgInstance;}));
+    in {
+      x86_64-linux = flakePkgs pkgs;
+      aarch64-linux = filterAttrs (k: v: k == "wg-reresolve-dns") (flakePkgs nixpkgs.legacyPackages."aarch64-linux");
+    };
+
+    devShells.${system}.default = pkgs.mkShell {
+      packages = with pkgs; [
+        python3.pkgs.invoke
+        python3.pkgs.autopep8
+        direnv
+        nix-direnv
+        nix-diff
+      ];
+    };
+  };
 }

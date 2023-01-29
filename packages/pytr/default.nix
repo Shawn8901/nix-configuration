@@ -1,19 +1,19 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, writeScript
-, certifi
-, coloredlogs
-, ecdsa
-, packaging
-, pathvalidate
-, pygments
-, requests-futures
-, shtab
-, websockets
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  writeScript,
+  certifi,
+  coloredlogs,
+  ecdsa,
+  packaging,
+  pathvalidate,
+  pygments,
+  requests-futures,
+  shtab,
+  websockets,
 }:
 buildPythonApplication rec {
-
   pname = "pytr";
   version = "0.1.5";
 
@@ -36,7 +36,7 @@ buildPythonApplication rec {
     websockets
   ];
 
-  pythonImportsCheck = [ "pytr" ];
+  pythonImportsCheck = ["pytr"];
 
   passthru.runUpdate = true;
 
@@ -45,6 +45,6 @@ buildPythonApplication rec {
     description = "Use TradeRepublic in terminal and mass download all documents ";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ shawn8901 ];
+    maintainers = with maintainers; [shawn8901];
   };
 }

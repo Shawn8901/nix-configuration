@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, fetchpatch, rustPlatform }:
-
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
   version = "0.5.0";
@@ -36,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     description = "Update notifications for nextcloud clients";
     homepage = "https://github.com/nextcloud/notify_push";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ajs124 ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [ajs124];
   };
 }

@@ -1,30 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, p7zip
-, nodePackages
-, imagemagick
-, electron_13
-}:
-
-let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  p7zip,
+  nodePackages,
+  imagemagick,
+  electron_13,
+}: let
   desktop = makeDesktopItem {
     name = "deezer";
     desktopName = "Deezer";
     comment = "Deezer audio streaming service";
     icon = "deezer";
-    categories = [ "Audio" "Music" "Player" "AudioVideo" ];
+    categories = ["Audio" "Music" "Player" "AudioVideo"];
     type = "Application";
-    mimeTypes = [ "x-scheme-handler/deezer" ];
+    mimeTypes = ["x-scheme-handler/deezer"];
     startupWMClass = "deezer";
     exec = "deezer %u";
   };
 in
-stdenv.mkDerivation
+  stdenv.mkDerivation
   (finalAttrs: {
-
     pname = "deezer";
 
     version = "5.30.500";
@@ -67,7 +65,6 @@ stdenv.mkDerivation
 
       runHook postUnpack
     '';
-
 
     prePatch = ''
       cd resources/app
@@ -120,9 +117,8 @@ stdenv.mkDerivation
       runHook postInstall
     '';
 
-
     meta = with lib; {
-      maintainers = with maintainers; [ shawn8901 ];
-      platforms = [ "x86_64-linux" ];
+      maintainers = with maintainers; [shawn8901];
+      platforms = ["x86_64-linux"];
     };
   })

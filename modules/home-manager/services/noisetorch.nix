@@ -1,9 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let cfg = config.services.noisetorch;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.noisetorch;
+in {
   options = {
     services.noisetorch = {
       enable = mkEnableOption "noisetorch service";
@@ -30,7 +33,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ cfg.package ];
+    home.packages = [cfg.package];
 
     systemd.user.services.noisetorch = {
       Unit = {
@@ -38,7 +41,7 @@ in
         Requires = "${cfg.deviceUnit}";
         After = "${cfg.deviceUnit}";
       };
-      Install = { WantedBy = [ "default.target" ]; };
+      Install = {WantedBy = ["default.target"];};
       Service = {
         Type = "simple";
         RemainAfterExit = "yes";

@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, writeScript }:
-
+{
+  stdenv,
+  lib,
+  fetchurl,
+  writeScript,
+}:
 stdenv.mkDerivation (finalAttrs: {
   name = "proton-ge-custom";
   version = "GE-Proton7-47";
@@ -20,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Compatibility tool for Steam Play based on Wine and additional components";
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ajs124 ];
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [ajs124];
   };
 })

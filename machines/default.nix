@@ -1,4 +1,8 @@
-{ self, lib, ... }@inputs: {
+{
+  self,
+  lib,
+  ...
+} @ inputs: {
   pointalpha = lib.mkSystem "pointalpha" inputs.nixpkgs-custom;
   tank = lib.mkSystem "tank" inputs.nixpkgs;
   pointjig = lib.mkSystem "pointjig" inputs.nixpkgs-22_11;

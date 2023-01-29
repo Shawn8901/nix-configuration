@@ -1,8 +1,12 @@
-{ pkgs, lib, config, inputs, ... }:
-let
-  system = pkgs.hostPlatform.system;
-in
 {
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}: let
+  system = pkgs.hostPlatform.system;
+in {
   age.secrets = {
     nix-gh-token = {
       file = ../../secrets/nix-gh-token.age;
@@ -16,15 +20,15 @@ in
     };
   };
 
-  environment.systemPackages = [ inputs.attic.packages.${system}.attic-nixpkgs ];
+  environment.systemPackages = [inputs.attic.packages.${system}.attic-nixpkgs];
   nix = {
     package = pkgs.nix;
     settings = {
       auto-optimise-store = true;
       #allow-import-from-derivation = false;
-      substituters = [ "https://cache.pointjig.de/nixos" ];
-      trusted-public-keys = [ "nixos:vjrrtYYXDQx4qWPPQ0BeO2cr/O/VCkqOWgbFe2bPfi4=" ];
-      trusted-users = [ "root" "shawn" ];
+      substituters = ["https://cache.pointjig.de/nixos"];
+      trusted-public-keys = ["nixos:vjrrtYYXDQx4qWPPQ0BeO2cr/O/VCkqOWgbFe2bPfi4="];
+      trusted-users = ["root" "shawn"];
       cores = lib.mkDefault 4;
       max-jobs = lib.mkDefault 2;
       experimental-features = "nix-command flakes";

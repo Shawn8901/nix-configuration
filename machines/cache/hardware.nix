@@ -1,13 +1,12 @@
-{ modulesPath, ... }:
-{
-  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+{modulesPath, ...}: {
+  imports = [(modulesPath + "/profiles/qemu-guest.nix")];
 
   nixpkgs.hostPlatform.system = "aarch64-linux";
   boot = {
     cleanTmpDir = true;
     initrd = {
-      availableKernelModules = [ "ata_piix" "uhci_hcd" "xen_blkfront" "xhci_pci" "virtio_pci" "usbhid" ];
-      kernelModules = [ "nvme" ];
+      availableKernelModules = ["ata_piix" "uhci_hcd" "xen_blkfront" "xhci_pci" "virtio_pci" "usbhid"];
+      kernelModules = ["nvme"];
     };
     loader = {
       efi.efiSysMountPoint = "/boot/efi";
