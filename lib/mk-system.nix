@@ -37,7 +37,7 @@ nixpkgs.lib.nixosSystem
         bootloader
         hardware
 
-        agenix.nixosModule
+        agenix.nixosModules.age
 
       ]
       ++ builtins.attrValues self.nixosModules

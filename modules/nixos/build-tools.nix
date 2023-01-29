@@ -18,6 +18,5 @@ in
     ncdu
     graphviz
     nix-du
-    inputs.agenix.defaultPackage.${system}
-  ];
+  ] ++ [ inputs.agenix.packages.${system}.agenix ];
 }
