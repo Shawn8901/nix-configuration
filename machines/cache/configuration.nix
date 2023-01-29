@@ -42,7 +42,7 @@ in
       wg0 = {
         listenPort = 51820;
         privateKeyFile = secrets.cache-wg-priv-key.path;
-        dns = [ "192.168.11.1" ];
+        dns = [ "192.168.11.1" "208.67.222.222" "208.67.220.220" ];
         address = [ " 192.168.11.204/24" ];
         peers = [
           {
