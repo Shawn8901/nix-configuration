@@ -12,7 +12,7 @@ with lib; {
 
   config = mkIf cfg.enable {
 
-    home.packages = with pkgs; [ nixpkgs-fmt nil ];
+    home.packages = with pkgs; [ alejandra nil ];
 
     programs.vscode = {
       enable = true;
@@ -77,7 +77,7 @@ with lib; {
         "diffEditor.ignoreTrimWhitespace" = false;
         "editor.formatOnSave" = true;
         "nix.enableLanguageServer" = true;
-        "nix.formatterPath" = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
+        "nix.formatterPath" = "${pkgs.alejandra}/bin/alejandra";
         "nix.serverPath" = "${pkgs.nil}/bin/nil";
         "nix.serverSettings" = {
           "nil" = {
@@ -85,7 +85,7 @@ with lib; {
               "ignored" = [ "unused_binding" "unused_with" ];
             };
             "formatting" = {
-              "command" = [ "nixpkgs-fmt" ];
+              "command" = [ "alejandra" ];
             };
           };
         };
