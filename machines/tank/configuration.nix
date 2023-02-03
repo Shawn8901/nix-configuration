@@ -727,6 +727,13 @@ in {
     sshKey = secrets.builder_ssh_priv.path;
   in [
     {
+      hostName = "localhost";
+      systems = ["x86_64-linux" "i686-linux"];
+      supportedFeatures = ["gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
+      maxJobs = 1;
+      inherit sshUser sshKey;
+    }
+    {
       hostName = "cache.pointjig.de";
       systems = ["aarch64-linux"];
       supportedFeatures = ["benchmark" "big-parallel" "kvm" "nixos-test"];
