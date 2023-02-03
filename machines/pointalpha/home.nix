@@ -27,6 +27,7 @@ in {
         virt-manager
         sqlitebrowser
         plasma-integration
+        exodus
       ]
       ++ (with fPkgs; [
         deezer

@@ -50,6 +50,7 @@ in {
       "steam-original"
       "teamspeak-client"
       "teamviewer"
+      "exodus"
       "vscode"
       "vscode-extension-MS-python-vscode-pylance"
       "tampermonkey"
