@@ -24,12 +24,11 @@ in
   stdenv.mkDerivation
   (finalAttrs: {
     pname = "deezer";
-
-    version = "5.30.500";
+    version = "5.30.510";
 
     src = fetchurl {
       url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${finalAttrs.version}";
-      sha256 = "sha256-9kaRkRBjbrwXlKAHPv6AeVoRuGRJHh0sYEeBABb/fX0=";
+      sha256 = "sha256-P/7F4Q+VfDn1B/69dZWWMYj0ri98db525BmcDoRkG44=";
     };
 
     patches = [
@@ -59,9 +58,9 @@ in
 
       prettier --write "resources/app/build/*.js"
 
-       substituteInPlace resources/app/build/main.js \
-         --replace "return external_path_default().join(process.resourcesPath, appIcon);" \
-         "return external_path_default().join('$out', 'share/deezer/', appIcon);"
+      substituteInPlace resources/app/build/main.js \
+        --replace "return external_path_default().join(process.resourcesPath, appIcon);" \
+        "return external_path_default().join('$out', 'share/deezer/', appIcon);"
 
       runHook postUnpack
     '';
@@ -96,12 +95,13 @@ in
 
       mkdir -p "$out/share/deezer" "$out/share/deezer/linux" "$out/share/applications" "$out/bin/"  $out/app
 
-      for size in 16 32 48 64 128 256; do
-          mkdir -p "$out/share/icons/hicolor/''${size}x''${size}/apps/"
-      done
-
       install -Dm644 resources/app.asar "$out/share/deezer/"
       install -Dm644 resources/win/systray.png "$out/share/deezer/linux/"
+
+      for size in 16 32 48 64 128 256; do
+          mkdir -p "$out/share/icons/hicolor/''${size}x''${size}/apps/"
+          install -Dm644 resources/win/systray.png  "$out/share/icons/hicolor/''${size}x''${size}/apps/deezer.png"
+      done
 
       mkdir $out/js
       install -Dm644 resources/main.js "$out/js"
