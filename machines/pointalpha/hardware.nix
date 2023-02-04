@@ -11,8 +11,8 @@ in {
 
   nix.settings.system-features = ["gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
   nixpkgs.hostPlatform = {
-    gcc.arch = "x86-64-v3";
-    gcc.tune = "znver1";
+    # gcc.arch = "x86-64-v3";
+    # gcc.tune = "znver1";
     system = "x86_64-linux";
   };
 
@@ -25,14 +25,14 @@ in {
     kernelModules = ["amdgpu" "kvm-amd" "cifs" "usb_storage"];
     kernelPackages = pkgs.linuxPackages_xanmod_stable;
     kernelPatches = [
-      {
-        name = "add-cpu-config";
-        patch = null;
-        extraConfig = ''
-          GENERIC_CPU n
-          GENERIC_CPU3 y
-        '';
-      }
+      # {
+      #   name = "add-cpu-config";
+      #   patch = null;
+      #   extraConfig = ''
+      #     GENERIC_CPU n
+      #     GENERIC_CPU3 y
+      #   '';
+      # }
     ];
     extraModulePackages = with config.boot.kernelPackages; [zenpower];
     blacklistedKernelModules = ["k10temp"];

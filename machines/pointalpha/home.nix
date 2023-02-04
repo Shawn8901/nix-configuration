@@ -63,7 +63,6 @@ in {
       --ozone-platform-hint=auto
       --enable-features=WaylandWindowDecorations
     '';
-    systemd.user.startServices = "sd-switch";
     services = {
       nextcloud-client = {startInBackground = true;};
       gpg-agent = {
