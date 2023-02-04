@@ -15,7 +15,7 @@ in {
     gcc.tune = "znver1";
     system = "x86_64-linux";
   };
-  nixpkgs.config.replaceStdenv = {pkgs}: pkgs.withCFlags ["-O3"] pkgs.stdenv;
+  nixpkgs.config.replaceStdenv = {pkgs}: pkgs.withCFlags ["-O2" "-pipe" "-maes"] pkgs.stdenv;
 
   boot = {
     initrd = {
