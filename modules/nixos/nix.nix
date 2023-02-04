@@ -6,6 +6,7 @@
   ...
 }: let
   system = pkgs.hostPlatform.system;
+  attic-client = inputs.attic.packages.${system}.attic-nixpkgs.override {clientOnly = true;};
 in {
   age.secrets = {
     nix-gh-token = {
@@ -20,12 +21,12 @@ in {
     };
   };
 
-  environment.systemPackages = [inputs.attic.packages.${system}.attic-nixpkgs];
+  environment.systemPackages = [attic-client];
   nix = {
     package = pkgs.nix;
     settings = {
       auto-optimise-store = true;
-      #allow-import-from-derivation = false;
+      allow-import-from-derivation = false;
       substituters = ["https://cache.pointjig.de/nixos"];
       trusted-public-keys = ["nixos:vjrrtYYXDQx4qWPPQ0BeO2cr/O/VCkqOWgbFe2bPfi4="];
       trusted-users = ["root" "shawn"];
