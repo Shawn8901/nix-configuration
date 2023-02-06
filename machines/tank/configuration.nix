@@ -122,6 +122,10 @@ in {
   services = {
     openssh = {
       enable = true;
+      settings = {
+        passwordAuthentication = false;
+        kbdInteractiveAuthentication = false;
+      };
       hostKeys = [
         {
           path = "/persist/etc/ssh/ssh_host_ed25519_key";
