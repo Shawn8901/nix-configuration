@@ -37,6 +37,7 @@ in {
     users.mutableUsers = false;
     users.users.root = {
       passwordFile = config.age.secrets.root_password_file.path;
+      shell = pkgs.zsh;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
       ];

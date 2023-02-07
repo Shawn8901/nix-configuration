@@ -325,9 +325,12 @@ in {
   };
 
   env.auto-upgrade.enable = true;
-
+  sound.enable = false;
+  hardware.pulseaudio.enable = false;
+  hardware.bluetooth.enable = false;
   security = {
-    rtkit.enable = true;
+    auditd.enable = false;
+    audit.enable = false;
     acme = {
       acceptTerms = true;
       defaults.email = "shawn@pointjig.de";

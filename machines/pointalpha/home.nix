@@ -13,9 +13,8 @@ in {
         remmina
         samba
         portfolio
-        #libreoffice-qt
-        inkscape
-        gimp
+        libreoffice-qt
+        krita
         nextcloud-client
         keepassxc
         (discord.override {nss = pkgs.nss_latest;})
@@ -25,7 +24,6 @@ in {
         vlc
         wineWowPackages.waylandFull
         virt-manager
-        sqlitebrowser
         plasma-integration
         exodus
       ]
