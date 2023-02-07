@@ -37,6 +37,8 @@ in {
     };
     extraOptions = ''
       !include ${config.age.secrets.nix-gh-token.path}
+      min-free = ${toString (1024 * 1024 * 1024)}
+      max-free = ${toString (5 * 1024 * 1024 * 1024)}
     '';
     nrBuildUsers = lib.mkForce 16;
     daemonIOSchedClass = "idle";
