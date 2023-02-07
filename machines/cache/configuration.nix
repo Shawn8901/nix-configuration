@@ -324,7 +324,7 @@ in {
     ];
   };
 
-  env.auto-upgrade.enable = false;
+  env.auto-upgrade.enable = true;
 
   security = {
     rtkit.enable = true;
@@ -333,4 +333,5 @@ in {
       defaults.email = "shawn@pointjig.de";
     };
   };
+  environment.noXlibs = true;
 }
