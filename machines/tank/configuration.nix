@@ -797,31 +797,5 @@ in {
     etc."zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
     etc."zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
     etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
-
-    systemPackages = [
-      (pkgs.writeScriptBin "upgrade-pg-cluster" ''
-        set -eux
-        # XXX it's perhaps advisable to stop all services that depend on postgresql
-        systemctl stop postgresql
-
-        # XXX replace `<new version>` with the psqlSchema here
-        export NEWDATA="/var/lib/postgresql/${pkgs.postgresql_15.psqlSchema}"
-
-        # XXX specify the postgresql package you'd like to upgrade to
-        export NEWBIN="${pkgs.postgresql_15}/bin"
-
-        export OLDDATA="/var/lib/postgresql/${pkgs.postgresql_14.psqlSchema}"
-        export OLDBIN="${pkgs.postgresql_14}/bin"
-
-        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-        cd "$NEWDATA"
-        sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
-
-        sudo -u postgres $NEWBIN/pg_upgrade \
-          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-          --old-bindir $OLDBIN --new-bindir $NEWBIN \
-          "$@"
-      '')
-    ];
   };
 }
