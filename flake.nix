@@ -65,10 +65,10 @@
 
     hydraJobs = {
       packages = packages;
-      nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
+      nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (lib.filterAttrs (name: _: !builtins.elem name ["shelter" "cache"]) nixosConfigurations);
       release = pkgs.releaseTools.aggregate {
         name = "flake-update";
-        constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n ["pointalpha" "cache"]) (builtins.attrNames hydraJobs.nixos));
+        constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n ["pointalpha" "shelter" "cache"]) (builtins.attrNames hydraJobs.nixos));
       };
     };
 
