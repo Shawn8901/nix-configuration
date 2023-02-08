@@ -101,14 +101,7 @@ in {
   systemd.network.wait-online.anyInterface = true;
 
   environment.systemPackages = with pkgs; [
-    glxinfo
-    vulkan-tools
     cifs-utils
-    alsa-utils
-    xdg-utils
-    libva-utils
-
-    qt5.qtwayland
     plasma5Packages.skanlite
     plasma5Packages.ark
     plasma5Packages.kate
@@ -116,7 +109,6 @@ in {
     plasma5Packages.kmail
     plasma5Packages.kdeplasma-addons
 
-    sysstat
     nixpkgs-review
   ];
 
@@ -127,11 +119,8 @@ in {
       font-awesome
       freefont_ttf
       liberation_ttf
-      roboto
       noto-fonts
-      noto-fonts-cjk
       noto-fonts-emoji
-      powerline-fonts
     ];
     fontconfig = {
       defaultFonts = {
@@ -443,7 +432,7 @@ in {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = with pkgs; [libva rocm-opencl-icd rocm-opencl-runtime];
+      extraPackages = with pkgs; [libva];
     };
   };
   sound.enable = false;
