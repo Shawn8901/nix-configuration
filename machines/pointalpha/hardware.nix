@@ -26,14 +26,14 @@ in {
     kernelModules = ["amdgpu" "kvm-amd" "cifs" "usb_storage"];
     kernelPackages = pkgs.linuxPackages_xanmod_stable;
     kernelPatches = [
-      {
-        name = "add-cpu-config";
-        patch = null;
-        extraConfig = ''
-          GENERIC_CPU n
-          GENERIC_CPU3 y
-        '';
-      }
+      # {
+      #   name = "add-cpu-config";
+      #   patch = null;
+      #   extraConfig = ''
+      #     GENERIC_CPU n
+      #     GENERIC_CPU3 y
+      #   '';
+      # }
     ];
     extraModulePackages = with config.boot.kernelPackages; [zenpower];
     blacklistedKernelModules = ["k10temp"];
