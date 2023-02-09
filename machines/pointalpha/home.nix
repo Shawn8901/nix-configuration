@@ -13,7 +13,7 @@ in {
         remmina
         samba
         portfolio
-        libreoffice-qt
+        #libreoffice-qt
         krita
         nextcloud-client
         keepassxc
