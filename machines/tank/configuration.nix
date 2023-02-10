@@ -200,9 +200,11 @@ in {
             recv = {placeholder = {encryption = "inherit";};};
             pruning = {
               keep_sender = [
+                {type = "not_replicated";}
                 {
-                  type = "regex";
-                  regex = ".*";
+                  type = "grid";
+                  grid = "3x1d";
+                  regex = "^zrepl_.*";
                 }
               ];
               keep_receiver = [
@@ -230,9 +232,11 @@ in {
             recv = {placeholder = {encryption = "inherit";};};
             pruning = {
               keep_sender = [
+                {type = "not_replicated";}
                 {
-                  type = "regex";
-                  regex = ".*";
+                  type = "grid";
+                  grid = "3x1d";
+                  regex = "^zrepl_.*";
                 }
               ];
               keep_receiver = [
@@ -260,9 +264,11 @@ in {
             recv = {placeholder = {encryption = "inherit";};};
             pruning = {
               keep_sender = [
+                {type = "not_replicated";}
                 {
-                  type = "regex";
-                  regex = ".*";
+                  type = "grid";
+                  grid = "3x1d";
+                  regex = "^zrepl_.*";
                 }
               ];
               keep_receiver = [
