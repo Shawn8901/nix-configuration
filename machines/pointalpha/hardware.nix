@@ -14,7 +14,6 @@ in {
     gcc.arch = "x86-64-v3";
     system = "x86_64-linux";
   };
-  nixpkgs.config.replaceStdenv = {pkgs}: pkgs.withCFlags ["-pipe" "-maes"] pkgs.stdenv;
 
   boot = {
     initrd = {
