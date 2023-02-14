@@ -53,7 +53,7 @@ in {
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
       ];
     };
-
+    environment.systemPackages = [pkgs.fzf]; # Used by zsh-interactive-cd
     environment = {variables.EDITOR = "nano";};
   };
 }
