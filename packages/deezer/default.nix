@@ -98,7 +98,7 @@ in
 
       mkdir -p "$out/share/deezer" "$out/share/deezer/linux" "$out/share/applications" "$out/bin/"  $out/app
 
-      ln -sf resources/app.asar "$out/share/deezer/"
+      install -m644 resources/app.asar "$out/share/deezer/"
       ln -sf ${finalAttrs.linux_patch_upstream}/extra/linux/systray.png "$out/share/deezer/linux/"
 
       for size in 16 32 48 64 128 256; do
