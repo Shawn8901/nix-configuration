@@ -9,7 +9,7 @@
 in {
   # FIXME: Remove with 23.05
   disabledModules = ["services/monitoring/prometheus/default.nix"];
-  imports = [stfc-bot.nixosModules.default mimir.nixosModule ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
+  imports = [stfc-bot.nixosModules.default mimir.nixosModules.default ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
 
   age.secrets = {
     sms-technical-passwd = {file = ../../secrets/sms-technical-passwd.age;};
