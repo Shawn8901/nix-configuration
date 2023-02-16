@@ -81,11 +81,8 @@
 
     devShells.${system}.default = pkgs.mkShell {
       packages = with pkgs; [
-        python3.pkgs.invoke
-        python3.pkgs.autopep8
         direnv
         nix-direnv
-        nix-diff
       ];
     };
   };
