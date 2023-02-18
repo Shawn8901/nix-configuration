@@ -418,7 +418,7 @@ in {
     '';
     acpid.enable = true;
     smartd.enable = true;
-    teamviewer.enable = false;
+    teamviewer.enable = true;
   };
   security = {
     rtkit.enable = true;
@@ -446,9 +446,7 @@ in {
       enable = true;
       extraCompatPackages = [fPkgs.proton-ge-custom];
     };
-    chromium.enable = true;
     dconf.enable = true;
-    adb.enable = false;
     noisetorch.enable = true;
     noisetorch.package = fPkgs.noisetorch;
     ssh.startAgent = true;
