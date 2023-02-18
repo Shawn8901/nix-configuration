@@ -83,7 +83,10 @@ in {
       allowedTCPPorts = [config.services.prometheus.port stronghold_tcp] ++ zreplServePorts;
       allowedTCPPortRanges = [stronghold_range];
     };
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      plugins = lib.mkForce [];
+    };
     nftables.enable = true;
     hosts = {
       "192.168.11.31" = lib.attrNames hosts.tank.config.services.nginx.virtualHosts;
