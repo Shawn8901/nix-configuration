@@ -439,17 +439,6 @@ in {
     };
   };
   sound.enable = false;
-
-  virtualisation = {
-    libvirtd = {
-      enable = true;
-      onBoot = "start";
-      qemu.package = pkgs.qemu_kvm;
-    };
-  };
-  virtualisation.virtualbox.host.enable = false;
-  virtualisation.virtualbox.host.enableExtensionPack = false;
-
   systemd.tmpfiles.rules = ["d /media/nas 0750 shawn users -"];
 
   programs = {

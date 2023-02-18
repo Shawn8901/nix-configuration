@@ -23,7 +23,6 @@ in {
         wally-cli
         vlc
         wineWowPackages.waylandFull
-        virt-manager
         plasma-integration
         exodus
       ]
