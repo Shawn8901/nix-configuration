@@ -5,7 +5,7 @@
   ...
 }: let
   cfg = config.env.vscode;
-  system = pkgs.hostPlatform.system;
+  inherit (pkgs.hostPlatform) system;
 in
   with lib; {
     options = {

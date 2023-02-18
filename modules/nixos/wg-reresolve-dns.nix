@@ -24,7 +24,7 @@ in {
     };
   };
 
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     systemd.timers =
       lib.attrsets.mapAttrs'
       (name: _:

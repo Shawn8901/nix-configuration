@@ -7,8 +7,9 @@
   ...
 }: let
   hosts = self.nixosConfigurations;
-  secrets = config.age.secrets;
-  system = pkgs.hostPlatform.system;
+
+  inherit (config.age) secrets;
+  inherit (pkgs.hostPlatform) system;
   # inherit (inputs) stfc-bot mimir;
 in {
   #imports = [ stfc-bot.nixosModules.default mimir.nixosModule ];
@@ -34,7 +35,7 @@ in {
     nextcloud_prometheus_file = {
       file = ../../secrets/nextcloud_prometheus.age;
       owner = config.services.prometheus.exporters.nextcloud.user;
-      group = config.services.prometheus.exporters.nextcloud.group;
+      inherit (config.services.prometheus.exporters.nextcloud) group;
     };
     prometheus_web_config = {
       file = ../../secrets/prometheus_internal_web_config.age;

@@ -8,14 +8,15 @@
 }: let
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
-  system = pkgs.hostPlatform.system;
-  secrets = config.age.secrets;
+
+  inherit (config.age) secrets;
+  inherit (pkgs.hostPlatform) system;
 
   # https://github.com/NixOS/nixpkgs/pull/195521/files
   fontsPkg = pkgs: (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
     mkdir -p "$out/share/fonts"
     font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-    find ${toString (config.fonts.fonts)} -regex "$font_regexp" \
+    find ${toString config.fonts.fonts} -regex "$font_regexp" \
       -exec ln -sf -t "$out/share/fonts" '{}' \;
   '');
 in {

@@ -21,8 +21,8 @@
   };
 
   nodeVdhcoapp = composition.nodeDependencies.override (old: {
-    src = src;
     dontNpmInstall = true;
+    inherit src;
   });
 
   appName = "net.downloadhelper.coapp";
@@ -101,7 +101,7 @@ in
       description = "Companion application for the Video DownloadHelper browser add-on";
       homepage = "https://www.downloadhelper.net/";
       license = lib.licenses.gpl2;
-      platforms = nodejs.meta.platforms;
       maintainers = with lib.maintainers; [wolfangaukang];
+      inherit (nodejs.meta) platforms;
     };
   }

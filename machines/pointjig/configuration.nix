@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  secrets = config.age.secrets;
+  inherit (config.age) secrets;
   inherit (inputs) stfc-bot mimir;
 in {
   # FIXME: Remove with 23.05

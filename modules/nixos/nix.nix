@@ -5,7 +5,7 @@
   inputs,
   ...
 }: let
-  system = pkgs.hostPlatform.system;
+  inherit (pkgs.hostPlatform) system;
   attic-client = inputs.attic.packages.${system}.attic-nixpkgs.override {clientOnly = true;};
 in {
   age.secrets = {

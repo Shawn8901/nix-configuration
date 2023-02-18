@@ -6,8 +6,8 @@
   ...
 }: let
   cfg = config.services.shutdown-wakeup;
-  system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
+  inherit (pkgs.hostPlatform) system;
 in {
   options = {
     services.shutdown-wakeup = {

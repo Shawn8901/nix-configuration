@@ -7,8 +7,8 @@
   ...
 }: let
   hosts = self.nixosConfigurations;
-  secrets = config.age.secrets;
-  system = pkgs.hostPlatform.system;
+  inherit (config.age) secrets;
+  inherit (pkgs.hostPlatform) system;
   inherit (inputs) attic;
 in {
   imports = [attic.nixosModules.atticd ../../modules/nixos/wg-reresolve-dns.nix];

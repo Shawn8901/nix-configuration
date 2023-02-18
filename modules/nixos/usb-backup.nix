@@ -6,8 +6,8 @@
   ...
 }: let
   cfg = config.services.usb-backup;
-  system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
+  inherit (pkgs.hostPlatform) system;
 in {
   options = {
     services.usb-backup = {

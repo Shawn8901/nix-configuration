@@ -3,7 +3,7 @@
   inputs,
   ...
 }: let
-  system = pkgs.hostPlatform.system;
+  inherit (pkgs.hostPlatform) system;
 in {
   environment.systemPackages = with pkgs;
     [

@@ -64,12 +64,12 @@
     nixosConfigurations = import ./machines (inputs // {inherit lib;});
 
     hydraJobs = {
-      packages = packages;
       nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
       release = pkgs.releaseTools.aggregate {
         name = "flake-update";
         constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n ["pointalpha"]) (builtins.attrNames hydraJobs.nixos));
       };
+      inherit packages;
     };
 
     packages = let
@@ -83,6 +83,7 @@
       packages = with pkgs; [
         direnv
         nix-direnv
+        statix
       ];
     };
   };

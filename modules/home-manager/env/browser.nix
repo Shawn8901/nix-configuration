@@ -9,8 +9,8 @@
   inherit (lib) mkEnableOption mkIf;
   inherit (inputs) firefox-addons;
   inherit (firefox-addons.lib.${system}) buildFirefoxXpiAddon;
+  inherit (pkgs.hostPlatform) system;
 
-  system = pkgs.hostPlatform.system;
   fPkgs = self.packages.${system};
   cfg = config.env.browser;
   firefox-addon-packages = firefox-addons.packages.${system};
