@@ -680,6 +680,9 @@ in {
     hydra = let
       atticPkg = inputs.attic.packages.${system}.attic-nixpkgs;
       upload_to_attic = pkgs.writeScriptBin "upload-to-attic" ''
+        echo $HYDRA_JSON
+        cat $HYDRA_JSON
+        echo "\n"
         pathToPush=$(${pkgs.jq}/bin/jq -r '.outputs | .[] | .path' < $HYDRA_JSON)
         ${atticPkg}/bin/attic push nixos $pathToPush
       '';
