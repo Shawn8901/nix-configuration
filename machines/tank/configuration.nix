@@ -678,14 +678,6 @@ in {
 
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
     hydra = let
-      atticPkg = inputs.attic.packages.${system}.attic-nixpkgs;
-      upload_to_attic = pkgs.writeScriptBin "upload-to-attic" ''
-        echo $HYDRA_JSON
-        cat $HYDRA_JSON
-        echo "\n"
-        pathToPush=$(${pkgs.jq}/bin/jq -r '.outputs | .[] | .path' < $HYDRA_JSON)
-        ${atticPkg}/bin/attic push nixos $pathToPush
-      '';
       advance_branch = pkgs.writeScriptBin "advance_branch" ''
         echo $HYDRA_JSON
         cat $HYDRA_JSON
@@ -724,10 +716,6 @@ in {
             port = 9199
           </prometheus>
         </hydra_notify>
-
-        <runcommand>
-          command = ${upload_to_attic}/bin/upload-to-attic
-        </runcommand>
         <runcommand>
           job = *:staging:release
           command = ${advance_branch}/bin/advance_branch
@@ -736,6 +724,19 @@ in {
     };
   };
   systemd.services.hydra-init.after = ["network-online.target"];
+  systemd.services.attic-watch-store = {
+    wantedBy = ["multi-user.target"];
+    wants = ["network-online.target"];
+    after = ["network-online.target"];
+    description = "Upload all store content to binary catch";
+    serviceConfig = let
+      atticPkg = inputs.attic.packages.${system}.attic-nixpkgs;
+    in {
+      User = "hydra-queue-runner";
+      Restart = "always";
+      ExecStart = " ${atticPkg}/bin/attic watch-store nixos";
+    };
+  };
   nix.buildMachines = let
     sshUser = "root";
     sshKey = secrets.builder_ssh_priv.path;
