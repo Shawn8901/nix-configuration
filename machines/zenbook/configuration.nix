@@ -311,6 +311,7 @@ in {
       mesa_glthread = "true";
       MOZ_ENABLE_WAYLAND = "1";
       MOZ_DISABLE_RDD_SANDBOX = "1";
+      MOZ_USE_XINPUT2 = "1";
       NIXOS_OZONE_WL = "1";
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       _JAVA_AWT_WM_NONREPARENTING = "1";
