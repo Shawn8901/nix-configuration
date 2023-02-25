@@ -18,7 +18,6 @@ in {
         nextcloud-client
         keepassxc
         (discord.override {nss = pkgs.nss_latest;})
-        teamspeak_client
         vlc
         plasma-integration
       ]

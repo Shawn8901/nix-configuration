@@ -8,26 +8,21 @@
   zfsOptions = ["zfsutil" "X-mount.mkdir"];
 in {
   imports = [(modulesPath + "/installer/scan/not-detected.nix")];
+  nixpkgs.hostPlatform.system = "x86_64-linux";
 
-  nix.settings.system-features = ["gccarch-x86-64-v2" "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
-  nixpkgs.hostPlatform = {
-    system = "x86_64-linux";
-  };
   boot = {
     initrd = {
-      availableKernelModules = ["ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod"];
+      availableKernelModules = ["nvme" "xhci_pci" "rtsx_pci_sdmmc" "usbhid" "sd_mod" "sr_mod"];
       kernelModules = ["amdgpu"];
       systemd.enable = true;
     };
     kernelModules = ["amdgpu" "kvm-amd" "cifs" "usb_storage"];
     kernelPackages = pkgs.linuxPackages_xanmod_stable;
-    kernelPatches = [
-    ];
     extraModulePackages = with config.boot.kernelPackages; [zenpower];
     blacklistedKernelModules = ["k10temp"];
     extraModprobeConfig = ''
-      options zfs zfs_arc_max=6442450944
-      options zfs zfs_vdev_scheduler=deadline
+      options zfs zfs_arc_min=1073741824
+      options zfs zfs_arc_max=1610612736
     '';
     supportedFilesystems = ["zfs" "ntfs"];
     kernel.sysctl = {"vm.swappiness" = lib.mkDefault 1;};
@@ -66,11 +61,13 @@ in {
     options = zfsOptions;
   };
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/F66B-A20D";
+    device = "/dev/disk/by-label/BOOT";
     fsType = "vfat";
     options = ["x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto"];
   };
-  swapDevices = [];
+  swapDevices = [{device = "/dev/disk/by-label/swap";}];
+
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
+  powerManagement.enable = true;
 }

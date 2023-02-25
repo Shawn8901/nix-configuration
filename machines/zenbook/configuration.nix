@@ -265,7 +265,7 @@ in {
     '';
     acpid.enable = true;
     smartd.enable = true;
-    teamviewer.enable = true;
+    upower.enable = true;
   };
   security = {
     rtkit.enable = true;
