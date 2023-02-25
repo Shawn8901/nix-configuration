@@ -6,15 +6,15 @@ let
   shelter = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDg8wKBWXd+v9FeoujUAppfFp4FUX4IobYNujKO8PBGL";
   next = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOXIWr2IzBmFBqcLZ503WFiKt1jcxZcn2oklGcnv9F8W";
   cache = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsbOU2fH6DUf3MTnMJuMU6PLT7sugH7s1cC2i0ob2pY";
-
-  systems = [pointalpha pointjig tank shelter cache];
+  zenbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMd5o7qGbBlgneU0yuwu8b03mVW15tCuTPB8BjdtT4H";
+  systems = [pointalpha pointjig tank shelter cache zenbook];
 in {
   "shawn_password.age".publicKeys = [shawn] ++ systems;
   "root_password.age".publicKeys = [shawn] ++ systems;
   "builder_ssh_priv.age".publicKeys = [shawn tank];
   "ela_password.age".publicKeys = [shawn tank];
 
-  "shawn_samba_credentials.age".publicKeys = [shawn pointalpha];
+  "shawn_samba_credentials.age".publicKeys = [shawn pointalpha zenbook];
   "ela_samba_credentials.age".publicKeys = [shawn pointalpha];
 
   "zrepl_pointalpha.age".publicKeys = [shawn pointalpha];
