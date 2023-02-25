@@ -112,7 +112,7 @@ in {
     plasma5Packages.kalk
     plasma5Packages.kmail
     plasma5Packages.kdeplasma-addons
-
+    zenmonitor
     nixpkgs-review
   ];
 
