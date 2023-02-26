@@ -11,7 +11,7 @@
 in {
   # FIXME: Remove with 23.05
   disabledModules = ["services/monitoring/prometheus/default.nix"];
-  imports = [../../modules/nixos/overriden/prometheus.nix];
+  imports = [../../modules/nixos/overriden/prometheus.nix ../../modules/nixos/overriden/notify_push.nix];
 
   age.secrets = {
     ffm_nextcloud_db_file = {
