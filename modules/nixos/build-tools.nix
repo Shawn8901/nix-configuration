@@ -11,6 +11,7 @@ in {
       htop
       nano
       vim
+      nix-output-monitor
     ]
     ++ [inputs.agenix.packages.${system}.agenix];
 }
