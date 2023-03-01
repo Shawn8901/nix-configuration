@@ -23,7 +23,6 @@ in {
         signal-desktop
         wally-cli
         vlc
-        wineWowPackages.waylandFull
         plasma-integration
         exodus
       ]
