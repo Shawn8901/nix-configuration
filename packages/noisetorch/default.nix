@@ -5,21 +5,21 @@
 }:
 buildGoModule rec {
   pname = "NoiseTorch";
-  version = "0.12.2.pre+date=2022-08-11";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "noisetorch";
-    repo = pname;
-    rev = "2792a642b8c483475d78518a0c148e5f68eb980b";
-    sha256 = "sha256-mtGTa3jH7QR9RU6Gy9An7EX+B7ZM/+9EzlhBPxeQ/4M=";
+    repo = "NoiseTorch";
+    rev = "v${version}";
     fetchSubmodules = true;
+    sha256 = "sha256-gOPSMPH99Upi/30OnAdwSb7SaMV0i/uHB051cclfz6A=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
-  ldflags = ["-s" "-w" "-X main.version=${version}" "-X main.distribution=nix"];
+  ldflags = ["-s" "-w" "-X main.version=${version}" "-X main.distribution=nixpkgs"];
 
   subPackages = ["."];
 
@@ -35,9 +35,6 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    insecure = true;
-    knownVulnerabilities =
-      lib.optional (lib.versionOlder version "0.12") "https://github.com/noisetorch/NoiseTorch/releases/tag/v0.12.0";
     description = "Virtual microphone device with noise supression for PulseAudio";
     homepage = "https://github.com/noisetorch/NoiseTorch";
     license = licenses.gpl3Plus;
