@@ -234,6 +234,13 @@ in {
                   regex = "^auto_daily.*";
                 }
               ];
+              keep_sender = [
+                {
+                  type = "last_n";
+                  count = 10;
+                  regex = "^auto_daily.*";
+                }
+              ];
             };
           }
           {
@@ -255,6 +262,13 @@ in {
                 {
                   type = "grid";
                   grid = "7x1d(keep=all) | 3x30d";
+                  regex = "^auto_daily.*";
+                }
+              ];
+              keep_sender = [
+                {
+                  type = "last_n";
+                  count = 10;
                   regex = "^auto_daily.*";
                 }
               ];
