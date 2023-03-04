@@ -5,24 +5,15 @@
   ...
 }: let
   inherit (config.age) secrets;
-  inherit (inputs) stfc-bot mimir;
+  inherit (inputs) mimir;
 in {
   # FIXME: Remove with 23.05
   disabledModules = ["services/monitoring/prometheus/default.nix"];
-  imports = [stfc-bot.nixosModules.default mimir.nixosModules.default ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
+  imports = [mimir.nixosModules.default ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
 
   age.secrets = {
     sms-technical-passwd = {file = ../../secrets/sms-technical-passwd.age;};
-    sms-shawn-passwd = {
-      file = ../../secrets/sms-shawn-passwd.age;
-      owner = "stfc-bot";
-      group = "stfc-bot";
-    };
-    stfc-env = {
-      file = ../../secrets/stfc-env.age;
-      owner = "stfc-bot";
-      group = "stfc-bot";
-    };
+    sms-shawn-passwd = {file = ../../secrets/sms-shawn-passwd.age;};
     mimir-env = {
       file = ../../secrets/mimir-env.age;
       owner = "mimir";
@@ -182,11 +173,6 @@ in {
           runAsLocalSuperUser = true;
         };
       };
-    };
-    stfc-bot = {
-      enable = true;
-      package = inputs.stfc-bot.packages.x86_64-linux.default;
-      envFile = config.age.secrets.stfc-env.path;
     };
     stne-mimir = {
       enable = true;

@@ -24,10 +24,6 @@
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stfc-bot = {
-      url = "github:shawn8901/stfc-bot";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     mimir = {
       url = "github:shawn8901/mimir";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -342,8 +342,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
         "nixpkgs-custom": "nixpkgs-custom",
-        "simple-nixos-mailserver": "simple-nixos-mailserver",
-        "stfc-bot": "stfc-bot"
+        "simple-nixos-mailserver": "simple-nixos-mailserver"
       }
     },
     "rust-overlay": {
@@ -395,26 +394,6 @@
         "owner": "simple-nixos-mailserver",
         "repo": "nixos-mailserver",
         "type": "gitlab"
-      }
-    },
-    "stfc-bot": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1674664265,
-        "narHash": "sha256-GvycR4uckjfEPB8O5PLR9MoJgKZ5kg2sHQCkuXM8n24=",
-        "owner": "shawn8901",
-        "repo": "stfc-bot",
-        "rev": "eeac5b2d33daf71df2d3728c52be5ca612f97fcd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "shawn8901",
-        "repo": "stfc-bot",
-        "type": "github"
       }
     },
     "utils": {

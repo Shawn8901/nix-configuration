@@ -10,9 +10,9 @@
 
   inherit (config.age) secrets;
   inherit (pkgs.hostPlatform) system;
-  # inherit (inputs) stfc-bot mimir;
+  inherit (inputs) mimir;
 in {
-  #imports = [ stfc-bot.nixosModules.default mimir.nixosModule ];
+  imports = [mimir.nixosModules.default];
 
   age.secrets = {
     builder_ssh_priv = {
@@ -64,11 +64,6 @@ in {
       group = "nixbld";
       mode = "0440";
     };
-    # stfc-env-dev = {
-    #   file = ../../secrets/stfc-env-dev.age;
-    #   owner = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
-    #   group = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
-    # };
     # mimir-env-dev = {
     #   file = ../../secrets/mimir-env-dev.age;
     #   owner = lib.mkIf config.services.stne-mimir.enable "mimir";
@@ -646,11 +641,6 @@ in {
       SystemMaxUse=100M
       SystemMaxFileSize=50M
     '';
-    # stfc-bot = {
-    #   enable = false;
-    #   package = inputs.stfc-bot.packages.x86_64-linux.default;
-    #   envFile = config.age.secrets.stfc-env-dev.path;
-    # };
     # stne-mimir = {
     #   enable = false;
     #   domain = "mimir.tank.pointjig.de";
