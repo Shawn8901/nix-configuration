@@ -15,6 +15,7 @@
   generate-zrepl-ssl = pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix {};
   noisetorch = pkgs.callPackage ./noisetorch {};
   pytr = pkgs.python3.pkgs.callPackage ./pytr {};
+  asus-touchpad-numpad-driver = pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver {};
   notify_push = pkgs.callPackage ./notify_push {};
 
   gh-poi = pkgs.callPackage ./gh-poi {};

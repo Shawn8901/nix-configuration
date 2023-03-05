@@ -284,6 +284,11 @@ in {
       driSupport32Bit = true;
       extraPackages = with pkgs; [libva];
     };
+    asus-touchpad-numpad = {
+      enable = true;
+      package = fPkgs.asus-touchpad-numpad-driver;
+      model = "ux433fa";
+    };
   };
   sound.enable = false;
   systemd.tmpfiles.rules = ["d /media/nas 0750 shawn users -"];
