@@ -14,7 +14,7 @@ in {
         remmina
         samba
         portfolio
-        #libreoffice-qt
+        libreoffice-qt
         krita
         nextcloud-client
         keepassxc
@@ -25,6 +25,7 @@ in {
         vlc
         plasma-integration
         exodus
+        nix-tree
       ]
       ++ (with fPkgs; [
         deezer
