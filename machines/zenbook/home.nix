@@ -20,6 +20,7 @@ in {
         (discord.override {nss = pkgs.nss_latest;})
         vlc
         plasma-integration
+        nix-tree
       ]
       ++ (with fPkgs; [
         deezer
