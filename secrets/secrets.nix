@@ -35,9 +35,7 @@ in {
   "gh-write-token.age".publicKeys = [shawn tank];
   "nix-netrc-ro.age".publicKeys = [shawn next] ++ systems;
   "nix-netrc-rw.age".publicKeys = [shawn tank pointalpha];
-  "stfc-env-dev.age".publicKeys = [shawn tank];
   "mimir-env-dev.age".publicKeys = [shawn tank];
-  "stfc-env.age".publicKeys = [shawn pointjig];
   "mimir-env.age".publicKeys = [shawn pointjig];
   "sms-shawn-passwd.age".publicKeys = [shawn pointjig];
   "sms-technical-passwd.age".publicKeys = [shawn tank pointjig];
