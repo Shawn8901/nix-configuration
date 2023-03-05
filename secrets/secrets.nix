@@ -20,6 +20,7 @@ in {
   "zrepl_pointalpha.age".publicKeys = [shawn pointalpha];
   "zrepl_shelter.age".publicKeys = [shawn shelter];
   "zrepl_tank.age".publicKeys = [shawn tank];
+  "zrepl_zenbook.age".publicKeys = [shawn zenbook];
   "ztank_key.age".publicKeys = [shawn tank];
 
   "nextcloud_db.age".publicKeys = [shawn tank];

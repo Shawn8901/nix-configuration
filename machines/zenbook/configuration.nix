@@ -16,9 +16,8 @@ in {
   imports = [../../modules/nixos/overriden/sddm.nix];
 
   age.secrets = {
-    shawn_samba_credentials = {
-      file = ../../secrets/shawn_samba_credentials.age;
-    };
+    shawn_samba_credentials = {file = ../../secrets/shawn_samba_credentials.age;};
+    zrepl_zenbook = {file = ../../secrets/zrepl_zenbook.age;};
   };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -251,7 +250,54 @@ in {
       enable = true;
       package = pkgs.zrepl;
       settings = {
-        jobs = [];
+        jobs = [
+          {
+            name = "zenbook";
+            type = "push";
+            filesystems = {"rpool/safe<" = true;};
+            snapshotting = {
+              type = "periodic";
+              interval = "1h";
+              prefix = "zrepl_";
+            };
+            connect = let
+              zreplPort = builtins.head (inputs.zrepl.servePorts hosts.tank.config.services.zrepl);
+            in {
+              type = "tls";
+              address = "tank.fritz.box:${toString zreplPort}";
+              ca = "/etc/zrepl/tank.crt";
+              cert = "/etc/zrepl/zenbook.crt";
+              key = "/etc/zrepl/zenbook.key";
+              server_cn = "tank";
+            };
+            send = {
+              encrypted = true;
+              compressed = true;
+            };
+            pruning = {
+              keep_sender = [
+                {type = "not_replicated";}
+                {
+                  type = "grid";
+                  grid = "1x3h(keep=all) | 2x6h | 30x1d";
+                  regex = "^zrepl_.*";
+                }
+                {
+                  type = "regex";
+                  negate = true;
+                  regex = "^zrepl_.*";
+                }
+              ];
+              keep_receiver = [
+                {
+                  type = "grid";
+                  grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
+                  regex = "^zrepl_.*";
+                }
+              ];
+            };
+          }
+        ];
       };
     };
     avahi = {
@@ -308,6 +354,9 @@ in {
   environment = {
     etc = {
       "samba/credentials_shawn".source = secrets.shawn_samba_credentials.path;
+      "zrepl/zenbook.key".source = secrets.zrepl_zenbook.path;
+      "zrepl/zenbook.crt".source = ../../public_certs/zrepl/zenbook.crt;
+      "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
     };
     variables = {
       AMD_VULKAN_ICD = "RADV";

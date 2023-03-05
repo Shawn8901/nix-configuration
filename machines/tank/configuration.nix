@@ -213,6 +213,20 @@ in {
             };
           }
           {
+            name = "zenbook_sink";
+            type = "sink";
+            root_fs = "ztank/backup/zenbook";
+            serve = {
+              type = "tls";
+              listen = ":8888";
+              ca = "/etc/zrepl/zenbook.crt";
+              cert = "/etc/zrepl/tank.crt";
+              key = "/etc/zrepl/tank.key";
+              client_cns = ["zenbook"];
+            };
+            recv = {placeholder = {encryption = "inherit";};};
+          }
+          {
             name = "sapsrv01";
             type = "pull";
             root_fs = "ztank/backup/sapsrv01";
@@ -788,12 +802,15 @@ in {
 
   environment = {
     noXlibs = true;
-    etc.".ztank_key".source = secrets.ztank_key.path;
-    etc."zrepl/tank.key".source = secrets.zrepl_tank.path;
-    etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
-    etc."zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
-    etc."zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
-    etc."zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
-    etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
+    etc = {
+      ".ztank_key".source = secrets.ztank_key.path;
+      "zrepl/tank.key".source = secrets.zrepl_tank.path;
+      "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
+      "zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
+      "zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
+      "zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
+      "zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
+      "zrepl/zenbook.crt".source = ../../public_certs/zrepl/zenbook.crt;
+    };
   };
 }
