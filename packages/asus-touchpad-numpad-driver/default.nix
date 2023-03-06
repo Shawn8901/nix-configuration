@@ -31,7 +31,7 @@ buildPythonApplication rec {
     install -Dm644 -t $out/bin/numpad_layouts numpad_layouts/*.py
   '';
 
-  passthru.runUpdate = true;
+
 
   meta = with lib; {
     description = "Up-to-date feature-rich linux driver for NumberPad(2.0) on Asus laptops";
