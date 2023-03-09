@@ -23,7 +23,7 @@ in {
       systemd.enable = true;
     };
     kernelModules = ["amdgpu" "kvm-amd" "cifs" "usb_storage"];
-    kernelPackages = pkgs.linuxPackages_xanmod_lts;
+    kernelPackages = pkgs.linuxPackages_xanmod;
     kernelPatches = [
       # {
       #   name = "add-cpu-config";
