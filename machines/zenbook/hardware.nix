@@ -17,7 +17,7 @@ in {
       systemd.enable = true;
     };
     kernelModules = ["amdgpu" "kvm-amd" "cifs" "usb_storage" "acpi_call" "amdgpu" "amd_pstate"];
-    kernelPackages = pkgs.linuxPackages_xanmod_lts;
+    kernelPackages = pkgs.linuxPackages_xanmod;
     kernelParams = ["initcall_blacklist=acpi_cpufreq_init" "amd_pstate=passive" "amd_pstate.shared_mem=1" "amdgpu.dcfeaturemask=0x8"];
     extraModulePackages = with config.boot.kernelPackages; [zenpower];
     blacklistedKernelModules = ["k10temp"];
