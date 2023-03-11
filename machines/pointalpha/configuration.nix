@@ -330,7 +330,7 @@ in {
     rtkit.enable = true;
     auditd.enable = false;
     audit.enable = false;
-    pam.services.shawn.enableKwallet = true;
+    pam.services.sddm.enableKwallet = true;
   };
   hardware = {
     bluetooth.enable = true;
