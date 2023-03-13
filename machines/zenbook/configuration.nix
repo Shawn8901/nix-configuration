@@ -39,6 +39,8 @@ in {
       allowedUDPPortRanges = [];
       allowedTCPPorts = [];
       allowedTCPPortRanges = [];
+      logReversePathDrops = true;
+      checkReversePath = false;
     };
     networkmanager = {
       enable = true;
