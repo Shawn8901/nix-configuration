@@ -26,13 +26,16 @@ in {
       enableGlobalCompInit = true;
       syntaxHighlighting.enable = true;
       autosuggestions.enable = true;
-      ohMyZsh = {
-        enable = true;
-        plugins = ["git" "cp" "zsh-interactive-cd"];
-        theme = "fletcherm";
-      };
+      promptInit = ''
+        source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+        source ${../../files/p10k.zsh}
+      '';
     };
     environment.pathsToLink = ["/share/zsh"];
+    fonts = {
+      enableDefaultFonts = true;
+      fonts = [pkgs.nerdfonts];
+    };
 
     users.mutableUsers = false;
     users.users.root = {

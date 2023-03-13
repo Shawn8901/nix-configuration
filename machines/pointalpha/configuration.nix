@@ -116,22 +116,11 @@ in {
     nixpkgs-review
   ];
 
-  fonts = {
-    enableDefaultFonts = true;
-    fonts = with pkgs; [
-      dejavu_fonts
-      font-awesome
-      freefont_ttf
-      liberation_ttf
-      noto-fonts
-      noto-fonts-emoji
-    ];
-    fontconfig = {
-      defaultFonts = {
-        serif = ["Noto Serif"];
-        sansSerif = ["Noto Sans"];
-        monospace = ["Noto Sans Mono"];
-      };
+  fonts.fontconfig = {
+    defaultFonts = {
+      serif = ["Noto Serif"];
+      sansSerif = ["Noto Sans"];
+      monospace = ["Noto Sans Mono"];
     };
   };
 
