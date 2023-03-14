@@ -708,16 +708,13 @@ in {
         evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
         evaluator_workers = 4
         max_concurrent_evals = 2
-        max_output_size = ${toString (4 * 1024 * 1024 * 1024)}
+        max_output_size = ${toString (5 * 1024 * 1024 * 1024)}
         max_db_connections = 150
-        binary_cache_secret_key_file =  ${secrets.hydra-signing-key.path}
-
-        <hydra_notify>
-          <prometheus>
-            listen_address = localhost
-            port = 9199
-          </prometheus>
-        </hydra_notify>
+        binary_cache_secret_key_file = ${secrets.hydra-signing-key.path}
+        compress_build_logs = 1
+        <github_authorization>
+          shawn8901 = Bearer #github_token#
+        </github_authorization>
         <runcommand>
           job = *:staging:release
           command = ${advance_branch}/bin/advance_branch
@@ -726,6 +723,10 @@ in {
     };
   };
   systemd.services.hydra-init.after = ["network-online.target"];
+
+  systemd.services.hydra-init.preStart = lib.mkAfter ''
+    sed -i -e "s|#github_token#|$(<${secrets.gh-write-token.path})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
+  '';
   systemd.services.attic-watch-store = {
     wantedBy = ["multi-user.target"];
     wants = ["network-online.target"];
