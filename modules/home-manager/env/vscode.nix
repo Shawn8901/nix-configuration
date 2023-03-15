@@ -75,6 +75,7 @@ in
           "editor.tabSize" = 2;
           "terminal.integrated.persistentSessionReviveProcess" = "never";
           "terminal.integrated.enablePersistentSessions" = false;
+          "terminal.integrated.fontFamily" = "MesloLGS Nerd Font Mono";
           "files.trimFinalNewlines" = true;
           "files.insertFinalNewline" = true;
           "diffEditor.ignoreTrimWhitespace" = false;
