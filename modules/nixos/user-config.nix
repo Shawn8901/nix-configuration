@@ -30,8 +30,11 @@ in {
         source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
         source ${../../files/p10k.zsh}
       '';
+      interactiveShellInit = ''
+        bindkey '^[[1;5C' forward-word        # ctrl right
+        bindkey '^[[1;5D' backward-word       # ctrl left
+      '';
     };
-    environment.pathsToLink = ["/share/zsh"];
     fonts = {
       enableDefaultFonts = true;
       fonts = [pkgs.nerdfonts];
