@@ -21,30 +21,22 @@
     startupWMClass = "deezer";
     exec = "deezer %u";
   };
+  version = "5.30.520";
+  deezer-windows-app = fetchurl {
+    url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${version}";
+    hash = "sha256-RfyshGi2togvdJjyJsEgXXlaYgX6CrlZF/XUzXDy+2c=";
+  };
 in
-  stdenv.mkDerivation
-  (finalAttrs: {
+  stdenv.mkDerivation {
     pname = "deezer";
-    version = "5.30.510";
-
-    deezer-windows-app = fetchurl {
-      url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${finalAttrs.version}";
-      hash = "sha256-P/7F4Q+VfDn1B/69dZWWMYj0ri98db525BmcDoRkG44=";
-    };
-
-    linux_patch_upstream = fetchFromGitHub {
-      owner = "aunetx";
-      repo = "deezer-linux";
-      rev = "d4fd8cd41d4c58ef5144f3d7cec79c2679e7dc2b";
-      hash = "sha256-8LiBjn0j863Nlaau+/UvZGJc0CtneWPiY1eiC9be5gw=";
-    };
+    inherit version;
 
     patches = [
-      "${finalAttrs.linux_patch_upstream}/patches/avoid-change-default-texthtml-mime-type.patch"
-      "${finalAttrs.linux_patch_upstream}/patches/fix-isDev-usage.patch"
-      "${finalAttrs.linux_patch_upstream}/patches/remove-kernel-version-from-user-agent.patch"
-      "${finalAttrs.linux_patch_upstream}/patches/start-hidden-in-tray.patch"
-      "${finalAttrs.linux_patch_upstream}/patches/quit.patch"
+      ./avoid-change-default-texthtml-mime-type.patch
+      ./fix-isDev-usage.patch
+      ./remove-kernel-version-from-user-agent.patch
+      ./start-hidden-in-tray.patch
+      ./quit.patch
     ];
 
     nativeBuildInputs = [
@@ -59,7 +51,7 @@ in
 
     unpackPhase = ''
       runHook preUnpack
-      7z x -so ${finalAttrs.deezer-windows-app} "\''$PLUGINSDIR/app-32.7z" > app-32.7z
+      7z x -so ${deezer-windows-app} "\''$PLUGINSDIR/app-32.7z" > app-32.7z
       7z x -y -bsp0 -bso0 app-32.7z
 
       asar extract resources/app.asar resources/app
@@ -96,15 +88,11 @@ in
     installPhase = ''
       runHook preInstall
 
-      mkdir -p "$out/share/deezer" "$out/share/deezer/linux" "$out/share/applications" "$out/bin/"  $out/app
+      mkdir -p "$out/share/deezer" "$out/share/deezer/linux" "$out/share/icons/" "$out/share/applications" "$out/bin/"  $out/app
 
       install -m644 resources/app.asar "$out/share/deezer/"
-      ln -sf ${finalAttrs.linux_patch_upstream}/extra/linux/systray.png "$out/share/deezer/linux/"
-
-      for size in 16 32 48 64 128 256; do
-          mkdir -p "$out/share/icons/hicolor/''${size}x''${size}/apps/"
-          ln -sf ${finalAttrs.linux_patch_upstream}/icons/''${size}x''${size}.png "$out/share/icons/hicolor/''${size}x''${size}/apps/deezer.png"
-      done
+      install -m644 resources/win/systray.png "$out/share/deezer/linux/"
+      install -m644 resources/win/app.ico "$out/share/icons/"
 
       makeWrapper ${electron_13}/bin/electron $out/bin/deezer \
         --add-flags $out/share/deezer/app.asar \
@@ -119,4 +107,4 @@ in
       maintainers = with maintainers; [shawn8901];
       platforms = ["x86_64-linux"];
     };
-  })
+  }
