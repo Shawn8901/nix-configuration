@@ -8,5 +8,4 @@
   nextcloud-backup = import ./nextcloud-backup.nix;
   auto-upgrade = import ./auto-upgrade.nix;
   asus-touchpad-numpad = import ./asus-touchpad-numpad.nix;
-  pipewire-rt = import ./pipewire-rt.nix;
 }

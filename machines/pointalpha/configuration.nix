@@ -314,6 +314,13 @@ in {
     acpid.enable = true;
     smartd.enable = true;
     teamviewer.enable = true;
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      wireplumber.enable = true;
+    };
   };
   security = {
     rtkit.enable = true;
@@ -354,7 +361,6 @@ in {
     partition-manager.enable = true;
   };
   env.user-config.enable = true;
-  env.pipewire-rt.enable = true;
 
   environment = {
     etc = {
