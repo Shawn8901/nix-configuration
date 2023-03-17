@@ -61,9 +61,9 @@
 
     hydraJobs = {
       nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
-      release = pkgs.releaseTools.aggregate {
+      "flake-update" = pkgs.releaseTools.aggregate {
         name = "flake-update";
-        constituents = map (n: "nixos." + n) (builtins.filter (n: !builtins.elem n ["pointalpha"]) (builtins.attrNames hydraJobs.nixos));
+        constituents = map (n: "nixos." + n) (builtins.attrNames hydraJobs.nixos);
       };
       inherit packages;
     };
