@@ -4,7 +4,7 @@
   modulesPath,
   ...
 }: {
-  imports = [(modulesPath + "/profiles/qemu-guest.nix")];
+  imports = [(modulesPath + "/profiles/qemu-guest.nix") (modulesPath + "/profiles/minimal.nix")];
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
 
