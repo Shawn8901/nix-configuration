@@ -71,6 +71,15 @@ in {
     # };
   };
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    udisks2 = pkgs.udisks2.override {
+      btrfs-progs = null;
+      nilfs-utils = null;
+      xfsprogs = null;
+      f2fs-tools = null;
+    };
+  };
+
   networking = {
     firewall = let
       zreplServePorts = inputs.zrepl.servePorts config.services.zrepl;
