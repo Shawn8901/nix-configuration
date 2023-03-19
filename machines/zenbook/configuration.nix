@@ -11,9 +11,17 @@
 
   inherit (config.age) secrets;
   inherit (pkgs.hostPlatform) system;
+
+  # https://github.com/NixOS/nixpkgs/pull/195521/files
+  fontsPkg = pkgs: (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
+    mkdir -p "$out/share/fonts"
+    font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+    find ${toString config.fonts.fonts} -regex "$font_regexp" \
+      -exec ln -sf -t "$out/share/fonts" '{}' \;
+  '');
 in {
   disabledModules = ["services/x11/display-managers/sddm.nix"];
-  imports = [../../modules/nixos/overriden/sddm.nix];
+  imports = [../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix];
 
   age.secrets = {
     shawn_samba_credentials = {file = ../../secrets/shawn_samba_credentials.age;};
@@ -25,6 +33,9 @@ in {
       "deezer"
       "discord"
       "exodus"
+      "steam"
+      "steam-run"
+      "steam-original"
       "vscode"
       "vscode-extension-MS-python-vscode-pylance"
       "tampermonkey"
@@ -32,6 +43,15 @@ in {
     ];
 
   nixpkgs.config.packageOverrides = pkgs: {
+    steam = pkgs.steam.override {
+      extraPkgs = pkgs:
+        with pkgs; [
+          # Victoria 3
+          ncurses
+          # Universim
+          (fontsPkg pkgs)
+        ];
+    };
   };
 
   networking = {
@@ -242,6 +262,10 @@ in {
   systemd.tmpfiles.rules = ["d /media/nas 0750 shawn users -"];
 
   programs = {
+    steam = {
+      enable = true;
+      extraCompatPackages = [fPkgs.proton-ge-custom];
+    };
     dconf.enable = true;
     ssh.startAgent = true;
     iotop.enable = true;
