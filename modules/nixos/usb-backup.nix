@@ -32,8 +32,7 @@ in {
     };
 
     systemd.services."usb-backup@" = let
-      usbBackup =
-        fPkgs.usb-backup.override {inherit (cfg) backupPath mountPoint;};
+      usbBackup = fPkgs.usb-backup.override {inherit (cfg) backupPath mountPoint;};
     in {
       description = "Backups ${cfg.backupPath} to usb hdd";
       serviceConfig = {

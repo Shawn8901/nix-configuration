@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  cfg = config.services.usb-backup;
+  cfg = config.services.backup-nextcloud;
 in {
   options = {
     services.backup-nextcloud = {
