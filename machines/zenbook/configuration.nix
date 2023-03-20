@@ -52,24 +52,6 @@ in {
           (fontsPkg pkgs)
         ];
     };
-    udisks2 = pkgs.udisks2.override {
-      btrfs-progs = null;
-      nilfs-utils = null;
-      xfsprogs = null;
-      f2fs-tools = null;
-    };
-    partition-manager = pkgs.partition-manager.override {
-      btrfs-progs = null;
-      e2fsprogs = null;
-      f2fs-tools = null;
-      hfsprogs = null;
-      jfsutils = null;
-      nilfs-utils = null;
-      reiser4progs = null;
-      reiserfsprogs = null;
-      udftools = null;
-      xfsprogs = null;
-    };
   };
 
   networking = {
