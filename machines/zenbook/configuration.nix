@@ -262,7 +262,7 @@ in {
 
   programs = {
     steam = {
-      enable = false;
+      enable = true;
       extraCompatPackages = [fPkgs.proton-ge-custom];
     };
     dconf.enable = true;
