@@ -337,6 +337,7 @@ in {
       driSupport = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [libva];
+      extraPackages32 = with pkgs.pkgsi686Linux; [libva];
     };
   };
   sound.enable = false;
@@ -363,8 +364,8 @@ in {
 
   environment = {
     etc = {
-      "samba/credentials_shawn".source = secrets.shawn_samba_credentials.path;
       "samba/credentials_ela".source = secrets.ela_samba_credentials.path;
+      "samba/credentials_shawn".source = secrets.shawn_samba_credentials.path;
       "zrepl/pointalpha.key".source = secrets.zrepl_pointalpha.path;
       "zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
       "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
