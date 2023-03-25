@@ -18,7 +18,7 @@
       "description": "Build main branch",
       "flake": "github:shawn8901/nix-configuration",
       "checkinterval": 1800,
-      "schedulingshares": 10,
+      "schedulingshares": 50,
       "enableemail": false,
       "emailoverride": "",
       "keepnr": 1
