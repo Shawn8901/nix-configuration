@@ -41,7 +41,7 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GH_TOKEN }}"
 
-  update-branch:
+  update-branch_microarchitecture:
     runs-on: ubuntu-22.04
     needs: [update-branch]
     steps:
