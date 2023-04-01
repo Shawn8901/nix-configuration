@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+,
 }:
 buildGoModule rec {
   pname = "gh-poi";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "seachicken";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "sha256-7lvqiD0yitc3kvXLD9AtCBCp+F+fqRJyLdnio1R6oP8=";
+    sha256 = "sha256-7KZSZsYfo9zZ0HSg5yLDNTlwb30byD73kqMNHc0tQpo=";
   };
   vendorSha256 = "sha256-D/YZLwwGJWCekq9mpfCECzJyJ/xSlg7fC6leJh+e8i0=";
 
@@ -28,7 +28,7 @@ buildGoModule rec {
     homepage = "https://github.com/seachicken/gh-poi";
     description = "Safely clean up your local branches";
     license = licenses.mit;
-    maintainers = with maintainers; [shawn8901];
-    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [ shawn8901 ];
+    platforms = [ "x86_64-linux" ];
   };
 }
