@@ -33,6 +33,8 @@ in {
       interactiveShellInit = ''
         bindkey '^[[1;5C' forward-word        # ctrl right
         bindkey '^[[1;5D' backward-word       # ctrl left
+        bindkey '^H' backward-kill-word
+        bindkey '5~' kill-word
       '';
     };
     fonts = {
