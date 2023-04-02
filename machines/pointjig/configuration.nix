@@ -5,11 +5,11 @@
   ...
 }: let
   inherit (config.age) secrets;
-  inherit (inputs) mimir;
+  inherit (inputs) mimir mimir-client stfc-bot;
 in {
   # FIXME: Remove with 23.05
   disabledModules = ["services/monitoring/prometheus/default.nix"];
-  imports = [mimir.nixosModules.default ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
+  imports = [mimir.nixosModules.default stfc-bot.nixosModules.default ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
 
   age.secrets = {
     sms-technical-passwd = {file = ../../secrets/sms-technical-passwd.age;};
@@ -18,6 +18,11 @@ in {
       file = ../../secrets/mimir-env.age;
       owner = "mimir";
       group = "mimir";
+    };
+    stfc-env = {
+      file = ../../secrets/stfc-env.age;
+      owner = "stfc-bot";
+      group = "stfc-bot";
     };
     prometheus_web_config = {
       file = ../../secrets/prometheus_public_web_config.age;
@@ -177,10 +182,15 @@ in {
     stne-mimir = {
       enable = true;
       domain = "mimir.pointjig.de";
-      clientPackage = inputs.mimir-client.packages.x86_64-linux.default;
-      package = inputs.mimir.packages.x86_64-linux.default;
+      clientPackage = mimir-client.packages.x86_64-linux.default;
+      package = mimir.packages.x86_64-linux.default;
       envFile = config.age.secrets.mimir-env.path;
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
+    };
+    stfc-bot = {
+      enable = true;
+      package = stfc-bot.packages.x86_64-linux.default;
+      envFile = config.age.secrets.stfc-env.path;
     };
   };
 

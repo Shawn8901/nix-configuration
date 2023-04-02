@@ -10,9 +10,9 @@
 
   inherit (config.age) secrets;
   inherit (pkgs.hostPlatform) system;
-  inherit (inputs) mimir;
+  inherit (inputs) mimir mimir-client stfc-bot;
 in {
-  imports = [mimir.nixosModules.default];
+  imports = [mimir.nixosModules.default stfc-bot.nixosModules.default];
 
   age.secrets = {
     builder_ssh_priv = {
@@ -68,6 +68,11 @@ in {
     #   file = ../../secrets/mimir-env-dev.age;
     #   owner = lib.mkIf config.services.stne-mimir.enable "mimir";
     #   group = lib.mkIf config.services.stne-mimir.enable "mimir";
+    # };
+    #  stfc-env-dev = {
+    #   file = ../../secrets/stfc-env-dev.age;
+    #   owner = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
+    #   group = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
     # };
   };
 
@@ -685,6 +690,11 @@ in {
     #   package = inputs.mimir.packages.x86_64-linux.default;
     #   envFile = config.age.secrets.mimir-env-dev.path;
     #   unixSocket = "/run/mimir-backend/mimir-backend.sock";
+    # };
+    # stfc-bot = {
+    #   enable = false;
+    #   package = stfc-bot.packages.x86_64-linux.default;
+    #   envFile = config.age.secrets.stfc-env-dev.path;
     # };
 
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together

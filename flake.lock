@@ -126,11 +126,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1680295343,
-        "narHash": "sha256-1PJMZoB8blH3dHZ4a5DvRkEksH4oXqovl90H2MeeEWA=",
+        "lastModified": 1680408163,
+        "narHash": "sha256-UecYySMYQTEIKY2vApRB//5UfujooRa5A1A30ipsVEo=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "c16e0dfba8bdc1781d5a88bf221057da6d2cc40d",
+        "rev": "bdf9c52e6c60f5bc3c4e1d3eda330ac1592076d3",
         "type": "gitlab"
       },
       "original": {
@@ -197,11 +197,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1680249941,
-        "narHash": "sha256-7Ylr0NAr8msd3YVaYBw6uyJIRbtOq5l6aLrmrYA5qTw=",
+        "lastModified": 1680389554,
+        "narHash": "sha256-+8FUmS4GbDMynQErZGXKg+wU76rq6mI5fprxFXFWKSM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "67b97020b6970d39b4126a7870063d11337ecb80",
+        "rev": "ddd8866c0306c48f465e7f48432e6f1ecd1da7f8",
         "type": "github"
       },
       "original": {
@@ -268,11 +268,11 @@
     },
     "nixpkgs-22_11": {
       "locked": {
-        "lastModified": 1680122840,
-        "narHash": "sha256-zCQ/9iFHzCW5JMYkkHMwgK1/1/kTMgCMHq4THPINpAU=",
+        "lastModified": 1680334310,
+        "narHash": "sha256-ISWz16oGxBhF7wqAxefMPwFag6SlsA9up8muV79V9ck=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a575c243c23e2851b78c00e9fa245232926ec32f",
+        "rev": "884e3b68be02ff9d61a042bc9bd9dd2a358f95da",
         "type": "github"
       },
       "original": {
@@ -341,7 +341,8 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
         "nixpkgs-custom": "nixpkgs-custom",
-        "simple-nixos-mailserver": "simple-nixos-mailserver"
+        "simple-nixos-mailserver": "simple-nixos-mailserver",
+        "stfc-bot": "stfc-bot"
       }
     },
     "rust-overlay": {
@@ -393,6 +394,26 @@
         "owner": "simple-nixos-mailserver",
         "repo": "nixos-mailserver",
         "type": "gitlab"
+      }
+    },
+    "stfc-bot": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1674664265,
+        "narHash": "sha256-GvycR4uckjfEPB8O5PLR9MoJgKZ5kg2sHQCkuXM8n24=",
+        "owner": "shawn8901",
+        "repo": "stfc-bot",
+        "rev": "eeac5b2d33daf71df2d3728c52be5ca612f97fcd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shawn8901",
+        "repo": "stfc-bot",
+        "type": "github"
       }
     },
     "utils": {
