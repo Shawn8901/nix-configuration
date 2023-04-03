@@ -735,7 +735,7 @@ in {
           shawn8901 = Bearer #github_token#
         </github_authorization>
         <runcommand>
-          job = *:staging:release
+          job = *:staging:flake-update
           command = ${advance_branch}/bin/advance_branch
         </runcommand>
       '';
@@ -746,6 +746,7 @@ in {
   systemd.services.hydra-init.preStart = lib.mkAfter ''
     sed -i -e "s|#github_token#|$(<${secrets.gh-write-token.path})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
   '';
+
   systemd.services.attic-watch-store = {
     wantedBy = ["multi-user.target"];
     wants = ["network-online.target"];
@@ -754,7 +755,7 @@ in {
     serviceConfig = let
       atticPkg = inputs.attic.packages.${system}.attic-nixpkgs;
     in {
-      User = "hydra-queue-runner";
+      User = "attic";
       Restart = "always";
       ExecStart = " ${atticPkg}/bin/attic watch-store nixos";
     };
@@ -817,6 +818,12 @@ in {
       group = "users";
     };
     shawn = {extraGroups = ["nextcloud"];};
+    attic = {
+      isNormalUser = false;
+      isSystemUser = true;
+      group = "users";
+      home = "/var/lib/attic";
+    };
   };
   nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
 

@@ -49,6 +49,11 @@
     options = ["bind" "noauto" "x-systemd.automount"];
   };
 
+  fileSystems."/var/lib/attic" = {
+    device = "/persist/var/lib/attic";
+    options = ["bind" "noauto" "x-systemd.automount"];
+  };
+
   fileSystems."/var/lib/nixos" = {
     device = "/persist/var/lib/nixos";
     noCheck = true;
