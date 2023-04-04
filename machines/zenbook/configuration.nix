@@ -130,7 +130,6 @@ in {
       desktopManager.plasma5 = {
         enable = true;
         phononBackend = "vlc";
-        excludePackages = with pkgs.libsForQt5; [kwrited elisa ktnef];
       };
       desktopManager.xterm.enable = false;
       excludePackages = [pkgs.xterm];
@@ -294,6 +293,7 @@ in {
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       _JAVA_AWT_WM_NONREPARENTING = "1";
     };
+    plasma5.excludePackages = with pkgs.libsForQt5; [kwrited elisa ktnef];
   };
   users.users.shawn = {
     extraGroups = ["video" "audio" "scanner" "lp" "networkmanager" "nixbld"];
