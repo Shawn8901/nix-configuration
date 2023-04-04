@@ -119,7 +119,6 @@ in {
     };
     services.nextcloud-setup.after = ["postgresql.service"];
     services.nextcloud-notify_push = {
-      after = ["redis-nextcloud.service"];
       serviceConfig = {
         Restart = "on-failure";
         RestartSec = "5s";
@@ -410,10 +409,8 @@ in {
         memcached = false;
       };
       extraOptions.redis = {
-        host = "127.0.0.1";
-        port = 6379;
-        dbindex = 0;
-        timeout = 1.5;
+        host = config.services.redis.servers.nextcloud.unixSocket;
+        port = 0;
       };
       extraOptions."overwrite.cli.url" = "https://${hostName}";
       extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
@@ -421,7 +418,7 @@ in {
     };
     redis.servers."nextcloud" = {
       enable = true;
-      port = 6379;
+      user = "nextcloud";
     };
     postgresql = {
       enable = true;

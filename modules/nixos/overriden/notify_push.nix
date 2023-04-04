@@ -7,6 +7,7 @@
   ...
 }: let
   cfg = config.services.nextcloud.notify_push;
+  cfgN = config.services.nextcloud;
 in {
   options.services.nextcloud.notify_push =
     {
@@ -55,11 +56,14 @@ in {
 
   config = lib.mkIf cfg.enable {
     systemd.services.nextcloud-notify_push = let
-      nextcloudUrl = "http${lib.optionalString config.services.nextcloud.https "s"}://${config.services.nextcloud.hostName}";
+      nextcloudUrl = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
     in {
       description = "Push daemon for Nextcloud clients";
       documentation = ["https://github.com/nextcloud/notify_push"];
-      after = ["phpfpm-nextcloud.service"];
+      after = [
+        "phpfpm-nextcloud.service"
+        "redis-nextcloud.service"
+      ];
       wantedBy = ["multi-user.target"];
       environment = {
         NEXTCLOUD_URL = nextcloudUrl;
@@ -68,7 +72,7 @@ in {
         LOG = cfg.logLevel;
       };
       postStart = ''
-        ${config.services.nextcloud.occ}/bin/nextcloud-occ notify_push:setup ${nextcloudUrl}/push
+        ${cfgN.occ}/bin/nextcloud-occ notify_push:setup ${nextcloudUrl}/push
       '';
       script = let
         dbType =
@@ -96,7 +100,7 @@ in {
         ''
         + ''
           export DATABASE_URL="${dbUrl}"
-          ${cfg.package}/bin/notify_push --glob-config '${config.services.nextcloud.datadir}/config/config.php'
+          ${cfg.package}/bin/notify_push --glob-config '${cfgN.datadir}/config/config.php'
         '';
       serviceConfig = {
         User = "nextcloud";
