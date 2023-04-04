@@ -32,6 +32,7 @@ in
           mhutchie.git-graph
           usernamehw.errorlens
           eamodio.gitlens
+          rust-lang.rust-analyzer
         ];
         keybindings = [
           {
@@ -63,6 +64,9 @@ in
             "editor.formatOnSave" = true;
             "editor.formatOnPaste" = true;
             "editor.formatOnType" = false;
+          };
+          "[rust]" = {
+            "editor.defaultFormatter" = "rust-lang.rust-analyzer";
           };
           "[python]" = {
             "editor.formatOnSave" = true;
