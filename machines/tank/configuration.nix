@@ -385,6 +385,8 @@ in {
       notify_push = {
         enable = true;
         package = self.packages.${system}.notify_push;
+        bendDomainToLocalhost = true;
+        configureRedis = true;
       };
       enable = true;
       package = pkgs.nextcloud25;
@@ -408,17 +410,9 @@ in {
         redis = true;
         memcached = false;
       };
-      extraOptions.redis = {
-        host = config.services.redis.servers.nextcloud.unixSocket;
-        port = 0;
-      };
       extraOptions."overwrite.cli.url" = "https://${hostName}";
       extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
       extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
-    };
-    redis.servers."nextcloud" = {
-      enable = true;
-      user = "nextcloud";
     };
     postgresql = {
       enable = true;
