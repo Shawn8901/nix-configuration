@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-custom.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
+    nixpkgs-x86-64-v3.url = "github:Shawn8901/nixpkgs/x86-64-v3";
     nixpkgs-22_11.url = "github:NixOS/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {

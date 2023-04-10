@@ -332,6 +332,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-x86-64-v3": {
+      "locked": {
+        "lastModified": 1681089616,
+        "narHash": "sha256-OvOyaf8Ebqx+uLhudPCyk+fmXWfkrq6CXH9eqTL2u4k=",
+        "owner": "Shawn8901",
+        "repo": "nixpkgs",
+        "rev": "88c5ab7e90bfb81410a6bc9d45031df62e99df35",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Shawn8901",
+        "ref": "x86-64-v3",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -344,6 +360,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
         "nixpkgs-custom": "nixpkgs-custom",
+        "nixpkgs-x86-64-v3": "nixpkgs-x86-64-v3",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "stfc-bot": "stfc-bot"
       }
