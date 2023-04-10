@@ -10,8 +10,6 @@ with lib; let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = cfg.package;
-
   iniFmt = pkgs.formats.ini {};
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
@@ -276,8 +274,8 @@ in {
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 
-    environment.systemPackages = [sddm];
-    services.dbus.packages = [sddm];
+    environment.systemPackages = [cfg.package];
+    services.dbus.packages = [cfg.package];
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;

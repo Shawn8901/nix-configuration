@@ -136,17 +136,17 @@ in {
       displayManager.sddm = {
         enable = true;
         autoNumlock = true;
-        #package = self.packages.${system}.sddm-git;
-        #         settings = {
-        #           General = {
-        #             InputMethod = "";
-        # #            DisplayServer = "wayland";
-        #             GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
-        #           };
-        #           Wayland = {
-        #             CompositorCommand = "/run/wrappers/bin/kwin_wayland --no-lockscreen";
-        #           };
-        #         };
+        package = self.packages.${system}.sddm-git;
+        settings = {
+          General = {
+            InputMethod = "";
+            #            DisplayServer = "wayland";
+            GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
+          };
+          Wayland = {
+            CompositorCommand = "/run/wrappers/bin/kwin_wayland --no-lockscreen";
+          };
+        };
       };
       displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5 = {
