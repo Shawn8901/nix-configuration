@@ -113,6 +113,7 @@ in {
     plasma5Packages.kdeplasma-addons
     zenmonitor
     nixpkgs-review
+    virt-manager
   ];
 
   fonts.fontconfig = {
@@ -360,6 +361,14 @@ in {
     partition-manager.enable = true;
   };
   env.user-config.enable = true;
+
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+      onBoot = "start";
+      qemu.package = pkgs.qemu_kvm;
+    };
+  };
 
   environment = {
     etc = {
