@@ -39,7 +39,7 @@ in {
     };
     fonts = {
       enableDefaultFonts = true;
-      fonts = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "JetBrainsMono" "Terminus"];})];
+      fonts = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
     };
 
     users.mutableUsers = false;
