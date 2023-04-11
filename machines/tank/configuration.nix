@@ -769,13 +769,6 @@ in {
       maxJobs = 2;
       inherit sshUser sshKey;
     }
-    {
-      hostName = "pointalpha";
-      systems = ["x86_64-linux" "i686-linux"];
-      maxJobs = 1;
-      supportedFeatures = ["gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
-      inherit sshUser sshKey;
-    }
   ];
   nix.settings.max-jobs = 4;
   nix.extraOptions = ''
