@@ -11,21 +11,7 @@ in {
   home-manager.users.shawn = {
     home.packages = with pkgs; [
       plasma-integration
-      nix-tree
     ];
-    programs.direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      enableZshIntegration = true;
-    };
-    programs.dircolors = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-    programs.gh = {
-      enable = true;
-      extensions = [fPkgs.gh-poi];
-    };
     programs.ssh = {
       enable = true;
       matchBlocks = {
@@ -71,11 +57,5 @@ in {
       --ozone-platform-hint=auto
       --enable-features=WaylandWindowDecorations
     '';
-    services = {
-      gpg-agent = {
-        enable = true;
-        pinentryFlavor = "qt";
-      };
-    };
   };
 }

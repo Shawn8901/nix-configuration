@@ -11,28 +11,13 @@
 
   inherit (config.age) secrets;
   inherit (pkgs.hostPlatform) system;
-
-  # https://github.com/NixOS/nixpkgs/pull/195521/files
-  fontsPkg = pkgs: (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
-    mkdir -p "$out/share/fonts"
-    font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-    find ${toString pkgs.liberation_ttf} -regex "$font_regexp" \
-      -exec ln -sf -t "$out/share/fonts" '{}' \;
-  '');
 in {
   disabledModules = ["services/x11/display-managers/sddm.nix"];
   imports = [../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix];
 
   age.secrets = {
-    zrepl_pointalpha = {file = ../../secrets/zrepl_pointalpha.age;};
     shawn_samba_credentials = {
       file = ../../secrets/shawn_samba_credentials.age;
-    };
-    ela_samba_credentials = {file = ../../secrets/ela_samba_credentials.age;};
-    prometheus_web_config = {
-      file = ../../secrets/prometheus_internal_web_config.age;
-      owner = "prometheus";
-      group = "prometheus";
     };
     nix-netrc = lib.mkForce {
       file = ../../secrets/nix-netrc-rw.age;
@@ -79,9 +64,6 @@ in {
   services.resolved.enable = false;
   systemd.network.wait-online.anyInterface = true;
 
-  environment.systemPackages = with pkgs; [
-  ];
-
   fonts.fontconfig = {
     defaultFonts = {
       serif = ["Noto Serif"];
@@ -91,11 +73,6 @@ in {
   };
 
   services = {
-    udev = {
-      packages = [pkgs.libmtp.out];
-      extraRules = ''
-      '';
-    };
     xserver = {
       enable = true;
       layout = "de";
@@ -137,11 +114,6 @@ in {
         }
       ];
     };
-    avahi = {
-      enable = true;
-      nssmdns = true;
-      openFirewall = true;
-    };
     journald.extraConfig = ''
       SystemMaxUse=100M
       SystemMaxFileSize=50M
@@ -151,7 +123,6 @@ in {
       enable = true;
       pulse.enable = true;
       alsa.enable = true;
-      alsa.support32Bit = true;
       wireplumber.enable = true;
     };
   };
@@ -162,28 +133,21 @@ in {
     pam.services.sddm.enableKwallet = true;
   };
   hardware = {
-    bluetooth.enable = true;
     pulseaudio.enable = false;
     opengl = {
       enable = true;
       driSupport = true;
-      driSupport32Bit = true;
       extraPackages = with pkgs; [libva];
-      extraPackages32 = with pkgs.pkgsi686Linux; [libva];
     };
   };
   sound.enable = false;
 
   programs = {
     dconf.enable = true;
-    ssh.startAgent = true;
-    iotop.enable = true;
   };
   env.user-config.enable = true;
 
   environment = {
-    etc = {
-    };
     variables = {
       AMD_VULKAN_ICD = "RADV";
       DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
