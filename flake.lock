@@ -334,11 +334,11 @@
     },
     "nixpkgs-x86-64-v3": {
       "locked": {
-        "lastModified": 1681089616,
-        "narHash": "sha256-OvOyaf8Ebqx+uLhudPCyk+fmXWfkrq6CXH9eqTL2u4k=",
+        "lastModified": 1681240715,
+        "narHash": "sha256-7RbggYe/goizyR77BmpEVCnxmjU99HII7FOxZmTSAjs=",
         "owner": "Shawn8901",
         "repo": "nixpkgs",
-        "rev": "88c5ab7e90bfb81410a6bc9d45031df62e99df35",
+        "rev": "95bc8fefd42cce95b3ff327b3245108ff75e998a",
         "type": "github"
       },
       "original": {

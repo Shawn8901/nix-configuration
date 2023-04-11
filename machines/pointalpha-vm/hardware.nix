@@ -13,7 +13,7 @@
     system = "x86_64-linux";
   };
 
-  #nixpkgs.config.replaceStdenv = {pkgs}: pkgs.withCFlags ["-mpclmul"] pkgs.stdenv;
+  nixpkgs.config.replaceStdenv = {pkgs}: pkgs.withCFlags ["-mpclmul"] pkgs.stdenv;
 
   boot = {
     initrd = {
