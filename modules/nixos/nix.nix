@@ -35,7 +35,7 @@ in {
       substituters = ["https://cache.pointjig.de/nixos"];
       trusted-public-keys = ["nixos:vjrrtYYXDQx4qWPPQ0BeO2cr/O/VCkqOWgbFe2bPfi4="];
       trusted-users = ["root" "shawn"];
-      cores = lib.mkDefault 4;
+      cores = lib.mkDefault 6;
       max-jobs = lib.mkDefault 2;
       experimental-features = "nix-command flakes";
       netrc-file = lib.mkForce config.age.secrets.nix-netrc.path;
