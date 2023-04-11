@@ -744,7 +744,7 @@ in {
     after = ["network-online.target"];
     description = "Upload all store content to binary catch";
     serviceConfig = let
-      atticPkg = inputs.attic.packages.${system}.attic-nixpkgs;
+      atticPkg = inputs.attic.packages.${system}.attic-client;
     in {
       User = "attic";
       Restart = "always";

@@ -6,7 +6,7 @@
   ...
 }: let
   inherit (pkgs.hostPlatform) system;
-  attic-client = inputs.attic.packages.${system}.attic-nixpkgs.override {clientOnly = true;};
+  attic-client = inputs.attic.packages.${system}.attic-client;
   nixos-rebuild = pkgs.nixos-rebuild.override {nix = config.nix.package.out;};
 in {
   age.secrets = {
