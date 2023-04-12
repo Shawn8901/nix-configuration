@@ -8,8 +8,7 @@
     nixpkgs-22_11.url = "github:NixOS/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
-      #url = "github:zhaofengli/attic";
-      url = "github:shawn8901/attic";
+      url = "github:zhaofengli/attic";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };

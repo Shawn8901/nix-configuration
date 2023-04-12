@@ -34,15 +34,15 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1680636724,
+        "lastModified": 1680646146,
         "narHash": "sha256-NH+EhLFYDwLQ01BqfTwGvZAjfmZynnP1xxPjqH0XJss=",
-        "owner": "shawn8901",
+        "owner": "zhaofengli",
         "repo": "attic",
-        "rev": "d48e920f1237f60812bbcf891d5665f858fac1ce",
+        "rev": "efa15b9788add910f6e8409dddfb7bb69c2ad201",
         "type": "github"
       },
       "original": {
-        "owner": "shawn8901",
+        "owner": "zhaofengli",
         "repo": "attic",
         "type": "github"
       }
