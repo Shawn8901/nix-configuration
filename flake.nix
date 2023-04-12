@@ -66,7 +66,7 @@
     nixosConfigurations = import ./machines (inputs // {inherit lib;});
 
     hydraJobs = {
-      nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) nixosConfigurations;
+      nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (filterAttrs (name: _: !builtins.elem name ["pointalpha-vm"]) nixosConfigurations);
       "flake-update" = pkgs.releaseTools.aggregate {
         name = "flake-update";
         constituents = map (n: "nixos." + n) (builtins.attrNames hydraJobs.nixos);
