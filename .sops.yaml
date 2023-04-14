@@ -1,0 +1,65 @@
+keys:
+  - &shawn age1q5mka3zt3w0w4nqzlmdm5pwf3ktxnjf87qcdjjxdednsanryry2scfzh93
+  - &cache age1j8gtypmaguankjjftmmzavck9mwns03aq2wgm3j6nxwn9dg3xcgqmg450e
+  - &next age1uq4qun60snrl3t3yjqagrnjhsjma36kkdw3ypj9sntccwlgplfgq4ytdtj
+  - &pointalpha age1fepqavsyfukjf72ajv9cwp6r62hnlz4h6hgxw4wsddrlaqm8e42sns70ws
+  - &pointjig age1wlznz542ulyhjvp9zxe57z5rgy738wt6ygy6qsgjyavl5e9vcd0q27mu3n
+  - &shelter age1qx60k4ft2lvs9qa3s0xqhpkdf26zdc8yw4vr7a7424ta9mcq9g8qrseqv3
+  - &tank age1ejf78m4mn8ch2lusuwn3gwqkpz45n03368sf78ce2nunzxlgduuqlme66d
+  - &zenbook age1q9wy9rnpusgr7w993dm03ec50zm0mgrylmqxdpph2avzf38k6gks3g4vp2
+
+all: &all
+  - *shawn
+  - *cache
+  - *next
+  - *pointalpha
+  - *pointjig
+  - *shelter
+  - *tank
+  - *zenbook
+
+creation_rules:
+  - path_regex: files/secrets-desktop.yaml
+    key_groups:
+      - age:
+          - *shawn
+          - *pointalpha
+          - *zenbook
+  - path_regex: files/secrets-common.yaml
+    key_groups:
+      - age: *all
+  - path_regex: machines/cache/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *shawn
+          - *cache
+  - path_regex: machines/next/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *shawn
+          - *next
+  - path_regex: machines/pointalpha/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *shawn
+          - *pointalpha
+  - path_regex: machines/pointjig/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *shawn
+          - *pointjig
+  - path_regex: machines/shelter/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *shawn
+          - *shelter
+  - path_regex: machines/tank/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *shawn
+          - *tank
+  - path_regex: machines/zenbook/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *shawn
+          - *zenbook

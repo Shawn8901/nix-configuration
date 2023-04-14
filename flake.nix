@@ -15,11 +15,12 @@
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "flake-utils";
     };
-    agenix = {
-      url = "github:ryantm/agenix";
+    sops-nix = {
+      #url = "github:Mic92/sops-nix";
+      url = "github:shawn8901/sops-nix/secretsMountPoint";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows = "nixpkgs-22_11";
     };
     simple-nixos-mailserver = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";

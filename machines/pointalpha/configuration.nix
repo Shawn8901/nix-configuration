@@ -9,7 +9,7 @@
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
 
-  inherit (config.age) secrets;
+  inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
 
   # https://github.com/NixOS/nixpkgs/pull/195521/files
@@ -23,21 +23,13 @@ in {
   disabledModules = ["services/x11/display-managers/sddm.nix"];
   imports = [../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix];
 
-  age.secrets = {
-    zrepl_pointalpha = {file = ../../secrets/zrepl_pointalpha.age;};
-    shawn_samba_credentials = {
-      file = ../../secrets/shawn_samba_credentials.age;
-    };
-    ela_samba_credentials = {file = ../../secrets/ela_samba_credentials.age;};
-    prometheus_web_config = {
-      file = ../../secrets/prometheus_internal_web_config.age;
+  sops.secrets = {
+    zrepl = {};
+    samba = {};
+    samba-ela = {};
+    prometheus-web-config = {
       owner = "prometheus";
       group = "prometheus";
-    };
-    nix-netrc = lib.mkForce {
-      file = ../../secrets/nix-netrc-rw.age;
-      group = "nixbld";
-      mode = "0440";
     };
   };
 
@@ -241,7 +233,7 @@ in {
       globalConfig = {
         external_labels = labels;
       };
-      webConfigFile = secrets.prometheus_web_config.path;
+      webConfigFile = secrets.prometheus-web-config.path;
       scrapeConfigs = [
         {
           job_name = "node";
@@ -372,9 +364,9 @@ in {
 
   environment = {
     etc = {
-      "samba/credentials_ela".source = secrets.ela_samba_credentials.path;
-      "samba/credentials_shawn".source = secrets.shawn_samba_credentials.path;
-      "zrepl/pointalpha.key".source = secrets.zrepl_pointalpha.path;
+      "samba/credentials_ela".source = secrets.samba-ela.path;
+      "samba/credentials_shawn".source = secrets.samba.path;
+      "zrepl/pointalpha.key".source = secrets.zrepl.path;
       "zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
       "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
     };
@@ -393,10 +385,6 @@ in {
     };
     plasma5.excludePackages = with pkgs.libsForQt5; [kwrited elisa ktnef];
   };
-  nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
-
   users.users.root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
-  users.users.shawn = {
-    extraGroups = ["video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld"];
-  };
+  users.users.shawn.extraGroups = ["video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld"];
 }

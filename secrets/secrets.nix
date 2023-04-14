@@ -22,6 +22,7 @@ in {
   "zrepl_tank.age".publicKeys = [shawn tank];
   "zrepl_zenbook.age".publicKeys = [shawn zenbook];
   "ztank_key.age".publicKeys = [shawn tank];
+  "hydra-signing-key.age".publicKeys = [shawn tank];
 
   "nextcloud_db.age".publicKeys = [shawn tank];
   "nextcloud_admin.age".publicKeys = [shawn tank];

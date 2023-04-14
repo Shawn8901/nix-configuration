@@ -9,22 +9,11 @@
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
 
-  inherit (config.age) secrets;
+  inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
 in {
   disabledModules = ["services/x11/display-managers/sddm.nix"];
   imports = [../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix];
-
-  age.secrets = {
-    shawn_samba_credentials = {
-      file = ../../secrets/shawn_samba_credentials.age;
-    };
-    nix-netrc = lib.mkForce {
-      file = ../../secrets/nix-netrc-rw.age;
-      group = "nixbld";
-      mode = "0440";
-    };
-  };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [

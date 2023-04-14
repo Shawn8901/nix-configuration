@@ -6,37 +6,28 @@
   inputs,
   ...
 }: let
-  inherit (config.age) secrets;
+  inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
 in {
   # FIXME: Remove with 23.05
   disabledModules = ["services/monitoring/prometheus/default.nix"];
   imports = [../../modules/nixos/overriden/prometheus.nix ../../modules/nixos/overriden/notify_push.nix];
 
-  age.secrets = {
-    ffm_nextcloud_db_file = {
-      file = ../../secrets/ffm_nextcloud_db.age;
+  sops.secrets = {
+    root = {};
+    nextcloud-admin = {
       owner = "nextcloud";
       group = "nextcloud";
     };
-    ffm_root_password_file = {
-      file = ../../secrets/ffm_root_password.age;
-      owner = "nextcloud";
-      group = "nextcloud";
-    };
-    prometheus_web_config = {
-      file = ../../secrets/prometheus_public_web_config.age;
+    prometheus-web-config = {
       owner = "prometheus";
       group = "prometheus";
     };
-    nextcloud_prometheus_file = {
-      file = ../../secrets/nextcloud_prometheus.age;
-      owner = "nextcloud-exporter";
-      group = "nextcloud-exporter";
+    prometheus-nextcloud = {
+      owner = config.services.prometheus.exporters.nextcloud.user;
+      group = config.services.prometheus.exporters.nextcloud.group;
     };
   };
-
-  nix.gc.options = "--delete-older-than 3d";
 
   networking = {
     firewall = {
@@ -115,7 +106,7 @@ in {
         dbhost = "/run/postgresql";
         dbname = "nextcloud";
         adminuser = "admin";
-        adminpassFile = secrets.ffm_root_password_file.path;
+        adminpassFile = secrets.nextcloud-admin.path;
         trustedProxies = ["134.255.226.115" "2a05:bec0:1:16::115"];
         defaultPhoneRegion = "DE";
       };
@@ -201,7 +192,7 @@ in {
       globalConfig = {
         external_labels = labels;
       };
-      webConfigFile = secrets.prometheus_web_config.path;
+      webConfigFile = secrets.prometheus-web-config.path;
       webExternalUrl = "https://status.${config.services.nextcloud.hostName}";
       scrapeConfigs = [
         {
@@ -244,7 +235,7 @@ in {
           listenAddress = "localhost";
           port = 9205;
           url = "https://${config.services.nextcloud.hostName}";
-          passwordFile = secrets.nextcloud_prometheus_file.path;
+          passwordFile = secrets.prometheus-nextcloud.path;
         };
         postgres = {
           enable = true;
@@ -254,16 +245,12 @@ in {
         };
       };
     };
-
     vnstat.enable = true;
     journald.extraConfig = ''
       SystemMaxUse=500M
       SystemMaxFileSize=100M
     '';
     acpid.enable = true;
-  };
-  boot.kernel.sysctl = {
-    "vm.overcommit_memory" = "1";
   };
   security = {
     acme = {
@@ -277,43 +264,14 @@ in {
   hardware.bluetooth.enable = false;
 
   env.auto-upgrade.enable = true;
-  env.user-config.enable = false;
 
   users.mutableUsers = false;
   users.users.root = {
-    passwordFile = secrets.ffm_root_password_file.path;
+    passwordFile = secrets.root.path;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
     ];
   };
 
-  environment = {
-    noXlibs = true;
-    systemPackages = [
-      # TODO: write installable package
-      # (pkgs.writeScriptBin "upgrade-pg-cluster" ''
-      #   set -eux
-      #   # XXX it's perhaps advisable to stop all services that depend on postgresql
-      #   systemctl stop postgresql
-
-      #   # XXX replace `<new version>` with the psqlSchema here
-      #   export NEWDATA="/var/lib/postgresql/${pkgs.postgresql_15.psqlSchema}"
-
-      #   # XXX specify the postgresql package you'd like to upgrade to
-      #   export NEWBIN="${pkgs.postgresql_15}/bin"
-
-      #   export OLDDATA="/var/lib/postgresql/${pkgs.postgresql_14.psqlSchema}"
-      #   export OLDBIN="${pkgs.postgresql_14}/bin"
-
-      #   install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-      #   cd "$NEWDATA"
-      #   sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
-
-      #   sudo -u postgres $NEWBIN/pg_upgrade \
-      #     --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-      #     --old-bindir $OLDBIN --new-bindir $NEWBIN \
-      #     "$@"
-      # '')
-    ];
-  };
+  environment.noXlibs = true;
 }

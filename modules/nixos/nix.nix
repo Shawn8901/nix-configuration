@@ -9,15 +9,15 @@
   attic-client = inputs.attic.packages.${system}.attic-client;
   nixos-rebuild = pkgs.nixos-rebuild.override {nix = config.nix.package.out;};
 in {
-  age.secrets = {
-    nix-gh-token = {
-      file = ../../secrets/nix-gh-token.age;
-      group = "nixbld";
+  sops.secrets = {
+    nix-gh-token-ro = {
+      sopsFile = ../../files/secrets-common.yaml;
+      group = config.users.groups.nixbld.name;
       mode = "0440";
     };
-    nix-netrc = {
-      file = ../../secrets/nix-netrc-ro.age;
-      group = "nixbld";
+    nix-netrc-ro = {
+      sopsFile = ../../files/secrets-common.yaml;
+      group = config.users.groups.nixbld.name;
       mode = "0440";
     };
   };
@@ -38,10 +38,10 @@ in {
       cores = lib.mkDefault 6;
       max-jobs = lib.mkDefault 2;
       experimental-features = "nix-command flakes";
-      netrc-file = lib.mkForce config.age.secrets.nix-netrc.path;
+      netrc-file = lib.mkForce config.sops.secrets.nix-netrc-ro.path;
     };
     extraOptions = ''
-      !include ${config.age.secrets.nix-gh-token.path}
+      !include ${config.sops.secrets.nix-gh-token-ro.path}
       min-free = ${toString (1024 * 1024 * 1024)}
       max-free = ${toString (5 * 1024 * 1024 * 1024)}
     '';
