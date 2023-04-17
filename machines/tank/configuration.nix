@@ -394,8 +394,8 @@ in {
     };
     postgresql = {
       enable = true;
-      package = pkgs.postgresql_14;
-      dataDir = "/persist/var/lib/postgres/14";
+      package = pkgs.postgresql_15;
+      dataDir = "/persist/var/lib/postgresql/15";
       ensureDatabases = [
         "${config.services.nextcloud.config.dbname}"
         "stfcbot"
