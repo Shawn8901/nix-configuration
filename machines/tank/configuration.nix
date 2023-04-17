@@ -364,9 +364,9 @@ in {
         enable = true;
         package = self.packages.${system}.notify_push;
         bendDomainToLocalhost = true;
-        configureRedis = true;
       };
       enable = true;
+      configureRedis = true;
       package = pkgs.nextcloud26;
       enableBrokenCiphersForSSE = false;
       https = true;
@@ -380,17 +380,13 @@ in {
         dbname = "nextcloud";
         adminuser = "admin";
         adminpassFile = secrets.nextcloud-admin.path;
-        trustedProxies = ["::1" "127.0.0.1"];
         defaultPhoneRegion = "DE";
       };
       caching = {
         apcu = false;
-        redis = true;
         memcached = false;
       };
       extraOptions."overwrite.cli.url" = "https://${hostName}";
-      extraOptions."memcache.local" = "\\OC\\Memcache\\Redis";
-      extraOptions."memcache.locking" = "\\OC\\Memcache\\Redis";
     };
     postgresql = {
       enable = true;
