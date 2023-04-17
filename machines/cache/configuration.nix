@@ -7,29 +7,22 @@
   ...
 }: let
   hosts = self.nixosConfigurations;
-  inherit (config.age) secrets;
+  inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
   inherit (inputs) attic;
 in {
   imports = [attic.nixosModules.atticd ../../modules/nixos/wg-reresolve-dns.nix];
 
-  age.secrets = {
-    root_password_file = {file = ../../secrets/root_password.age;};
-    attic_env = {file = ../../secrets/attic_env.age;};
-    pve_prometheus = {
-      file = ../../secrets/pve_prometheus.age;
-    };
-    grafana_env_file = {
-      file = ../../secrets/grafana_env_file.age;
+  sops.secrets = {
+    root = {neededForUsers = true;};
+    attic-env = {};
+    prometheus-pve = {};
+    grafana-env = {
       owner = "grafana";
       group = "grafana";
     };
-    cache-wg-priv-key = {
-      file = ../../secrets/cache-wg-priv-key.age;
-    };
-    cache-wg-preshared-key = {
-      file = ../../secrets/cache-wg-preshared-key.age;
-    };
+    wireguard-priv-key = {};
+    wireguard-preshared-key = {};
   };
 
   networking = {
@@ -45,25 +38,23 @@ in {
     wg-quick.interfaces = {
       wg0 = {
         listenPort = 51820;
-        privateKeyFile = secrets.cache-wg-priv-key.path;
-        dns = ["192.168.11.1" "208.67.222.222" "208.67.220.220"];
+        privateKeyFile = secrets.wireguard-priv-key.path;
+        dns = ["192.168.11.1"] ++ config.networking.nameservers;
         address = [" 192.168.11.204/24"];
         peers = [
           {
             publicKey = "98gCbQmLB/W8Q1o1Zve/bSdZpAA1UuRvfjvXeVwEdQ4=";
             allowedIPs = ["192.168.11.0/24"];
             endpoint = "qy3w1d6525raac36.myfritz.net:54368";
-            presharedKeyFile = secrets.cache-wg-preshared-key.path;
-            persistentKeepalive = 25;
+            presharedKeyFile = secrets.wireguard-preshared-key.path;
+            persistentKeepalive = 60;
           }
         ];
       };
     };
   };
   systemd = {
-    services.grafana.serviceConfig.EnvironmentFile = [
-      secrets.grafana_env_file.path
-    ];
+    services.grafana.serviceConfig.EnvironmentFile = [secrets.grafana-env.path];
     services.wg-quick-wg0.serviceConfig = {
       Restart = "on-failure";
       RestartSec = "5s";
@@ -120,7 +111,7 @@ in {
     atticd = {
       enable = true;
       package = attic.packages.${system}.attic;
-      credentialsFile = secrets.attic_env.path;
+      credentialsFile = secrets.attic-env.path;
       settings = {
         allowed-hosts = ["cache.pointjig.de"];
         api-endpoint = "https://cache.pointjig.de/";
@@ -209,7 +200,7 @@ in {
           enable = true;
           listenAddress = "localhost";
           port = 9221;
-          configFile = secrets.pve_prometheus.path;
+          configFile = secrets.prometheus-pve.path;
         };
       };
     };
@@ -317,7 +308,7 @@ in {
 
   users.mutableUsers = false;
   users.users.root = {
-    passwordFile = secrets.root_password_file.path;
+    passwordFile = secrets.root.path;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"

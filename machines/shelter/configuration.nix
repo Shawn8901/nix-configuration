@@ -6,17 +6,16 @@
 }: let
   uPkgs = inputs.nixpkgs.legacyPackages.${system};
 
-  inherit (config.age) secrets;
+  inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
 in {
   # FIXME: Remove with 23.05
   disabledModules = ["services/monitoring/prometheus/default.nix"];
   imports = [../../modules/nixos/overriden/prometheus.nix];
 
-  age.secrets = {
-    zrepl_shelter = {file = ../../secrets/zrepl_shelter.age;};
-    prometheus_web_config = {
-      file = ../../secrets/prometheus_public_web_config.age;
+  sops.secrets = {
+    zrepl = {};
+    prometheus-web-config = {
       owner = "prometheus";
       group = "prometheus";
     };
@@ -142,7 +141,7 @@ in {
       globalConfig = {
         external_labels = labels;
       };
-      webConfigFile = secrets.prometheus_web_config.path;
+      webConfigFile = secrets.prometheus-web-config.path;
       webExternalUrl = "https://status.shelter.pointjig.de";
       scrapeConfigs = [
         {
@@ -201,7 +200,7 @@ in {
 
   environment = {
     noXlibs = true;
-    etc."zrepl/shelter.key".source = config.age.secrets.zrepl_shelter.path;
+    etc."zrepl/shelter.key".source = secrets.zrepl.path;
     etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
     etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
   };

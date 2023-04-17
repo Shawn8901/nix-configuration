@@ -1,7 +1,7 @@
 {
   self,
   home-manager,
-  agenix,
+  sops-nix,
   simple-nixos-mailserver,
   ...
 } @ inputs: name: nixpkgs:
@@ -36,12 +36,12 @@ nixpkgs.lib.nixosSystem
           };
           nix.nixPath = ["nixpkgs=${nixpkgs}"];
           system.stateVersion = "22.05";
+          sops.defaultSopsFile = "${configFolder}/secrets.yaml";
         }
         entryPoint
         bootloader
         hardware
-
-        agenix.nixosModules.age
+        sops-nix.nixosModules.sops
       ]
       ++ builtins.attrValues self.nixosModules
       ++ nixpkgs.lib.optionals (builtins.pathExists home)
@@ -59,7 +59,7 @@ nixpkgs.lib.nixosSystem
         }
         {
           home-manager = {
-            sharedModules = [../modules/home-manager];
+            sharedModules = [../modules/home-manager sops-nix.homeManagerModules.sops];
             users.shawn = {
               home.stateVersion = "22.05";
               nix.registry.nixpkgs.flake = nixpkgs;

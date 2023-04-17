@@ -4,28 +4,25 @@
   pkgs,
   ...
 }: let
-  inherit (config.age) secrets;
+  inherit (config.sops) secrets;
   inherit (inputs) mimir mimir-client stfc-bot;
 in {
   # FIXME: Remove with 23.05
   disabledModules = ["services/monitoring/prometheus/default.nix"];
   imports = [mimir.nixosModules.default stfc-bot.nixosModules.default ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
 
-  age.secrets = {
-    sms-technical-passwd = {file = ../../secrets/sms-technical-passwd.age;};
-    sms-shawn-passwd = {file = ../../secrets/sms-shawn-passwd.age;};
+  sops.secrets = {
+    sms-technical-passwd = {};
+    sms-shawn-passwd = {};
     mimir-env = {
-      file = ../../secrets/mimir-env.age;
       owner = "mimir";
       group = "mimir";
     };
     stfc-env = {
-      file = ../../secrets/stfc-env.age;
       owner = "stfc-bot";
       group = "stfc-bot";
     };
-    prometheus_web_config = {
-      file = ../../secrets/prometheus_public_web_config.age;
+    prometheus-web-config = {
       owner = "prometheus";
       group = "prometheus";
     };
@@ -142,7 +139,7 @@ in {
       globalConfig = {
         external_labels = labels;
       };
-      webConfigFile = secrets.prometheus_web_config.path;
+      webConfigFile = secrets.prometheus-web-config.path;
       webExternalUrl = "https://status.pointjig.de";
       scrapeConfigs = [
         {
@@ -184,13 +181,13 @@ in {
       domain = "mimir.pointjig.de";
       clientPackage = mimir-client.packages.x86_64-linux.default;
       package = mimir.packages.x86_64-linux.default;
-      envFile = config.age.secrets.mimir-env.path;
+      envFile = secrets.mimir-env.path;
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
     stfc-bot = {
       enable = true;
       package = stfc-bot.packages.x86_64-linux.default;
-      envFile = config.age.secrets.stfc-env.path;
+      envFile = secrets.stfc-env.path;
     };
   };
 

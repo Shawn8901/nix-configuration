@@ -13,9 +13,15 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    age.secrets = {
-      shawn_password_file = {file = ../../secrets/shawn_password.age;};
-      root_password_file = {file = ../../secrets/root_password.age;};
+    sops.secrets = {
+      shawn = {
+        sopsFile = ../../files/secrets-common.yaml;
+        neededForUsers = true;
+      };
+      root = {
+        sopsFile = ../../files/secrets-common.yaml;
+        neededForUsers = true;
+      };
     };
 
     programs.command-not-found.enable = false;
@@ -44,14 +50,14 @@ in {
 
     users.mutableUsers = false;
     users.users.root = {
-      passwordFile = config.age.secrets.root_password_file.path;
+      passwordFile = config.sops.secrets.root.path;
       shell = pkgs.zsh;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
       ];
     };
     users.users.shawn = {
-      passwordFile = config.age.secrets.shawn_password_file.path;
+      passwordFile = config.sops.secrets.shawn.path;
       isNormalUser = true;
       group = "users";
       extraGroups = ["wheel"];

@@ -9,7 +9,7 @@
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
 
-  inherit (config.age) secrets;
+  inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
 
   # https://github.com/NixOS/nixpkgs/pull/195521/files
@@ -23,9 +23,9 @@ in {
   disabledModules = ["services/x11/display-managers/sddm.nix"];
   imports = [../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix];
 
-  age.secrets = {
-    shawn_samba_credentials = {file = ../../secrets/shawn_samba_credentials.age;};
-    zrepl_zenbook = {file = ../../secrets/zrepl_zenbook.age;};
+  sops.secrets = {
+    zrepl = {restartUnits = ["zrepl.service"];};
+    samba = {sopsFile = ./../../files/secrets-desktop.yaml;};
   };
 
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -276,8 +276,8 @@ in {
 
   environment = {
     etc = {
-      "samba/credentials_shawn".source = secrets.shawn_samba_credentials.path;
-      "zrepl/zenbook.key".source = secrets.zrepl_zenbook.path;
+      "zrepl/zenbook.key".source = secrets.zrepl.path;
+      "samba/credentials_shawn".source = secrets.samba.path;
       "zrepl/zenbook.crt".source = ../../public_certs/zrepl/zenbook.crt;
       "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
     };

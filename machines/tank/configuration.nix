@@ -8,60 +8,38 @@
 }: let
   hosts = self.nixosConfigurations;
 
-  inherit (config.age) secrets;
+  inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
   inherit (inputs) mimir mimir-client stfc-bot;
 in {
   imports = [mimir.nixosModules.default stfc-bot.nixosModules.default];
 
-  age.secrets = {
-    builder_ssh_priv = {
-      file = ../../secrets/builder_ssh_priv.age;
-      owner = "hydra-queue-runner";
-    };
-    ztank_key = {file = ../../secrets/ztank_key.age;};
-    zrepl_tank = {file = ../../secrets/zrepl_tank.age;};
-    ela_password_file = {file = ../../secrets/ela_password.age;};
-    nextcloud_db_file = {
-      file = ../../secrets/nextcloud_db.age;
+  sops.secrets = {
+    ssh-builder-key = {owner = "hydra-queue-runner";};
+    zfs-ztank-key = {};
+    zrepl = {};
+    ela = {};
+    nextcloud-admin = {
       owner = "nextcloud";
       group = "nextcloud";
     };
-    nextcloud_admin_file = {
-      file = ../../secrets/nextcloud_admin.age;
-      owner = "nextcloud";
-      group = "nextcloud";
-    };
-    nextcloud_prometheus_file = {
-      file = ../../secrets/nextcloud_prometheus.age;
+    prometheus-nextcloud = {
       owner = config.services.prometheus.exporters.nextcloud.user;
       inherit (config.services.prometheus.exporters.nextcloud) group;
     };
-    prometheus_web_config = {
-      file = ../../secrets/prometheus_internal_web_config.age;
+    prometheus-web-config = {
       owner = "prometheus";
       group = "prometheus";
     };
-    fritzbox_prometheus_file = {
-      file = ../../secrets/fritzbox_prometheus.age;
-    };
+    prometheus-fritzbox = {};
     # GitHub access token is stored on all systems with group right for nixbld
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
-    nix-gh-token.mode = lib.mkForce "0777";
-    gh-write-token = {
-      file = ../../secrets/gh-write-token.age;
-      mode = "0777";
-    };
+    nix-gh-token-ro.mode = lib.mkForce "0777";
+    github-write-token = {};
     hydra-signing-key = {
-      file = ../../secrets/hydra-signing-key.age;
       owner = "hydra";
       group = "hydra";
-      mode = "0440";
-    };
-    nix-netrc = lib.mkForce {
-      file = ../../secrets/nix-netrc-rw.age;
-      group = "nixbld";
       mode = "0440";
     };
     # mimir-env-dev = {
@@ -125,7 +103,7 @@ in {
       };
     };
     # TODO: Prepare a PR to fix/make it configurable that upstream
-    services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.fritzbox_prometheus_file.path;
+    services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.prometheus-fritzbox.path;
   };
 
   services = {
@@ -401,7 +379,7 @@ in {
         dbhost = "/run/postgresql";
         dbname = "nextcloud";
         adminuser = "admin";
-        adminpassFile = secrets.nextcloud_admin_file.path;
+        adminpassFile = secrets.nextcloud-admin.path;
         trustedProxies = ["::1" "127.0.0.1"];
         defaultPhoneRegion = "DE";
       };
@@ -539,7 +517,7 @@ in {
       globalConfig = {
         external_labels = {machine = "${config.networking.hostName}";};
       };
-      webConfigFile = secrets.prometheus_web_config.path;
+      webConfigFile = secrets.prometheus-web-config.path;
       scrapeConfigs = let
         nodePort = toString config.services.prometheus.exporters.node.port;
         smartctlPort = toString config.services.prometheus.exporters.smartctl.port;
@@ -644,7 +622,7 @@ in {
           listenAddress = "localhost";
           port = 9205;
           url = "https://${config.services.nextcloud.hostName}";
-          passwordFile = secrets.nextcloud_prometheus_file.path;
+          passwordFile = secrets.prometheus-nextcloud.path;
         };
         postgres = {
           enable = true;
@@ -691,25 +669,21 @@ in {
     # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
     hydra = let
       advance_branch = pkgs.writeScriptBin "advance_branch" ''
-        echo $HYDRA_JSON
-        cat $HYDRA_JSON
-        set -x
         ${pkgs.curl}/bin/curl \
         -X POST \
         -H "Accept: application/vnd.github+json" \
-        -H "Authorization: Bearer $(<${secrets.gh-write-token.path})" \
+        -H "Authorization: Bearer $(<${secrets.github-write-token.path})" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
         https://api.github.com/repos/shawn8901/nix-configuration/merges \
         -d '{"base":"main","head":"staging","commit_message":"Built flake update!"}'
-        set +x
       '';
     in {
       enable = true;
       listenHost = "127.0.0.1";
       port = 3000;
       package = pkgs.hydra_unstable;
-      minimumDiskFree = 2;
-      minimumDiskFreeEvaluator = 5;
+      minimumDiskFree = 5;
+      minimumDiskFreeEvaluator = 10;
       hydraURL = "https://hydra.pointjig.de";
       notificationSender = "hydra@pointjig.de";
       useSubstitutes = true;
@@ -720,7 +694,7 @@ in {
         max_concurrent_evals = 2
         max_output_size = ${toString (5 * 1024 * 1024 * 1024)}
         max_db_connections = 150
-        binary_cache_secret_key_file = ${secrets.hydra-signing-key.path}
+        #binary_cache_secret_key_file = ${secrets.hydra-signing-key.path}
         compress_build_logs = 1
         <github_authorization>
           shawn8901 = Bearer #github_token#
@@ -735,7 +709,7 @@ in {
   systemd.services.hydra-init.after = ["network-online.target"];
 
   systemd.services.hydra-init.preStart = lib.mkAfter ''
-    sed -i -e "s|#github_token#|$(<${secrets.gh-write-token.path})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
+    sed -i -e "s|#github_token#|$(<${secrets.github-write-token.path})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
   '';
 
   systemd.services.attic-watch-store = {
@@ -753,7 +727,7 @@ in {
   };
   nix.buildMachines = let
     sshUser = "root";
-    sshKey = secrets.builder_ssh_priv.path;
+    sshKey = secrets.ssh-builder-key.path;
   in [
     {
       hostName = "localhost";
@@ -790,7 +764,7 @@ in {
 
   users.users = {
     ela = {
-      passwordFile = secrets.ela_password_file.path;
+      passwordFile = secrets.ela.path;
       isNormalUser = true;
       group = "users";
       uid = 1001;
@@ -809,13 +783,11 @@ in {
       home = "/var/lib/attic";
     };
   };
-  nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
-
   environment = {
     noXlibs = true;
     etc = {
-      ".ztank_key".source = secrets.ztank_key.path;
-      "zrepl/tank.key".source = secrets.zrepl_tank.path;
+      ".ztank_key".source = secrets.zfs-ztank-key.path;
+      "zrepl/tank.key".source = secrets.zrepl.path;
       "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
       "zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
       "zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
