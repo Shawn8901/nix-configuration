@@ -367,7 +367,7 @@ in {
         configureRedis = true;
       };
       enable = true;
-      package = pkgs.nextcloud25;
+      package = pkgs.nextcloud26;
       enableBrokenCiphersForSSE = false;
       https = true;
       home = "/persist/var/lib/nextcloud";
