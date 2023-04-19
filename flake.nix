@@ -17,8 +17,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      #url = "github:Mic92/sops-nix";
-      url = "github:shawn8901/sops-nix/secretsMountPoint";
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-22_11";
     };

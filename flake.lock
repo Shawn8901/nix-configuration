@@ -380,16 +380,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1681749023,
-        "narHash": "sha256-h9xF9QLhPO2SHUcEOJKo2NsWr/udu2vGm6GZJvJS4Cc=",
-        "owner": "shawn8901",
+        "lastModified": 1681821695,
+        "narHash": "sha256-uwyBGo/9IALi97AfMuzkJroQQhV6hkybaZVdw6pRNG4=",
+        "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "37400a275dab894a9c07eeeca7f74e29b6349b53",
+        "rev": "5698b06b0731a2c15ff8c2351644427f8ad33993",
         "type": "github"
       },
       "original": {
-        "owner": "shawn8901",
-        "ref": "secretsMountPoint",
+        "owner": "Mic92",
         "repo": "sops-nix",
         "type": "github"
       }
