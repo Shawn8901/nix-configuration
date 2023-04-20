@@ -45,6 +45,8 @@ in {
     };
     fonts = {
       enableDefaultFonts = true;
+      fontDir.enable = true;
+      fontconfig.enable = true;
       fonts = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
     };
 

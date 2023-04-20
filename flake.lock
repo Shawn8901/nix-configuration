@@ -256,11 +256,11 @@
     },
     "nixpkgs-custom": {
       "locked": {
-        "lastModified": 1681764418,
-        "narHash": "sha256-knaoaHkZiLd9FsMUIyPU4H8h4vTHErmBRQlaQy/9ylU=",
+        "lastModified": 1682007902,
+        "narHash": "sha256-G5pnRPGgMCl1qhCpfGYMj4e1s+w9jMaaoPKmVXYA08s=",
         "owner": "Shawn8901",
         "repo": "nixpkgs",
-        "rev": "a62d6fb2550697278c35fcd7c0b73940abc2cb68",
+        "rev": "da2e9dca6b6079cdd47d3d78bbb58a043a9f191b",
         "type": "github"
       },
       "original": {

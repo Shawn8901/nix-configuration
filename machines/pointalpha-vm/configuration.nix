@@ -152,7 +152,6 @@ in {
     };
     plasma5.excludePackages = with pkgs.libsForQt5; [kwrited elisa ktnef];
   };
-  nix.settings.netrc-file = lib.mkForce secrets.nix-netrc.path;
 
   users.users.root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
   users.users.shawn = {
