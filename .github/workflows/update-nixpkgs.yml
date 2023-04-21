@@ -31,6 +31,10 @@ jobs:
         run: |
           git config user.email git@pointjig.de
           git config user.name "Git Bot"
+
+      - name: Fetch origin
+        shell: bash
+        run: |
           git fetch origin
       - name: Update custom branch
         shell: bash
