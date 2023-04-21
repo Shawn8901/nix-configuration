@@ -13,8 +13,6 @@
     system = "x86_64-linux";
   };
 
-  nixpkgs.config.replaceStdenv = {pkgs}: pkgs.withCFlags ["-mpclmul"] pkgs.stdenv;
-
   boot = {
     initrd = {
       availableKernelModules = ["ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod"];
