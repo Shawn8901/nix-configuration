@@ -50,7 +50,7 @@ in {
     daemonCPUSchedPolicy = "idle";
     gc = {
       automatic = true;
-      dates = "daily";
+      dates = "weekly";
       options = lib.mkDefault "--delete-older-than 7d";
     };
   };
