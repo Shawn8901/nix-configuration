@@ -9,7 +9,7 @@
 in {
   imports = [(modulesPath + "/installer/scan/not-detected.nix")];
 
-  nix.settings.system-features = ["gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
+  nix.settings.system-features = ["gccarch-x86-64-v3" "gccarch-znver1" "benchmark" "big-parallel" "kvm" "nixos-test"];
   nixpkgs.hostPlatform = {
     #gcc.arch = "x86-64-v3";
     system = "x86_64-linux";
