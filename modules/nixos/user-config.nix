@@ -46,7 +46,7 @@ in {
     fonts = {
       enableDefaultFonts = true;
       fontDir.enable = true;
-      fontconfig.enable = lib.mkDefault true;
+      fontconfig.enable = lib.mkIf (!config.environment.noXlibs) (lib.mkDefault true);
       fonts = [pkgs.liberation_ttf pkgs.noto-fonts (pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
     };
 
