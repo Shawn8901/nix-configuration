@@ -36,7 +36,10 @@ in {
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
     nix-gh-token-ro.mode = lib.mkForce "0777";
-    github-write-token = {};
+    github-write-token = {
+      owner = "hydra-queue-runner";
+      group = "hydra";
+    };
     hydra-signing-key = {
       owner = "hydra";
       group = "hydra";
