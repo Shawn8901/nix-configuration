@@ -4,9 +4,9 @@
   fetchurl,
   makeDesktopItem,
   makeWrapper,
+  icoutils,
   p7zip,
   nodePackages,
-  imagemagick,
   electron_13,
   fetchFromGitHub,
 }: let
@@ -44,7 +44,7 @@ in
       p7zip
       nodePackages.asar
       nodePackages.prettier
-      imagemagick
+      icoutils
     ];
 
     dontConfigure = true;
@@ -90,9 +90,15 @@ in
 
       mkdir -p "$out/share/deezer" "$out/share/deezer/linux" "$out/share/icons/" "$out/share/applications" "$out/bin/"  $out/app
 
+      icotool -x "resources/win/app.ico"
+      for f in app_*.png; do
+        res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -d"x" -f1-2)
+        mkdir -pv "$out/share/icons/hicolor/$res/apps"
+        mv "$f" "$out/share/icons/hicolor/$res/apps/deezer.png"
+      done;
+
       install -m644 resources/app.asar "$out/share/deezer/"
       install -m644 resources/win/systray.png "$out/share/deezer/linux/"
-      install -m644 resources/win/app.ico "$out/share/icons/"
 
       makeWrapper ${electron_13}/bin/electron $out/bin/deezer \
         --add-flags $out/share/deezer/app.asar \
