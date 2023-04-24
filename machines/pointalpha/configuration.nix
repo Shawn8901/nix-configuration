@@ -16,7 +16,7 @@
   fontsPkg = pkgs: (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
     mkdir -p "$out/share/fonts"
     font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-    find ${toString [pkgs.liberation_ttf pkgs.noto-fonts]} -regex "$font_regexp" \
+    find ${toString [pkgs.liberation_ttf pkgs.dejavu_fonts]} -regex "$font_regexp" \
       -exec ln -sf -t "$out/share/fonts" '{}' \;
   '');
 in {
@@ -356,7 +356,7 @@ in {
 
   virtualisation = {
     libvirtd = {
-      enable = true;
+      enable = false;
       onBoot = "start";
       qemu.package = pkgs.qemu_kvm;
     };
