@@ -393,24 +393,12 @@ in {
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
-      virtualHosts = {
-        "hydra.pointjig.de" = {
-          enableACME = true;
-          forceSSL = true;
-          http3 = true;
-          kTLS = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:3000";
-            recommendedProxySettings = true;
-          };
-        };
-        # "${config.services.stne-mimir.domain}" = {
-        #   enableACME = true;
-        #   forceSSL = true;
-        #   http3 = true;
-        #   kTLS = true;
-        # };
-      };
+      # "${config.services.stne-mimir.domain}" = {
+      #   enableACME = true;
+      #   forceSSL = true;
+      #   http3 = true;
+      #   kTLS = true;
+      # };
     };
     avahi = {
       enable = true;
@@ -613,90 +601,15 @@ in {
     #   envFile = config.age.secrets.stfc-env-dev.path;
     # };
 
-    # FIXME: Move hydra stuff to a module, so that everything related to it, is stick together
-    hydra = let
-      advance_branch = pkgs.writeScriptBin "advance_branch" ''
-        ${pkgs.curl}/bin/curl \
-        -X POST \
-        -H "Accept: application/vnd.github+json" \
-        -H "Authorization: Bearer $(<${secrets.github-write-token.path})" \
-        -H "X-GitHub-Api-Version: 2022-11-28" \
-        https://api.github.com/repos/shawn8901/nix-configuration/merges \
-        -d '{"base":"main","head":"staging","commit_message":"Built flake update!"}'
-      '';
-    in {
+    shawn8901.hydra = {
       enable = true;
-      listenHost = "127.0.0.1";
-      port = 3000;
-      package = pkgs.hydra_unstable;
-      minimumDiskFree = 5;
-      minimumDiskFreeEvaluator = 10;
-      hydraURL = "https://hydra.pointjig.de";
-      notificationSender = "hydra@pointjig.de";
-      useSubstitutes = true;
-      extraConfig = ''
-        evaluator_max_memory_size = 4096
-        evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
-        evaluator_workers = 4
-        max_concurrent_evals = 2
-        max_output_size = ${toString (5 * 1024 * 1024 * 1024)}
-        max_db_connections = 150
-        #binary_cache_secret_key_file = ${secrets.hydra-signing-key.path}
-        compress_build_logs = 1
-        <github_authorization>
-          shawn8901 = Bearer #github_token#
-        </github_authorization>
-        <runcommand>
-          job = *:staging:flake-update
-          command = ${advance_branch}/bin/advance_branch
-        </runcommand>
-      '';
+      hostName = "hydra.pointjig.de";
+      mailAdress = "hydra@pointjig.de";
+      writeTokenFile = secrets.github-write-token.path;
+      builder.sshKeyFile = secrets.ssh-builder-key.path;
+      attic.package = inputs.attic.packages.${system}.attic-client;
     };
   };
-  systemd.services.hydra-init.after = ["network-online.target"];
-
-  systemd.services.hydra-init.preStart = lib.mkAfter ''
-    sed -i -e "s|#github_token#|$(<${secrets.github-write-token.path})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
-  '';
-
-  systemd.services.attic-watch-store = {
-    wantedBy = ["multi-user.target"];
-    wants = ["network-online.target"];
-    after = ["network-online.target"];
-    description = "Upload all store content to binary catch";
-    serviceConfig = let
-      atticPkg = inputs.attic.packages.${system}.attic-client;
-    in {
-      User = "attic";
-      Restart = "always";
-      ExecStart = " ${atticPkg}/bin/attic watch-store nixos";
-    };
-  };
-  nix.buildMachines = let
-    sshUser = "root";
-    sshKey = secrets.ssh-builder-key.path;
-  in [
-    {
-      hostName = "localhost";
-      systems = ["x86_64-linux" "i686-linux"];
-      supportedFeatures = ["gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
-      maxJobs = 2;
-      inherit sshUser sshKey;
-    }
-    {
-      hostName = "cache.pointjig.de";
-      systems = ["aarch64-linux"];
-      supportedFeatures = ["benchmark" "big-parallel" "kvm" "nixos-test"];
-      maxJobs = 2;
-      inherit sshUser sshKey;
-    }
-  ];
-  nix.settings.max-jobs = 3;
-  nix.extraOptions = ''
-    extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://git.sr.ht/~rycee/nmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
-  '';
-  users.users.root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
-
   security.acme = {
     acceptTerms = true;
     defaults.email = "shawn@pointjig.de";
@@ -710,6 +623,7 @@ in {
   env.user-config.enable = true;
 
   users.users = {
+    root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
     ela = {
       passwordFile = secrets.ela.path;
       isNormalUser = true;
