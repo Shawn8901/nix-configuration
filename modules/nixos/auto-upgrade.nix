@@ -4,10 +4,10 @@
   config,
   ...
 }: let
-  cfg = config.env.auto-upgrade;
+  cfg = config.shawn8901.auto-upgrade;
 in {
   options = {
-    env.auto-upgrade = {
+    shawn8901.auto-upgrade = {
       enable = lib.mkEnableOption "Use auto-upgrade on that system";
     };
   };

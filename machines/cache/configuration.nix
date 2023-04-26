@@ -315,7 +315,7 @@ in {
     ];
   };
 
-  env.auto-upgrade.enable = true;
+  shawn8901.auto-upgrade.enable = true;
   sound.enable = false;
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;

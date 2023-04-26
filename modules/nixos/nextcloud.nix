@@ -4,11 +4,11 @@
   lib,
   ...
 }: let
-  cfg = config.services.shawn8901.nextcloud;
+  cfg = config.shawn8901.nextcloud;
   inherit (lib) mkEnableOption mkOption types literalExpression;
 in {
   options = {
-    services.shawn8901.nextcloud = {
+    shawn8901.nextcloud = {
       enable = mkEnableOption "Enables a preconfigured nextcloud instance";
       hostName = mkOption {
         type = types.str;

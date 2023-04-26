@@ -263,7 +263,7 @@ in {
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
 
-  env.auto-upgrade.enable = true;
+  shawn8901.auto-upgrade.enable = true;
 
   users.mutableUsers = false;
   users.users.root = {

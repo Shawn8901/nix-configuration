@@ -352,7 +352,7 @@ in {
     };
     partition-manager.enable = true;
   };
-  env.user-config.enable = true;
+  shawn8901.user-config.enable = true;
 
   virtualisation = {
     libvirtd = {

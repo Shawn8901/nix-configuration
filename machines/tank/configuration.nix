@@ -357,16 +357,6 @@ in {
         ];
       };
     };
-    shawn8901.nextcloud = {
-      enable = true;
-      hostName = "next.tank.pointjig.de";
-      notify_push.package = self.packages.${system}.notify_push;
-      adminPasswordFile = secrets.nextcloud-admin.path;
-      home = "/persist/var/lib/nextcloud";
-      package = pkgs.nextcloud26;
-      prometheus.passwordFile = secrets.prometheus-nextcloud.path;
-    };
-
     postgresql = {
       enable = true;
       package = pkgs.postgresql_15;
@@ -600,15 +590,6 @@ in {
     #   package = stfc-bot.packages.x86_64-linux.default;
     #   envFile = config.age.secrets.stfc-env-dev.path;
     # };
-
-    shawn8901.hydra = {
-      enable = true;
-      hostName = "hydra.pointjig.de";
-      mailAdress = "hydra@pointjig.de";
-      writeTokenFile = secrets.github-write-token.path;
-      builder.sshKeyFile = secrets.ssh-builder-key.path;
-      attic.package = inputs.attic.packages.${system}.attic-client;
-    };
   };
   security.acme = {
     acceptTerms = true;
@@ -620,7 +601,7 @@ in {
     pulseaudio.enable = false;
     bluetooth.enable = false;
   };
-  env.user-config.enable = true;
+  shawn8901.user-config.enable = true;
 
   users.users = {
     root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
@@ -644,6 +625,26 @@ in {
       home = "/var/lib/attic";
     };
   };
+  shawn8901 = {
+    nextcloud = {
+      enable = true;
+      hostName = "next.tank.pointjig.de";
+      notify_push.package = self.packages.${system}.notify_push;
+      adminPasswordFile = secrets.nextcloud-admin.path;
+      home = "/persist/var/lib/nextcloud";
+      package = pkgs.nextcloud26;
+      prometheus.passwordFile = secrets.prometheus-nextcloud.path;
+    };
+    hydra = {
+      enable = true;
+      hostName = "hydra.pointjig.de";
+      mailAdress = "hydra@pointjig.de";
+      writeTokenFile = secrets.github-write-token.path;
+      builder.sshKeyFile = secrets.ssh-builder-key.path;
+      attic.package = inputs.attic.packages.${system}.attic-client;
+    };
+  };
+
   environment = {
     noXlibs = true;
     etc = {

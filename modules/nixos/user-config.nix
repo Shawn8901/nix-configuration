@@ -4,10 +4,10 @@
   pkgs,
   ...
 }: let
-  cfg = config.env.user-config;
+  cfg = config.shawn8901.user-config;
 in {
   options = {
-    env.user-config = {
+    shawn8901.user-config = {
       enable = lib.mkEnableOption "Use general user config on that system";
     };
   };

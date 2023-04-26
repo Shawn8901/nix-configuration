@@ -4,11 +4,11 @@
   pkgs,
   ...
 }: let
-  cfg = config.services.shawn8901.hydra;
+  cfg = config.shawn8901.hydra;
   inherit (lib) mkEnableOption mkOption types literalExpression;
 in {
   options = {
-    services.shawn8901.hydra = {
+    shawn8901.hydra = {
       enable = mkEnableOption "Enables a preconfigured hydra instance";
       hostName = mkOption {
         type = types.str;

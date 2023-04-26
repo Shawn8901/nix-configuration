@@ -123,7 +123,7 @@ in {
           kTLS = true;
 
           locations."/" = {
-            proxyPass = "http://localhost:9001";
+            proxyPass = "http://localhost:${toString config.services.prometheus.port}";
           };
         };
       };
@@ -255,8 +255,8 @@ in {
   hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = false;
   sound.enable = false;
-  env.auto-upgrade.enable = true;
-  env.user-config.enable = true;
+  shawn8901.auto-upgrade.enable = true;
+  shawn8901.user-config.enable = true;
 
   environment.noXlibs = true;
 }

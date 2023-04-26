@@ -134,7 +134,7 @@ in {
   programs = {
     dconf.enable = true;
   };
-  env.user-config.enable = true;
+  shawn8901.user-config.enable = true;
 
   environment = {
     variables = {
