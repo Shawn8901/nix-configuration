@@ -27,13 +27,16 @@ in {
     extraModulePackages = with config.boot.kernelPackages; [zenpower];
     blacklistedKernelModules = ["k10temp"];
     extraModprobeConfig = ''
-      options zfs zfs_arc_min=1073741824
       options zfs zfs_arc_max=1610612736
     '';
     supportedFilesystems = ["zfs" "ntfs"];
     kernel.sysctl = {"vm.swappiness" = lib.mkDefault 1;};
     zfs.devNodes = "/dev/disk/by-id";
   };
+
+  services.udev.extraRules = ''
+    ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
+  '';
 
   fileSystems."/" = {
     device = "rpool/local/root";

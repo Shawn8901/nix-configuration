@@ -21,7 +21,6 @@ in {
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [];
     extraModprobeConfig = ''
-      options zfs zfs_arc_min=1073741824
       options zfs zfs_arc_max=2147483648
     '';
 
@@ -33,6 +32,10 @@ in {
       ${pkgs.zfs}/bin/zfs mount -a
     '';
   };
+
+  services.udev.extraRules = ''
+    ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
+  '';
 
   fileSystems."/" = {
     device = "rpool/local/root";
