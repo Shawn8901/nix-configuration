@@ -61,7 +61,8 @@
       ];
     };
   in rec {
-    nixosModules = import ./modules/nixos;
+    nixosModules = import ./modules/nixos/flake;
+    flakeModules.homeManager = import ./modules/home-manager/flake;
     nixosConfigurations = import ./machines (inputs // {inherit lib;});
 
     hydraJobs = {

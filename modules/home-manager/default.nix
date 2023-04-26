@@ -1,8 +1,4 @@
 {
-  imports = [
-    ./services/autoadb.nix
-    ./services/noisetorch.nix
-    ./env/vscode.nix
-    ./env/browser.nix
-  ];
+  vscode = import ./vscode.nix;
+  browser = import ./browser.nix;
 }

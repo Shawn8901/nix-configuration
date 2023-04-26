@@ -2,6 +2,7 @@
   self,
   home-manager,
   sops-nix,
+  attic,
   simple-nixos-mailserver,
   ...
 } @ inputs: name: nixpkgs:
@@ -42,8 +43,10 @@ nixpkgs.lib.nixosSystem
         bootloader
         hardware
         sops-nix.nixosModules.sops
+        attic.nixosModules.atticd
       ]
       ++ builtins.attrValues self.nixosModules
+      ++ builtins.attrValues (import ../modules/nixos)
       ++ nixpkgs.lib.optionals (builtins.pathExists home)
       [
         home-manager.nixosModule
@@ -59,7 +62,14 @@ nixpkgs.lib.nixosSystem
         }
         {
           home-manager = {
-            sharedModules = [../modules/home-manager sops-nix.homeManagerModules.sops];
+            sharedModules = [
+              {
+                imports =
+                  builtins.attrValues self.flakeModules.homeManager
+                  ++ builtins.attrValues (import ../modules/home-manager);
+              }
+              sops-nix.homeManagerModules.sops
+            ];
             users.shawn = {
               home.stateVersion = "22.05";
               nix.registry.nixpkgs.flake = nixpkgs;

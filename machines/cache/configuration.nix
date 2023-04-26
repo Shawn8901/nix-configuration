@@ -11,8 +11,6 @@
   inherit (pkgs.hostPlatform) system;
   inherit (inputs) attic;
 in {
-  imports = [attic.nixosModules.atticd ../../modules/nixos/wg-reresolve-dns.nix];
-
   sops.secrets = {
     root = {neededForUsers = true;};
     attic-env = {};
