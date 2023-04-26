@@ -41,7 +41,7 @@ in {
         nas
       ]);
 
-    env = {
+    shawn8901 = {
       vscode.enable = true;
       browser.enable = true;
     };

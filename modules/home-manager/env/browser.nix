@@ -12,11 +12,11 @@
   inherit (pkgs.hostPlatform) system;
 
   fPkgs = self.packages.${system};
-  cfg = config.env.browser;
+  cfg = config.shawn8901.browser;
   firefox-addon-packages = firefox-addons.packages.${system};
 in {
   options = {
-    env.browser = {
+    shawn8901.browser = {
       enable = mkEnableOption "Enable browser on the environment";
     };
   };

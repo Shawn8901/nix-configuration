@@ -4,12 +4,12 @@
   pkgs,
   ...
 }: let
-  cfg = config.env.vscode;
+  cfg = config.shawn8901.vscode;
   inherit (pkgs.hostPlatform) system;
 in
   with lib; {
     options = {
-      env.vscode = {
+      shawn8901.vscode = {
         enable = mkEnableOption "Enable vsocde on the environment";
       };
     };
