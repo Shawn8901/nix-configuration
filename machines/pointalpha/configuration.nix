@@ -21,7 +21,7 @@
   '');
 in {
   disabledModules = ["services/x11/display-managers/sddm.nix"];
-  imports = [../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix];
+  imports = [../../modules/nixos/overriden/sddm.nix];
 
   sops.secrets = {
     zrepl = {};

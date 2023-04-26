@@ -13,7 +13,7 @@
   inherit (pkgs.hostPlatform) system;
 in {
   disabledModules = ["services/x11/display-managers/sddm.nix"];
-  imports = [../../modules/nixos/overriden/sddm.nix ../../modules/nixos/steam-compat-tools.nix];
+  imports = [../../modules/nixos/overriden/sddm.nix];
 
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
