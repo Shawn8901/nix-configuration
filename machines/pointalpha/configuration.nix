@@ -362,6 +362,10 @@ in {
     };
   };
 
+  nix.settings = {
+    keep-outputs = true;
+    keep-derivations = true;
+  };
   environment = {
     etc = {
       "samba/credentials_ela".source = secrets.samba-ela.path;
@@ -373,7 +377,6 @@ in {
     variables = {
       AMD_VULKAN_ICD = "RADV";
       DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
-      VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
       mesa_glthread = "true";
       WINEFSYNC = "1";
       WINEDEBUG = "-all";
