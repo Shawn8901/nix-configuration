@@ -12,7 +12,12 @@
   inherit (pkgs.hostPlatform) system;
   inherit (inputs) mimir mimir-client stfc-bot;
 in {
-  imports = [mimir.nixosModules.default stfc-bot.nixosModules.default];
+  imports = [
+    mimir.nixosModules.default
+    stfc-bot.nixosModules.default
+    # https://github.com/NixOS/nixpkgs/pull/224274
+    ../../modules/nixos/nextcloud.nix
+  ];
 
   sops.secrets = {
     ssh-builder-key = {owner = "hydra-queue-runner";};
@@ -97,13 +102,6 @@ in {
         };
       };
       wait-online = {ignoredInterfaces = ["enp4s0"];};
-    };
-    services.nextcloud-setup.after = ["postgresql.service"];
-    services.nextcloud-notify_push = {
-      serviceConfig = {
-        Restart = "on-failure";
-        RestartSec = "5s";
-      };
     };
     # TODO: Prepare a PR to fix/make it configurable that upstream
     services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.prometheus-fritzbox.path;
@@ -359,52 +357,25 @@ in {
         ];
       };
     };
-    nextcloud = let
-      hostName = "next.tank.pointjig.de";
-    in {
-      inherit hostName;
-      notify_push = {
-        enable = true;
-        package = self.packages.${system}.notify_push;
-        bendDomainToLocalhost = true;
-      };
+    shawn8901.nextcloud = {
       enable = true;
-      configureRedis = true;
-      package = pkgs.nextcloud26;
-      enableBrokenCiphersForSSE = false;
-      https = true;
+      hostName = "next.tank.pointjig.de";
+      notify_push.package = self.packages.${system}.notify_push;
+      adminPasswordFile = secrets.nextcloud-admin.path;
       home = "/persist/var/lib/nextcloud";
-      autoUpdateApps.enable = true;
-      autoUpdateApps.startAt = "Sun 14:00:00";
-      config = {
-        dbtype = "pgsql";
-        dbuser = "nextcloud";
-        dbhost = "/run/postgresql";
-        dbname = "nextcloud";
-        adminuser = "admin";
-        adminpassFile = secrets.nextcloud-admin.path;
-        defaultPhoneRegion = "DE";
-      };
-      caching = {
-        apcu = false;
-        memcached = false;
-      };
-      extraOptions."overwrite.cli.url" = "https://${hostName}";
+      package = pkgs.nextcloud26;
+      prometheus.passwordFile = secrets.prometheus-nextcloud.path;
     };
+
     postgresql = {
       enable = true;
       package = pkgs.postgresql_15;
       dataDir = "/persist/var/lib/postgresql/15";
       ensureDatabases = [
-        "${config.services.nextcloud.config.dbname}"
         "stfcbot"
         "hydra"
       ];
       ensureUsers = [
-        {
-          name = "${config.services.nextcloud.config.dbuser}";
-          ensurePermissions = {"DATABASE ${config.services.nextcloud.config.dbname}" = "ALL PRIVILEGES";};
-        }
         {
           name = "stfcbot";
           ensurePermissions = {"DATABASE stfcbot" = "ALL PRIVILEGES";};
@@ -432,12 +403,6 @@ in {
             proxyPass = "http://127.0.0.1:3000";
             recommendedProxySettings = true;
           };
-        };
-        "${config.services.nextcloud.hostName}" = {
-          enableACME = true;
-          forceSSL = true;
-          http3 = true;
-          kTLS = true;
         };
         # "${config.services.stne-mimir.domain}" = {
         #   enableACME = true;
@@ -523,7 +488,6 @@ in {
         zfsPort = toString config.services.prometheus.exporters.zfs.port;
         zreplPort = toString (builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl));
         postgresPort = toString config.services.prometheus.exporters.postgres.port;
-        nextcloudPort = toString config.services.prometheus.exporters.nextcloud.port;
         fritzboxPort = toString config.services.prometheus.exporters.fritzbox.port;
         pvePort = toString config.services.prometheus.exporters.pve.port;
         labels = {machine = "${config.networking.hostName}";};
@@ -574,15 +538,6 @@ in {
           ];
         }
         {
-          job_name = "nextcloud";
-          static_configs = [
-            {
-              targets = ["localhost:${nextcloudPort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
           job_name = "fritzbox";
           static_configs = [
             {
@@ -615,13 +570,6 @@ in {
         fritzbox = {
           enable = true;
           listenAddress = "localhost";
-        };
-        nextcloud = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9205;
-          url = "https://${config.services.nextcloud.hostName}";
-          passwordFile = secrets.prometheus-nextcloud.path;
         };
         postgres = {
           enable = true;
