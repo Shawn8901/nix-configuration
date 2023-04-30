@@ -16,6 +16,8 @@
   noisetorch = pkgs.callPackage ./noisetorch {};
   pytr = pkgs.python3.pkgs.callPackage ./pytr {};
   asus-touchpad-numpad-driver = pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver {};
+
+  # remove with 23.05
   notify_push = pkgs.callPackage ./notify_push {};
 
   gh-poi = pkgs.callPackage ./gh-poi {};
