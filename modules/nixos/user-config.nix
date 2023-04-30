@@ -24,7 +24,6 @@ in {
       };
     };
 
-    programs.command-not-found.enable = false;
     programs.zsh = {
       enable = true;
       enableCompletion = true;

@@ -31,6 +31,7 @@ nixpkgs.lib.nixosSystem
             enable = true;
             generateCaches = true;
           };
+          programs.command-not-found.enable = false;
           nix.registry = {
             nixpkgs.flake = nixpkgs;
             system.flake = inputs.self;
