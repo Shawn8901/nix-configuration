@@ -283,9 +283,6 @@ in {
     };
     variables = {
       AMD_VULKAN_ICD = "RADV";
-      DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
-      VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-      mesa_glthread = "true";
       MOZ_ENABLE_WAYLAND = "1";
       MOZ_DISABLE_RDD_SANDBOX = "1";
       MOZ_USE_XINPUT2 = "1";
