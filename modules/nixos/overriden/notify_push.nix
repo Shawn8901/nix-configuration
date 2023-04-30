@@ -100,7 +100,7 @@ in {
         ''
         + ''
           export DATABASE_URL="${dbUrl}"
-          ${cfg.package}/bin/notify_push --glob-config '${cfgN.datadir}/config/config.php'
+          ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
         '';
       serviceConfig = {
         User = "nextcloud";
