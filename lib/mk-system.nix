@@ -56,13 +56,6 @@ nixpkgs.lib.nixosSystem
             useGlobalPkgs = true;
             useUserPackages = true;
             extraSpecialArgs = extraAgs;
-          };
-          home-manager.users.root = {
-            home.stateVersion = "22.05";
-          };
-        }
-        {
-          home-manager = {
             sharedModules = [
               {
                 imports =
@@ -71,17 +64,13 @@ nixpkgs.lib.nixosSystem
               }
               sops-nix.homeManagerModules.sops
             ];
+            users.root = {
+              home.stateVersion = "22.05";
+            };
             users.shawn = {
               home.stateVersion = "22.05";
               nix.registry.nixpkgs.flake = nixpkgs;
               programs.zsh = {enable = true;};
-              programs.git = {
-                enable = true;
-                userName = "Shawn8901";
-                userEmail = "shawn8901@googlemail.com";
-                ignores = ["*.swp"];
-                extraConfig = {init = {defaultBranch = "main";};};
-              };
             };
           };
         }
