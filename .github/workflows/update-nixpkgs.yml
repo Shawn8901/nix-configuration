@@ -31,7 +31,6 @@ jobs:
         run: |
           git config user.email git@pointjig.de
           git config user.name "Git Bot"
-
       - name: Fetch origin
         shell: bash
         run: |
@@ -40,6 +39,11 @@ jobs:
         shell: bash
         run: |
           git checkout nixos-unstable-custom
+          commits_ahead=$(git rev-list --count nixos-unstable-custom..origin/nixos-unstable)
+          if [ $commits_ahead -eq 0 ]
+          then
+            exit 0
+          fi
           git rebase origin/nixos-unstable
           git push --force-with-lease
         env:
@@ -48,6 +52,11 @@ jobs:
         shell: bash
         run: |
           git checkout x86-64-v3
+          commits_ahead=$(git rev-list --count x86-64-v3..origin/nixos-unstable-custom)
+          if [ $commits_ahead -eq 0 ]
+          then
+            exit 0
+          fi
           git rebase origin/nixos-unstable-custom
           git push --force-with-lease
         env:
