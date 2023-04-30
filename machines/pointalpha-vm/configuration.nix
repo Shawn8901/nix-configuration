@@ -73,11 +73,11 @@ in {
         settings = {
           General = {
             InputMethod = "";
-            #            DisplayServer = "wayland";
+            DisplayServer = "wayland";
             GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
           };
           Wayland = {
-            CompositorCommand = "/run/wrappers/bin/kwin_wayland --no-lockscreen";
+            CompositorCommand = "kwin_wayland --no-global-shortcuts --no-lockscreen --inputmethod maliit-keyboard --locale1";
           };
         };
       };
@@ -134,14 +134,10 @@ in {
   programs = {
     dconf.enable = true;
   };
-  shawn8901.user-config.enable = true;
 
   environment = {
     variables = {
       AMD_VULKAN_ICD = "RADV";
-      DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
-      VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-      mesa_glthread = "true";
       WINEFSYNC = "1";
       WINEDEBUG = "-all";
       MOZ_ENABLE_WAYLAND = "1";
@@ -154,6 +150,8 @@ in {
   };
 
   users.users.shawn = {
-    extraGroups = ["video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld"];
+    password = "1234";
+    isNormalUser = true;
+    extraGroups = ["video" "audio" "wheel" "scanner" "lp" "networkmanager"];
   };
 }

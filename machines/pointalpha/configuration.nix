@@ -11,14 +11,6 @@
 
   inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
-
-  # https://github.com/NixOS/nixpkgs/pull/195521/files
-  fontsPkg = pkgs: (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
-    mkdir -p "$out/share/fonts"
-    font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-    find ${toString [pkgs.liberation_ttf pkgs.dejavu_fonts]} -regex "$font_regexp" \
-      -exec ln -sf -t "$out/share/fonts" '{}' \;
-  '');
 in {
   disabledModules = ["services/x11/display-managers/sddm.nix"];
   imports = [../../modules/nixos/overriden/sddm.nix];
@@ -37,7 +29,6 @@ in {
     builtins.elem (lib.getName pkg) [
       "deezer"
       "discord"
-      "logmein-hamachi"
       "steam"
       "steam-run"
       "steam-original"
@@ -48,7 +39,6 @@ in {
       "vscode-extension-MS-python-vscode-pylance"
       "tampermonkey"
       "betterttv"
-      "Oracle_VM_VirtualBox_Extension_Pack"
     ];
 
   nixpkgs.config.packageOverrides = pkgs: {
@@ -57,8 +47,16 @@ in {
         with pkgs; [
           # Victoria 3
           ncurses
-          # Universim
-          (fontsPkg pkgs)
+          # Fix fonts for Unity games
+          # https://github.com/NixOS/nixpkgs/pull/195521/files
+          # (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
+          #   mkdir -p "$out/share/fonts"
+          #   font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+          #   find ${toString [pkgs.liberation_ttf pkgs.dejavu_fonts]} -regex "$font_regexp" \
+          #     -exec ln -sf -t "$out/share/fonts" '{}' \;
+          # '')
+          liberation_ttf
+          dejavu_fonts
         ];
     };
   };
@@ -376,8 +374,6 @@ in {
     };
     variables = {
       AMD_VULKAN_ICD = "RADV";
-      DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
-      mesa_glthread = "true";
       WINEFSYNC = "1";
       WINEDEBUG = "-all";
       MOZ_ENABLE_WAYLAND = "1";
