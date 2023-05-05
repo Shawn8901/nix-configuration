@@ -22,10 +22,10 @@ mkDerivation {
   version = "unstable-2023-04-05";
 
   src = fetchFromGitHub {
-    owner = "sddm";
+    owner = "shawn8901";
     repo = "sddm";
-    rev = "b923eccba2b8a3b8f6bf63fca10b4ff88b4b5f7a";
-    sha256 = "sha256-zbTr3IXVvtZqEFimG6GBjxLyPi2UoyIFKaqiaefCPTo=";
+    rev = "8a523530f5f39e8add22e38f7a7641e425fe47c3";
+    sha256 = "sha256-fxA5Q7gcb1Al/M+XENR/VFo1RYp5TWvLe76shZcRK0w=";
   };
 
   patches = [

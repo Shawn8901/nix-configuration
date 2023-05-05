@@ -8,6 +8,7 @@
 }: let
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
+  unoptimized = inputs.nixpkgs.legacyPackages.${system};
 
   inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
@@ -32,6 +33,16 @@ in {
       "betterttv"
       "Oracle_VM_VirtualBox_Extension_Pack"
     ];
+
+  # Override some packages to unoptimized, that do not compile with x86_64-v3
+  nixpkgs.config.packageOverrides = pkgs: {
+    inherit (unoptimized) openexr_3;
+    haskellPackages = pkgs.haskellPackages.override {
+      overrides = haskellPackagesNew: haskellPackagesOld: {
+        inherit (unoptimized.haskellPackages) cryptonite hermes-json hermes-json_0_2_0_1;
+      };
+    };
+  };
 
   networking = {
     networkmanager = {
@@ -93,11 +104,11 @@ in {
       enable = true;
       hostKeys = [
         {
-          path = "/persist/etc/ssh/ssh_host_ed25519_key";
+          path = "/etc/ssh/ssh_host_ed25519_key";
           type = "ed25519";
         }
         {
-          path = "/persist/etc/ssh/ssh_host_rsa_key";
+          path = "/etc/ssh/ssh_host_rsa_key";
           type = "rsa";
           bits = 4096;
         }

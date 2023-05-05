@@ -8,6 +8,7 @@
 }: let
   fPkgs = self.packages.${system};
   hosts = self.nixosConfigurations;
+  unoptimized = inputs.nixpkgs.legacyPackages.${system};
 
   inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
@@ -37,11 +38,20 @@ in {
       "exodus"
       "vscode"
       "vscode-extension-MS-python-vscode-pylance"
+      "vscode-extension-ms-vscode-cpptools"
       "tampermonkey"
       "betterttv"
     ];
 
+  # Override some packages to unoptimized, that do not compile with x86_64-v3
   nixpkgs.config.packageOverrides = pkgs: {
+    inherit (unoptimized) openexr_3;
+    haskellPackages = pkgs.haskellPackages.override {
+      overrides = haskellPackagesNew: haskellPackagesOld: {
+        inherit (unoptimized.haskellPackages) cryptonite hermes-json hermes-json_0_2_0_1;
+      };
+    };
+
     steam = pkgs.steam.override {
       extraPkgs = pkgs:
         with pkgs; [
