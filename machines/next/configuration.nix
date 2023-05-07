@@ -247,8 +247,8 @@ in {
     };
     vnstat.enable = true;
     journald.extraConfig = ''
-      SystemMaxUse=500M
-      SystemMaxFileSize=100M
+      SystemMaxUse=100M
+      SystemMaxFileSize=25M
     '';
     acpid.enable = true;
   };
