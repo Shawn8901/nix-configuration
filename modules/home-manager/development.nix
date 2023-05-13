@@ -40,10 +40,13 @@ in
           mkhl.direnv
           ms-python.python
           ms-python.vscode-pylance
+
           mhutchie.git-graph
           usernamehw.errorlens
-          eamodio.gitlens
+
           rust-lang.rust-analyzer
+
+          wix.vscode-import-cost
         ];
         keybindings = [
           {
