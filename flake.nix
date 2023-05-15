@@ -69,6 +69,7 @@
       nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (filterAttrs (name: _: !builtins.elem name ["pointalpha-vm"]) nixosConfigurations);
       "flake-update" = pkgs.releaseTools.aggregate {
         name = "flake-update";
+        meta = {schedulingPriority = 50;};
         constituents = map (n: "nixos." + n) (builtins.attrNames hydraJobs.nixos);
       };
       inherit packages;
