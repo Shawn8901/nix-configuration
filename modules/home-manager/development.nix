@@ -130,7 +130,7 @@ in
       };
       programs.gh = {
         enable = true;
-        extensions = [fPkgs.gh-poi];
+        extensions = [pkgs.gh-dash fPkgs.gh-poi];
       };
       programs.ssh = {
         enable = true;
