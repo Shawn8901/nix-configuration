@@ -31,6 +31,7 @@ in {
     supportedFilesystems = ["zfs" "ntfs"];
     kernel.sysctl = {"vm.swappiness" = lib.mkDefault 1;};
     zfs.devNodes = "/dev/disk/by-id";
+    enableContainers = false;
   };
 
   services.udev.extraRules = ''

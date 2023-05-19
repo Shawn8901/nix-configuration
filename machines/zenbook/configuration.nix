@@ -266,7 +266,6 @@ in {
     };
     dconf.enable = true;
     ssh.startAgent = true;
-    iotop.enable = true;
     ausweisapp = {
       enable = true;
       openFirewall = true;

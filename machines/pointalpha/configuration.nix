@@ -67,6 +67,30 @@ in {
           '')
         ];
     };
+    libreoffice-qt = unoptimized.libreoffice-qt;
+    krita = unoptimized.krita;
+    firefox-unwrapped = unoptimized.firefox-unwrapped;
+    noto-fonts = unoptimized.noto-fonts;
+
+    udisks2 = pkgs.udisks2.override {
+      btrfs-progs = null;
+      nilfs-utils = null;
+      xfsprogs = null;
+      f2fs-tools = null;
+    };
+
+    partition-manager = pkgs.partition-manager.override {
+      btrfs-progs = null;
+      e2fsprogs = null;
+      f2fs-tools = null;
+      hfsprogs = null;
+      jfsutils = null;
+      nilfs-utils = null;
+      reiser4progs = null;
+      reiserfsprogs = null;
+      udftools = null;
+      xfsprogs = null;
+    };
   };
 
   networking = {
@@ -111,7 +135,6 @@ in {
     plasma5Packages.kdeplasma-addons
     zenmonitor
     nixpkgs-review
-    virt-manager
   ];
 
   fonts.fontconfig = {
@@ -350,7 +373,6 @@ in {
     noisetorch.enable = true;
     noisetorch.package = fPkgs.noisetorch;
     ssh.startAgent = true;
-    iotop.enable = true;
     haguichi.enable = false;
     ausweisapp = {
       enable = true;
@@ -390,7 +412,7 @@ in {
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       _JAVA_AWT_WM_NONREPARENTING = "1";
     };
-    plasma5.excludePackages = with pkgs.libsForQt5; [kwrited elisa ktnef];
+    plasma5.excludePackages = with pkgs.libsForQt5; [kwrited elisa khelpcenter];
   };
   users.users.root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
   users.users.shawn.extraGroups = ["video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld"];

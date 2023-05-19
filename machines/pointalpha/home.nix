@@ -1,11 +1,11 @@
 {
   self,
+  inputs,
   config,
   pkgs,
   ...
 }: let
   inherit (pkgs.hostPlatform) system;
-
   fPkgs = self.packages.${system};
 in {
   home-manager.users.shawn = {
@@ -13,7 +13,7 @@ in {
       [
         samba
         portfolio
-        #libreoffice-qt
+        libreoffice-qt
         krita
         nextcloud-client
         keepassxc
