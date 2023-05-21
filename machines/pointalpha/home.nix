@@ -7,14 +7,12 @@
 }: let
   inherit (pkgs.hostPlatform) system;
   fPkgs = self.packages.${system};
+  unoptimized = inputs.nixpkgs.legacyPackages.${system};
 in {
   home-manager.users.shawn = {
     home.packages = with pkgs;
       [
         samba
-        portfolio
-        libreoffice-qt
-        krita
         nextcloud-client
         keepassxc
         (discord.override {nss = pkgs.nss_latest;})
@@ -26,6 +24,11 @@ in {
         exodus
         nix-tree
       ]
+      ++ (with unoptimized; [
+        portfolio
+        libreoffice-qt
+        krita
+      ])
       ++ (with fPkgs; [
         deezer
         generate-zrepl-ssl

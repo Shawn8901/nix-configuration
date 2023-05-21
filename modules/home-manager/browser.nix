@@ -11,6 +11,7 @@
   inherit (firefox-addons.lib.${system}) buildFirefoxXpiAddon;
   inherit (pkgs.hostPlatform) system;
 
+  unoptimized = inputs.nixpkgs.legacyPackages.${system};
   fPkgs = self.packages.${system};
   cfg = config.shawn8901.browser;
   firefox-addon-packages = firefox-addons.packages.${system};
@@ -24,7 +25,7 @@ in {
   config = mkIf cfg.enable {
     programs.firefox = {
       enable = true;
-      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+      package = pkgs.wrapFirefox unoptimized.firefox-unwrapped {
         extraNativeMessagingHosts = [fPkgs.vdhcoapp];
       };
       profiles."shawn" = {

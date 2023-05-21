@@ -15,6 +15,8 @@ in {
     system = "x86_64-linux";
   };
 
+  #aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sse sse2 sse3 sse4_1 sse4_2 ssse3
+
   boot = {
     initrd = {
       availableKernelModules = ["ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod"];
