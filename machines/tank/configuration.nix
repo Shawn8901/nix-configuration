@@ -601,7 +601,6 @@ in {
     pulseaudio.enable = false;
     bluetooth.enable = false;
   };
-  shawn8901.user-config.enable = true;
 
   users.users = {
     root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
@@ -626,6 +625,7 @@ in {
     };
   };
   shawn8901 = {
+    auto-upgrade.enable = true;
     nextcloud = {
       enable = true;
       hostName = "next.tank.pointjig.de";
@@ -643,6 +643,7 @@ in {
       builder.sshKeyFile = secrets.ssh-builder-key.path;
       attic.package = inputs.attic.packages.${system}.attic-client;
     };
+    user-config.enable = true;
   };
 
   environment = {
