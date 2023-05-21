@@ -121,17 +121,19 @@ in {
   services.resolved.enable = false;
   systemd.network.wait-online.anyInterface = true;
 
-  environment.systemPackages = with pkgs; [
-    cifs-utils
-    plasma5Packages.skanlite
-    plasma5Packages.ark
-    plasma5Packages.kate
-    plasma5Packages.kalk
-    plasma5Packages.kmail
-    plasma5Packages.kdeplasma-addons
-    zenmonitor
-    nixpkgs-review
-  ];
+  environment.systemPackages = with pkgs;
+    [
+      cifs-utils
+      plasma5Packages.skanlite
+      plasma5Packages.ark
+      plasma5Packages.kate
+      plasma5Packages.kalk
+      plasma5Packages.kmail
+      plasma5Packages.kdeplasma-addons
+      zenmonitor
+      nixpkgs-review
+    ]
+    ++ [inputs.nh.packages.${system}.default];
 
   fonts.fontconfig = {
     defaultFonts = {
@@ -398,7 +400,8 @@ in {
       "zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
       "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
     };
-    variables = {
+    sessionVariables = {
+      FLAKE = "/home/shawn/dev/nix-configuration";
       AMD_VULKAN_ICD = "RADV";
       WINEFSYNC = "1";
       WINEDEBUG = "-all";
@@ -408,7 +411,7 @@ in {
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       _JAVA_AWT_WM_NONREPARENTING = "1";
     };
-    plasma5.excludePackages = with pkgs.libsForQt5; [kwrited elisa khelpcenter];
+    plasma5.excludePackages = with pkgs.plasma5Packages; [elisa khelpcenter];
   };
   users.users.root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
   users.users.shawn.extraGroups = ["video" "audio" "libvirtd" "adbusers" "scanner" "lp" "networkmanager" "nixbld"];

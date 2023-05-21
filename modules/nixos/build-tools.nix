@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  self,
+  pkgs,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     git
     htop
