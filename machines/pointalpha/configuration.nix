@@ -71,6 +71,7 @@ in {
     krita = unoptimized.krita;
     firefox-unwrapped = unoptimized.firefox-unwrapped;
     noto-fonts = unoptimized.noto-fonts;
+    portfolio = unoptimized.portfolio;
 
     udisks2 = pkgs.udisks2.override {
       btrfs-progs = null;
