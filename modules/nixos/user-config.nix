@@ -48,10 +48,9 @@ in {
       '';
     };
     fonts = {
-      enableDefaultFonts = true;
-      fontDir.enable = true;
-      fontconfig.enable = lib.mkIf (!config.environment.noXlibs) (lib.mkDefault true);
-      fonts = [pkgs.noto-fonts (pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
+      enableDefaultFonts = !config.environment.noXlibs;
+      fontconfig.enable = !config.environment.noXlibs;
+      fonts = lib.mkIf (!config.environment.noXlibs) [pkgs.noto-fonts (pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
     };
 
     users.mutableUsers = false;
