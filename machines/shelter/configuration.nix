@@ -9,10 +9,6 @@
   inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
 in {
-  # FIXME: Remove with 23.05
-  disabledModules = ["services/monitoring/prometheus/default.nix"];
-  imports = [../../modules/nixos/overriden/prometheus.nix];
-
   sops.secrets = {
     zrepl = {};
     prometheus-web-config = {
@@ -34,8 +30,7 @@ in {
       logRefusedConnections = false;
     };
     networkmanager.enable = false;
-    # FIXME: Enable with 23.05
-    nftables.enable = false;
+    nftables.enable = true;
     dhcpcd.enable = false;
     useNetworkd = true;
     useDHCP = false;
@@ -69,8 +64,10 @@ in {
     qemuGuest.enable = true;
     openssh = {
       enable = true;
-      passwordAuthentication = false;
-      kbdInteractiveAuthentication = false;
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
     };
     resolved.enable = true;
     zfs.autoScrub = {

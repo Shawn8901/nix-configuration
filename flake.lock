@@ -309,6 +309,37 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-23_05": {
+      "locked": {
+        "lastModified": 1685272473,
+        "narHash": "sha256-oHNi6BgcGquKDkVN1/awsh+KLBey+Nj3ejTVH585upU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a7adeadc7d4033048592fac7c87ca888d2a99d31",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-23.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-23_05_2": {
+      "locked": {
+        "lastModified": 1685356226,
+        "narHash": "sha256-f2clSOdqi0SvY1WSgbnl2YgCZmoCXOxeUjYeXp8p2zI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0f7f5ca1cdec8dea85bb4fa60378258171d019ad",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-23.05",
+        "type": "indirect"
+      }
+    },
     "nixpkgs-custom": {
       "locked": {
         "lastModified": 1685222050,
@@ -386,6 +417,7 @@
         "nh": "nh",
         "nixpkgs": "nixpkgs",
         "nixpkgs-22_11": "nixpkgs-22_11",
+        "nixpkgs-23_05": "nixpkgs-23_05",
         "nixpkgs-custom": "nixpkgs-custom",
         "nixpkgs-x86-64-v3": "nixpkgs-x86-64-v3",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
@@ -425,21 +457,23 @@
         "blobs": "blobs",
         "flake-compat": "flake-compat_2",
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-23_05"
         ],
         "nixpkgs-22_11": "nixpkgs-22_11_2",
+        "nixpkgs-23_05": "nixpkgs-23_05_2",
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1684964237,
-        "narHash": "sha256-dDS+GhdZN2MAa2FJKFGM2gpgAXhx+xoMkpVsRx9qpDE=",
+        "lastModified": 1684958575,
+        "narHash": "sha256-9WXWeLBXtY0A2GPhiTnrsyMePfOXT6TVxyZLsr7iqaQ=",
         "owner": "simple-nixos-mailserver",
         "repo": "nixos-mailserver",
-        "rev": "1bcfcf786bc289ca1bd2c9d29d6f02d9141b1da3",
+        "rev": "6dc1bdebd54a06e52552a12156ed17ed90d9364b",
         "type": "gitlab"
       },
       "original": {
         "owner": "simple-nixos-mailserver",
+        "ref": "nixos-23.05",
         "repo": "nixos-mailserver",
         "type": "gitlab"
       }
