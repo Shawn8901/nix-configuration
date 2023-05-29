@@ -91,7 +91,7 @@ in {
     acpid.enable = true;
     postgresql = {
       enable = true;
-      package = pkgs.postgresql_14;
+      package = pkgs.postgresql_15;
       settings = {
         max_connections = 200;
         effective_cache_size = "256MB";
