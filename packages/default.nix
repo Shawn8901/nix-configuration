@@ -13,6 +13,8 @@
   nas = pkgs.callPackage ./shellscripts/nas.nix {};
   usb-backup = pkgs.callPackage ./shellscripts/usb-backup.nix {};
   generate-zrepl-ssl = pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix {};
+  pg-upgrade = pkgs.callPackage ./pg-upgrade {};
+
   noisetorch = pkgs.callPackage ./noisetorch {};
   pytr = pkgs.python3.pkgs.callPackage ./pytr {};
   asus-touchpad-numpad-driver = pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver {};
