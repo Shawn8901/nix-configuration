@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-custom.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
     nixpkgs-x86-64-v3.url = "github:Shawn8901/nixpkgs/x86-64-v3";
+    nixpkgs-23_05.url = "github:NixOS/nixpkgs/nixos-23.05";
     nixpkgs-22_11.url = "github:NixOS/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
@@ -22,8 +23,8 @@
       inputs.nixpkgs-stable.follows = "nixpkgs-22_11";
     };
     simple-nixos-mailserver = {
-      url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.05";
+      inputs.nixpkgs.follows = "nixpkgs-23_05";
     };
     mimir = {
       url = "github:shawn8901/mimir";

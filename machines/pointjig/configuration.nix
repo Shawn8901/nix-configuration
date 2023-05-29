@@ -7,9 +7,7 @@
   inherit (config.sops) secrets;
   inherit (inputs) mimir mimir-client stfc-bot;
 in {
-  # FIXME: Remove with 23.05
-  disabledModules = ["services/monitoring/prometheus/default.nix"];
-  imports = [mimir.nixosModules.default stfc-bot.nixosModules.default ../../modules/nixos/overriden/prometheus.nix inputs.simple-nixos-mailserver.nixosModule];
+  imports = [mimir.nixosModules.default stfc-bot.nixosModules.default inputs.simple-nixos-mailserver.nixosModule];
 
   sops.secrets = {
     sms-technical-passwd = {};
@@ -39,8 +37,7 @@ in {
       logRefusedConnections = false;
     };
     networkmanager.enable = false;
-    # FIXME: Enable with 23.05
-    nftables.enable = false;
+    nftables.enable = true;
     dhcpcd.enable = false;
     useNetworkd = true;
     useDHCP = false;
@@ -75,8 +72,10 @@ in {
     fstrim.enable = true;
     openssh = {
       enable = true;
-      passwordAuthentication = false;
-      kbdInteractiveAuthentication = false;
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
     };
     resolved.enable = true;
     fail2ban = {
@@ -197,7 +196,7 @@ in {
     enable = true;
     fqdn = "mail.pointjig.de";
     domains = ["pointjig.de"];
-    certificateScheme = "acme-nginx";
+    certificateScheme = 3; # Upgrade to "acme-nginx";
     loginAccounts = {
       "shawn@pointjig.de" = {
         hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
