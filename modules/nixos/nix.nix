@@ -32,8 +32,8 @@ in {
     settings = {
       auto-optimise-store = true;
       allow-import-from-derivation = false;
-      substituters = ["https://cache.pointjig.de/nixos"];
-      trusted-public-keys = ["nixos:vjrrtYYXDQx4qWPPQ0BeO2cr/O/VCkqOWgbFe2bPfi4="];
+      substituters = ["https://cache.pointjig.de/nixos" "https://nix-community.cachix.org"];
+      trusted-public-keys = ["nixos:vjrrtYYXDQx4qWPPQ0BeO2cr/O/VCkqOWgbFe2bPfi4=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
       trusted-users = ["root" "shawn"];
       cores = lib.mkDefault 6;
       max-jobs = lib.mkDefault 2;
