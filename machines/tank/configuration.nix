@@ -653,12 +653,12 @@ in {
     etc = {
       ".ztank_key".source = secrets.zfs-ztank-key.path;
       "zrepl/tank.key".source = secrets.zrepl.path;
-      "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
-      "zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
-      "zrepl/sapsrv01.crt".source = ../../public_certs/zrepl/sapsrv01.crt;
-      "zrepl/sapsrv02.crt".source = ../../public_certs/zrepl/sapsrv02.crt;
-      "zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
-      "zrepl/zenbook.crt".source = ../../public_certs/zrepl/zenbook.crt;
+      "zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
+      "zrepl/pointalpha.crt".source = ../../files/public_certs/zrepl/pointalpha.crt;
+      "zrepl/sapsrv01.crt".source = ../../files/public_certs/zrepl/sapsrv01.crt;
+      "zrepl/sapsrv02.crt".source = ../../files/public_certs/zrepl/sapsrv02.crt;
+      "zrepl/shelter.crt".source = ../../files/public_certs/zrepl/shelter.crt;
+      "zrepl/zenbook.crt".source = ../../files/public_certs/zrepl/zenbook.crt;
     };
   };
 }

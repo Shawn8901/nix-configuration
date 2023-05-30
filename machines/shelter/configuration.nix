@@ -200,7 +200,7 @@ in {
   environment = {
     noXlibs = true;
     etc."zrepl/shelter.key".source = secrets.zrepl.path;
-    etc."zrepl/shelter.crt".source = ../../public_certs/zrepl/shelter.crt;
-    etc."zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
+    etc."zrepl/shelter.crt".source = ../../files/public_certs/zrepl/shelter.crt;
+    etc."zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
   };
 }

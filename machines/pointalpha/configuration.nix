@@ -397,8 +397,8 @@ in {
       "samba/credentials_ela".source = secrets.samba-ela.path;
       "samba/credentials_shawn".source = secrets.samba.path;
       "zrepl/pointalpha.key".source = secrets.zrepl.path;
-      "zrepl/pointalpha.crt".source = ../../public_certs/zrepl/pointalpha.crt;
-      "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
+      "zrepl/pointalpha.crt".source = ../../files/public_certs/zrepl/pointalpha.crt;
+      "zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
     };
     sessionVariables = {
       FLAKE = "/home/shawn/dev/nix-configuration";

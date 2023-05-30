@@ -277,8 +277,8 @@ in {
     etc = {
       "zrepl/zenbook.key".source = secrets.zrepl.path;
       "samba/credentials_shawn".source = secrets.samba.path;
-      "zrepl/zenbook.crt".source = ../../public_certs/zrepl/zenbook.crt;
-      "zrepl/tank.crt".source = ../../public_certs/zrepl/tank.crt;
+      "zrepl/zenbook.crt".source = ../../files/public_certs/zrepl/zenbook.crt;
+      "zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
     };
     variables = {
       AMD_VULKAN_ICD = "RADV";
