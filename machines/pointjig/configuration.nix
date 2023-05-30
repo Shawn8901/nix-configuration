@@ -7,8 +7,6 @@
   inherit (config.sops) secrets;
   inherit (inputs) mimir mimir-client stfc-bot;
 in {
-  imports = [mimir.nixosModules.default stfc-bot.nixosModules.default inputs.simple-nixos-mailserver.nixosModule];
-
   sops.secrets = {
     sms-technical-passwd = {};
     sms-shawn-passwd = {};
@@ -26,21 +24,9 @@ in {
     };
   };
 
-  nix.gc.options = "--delete-older-than 3d";
-
-  networking = {
-    firewall = {
-      allowedUDPPorts = [443];
-      allowedUDPPortRanges = [];
-      allowedTCPPorts = [80 443];
-      allowedTCPPortRanges = [];
-      logRefusedConnections = false;
-    };
-    networkmanager.enable = false;
-    nftables.enable = true;
-    dhcpcd.enable = false;
-    useNetworkd = true;
-    useDHCP = false;
+  networking .firewall = {
+    allowedUDPPorts = [443];
+    allowedTCPPorts = [80 443];
   };
 
   systemd = {
@@ -67,41 +53,15 @@ in {
   };
 
   services = {
-    xserver.enable = false;
-    qemuGuest.enable = true;
     fstrim.enable = true;
-    openssh = {
-      enable = true;
-      settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
-    };
-    resolved.enable = true;
-    fail2ban = {
-      enable = true;
-      maxretry = 3;
-      bantime = "1h";
-      bantime-increment.enable = true;
-    };
-    vnstat.enable = true;
-    journald.extraConfig = ''
-      SystemMaxUse=100M
-      SystemMaxFileSize=50M
-    '';
-    acpid.enable = true;
-    postgresql = {
-      enable = true;
-      package = pkgs.postgresql_15;
-      settings = {
-        max_connections = 200;
-        effective_cache_size = "256MB";
-        shared_buffers = "256MB";
-        work_mem = "16MB";
-        track_activities = true;
-        track_counts = true;
-        track_io_timing = true;
-      };
+    postgresql.settings = {
+      max_connections = 200;
+      effective_cache_size = "256MB";
+      shared_buffers = "256MB";
+      work_mem = "16MB";
+      track_activities = true;
+      track_counts = true;
+      track_io_timing = true;
     };
     nginx = {
       enable = true;
@@ -129,53 +89,15 @@ in {
         };
       };
     };
-    prometheus = let
-      labels = {machine = "${config.networking.hostName}";};
-      nodePort = config.services.prometheus.exporters.node.port;
-      postgresPort = config.services.prometheus.exporters.postgres.port;
-    in {
+    prometheus = {
       enable = true;
-      port = 9001;
+      listenAddress = "127.0.0.1";
       retentionTime = "90d";
       globalConfig = {
-        external_labels = labels;
+        external_labels = {machine = "${config.networking.hostName}";};
       };
       webConfigFile = secrets.prometheus-web-config.path;
       webExternalUrl = "https://status.pointjig.de";
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [
-            {
-              targets = ["localhost:${toString nodePort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "postgres";
-          static_configs = [
-            {
-              targets = ["localhost:${toString postgresPort}"];
-              inherit labels;
-            }
-          ];
-        }
-      ];
-      exporters = {
-        node = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9101;
-          enabledCollectors = ["systemd"];
-        };
-        postgres = {
-          enable = true;
-          listenAddress = "127.0.0.1";
-          port = 9187;
-          runAsLocalSuperUser = true;
-        };
-      };
     };
     stne-mimir = {
       enable = true;
@@ -249,16 +171,9 @@ in {
   security = {
     auditd.enable = false;
     audit.enable = false;
-    acme = {
-      acceptTerms = true;
-      defaults.email = "shawn@pointjig.de";
-    };
   };
-  hardware.pulseaudio.enable = false;
-  hardware.bluetooth.enable = false;
-  sound.enable = false;
-  shawn8901.auto-upgrade.enable = true;
-  shawn8901.user-config.enable = true;
 
-  environment.noXlibs = true;
+  shawn8901 = {
+    postgresql.enable = true;
+  };
 }

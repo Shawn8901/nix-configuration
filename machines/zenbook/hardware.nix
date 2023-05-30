@@ -9,12 +9,6 @@
 in {
   imports = [(modulesPath + "/installer/scan/not-detected.nix")];
 
-  #nix.settings.system-features = ["gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
-  nixpkgs.hostPlatform = {
-    #gcc.arch = "x86-64-v3";
-    system = "x86_64-linux";
-  };
-
   boot = {
     initrd = {
       availableKernelModules = ["nvme" "xhci_pci" "rtsx_pci_sdmmc" "usbhid" "sd_mod" "sr_mod"];
@@ -32,6 +26,10 @@ in {
     supportedFilesystems = ["zfs" "ntfs"];
     kernel.sysctl = {"vm.swappiness" = lib.mkDefault 1;};
     zfs.devNodes = "/dev/disk/by-id";
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
   };
 
   services.udev.extraRules = ''

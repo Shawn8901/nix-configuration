@@ -1,24 +1,20 @@
 {
+  self',
   self,
   config,
+  fConfig,
   pkgs,
   lib,
   inputs,
+  inputs',
   ...
 }: let
   hosts = self.nixosConfigurations;
 
-  inherit (config.sops) secrets;
-  inherit (pkgs.hostPlatform) system;
-  inherit (inputs) mimir mimir-client stfc-bot;
-in {
-  imports = [
-    mimir.nixosModules.default
-    stfc-bot.nixosModules.default
-    # https://github.com/NixOS/nixpkgs/pull/224274
-    ../../modules/nixos/nextcloud.nix
-  ];
+  fPkgs = self'.packages;
 
+  inherit (config.sops) secrets;
+in {
   sops.secrets = {
     ssh-builder-key = {owner = "hydra-queue-runner";};
     zfs-ztank-key = {};
@@ -62,33 +58,12 @@ in {
     # };
   };
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    udisks2 = pkgs.udisks2.override {
-      btrfs-progs = null;
-      nilfs-utils = null;
-      xfsprogs = null;
-      f2fs-tools = null;
-    };
-  };
-
   networking = {
-    firewall = let
-      zreplServePorts = inputs.zrepl.servePorts config.services.zrepl;
-    in {
-      allowedUDPPorts = [443];
-      allowedUDPPortRanges = [];
-      allowedTCPPorts = [80 443 9001] ++ zreplServePorts;
-      allowedTCPPortRanges = [];
-    };
+    firewall.allowedTCPPorts = fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
     hosts = {
       "127.0.0.1" = lib.attrNames config.services.nginx.virtualHosts;
       "::1" = lib.attrNames config.services.nginx.virtualHosts;
     };
-    networkmanager.enable = false;
-    nftables.enable = true;
-    dhcpcd.enable = false;
-    useNetworkd = true;
-    useDHCP = false;
   };
 
   systemd = {
@@ -109,11 +84,6 @@ in {
 
   services = {
     openssh = {
-      enable = true;
-      settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
       hostKeys = [
         {
           path = "/persist/etc/ssh/ssh_host_ed25519_key";
@@ -126,7 +96,6 @@ in {
         }
       ];
     };
-    resolved.enable = true;
     zfs = {
       trim.enable = true;
       autoScrub = {
@@ -180,9 +149,9 @@ in {
             connect = {
               type = "tls";
               address = "pointalpha:8888";
-              ca = "/etc/zrepl/pointalpha.crt";
-              cert = "/etc/zrepl/tank.crt";
-              key = "/etc/zrepl/tank.key";
+              ca = ../../files/public_certs/zrepl/pointalpha.crt;
+              cert = ../../files/public_certs/zrepl/tank.crt;
+              key = secrets.zrepl.path;
               server_cn = "pointalpha";
             };
             recv = {placeholder = {encryption = "inherit";};};
@@ -211,9 +180,9 @@ in {
             serve = {
               type = "tls";
               listen = ":8888";
-              ca = "/etc/zrepl/zenbook.crt";
-              cert = "/etc/zrepl/tank.crt";
-              key = "/etc/zrepl/tank.key";
+              ca = ../../files/public_certs/zrepl/zenbook.crt;
+              cert = ../../files/public_certs/zrepl/tank.crt;
+              key = secrets.zrepl.path;
               client_cns = ["zenbook"];
             };
             recv = {placeholder = {encryption = "inherit";};};
@@ -226,9 +195,9 @@ in {
             connect = {
               type = "tls";
               address = "sapsrv01.clansap.org:8888";
-              ca = "/etc/zrepl/sapsrv01.crt";
-              cert = "/etc/zrepl/tank.crt";
-              key = "/etc/zrepl/tank.key";
+              ca = ../../files/public_certs/zrepl/sapsrv01.crt;
+              cert = ../../files/public_certs/zrepl/tank.crt;
+              key = secrets.zrepl.path;
               server_cn = "sapsrv01";
             };
             recv = {placeholder = {encryption = "inherit";};};
@@ -257,9 +226,9 @@ in {
             connect = {
               type = "tls";
               address = "sapsrv02.clansap.org:8888";
-              ca = "/etc/zrepl/sapsrv02.crt";
-              cert = "/etc/zrepl/tank.crt";
-              key = "/etc/zrepl/tank.key";
+              ca = ../../files/public_certs/zrepl/sapsrv02.crt;
+              cert = ../../files/public_certs/zrepl/tank.crt;
+              key = secrets.zrepl.path;
               server_cn = "sapsrv02";
             };
             recv = {placeholder = {encryption = "inherit";};};
@@ -314,13 +283,13 @@ in {
               prefix = "zrepl_";
             };
             connect = let
-              zreplPort = builtins.head (inputs.zrepl.servePorts hosts.shelter.config.services.zrepl);
+              zreplPort = fConfig.shawn8901.zrepl.servePorts hosts.shelter.config.services.zrepl;
             in {
               type = "tls";
               address = "shelter.pointjig.de:${toString zreplPort}";
-              ca = "/etc/zrepl/shelter.crt";
-              cert = "/etc/zrepl/tank.crt";
-              key = "/etc/zrepl/tank.key";
+              ca = ../../files/public_certs/zrepl/shelter.crt;
+              cert = ../../files/public_certs/zrepl/tank.crt;
+              key = secrets.zrepl.path;
               server_cn = "shelter";
             };
             send = {
@@ -358,31 +327,17 @@ in {
       };
     };
     postgresql = {
-      enable = true;
-      package = pkgs.postgresql_15;
       dataDir = "/persist/var/lib/postgresql/15";
-      ensureDatabases = [
-        "stfcbot"
-        "hydra"
-      ];
+      ensureDatabases = ["stfcbot"];
       ensureUsers = [
         {
           name = "stfcbot";
           ensurePermissions = {"DATABASE stfcbot" = "ALL PRIVILEGES";};
         }
-        {
-          name = "hydra";
-          ensurePermissions = {"DATABASE hydra" = "ALL PRIVILEGES";};
-        }
       ];
     };
     nginx = {
-      enable = true;
       package = pkgs.nginxQuic;
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = true;
       # "${config.services.stne-mimir.domain}" = {
       #   enableACME = true;
       #   forceSSL = true;
@@ -445,42 +400,24 @@ in {
         };
       };
     };
-    fail2ban = {
-      enable = true;
-      maxretry = 3;
-      bantime = "1h";
-      bantime-increment.enable = true;
-      ignoreIP = ["192.168.11.0/24"];
-    };
-    vnstat.enable = true;
     smartd.enable = true;
-    prometheus = {
+
+    prometheus = let
+      labels = {machine = "${config.networking.hostName}";};
+    in {
       enable = true;
-      port = 9001;
       retentionTime = "90d";
       globalConfig = {
-        external_labels = {machine = "${config.networking.hostName}";};
+        external_labels = labels;
       };
       webConfigFile = secrets.prometheus-web-config.path;
       scrapeConfigs = let
-        nodePort = toString config.services.prometheus.exporters.node.port;
         smartctlPort = toString config.services.prometheus.exporters.smartctl.port;
         zfsPort = toString config.services.prometheus.exporters.zfs.port;
-        zreplPort = toString (builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl));
-        postgresPort = toString config.services.prometheus.exporters.postgres.port;
+        zreplPort = toString (fConfig.shawn8901.zrepl.monitoringPorts config.services.zrepl);
         fritzboxPort = toString config.services.prometheus.exporters.fritzbox.port;
         pvePort = toString config.services.prometheus.exporters.pve.port;
-        labels = {machine = "${config.networking.hostName}";};
       in [
-        {
-          job_name = "node";
-          static_configs = [
-            {
-              targets = ["localhost:${nodePort}"];
-              inherit labels;
-            }
-          ];
-        }
         {
           job_name = "zfs";
           static_configs = [
@@ -509,15 +446,6 @@ in {
           ];
         }
         {
-          job_name = "postgres";
-          static_configs = [
-            {
-              targets = ["localhost:${postgresPort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
           job_name = "fritzbox";
           static_configs = [
             {
@@ -534,16 +462,9 @@ in {
         }
       ];
       exporters = {
-        node = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9101;
-          enabledCollectors = ["systemd"];
-        };
         smartctl = {
           enable = true;
           listenAddress = "localhost";
-          port = 9102;
           devices = ["/dev/sda"];
           maxInterval = "5m";
         };
@@ -551,34 +472,13 @@ in {
           enable = true;
           listenAddress = "localhost";
         };
-        postgres = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9187;
-          runAsLocalSuperUser = true;
-        };
+
         zfs = {
           enable = true;
           listenAddress = "localhost";
-          port = 9134;
         };
       };
     };
-    shutdown-wakeup = {
-      enable = true;
-      shutdownTime = "0:00:00";
-      wakeupTime = "15:00:00";
-    };
-    usb-backup = {
-      enable = true;
-      mountPoint = "/media/usb_backup_ela";
-      backupPath = "/media/daniela/";
-    };
-    backup-nextcloud.enable = true;
-    journald.extraConfig = ''
-      SystemMaxUse=100M
-      SystemMaxFileSize=50M
-    '';
     # stne-mimir = {
     #   enable = false;
     #   domain = "mimir.tank.pointjig.de";
@@ -593,17 +493,10 @@ in {
     #   envFile = config.age.secrets.stfc-env-dev.path;
     # };
   };
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "shawn@pointjig.de";
+  security = {
+    auditd.enable = false;
+    audit.enable = false;
   };
-  security.auditd.enable = false;
-  security.audit.enable = false;
-  hardware = {
-    pulseaudio.enable = false;
-    bluetooth.enable = false;
-  };
-
   users.users = {
     root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
     ela = {
@@ -627,38 +520,49 @@ in {
     };
   };
   shawn8901 = {
-    auto-upgrade.enable = true;
+    backup-rclone = {
+      enable = true;
+      sourceDir = "/var/lib/nextcloud/data/shawn/files/";
+      destDir = "dropbox:";
+    };
+    backup-usb = {
+      enable = true;
+      package = fPkgs.backup-usb;
+      device = {
+        idVendor = "04fc";
+        idProduct = "0c25";
+        partition = "2";
+      };
+      mountPoint = "/media/usb_backup_ela";
+      backupPath = "/media/daniela/";
+    };
+    shutdown-wakeup = {
+      enable = true;
+      package = fPkgs.rtc-helper;
+      shutdownTime = "0:00:00";
+      wakeupTime = "15:00:00";
+    };
     nextcloud = {
       enable = true;
       hostName = "next.tank.pointjig.de";
-      notify_push.package = self.packages.${system}.notify_push;
       adminPasswordFile = secrets.nextcloud-admin.path;
+      notify_push.package = pkgs.nextcloud-notify_push;
       home = "/persist/var/lib/nextcloud";
       package = pkgs.nextcloud26;
       prometheus.passwordFile = secrets.prometheus-nextcloud.path;
     };
+    postgresql.enable = true;
     hydra = {
       enable = true;
       hostName = "hydra.pointjig.de";
       mailAdress = "hydra@pointjig.de";
       writeTokenFile = secrets.github-write-token.path;
       builder.sshKeyFile = secrets.ssh-builder-key.path;
-      attic.package = inputs.attic.packages.${system}.attic-client;
+      attic.package = inputs'.attic.packages.attic-client;
     };
-    user-config.enable = true;
   };
 
   environment = {
-    noXlibs = true;
-    etc = {
-      ".ztank_key".source = secrets.zfs-ztank-key.path;
-      "zrepl/tank.key".source = secrets.zrepl.path;
-      "zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
-      "zrepl/pointalpha.crt".source = ../../files/public_certs/zrepl/pointalpha.crt;
-      "zrepl/sapsrv01.crt".source = ../../files/public_certs/zrepl/sapsrv01.crt;
-      "zrepl/sapsrv02.crt".source = ../../files/public_certs/zrepl/sapsrv02.crt;
-      "zrepl/shelter.crt".source = ../../files/public_certs/zrepl/shelter.crt;
-      "zrepl/zenbook.crt".source = ../../files/public_certs/zrepl/zenbook.crt;
-    };
+    etc.".ztank_key".source = secrets.zfs-ztank-key.path;
   };
 }

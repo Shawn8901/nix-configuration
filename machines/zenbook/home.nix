@@ -41,10 +41,6 @@ in {
         nas
       ]);
 
-    shawn8901 = {
-      development.enable = true;
-      browser.enable = true;
-    };
     programs.dircolors = {
       enable = true;
       enableZshIntegration = true;

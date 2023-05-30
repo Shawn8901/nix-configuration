@@ -9,14 +9,6 @@
 in {
   imports = [(modulesPath + "/installer/scan/not-detected.nix")];
 
-  nix.settings.system-features = ["gccarch-x86-64-v3" "gccarch-znver1" "benchmark" "big-parallel" "kvm" "nixos-test"];
-  nixpkgs.hostPlatform = {
-    gcc.arch = "x86-64-v3";
-    system = "x86_64-linux";
-  };
-
-  #aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sse sse2 sse3 sse4_1 sse4_2 ssse3
-
   boot = {
     initrd = {
       availableKernelModules = ["ahci" "xhci_pci" "usbhid" "sd_mod" "sr_mod"];
@@ -34,6 +26,11 @@ in {
     kernel.sysctl = {"vm.swappiness" = lib.mkDefault 1;};
     zfs.devNodes = "/dev/disk/by-id";
     enableContainers = false;
+
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
   };
 
   services.udev.extraRules = ''

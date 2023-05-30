@@ -6,14 +6,14 @@
 }: {
   imports = [(modulesPath + "/profiles/qemu-guest.nix") (modulesPath + "/profiles/minimal.nix")];
 
-  nixpkgs.hostPlatform.system = "x86_64-linux";
-
   boot = {
-    initrd.availableKernelModules = ["uhci_hcd" "ehci_pci" "ahci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod"];
-    kernelModules = [];
+    initrd.availableKernelModules = ["uhci_hcd" "ehci_pci" "ahci" "sd_mod" "sr_mod"];
     kernelPackages = pkgs.linuxPackages;
-    extraModulePackages = [];
     kernelParams = ["memhp_default_state=online"];
+    loader.grub = {
+      enable = true;
+      device = "/dev/sda";
+    };
   };
 
   fileSystems."/" = {

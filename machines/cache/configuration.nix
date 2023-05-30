@@ -1,15 +1,14 @@
 {
   self,
+  self',
   config,
   pkgs,
-  lib,
-  inputs,
+  inputs',
   ...
 }: let
   hosts = self.nixosConfigurations;
   inherit (config.sops) secrets;
-  inherit (pkgs.hostPlatform) system;
-  inherit (inputs) attic;
+  inherit (inputs') attic;
 in {
   sops.secrets = {
     root = {neededForUsers = true;};
@@ -26,9 +25,7 @@ in {
   networking = {
     firewall = {
       allowedUDPPorts = [443 51820];
-      allowedUDPPortRanges = [];
       allowedTCPPorts = [80 443];
-      allowedTCPPortRanges = [];
     };
     nameservers = ["208.67.222.222" "208.67.220.220"];
     domain = "";
@@ -61,14 +58,7 @@ in {
   services = {
     wireguard.reresolve-dns = {
       enable = true;
-      package = self.packages.${system}.wg-reresolve-dns;
-    };
-    openssh = {
-      enable = true;
-      settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
+      package = self'.packages.wg-reresolve-dns;
     };
     nginx = {
       enable = true;
@@ -106,15 +96,9 @@ in {
         };
       };
     };
-    fail2ban = {
-      enable = true;
-      maxretry = 3;
-      bantime = "1h";
-      bantime-increment.enable = true;
-    };
     atticd = {
       enable = true;
-      package = attic.packages.${system}.attic;
+      package = attic.packages.attic;
       credentialsFile = secrets.attic-env.path;
       settings = {
         allowed-hosts = ["cache.pointjig.de"];
@@ -134,8 +118,6 @@ in {
       };
     };
     postgresql = {
-      enable = true;
-      package = pkgs.postgresql_15;
       ensureDatabases = [
         "attic"
         "${config.services.grafana.settings.database.name}"
@@ -154,36 +136,13 @@ in {
     prometheus = {
       enable = true;
       listenAddress = "127.0.0.1";
-      port = 9001;
       retentionTime = "90d";
       globalConfig = {
         external_labels = {machine = "${config.networking.hostName}";};
       };
       scrapeConfigs = let
-        nodePort = toString config.services.prometheus.exporters.node.port;
-        postgresPort = toString config.services.prometheus.exporters.postgres.port;
-        nextcloudPort = toString config.services.prometheus.exporters.nextcloud.port;
         pvePort = toString config.services.prometheus.exporters.pve.port;
-        labels = {machine = "${config.networking.hostName}";};
       in [
-        {
-          job_name = "node";
-          static_configs = [
-            {
-              targets = ["localhost:${nodePort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "postgres";
-          static_configs = [
-            {
-              targets = ["localhost:${postgresPort}"];
-              inherit labels;
-            }
-          ];
-        }
         {
           job_name = "proxmox";
           metrics_path = "/pve";
@@ -192,18 +151,6 @@ in {
         }
       ];
       exporters = {
-        node = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9101;
-          enabledCollectors = ["systemd"];
-        };
-        postgres = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9187;
-          runAsLocalSuperUser = true;
-        };
         pve = {
           enable = true;
           listenAddress = "localhost";
@@ -323,17 +270,10 @@ in {
     ];
   };
 
-  shawn8901.auto-upgrade.enable = true;
-  sound.enable = false;
-  hardware.pulseaudio.enable = false;
-  hardware.bluetooth.enable = false;
-  security = {
-    auditd.enable = false;
-    audit.enable = false;
-    acme = {
-      acceptTerms = true;
-      defaults.email = "shawn@pointjig.de";
+  shawn8901 = {
+    postgresql = {
+      enable = true;
+      package = pkgs.postgresql_14;
     };
   };
-  environment.noXlibs = true;
 }
