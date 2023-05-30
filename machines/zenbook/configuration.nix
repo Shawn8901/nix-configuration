@@ -3,6 +3,7 @@
   pkgs,
   lib,
   config,
+  fConfig,
   inputs,
   ...
 }: let
@@ -20,9 +21,6 @@
       -exec ln -sf -t "$out/share/fonts" '{}' \;
   '');
 in {
-  disabledModules = ["services/x11/display-managers/sddm.nix"];
-  imports = [../../modules/nixos/overriden/sddm.nix];
-
   sops.secrets = {
     zrepl = {restartUnits = ["zrepl.service"];};
     samba = {sopsFile = ./../../files/secrets-desktop.yaml;};
@@ -175,7 +173,7 @@ in {
               prefix = "zrepl_";
             };
             connect = let
-              zreplPort = builtins.head (inputs.zrepl.servePorts hosts.tank.config.services.zrepl);
+              zreplPort = fConfig.shawn8901.zrepl.servePorts hosts.tank.config.services.zrepl;
             in {
               type = "tls";
               address = "tank.fritz.box:${toString zreplPort}";
@@ -271,7 +269,6 @@ in {
       openFirewall = true;
     };
   };
-  shawn8901.user-config.enable = true;
 
   environment = {
     etc = {

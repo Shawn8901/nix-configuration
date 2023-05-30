@@ -1,13 +1,15 @@
 {
+  self,
+  self',
   config,
+  fConfig,
   pkgs,
-  inputs,
+  inputs',
   ...
 }: let
-  uPkgs = inputs.nixpkgs.legacyPackages.${system};
+  uPkgs = inputs'.nixpkgs.legacyPackages;
 
   inherit (config.sops) secrets;
-  inherit (pkgs.hostPlatform) system;
 in {
   sops.secrets = {
     zrepl = {};
@@ -17,23 +19,13 @@ in {
     };
   };
 
-  nix.gc.options = "--delete-older-than 3d";
-
   networking = {
     firewall = let
-      zrepl = inputs.zrepl.servePorts config.services.zrepl;
+      zrepl = fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
     in {
       allowedUDPPorts = [443];
-      allowedUDPPortRanges = [];
       allowedTCPPorts = [80 443 9001] ++ zrepl;
-      allowedTCPPortRanges = [];
-      logRefusedConnections = false;
     };
-    networkmanager.enable = false;
-    nftables.enable = true;
-    dhcpcd.enable = false;
-    useNetworkd = true;
-    useDHCP = false;
   };
 
   systemd = {
@@ -60,16 +52,6 @@ in {
   };
 
   services = {
-    xserver.enable = false;
-    qemuGuest.enable = true;
-    openssh = {
-      enable = true;
-      settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
-    };
-    resolved.enable = true;
     zfs.autoScrub = {
       enable = true;
       pools = ["zbackup"];
@@ -95,9 +77,9 @@ in {
             serve = {
               type = "tls";
               listen = ":8888";
-              ca = "/etc/zrepl/tank.crt";
-              cert = "/etc/zrepl/shelter.crt";
-              key = "/etc/zrepl/shelter.key";
+              ca = ../../files/public_certs/zrepl/tank.crt;
+              cert = ../../files/public_certs/zrepl/shelter.crt;
+              key = secrets.zrepl.path;
               client_cns = ["tank"];
             };
             recv = {placeholder = {encryption = "inherit";};};
@@ -127,80 +109,19 @@ in {
       };
     };
 
-    prometheus = let
-      labels = {machine = "${config.networking.hostName}";};
-      nodePort = config.services.prometheus.exporters.node.port;
-      zreplPort = builtins.head (inputs.zrepl.monitoringPorts config.services.zrepl);
-    in {
+    prometheus = {
       enable = true;
-      port = 9001;
+      listenAddress = "127.0.0.1";
       retentionTime = "90d";
       globalConfig = {
-        external_labels = labels;
+        external_labels = {machine = "${config.networking.hostName}";};
       };
       webConfigFile = secrets.prometheus-web-config.path;
       webExternalUrl = "https://status.shelter.pointjig.de";
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [
-            {
-              targets = ["localhost:${toString nodePort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "zrepl";
-          static_configs = [
-            {
-              targets = ["localhost:${toString zreplPort}"];
-              inherit labels;
-            }
-          ];
-        }
-      ];
-      exporters = {
-        node = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9101;
-          enabledCollectors = ["systemd"];
-        };
-      };
     };
-
-    fail2ban = {
-      enable = true;
-      maxretry = 3;
-      bantime = "1h";
-      bantime-increment.enable = true;
-    };
-    vnstat.enable = true;
-    journald.extraConfig = ''
-      SystemMaxUse=100M
-      SystemMaxFileSize=50M
-    '';
-    acpid.enable = true;
   };
   security = {
-    acme = {
-      acceptTerms = true;
-      defaults.email = "shawn@pointjig.de";
-    };
     auditd.enable = false;
     audit.enable = false;
-  };
-  hardware.pulseaudio.enable = false;
-  hardware.bluetooth.enable = false;
-  sound.enable = false;
-  shawn8901.auto-upgrade.enable = true;
-  shawn8901.user-config.enable = true;
-
-  environment = {
-    noXlibs = true;
-    etc."zrepl/shelter.key".source = secrets.zrepl.path;
-    etc."zrepl/shelter.crt".source = ../../files/public_certs/zrepl/shelter.crt;
-    etc."zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
   };
 }

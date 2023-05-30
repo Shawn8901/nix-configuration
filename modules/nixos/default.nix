@@ -1,11 +1,15 @@
 {
-  locale = import ./locale.nix;
-  nix-config = import ./nix.nix;
-  build-tools = import ./build-tools.nix;
-  user-config = import ./user-config.nix;
-  shutdown-wakeup = import ./shutdown-wakeup.nix;
-  usb-backup = import ./usb-backup.nix;
-  nextcloud-backup = import ./nextcloud-backup.nix;
-  auto-upgrade = import ./auto-upgrade.nix;
-  hydra-server = import ./hydra-server.nix;
+  self,
+  config,
+  ...
+}: let
+  inherit (config.shawn8901.module-generator) generateModules;
+
+  modules = generateModules "${self}/modules/nixos";
+  privateModules = generateModules "${self}/modules/nixos/_private";
+in {
+  flake.nixosModules = modules;
+  # expose as modules after merge of https://github.com/NixOS/nix/pull/8332
+  flake.flakeModules.nixos = modules;
+  flake.flakeModules.private.nixos = privateModules;
 }

@@ -6,13 +6,9 @@
 }: {
   imports = [(modulesPath + "/profiles/qemu-guest.nix") (modulesPath + "/profiles/minimal.nix")];
 
-  nixpkgs.hostPlatform = "x86_64-linux";
-
   boot = {
-    initrd.availableKernelModules = ["ata_piix" "uhci_hcd" "virtio_pci" "virtio_blk"];
-    kernelModules = [];
+    initrd.availableKernelModules = ["ata_piix" "uhci_hcd"];
     kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-    extraModulePackages = [];
     zfs.devNodes = "/dev/";
     zfs.extraPools = ["zbackup"];
     zfs.requestEncryptionCredentials = false;
@@ -20,6 +16,10 @@
       options zfs zfs_arc_max=209715200
     '';
     supportedFilesystems = ["zfs"];
+    loader.grub = {
+      enable = true;
+      device = "/dev/vda";
+    };
   };
 
   services.udev.extraRules = ''
