@@ -113,7 +113,10 @@ in {
       settings = {
         allowed-hosts = ["cache.pointjig.de"];
         api-endpoint = "https://cache.pointjig.de/";
-        database.url = "postgresql:///attic?host=/run/postgresql";
+        database = {
+          url = "postgresql:///attic?host=/run/postgresql";
+          heartbeat = true;
+        };
         chunking = {
           nar-size-threshold = 65536;
           min-size = 16384;
@@ -121,6 +124,7 @@ in {
           max-size = 262144;
         };
         compression = {type = "zstd";};
+        garbage-collection.default-retention-period = "3 months";
       };
     };
     postgresql = {
