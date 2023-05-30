@@ -106,6 +106,12 @@ in {
         };
       };
     };
+    fail2ban = {
+      enable = true;
+      maxretry = 5;
+      bantime = "1h";
+      bantime-increment.enable = true;
+    };
     atticd = {
       enable = true;
       package = attic.packages.${system}.attic;
