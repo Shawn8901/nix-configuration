@@ -129,7 +129,7 @@ in {
     };
     postgresql = {
       enable = true;
-      package = pkgs.postgresql_14;
+      package = pkgs.postgresql_15;
       ensureDatabases = [
         "attic"
         "${config.services.grafana.settings.database.name}"
