@@ -227,6 +227,7 @@ in {
           "sto@pointjig.de"
           "supremegamers@pointjig.de"
           "unity@pointjig.de"
+          "wb@pointjig.de"
           "zsa@pointjig.de"
         ];
       };
