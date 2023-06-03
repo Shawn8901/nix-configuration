@@ -225,13 +225,11 @@ in {
     keep-derivations = true;
   };
   environment = {
-    systemPackages = with pkgs;
-      [
-        cifs-utils
-        zenmonitor
-        nixpkgs-review
-      ]
-      ++ [inputs'.nh.packages.default];
+    systemPackages = with pkgs; [
+      cifs-utils
+      zenmonitor
+      nixpkgs-review
+    ];
     etc = {
       "samba/credentials_ela".source = secrets.samba-ela.path;
       "samba/credentials_shawn".source = secrets.samba.path;
