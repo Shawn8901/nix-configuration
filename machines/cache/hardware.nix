@@ -1,7 +1,6 @@
 {modulesPath, ...}: {
   imports = [(modulesPath + "/profiles/qemu-guest.nix") (modulesPath + "/profiles/minimal.nix")];
   boot = {
-    cleanTmpDir = true;
     initrd = {
       availableKernelModules = ["ata_piix" "uhci_hcd" "xen_blkfront" "xhci_pci" "usbhid"];
       kernelModules = ["nvme"];

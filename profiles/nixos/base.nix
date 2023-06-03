@@ -21,6 +21,8 @@
     keyMap = "de";
   };
 
+  boot.tmp.cleanOnBoot = true;
+
   services.lvm.enable = false;
 
   environment.systemPackages = with pkgs; [
