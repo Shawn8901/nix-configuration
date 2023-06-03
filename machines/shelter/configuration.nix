@@ -19,13 +19,9 @@ in {
     };
   };
 
-  networking = {
-    firewall = let
-      zrepl = fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
-    in {
-      allowedUDPPorts = [443];
-      allowedTCPPorts = [80 443 9001] ++ zrepl;
-    };
+  networking.firewall = {
+    allowedUDPPorts = [443];
+    allowedTCPPorts = [80 443] ++ (fConfig.shawn8901.zrepl.servePorts config.services.zrepl);
   };
 
   systemd = {

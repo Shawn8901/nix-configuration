@@ -1,11 +1,10 @@
 {
   config,
-  inputs,
+  inputs',
   pkgs,
   ...
 }: let
   inherit (config.sops) secrets;
-  inherit (inputs) mimir mimir-client stfc-bot;
 in {
   sops.secrets = {
     sms-technical-passwd = {};
@@ -24,7 +23,7 @@ in {
     };
   };
 
-  networking .firewall = {
+  networking.firewall = {
     allowedUDPPorts = [443];
     allowedTCPPorts = [80 443];
   };
@@ -71,12 +70,6 @@ in {
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       virtualHosts = {
-        "${config.services.stne-mimir.domain}" = {
-          enableACME = true;
-          forceSSL = true;
-          http3 = true;
-          kTLS = true;
-        };
         "status.${config.networking.hostName}.de" = {
           enableACME = true;
           forceSSL = true;
@@ -85,6 +78,7 @@ in {
 
           locations."/" = {
             proxyPass = "http://localhost:${toString config.services.prometheus.port}";
+            recommendedProxySettings = true;
           };
         };
       };
@@ -102,14 +96,14 @@ in {
     stne-mimir = {
       enable = true;
       domain = "mimir.pointjig.de";
-      clientPackage = mimir-client.packages.x86_64-linux.default;
-      package = mimir.packages.x86_64-linux.default;
+      clientPackage = inputs'.mimir-client.packages.default;
+      package = inputs'.mimir.packages.default;
       envFile = secrets.mimir-env.path;
       unixSocket = "/run/mimir-backend/mimir-backend.sock";
     };
     stfc-bot = {
       enable = true;
-      package = stfc-bot.packages.x86_64-linux.default;
+      package = inputs'.stfc-bot.packages.default;
       envFile = secrets.stfc-env.path;
     };
   };

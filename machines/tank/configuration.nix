@@ -10,7 +10,6 @@
   ...
 }: let
   hosts = self.nixosConfigurations;
-
   fPkgs = self'.packages;
 
   inherit (config.sops) secrets;
@@ -326,25 +325,7 @@ in {
         ];
       };
     };
-    postgresql = {
-      dataDir = "/persist/var/lib/postgresql/15";
-      ensureDatabases = ["stfcbot"];
-      ensureUsers = [
-        {
-          name = "stfcbot";
-          ensurePermissions = {"DATABASE stfcbot" = "ALL PRIVILEGES";};
-        }
-      ];
-    };
-    nginx = {
-      package = pkgs.nginxQuic;
-      # "${config.services.stne-mimir.domain}" = {
-      #   enableACME = true;
-      #   forceSSL = true;
-      #   http3 = true;
-      #   kTLS = true;
-      # };
-    };
+    postgresql.dataDir = "/persist/var/lib/postgresql/15";
     avahi = {
       enable = true;
       nssmdns = true;
@@ -479,19 +460,6 @@ in {
         };
       };
     };
-    # stne-mimir = {
-    #   enable = false;
-    #   domain = "mimir.tank.pointjig.de";
-    #   clientPackage = inputs.mimir-client.packages.x86_64-linux.default;
-    #   package = inputs.mimir.packages.x86_64-linux.default;
-    #   envFile = config.age.secrets.mimir-env-dev.path;
-    #   unixSocket = "/run/mimir-backend/mimir-backend.sock";
-    # };
-    # stfc-bot = {
-    #   enable = false;
-    #   package = stfc-bot.packages.x86_64-linux.default;
-    #   envFile = config.age.secrets.stfc-env-dev.path;
-    # };
   };
   security = {
     auditd.enable = false;
