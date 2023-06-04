@@ -11,14 +11,6 @@ in {
       owner = "nextcloud";
       group = "nextcloud";
     };
-    prometheus-web-config = {
-      owner = "prometheus";
-      group = "prometheus";
-    };
-    prometheus-nextcloud = {
-      owner = config.services.prometheus.exporters.nextcloud.user;
-      group = config.services.prometheus.exporters.nextcloud.group;
-    };
   };
 
   systemd = {
@@ -45,34 +37,7 @@ in {
 
   services = {
     fstrim.enable = true;
-    nginx = {
-      enable = true;
-      package = pkgs.nginxQuic;
-      virtualHosts = {
-        "status.${config.services.nextcloud.hostName}" = {
-          enableACME = true;
-          forceSSL = true;
-          http3 = true;
-          kTLS = true;
-          locations."/" = {
-            proxyPass = "http://localhost:9001";
-          };
-        };
-      };
-    };
-
-    prometheus = let
-      labels = {machine = "${config.networking.hostName}";};
-    in {
-      enable = true;
-      listenAddress = "127.0.0.1";
-      retentionTime = "90d";
-      globalConfig = {
-        external_labels = labels;
-      };
-      webConfigFile = secrets.prometheus-web-config.path;
-      webExternalUrl = "https://status.${config.services.nextcloud.hostName}";
-    };
+    nginx.package = pkgs.nginxQuic;
   };
   security = {
     acme.defaults.email = "info@clansap.org";

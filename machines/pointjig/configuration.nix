@@ -17,10 +17,6 @@ in {
       owner = "stfc-bot";
       group = "stfc-bot";
     };
-    prometheus-web-config = {
-      owner = "prometheus";
-      group = "prometheus";
-    };
   };
 
   networking.firewall = {
@@ -62,37 +58,7 @@ in {
       track_counts = true;
       track_io_timing = true;
     };
-    nginx = {
-      enable = true;
-      package = pkgs.nginxQuic;
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = true;
-      virtualHosts = {
-        "status.${config.networking.hostName}.de" = {
-          enableACME = true;
-          forceSSL = true;
-          http3 = true;
-          kTLS = true;
-
-          locations."/" = {
-            proxyPass = "http://localhost:${toString config.services.prometheus.port}";
-            recommendedProxySettings = true;
-          };
-        };
-      };
-    };
-    prometheus = {
-      enable = true;
-      listenAddress = "127.0.0.1";
-      retentionTime = "90d";
-      globalConfig = {
-        external_labels = {machine = "${config.networking.hostName}";};
-      };
-      webConfigFile = secrets.prometheus-web-config.path;
-      webExternalUrl = "https://status.pointjig.de";
-    };
+    nginx.package = pkgs.nginxQuic;
     stne-mimir = {
       enable = true;
       domain = "mimir.pointjig.de";

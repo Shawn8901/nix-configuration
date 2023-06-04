@@ -16,6 +16,7 @@
       base.modules = [
         "base.nix"
         "nix.nix"
+        "telegraf.nix"
       ];
       server = {
         modules = ["server.nix"];

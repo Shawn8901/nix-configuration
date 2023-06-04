@@ -13,15 +13,10 @@
 in {
   sops.secrets = {
     zrepl = {};
-    prometheus-web-config = {
-      owner = "prometheus";
-      group = "prometheus";
-    };
   };
 
   networking.firewall = {
-    allowedUDPPorts = [443];
-    allowedTCPPorts = [80 443] ++ (fConfig.shawn8901.zrepl.servePorts config.services.zrepl);
+    allowedTCPPorts = fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
   };
 
   systemd = {
@@ -82,38 +77,6 @@ in {
           }
         ];
       };
-    };
-
-    nginx = {
-      enable = true;
-      package = pkgs.nginxQuic;
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = true;
-      virtualHosts = {
-        "status.shelter.pointjig.de" = {
-          enableACME = true;
-          forceSSL = true;
-          http3 = true;
-          kTLS = true;
-
-          locations."/" = {
-            proxyPass = "http://localhost:9001";
-          };
-        };
-      };
-    };
-
-    prometheus = {
-      enable = true;
-      listenAddress = "127.0.0.1";
-      retentionTime = "90d";
-      globalConfig = {
-        external_labels = {machine = "${config.networking.hostName}";};
-      };
-      webConfigFile = secrets.prometheus-web-config.path;
-      webExternalUrl = "https://status.shelter.pointjig.de";
     };
   };
   security = {
