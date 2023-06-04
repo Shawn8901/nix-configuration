@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  inherit (lib) types mkEnableOption mkOption mkIf;
+  inherit (lib) types mkEnableOption mkOption mkDefault mkIf;
 
   cfg = config.shawn8901.grafana;
 in {
@@ -31,8 +31,8 @@ in {
     };
     services = {
       nginx = {
-        enable = true;
-        package = pkgs.nginxQuic;
+        enable = mkDefault true;
+        package = mkDefault pkgs.nginxQuic;
         recommendedGzipSettings = true;
         recommendedOptimisation = true;
         recommendedTlsSettings = true;

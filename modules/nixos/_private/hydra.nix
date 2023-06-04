@@ -44,6 +44,7 @@ in {
     services = {
       nginx = {
         enable = mkDefault true;
+        package = mkDefault pkgs.nginxQuic;
         recommendedGzipSettings = true;
         recommendedOptimisation = true;
         recommendedProxySettings = true;

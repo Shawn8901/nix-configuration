@@ -5,7 +5,7 @@
   ...
 }: let
   cfg = config.shawn8901.nextcloud;
-  inherit (lib) mkEnableOption mkOption types literalExpression;
+  inherit (lib) mkEnableOption mkDefault mkOption types literalExpression;
 in {
   options = {
     shawn8901.nextcloud = {
@@ -94,9 +94,10 @@ in {
         ];
       };
       nginx = {
+        enable = mkDefault true;
+        package = mkDefault pkgs.nginxQuic;
         recommendedGzipSettings = true;
         recommendedOptimisation = true;
-        recommendedProxySettings = true;
         recommendedTlsSettings = true;
         virtualHosts."${cfg.hostName}" = {
           enableACME = true;
