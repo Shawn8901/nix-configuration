@@ -12,24 +12,15 @@
   hosts = self.nixosConfigurations;
 
   inherit (config.sops) secrets;
-  inherit (pkgs.hostPlatform) system;
 in {
   sops.secrets = {
     zrepl = {};
     samba = {};
     samba-ela = {};
-    prometheus-web-config = {
-      owner = "prometheus";
-      group = "prometheus";
-    };
   };
 
   networking = {
-    firewall = let
-      zreplServePorts = fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
-    in {
-      allowedTCPPorts = [config.services.prometheus.port] ++ zreplServePorts;
-    };
+    firewall.allowedTCPPorts = fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
     networkmanager = {
       enable = true;
       plugins = lib.mkForce [];
@@ -111,87 +102,13 @@ in {
             serve = {
               type = "tls";
               listen = ":8888";
-              ca = "/etc/zrepl/tank.crt";
-              cert = "/etc/zrepl/pointalpha.crt";
-              key = "/etc/zrepl/pointalpha.key";
+              ca = ../../files/public_certs/zrepl/tank.crt;
+              cert = ../../files/public_certs/zrepl/pointalpha.crt;
+              key = secrets.zrepl.path;
               client_cns = ["tank"];
             };
           }
         ];
-      };
-    };
-
-    prometheus = let
-      labels = {machine = "${config.networking.hostName}";};
-      nodePort = config.services.prometheus.exporters.node.port;
-      zfsPort = toString config.services.prometheus.exporters.zfs.port;
-      smartctlPort = config.services.prometheus.exporters.smartctl.port;
-      zreplPort = fConfig.shawn8901.zrepl.monitoringPorts config.services.zrepl;
-    in {
-      enable = true;
-      listenAddress = "127.0.0.1";
-      retentionTime = "90d";
-      globalConfig = {
-        external_labels = labels;
-      };
-      webConfigFile = secrets.prometheus-web-config.path;
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [
-            {
-              targets = ["localhost:${toString nodePort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "zfs";
-          static_configs = [
-            {
-              targets = ["localhost:${zfsPort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "smartctl";
-          static_configs = [
-            {
-              targets = ["localhost:${toString smartctlPort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "zrepl";
-          static_configs = [
-            {
-              targets = ["localhost:${toString zreplPort}"];
-              inherit labels;
-            }
-          ];
-        }
-      ];
-      exporters = {
-        node = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9101;
-          enabledCollectors = ["systemd"];
-        };
-        smartctl = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9102;
-          devices = ["/dev/sda"];
-          maxInterval = "5m";
-        };
-        zfs = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9134;
-        };
       };
     };
     teamviewer.enable = true;
@@ -228,14 +145,10 @@ in {
     systemPackages = with pkgs; [
       cifs-utils
       zenmonitor
-      nixpkgs-review
     ];
     etc = {
       "samba/credentials_ela".source = secrets.samba-ela.path;
       "samba/credentials_shawn".source = secrets.samba.path;
-      "zrepl/pointalpha.key".source = secrets.zrepl.path;
-      "zrepl/pointalpha.crt".source = ../../files/public_certs/zrepl/pointalpha.crt;
-      "zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
     };
     sessionVariables = {
       FLAKE = "/home/shawn/dev/nix-configuration";

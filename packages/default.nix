@@ -7,7 +7,6 @@
 }: {
   perSystem = {pkgs, ...}: let
     packages = {
-      wg-reresolve-dns = pkgs.callPackage ./wg-reresolve-dns {};
       pg-upgrade = pkgs.callPackage ./pg-upgrade {};
       generate-zrepl-ssl = pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix {};
     };

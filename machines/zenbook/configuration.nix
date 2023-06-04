@@ -222,7 +222,6 @@ in {
       SystemMaxFileSize=50M
     '';
     acpid.enable = true;
-    smartd.enable = true;
     upower.enable = true;
     pipewire = {
       enable = true;
