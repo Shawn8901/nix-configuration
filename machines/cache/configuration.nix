@@ -56,6 +56,7 @@ in {
       enable = true;
       package = self'.packages.wg-reresolve-dns;
     };
+    nginx.package = pkgs.nginxQuic;
     nginx.virtualHosts."influxdb.pointjig.de" = {
       enableACME = true;
       forceSSL = true;
