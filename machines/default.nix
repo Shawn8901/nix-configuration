@@ -1,12 +1,12 @@
 {
   self,
   inputs,
+  lib,
   config,
   withSystem,
   ...
 }: let
   inherit (config.shawn8901.system-generator) generateSystem;
-
   cfg = config.shawn8901.nixosConfigurations;
 in {
   config.shawn8901.nixosConfigurations = {
@@ -81,4 +81,16 @@ in {
   };
 
   config.flake.nixosConfigurations = generateSystem cfg;
+
+  config.flake.hydraJobs = {
+    nixos = lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) config.flake.nixosConfigurations;
+    "flake-update" = withSystem "x86_64-linux" (
+      {pkgs, ...}:
+        pkgs.releaseTools.aggregate {
+          name = "flake-update";
+          meta = {schedulingPriority = 50;};
+          constituents = map (n: "nixos." + n) (builtins.attrNames config.flake.hydraJobs.nixos);
+        }
+    );
+  };
 }
