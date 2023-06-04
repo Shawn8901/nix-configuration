@@ -105,28 +105,19 @@ in {
           kTLS = true;
         };
       };
-
-      prometheus = {
-        scrapeConfigs = let
-          nextcloudPort = toString config.services.prometheus.exporters.nextcloud.port;
-          labels = {machine = "${config.networking.hostName}";};
-        in [
-          {
-            job_name = "nextcloud";
-            static_configs = [
-              {
-                targets = ["localhost:${nextcloudPort}"];
-                inherit labels;
-              }
-            ];
-          }
-        ];
-        exporters.nextcloud = {
-          enable = cfg.prometheus.passwordFile != null;
-          listenAddress = "localhost";
-          port = 9205;
-          url = "https://${config.services.nextcloud.hostName}";
-          inherit (cfg.prometheus) passwordFile;
+      telegraf.extraConfig.inputs = {
+        "http" = {
+          urls = [
+            "https://${config.services.nextcloud.hostName}/ocs/v2.php/apps/serverinfo/api/v1/info?format=json"
+          ];
+          method = "GET";
+          username = "$NEXTCLOUD_USERNAME";
+          password = "$NEXTCLOUD_PASSWORD";
+          data_format = "json";
+          success_status_codes = [200];
+          timeout = "30s";
+          interval = "60s";
+          name_prefix = "nextcloud_";
         };
       };
     };

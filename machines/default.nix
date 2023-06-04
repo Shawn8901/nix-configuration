@@ -13,6 +13,7 @@ in {
     cache = {
       profiles = ["server" "managed-user"];
       hostPlatform.system = "aarch64-linux";
+      nixpkgs = inputs.nixpkgs-23_05;
     };
     next = {
       profiles = ["server"];

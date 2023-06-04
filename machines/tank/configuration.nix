@@ -23,15 +23,6 @@ in {
       owner = "nextcloud";
       group = "nextcloud";
     };
-    prometheus-nextcloud = {
-      owner = config.services.prometheus.exporters.nextcloud.user;
-      inherit (config.services.prometheus.exporters.nextcloud) group;
-    };
-    prometheus-web-config = {
-      owner = "prometheus";
-      group = "prometheus";
-    };
-    prometheus-fritzbox = {};
     # GitHub access token is stored on all systems with group right for nixbld
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
@@ -39,11 +30,6 @@ in {
     github-write-token = {
       owner = "hydra-queue-runner";
       group = "hydra";
-    };
-    hydra-signing-key = {
-      owner = "hydra";
-      group = "hydra";
-      mode = "0440";
     };
     # mimir-env-dev = {
     #   file = ../../secrets/mimir-env-dev.age;
@@ -77,8 +63,6 @@ in {
       };
       wait-online = {ignoredInterfaces = ["enp4s0"];};
     };
-    # TODO: Prepare a PR to fix/make it configurable that upstream
-    services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.prometheus-fritzbox.path;
   };
 
   services = {
@@ -382,84 +366,6 @@ in {
       };
     };
     smartd.enable = true;
-
-    prometheus = let
-      labels = {machine = "${config.networking.hostName}";};
-    in {
-      enable = true;
-      retentionTime = "90d";
-      globalConfig = {
-        external_labels = labels;
-      };
-      webConfigFile = secrets.prometheus-web-config.path;
-      scrapeConfigs = let
-        smartctlPort = toString config.services.prometheus.exporters.smartctl.port;
-        zfsPort = toString config.services.prometheus.exporters.zfs.port;
-        zreplPort = toString (fConfig.shawn8901.zrepl.monitoringPorts config.services.zrepl);
-        fritzboxPort = toString config.services.prometheus.exporters.fritzbox.port;
-        pvePort = toString config.services.prometheus.exporters.pve.port;
-      in [
-        {
-          job_name = "zfs";
-          static_configs = [
-            {
-              targets = ["localhost:${zfsPort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "smartctl";
-          static_configs = [
-            {
-              targets = ["localhost:${smartctlPort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "zrepl";
-          static_configs = [
-            {
-              targets = ["localhost:${zreplPort}"];
-              inherit labels;
-            }
-          ];
-        }
-        {
-          job_name = "fritzbox";
-          static_configs = [
-            {
-              targets = ["localhost:${fritzboxPort}"];
-              labels = {machine = "fritz.box";};
-            }
-          ];
-        }
-        {
-          job_name = "proxmox";
-          metrics_path = "/pve";
-          params = {"target" = ["wi.clansap.org"];};
-          static_configs = [{targets = ["localhost:${toString pvePort}"];}];
-        }
-      ];
-      exporters = {
-        smartctl = {
-          enable = true;
-          listenAddress = "localhost";
-          devices = ["/dev/sda"];
-          maxInterval = "5m";
-        };
-        fritzbox = {
-          enable = true;
-          listenAddress = "localhost";
-        };
-
-        zfs = {
-          enable = true;
-          listenAddress = "localhost";
-        };
-      };
-    };
   };
   security = {
     auditd.enable = false;

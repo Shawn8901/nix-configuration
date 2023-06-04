@@ -13,49 +13,19 @@ in {
   sops.secrets = {
     root = {neededForUsers = true;};
     attic-env = {};
-    prometheus-pve = {};
     grafana-env = {
       owner = "grafana";
       group = "grafana";
     };
-    wireguard-priv-key = {};
-    wireguard-preshared-key = {};
   };
 
-  networking = let
-    wireguardListenPort = 51820;
-  in {
-    firewall.allowedUDPPorts = [wireguardListenPort];
+  networking = {
     nameservers = ["208.67.222.222" "208.67.220.220"];
     domain = "";
     useDHCP = true;
-    wg-quick.interfaces = {
-      wg0 = {
-        listenPort = wireguardListenPort;
-        privateKeyFile = secrets.wireguard-priv-key.path;
-        dns = ["192.168.11.1"] ++ config.networking.nameservers;
-        address = [" 192.168.11.204/24"];
-        peers = [
-          {
-            publicKey = "98gCbQmLB/W8Q1o1Zve/bSdZpAA1UuRvfjvXeVwEdQ4=";
-            allowedIPs = ["192.168.11.0/24"];
-            endpoint = "qy3w1d6525raac36.myfritz.net:54368";
-            presharedKeyFile = secrets.wireguard-preshared-key.path;
-            persistentKeepalive = 60;
-          }
-        ];
-      };
-    };
   };
-  systemd.services.wg-quick-wg0.serviceConfig = {
-    Restart = "on-failure";
-    RestartSec = "5s";
-  };
+
   services = {
-    wireguard.reresolve-dns = {
-      enable = true;
-      package = self'.packages.wg-reresolve-dns;
-    };
     nginx.package = pkgs.nginxQuic;
     nginx.virtualHosts."influxdb.pointjig.de" = {
       enableACME = true;
@@ -67,38 +37,11 @@ in {
         recommendedProxySettings = true;
       };
     };
-
     influxdb2 = {
       enable = true;
       settings = {
         "reporting-disabled" = true;
         "http-bind-address" = "127.0.0.1:8086";
-      };
-    };
-    prometheus = {
-      enable = true;
-      listenAddress = "127.0.0.1";
-      retentionTime = "90d";
-      globalConfig = {
-        external_labels = {machine = "${config.networking.hostName}";};
-      };
-      scrapeConfigs = let
-        pvePort = toString config.services.prometheus.exporters.pve.port;
-      in [
-        {
-          job_name = "proxmox";
-          metrics_path = "/pve";
-          params = {"target" = ["wi.clansap.org"];};
-          static_configs = [{targets = ["localhost:${toString pvePort}"];}];
-        }
-      ];
-      exporters = {
-        pve = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9221;
-          configFile = secrets.prometheus-pve.path;
-        };
       };
     };
   };
