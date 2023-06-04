@@ -56,6 +56,24 @@ in {
       enable = true;
       package = self'.packages.wg-reresolve-dns;
     };
+    nginx.virtualHosts."influxdb.pointjig.de" = {
+      enableACME = true;
+      forceSSL = true;
+      http3 = true;
+      kTLS = true;
+      locations."/" = {
+        proxyPass = "http://${config.services.influxdb2.settings.http-bind-address}";
+        recommendedProxySettings = true;
+      };
+    };
+
+    influxdb2 = {
+      enable = true;
+      settings = {
+        "reporting-disabled" = true;
+        "http-bind-address" = "127.0.0.1:8086";
+      };
+    };
     prometheus = {
       enable = true;
       listenAddress = "127.0.0.1";
