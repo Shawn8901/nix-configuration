@@ -99,11 +99,13 @@ in {
       package = pkgs.postgresql_14;
     };
     attic = {
+      enable = true;
       hostName = "cache.pointjig.de";
       package = attic.packages.attic;
       credentialsFile = secrets.attic-env.path;
     };
     grafana = {
+      enable = true;
       hostName = "grafana.pointjig.de";
       credentialsFile = secrets.grafana-env.path;
       datasources = [
