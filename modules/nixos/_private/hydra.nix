@@ -136,7 +136,7 @@ in {
         hostName = "localhost";
         systems = ["x86_64-linux" "i686-linux"];
         supportedFeatures = ["gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
-        maxJobs = 2;
+        maxJobs = 1;
         inherit sshUser sshKey;
       }
       {
