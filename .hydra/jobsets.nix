@@ -36,7 +36,7 @@
   };
 
   desc =
-    prJobsets
+    {"flake-update" = prJobsets;}
     // {
       "main" = mkFlakeJobset "main";
     };
