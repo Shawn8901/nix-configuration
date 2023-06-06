@@ -47,16 +47,3 @@ jobs:
           git push --force-with-lease
         env:
           GH_TOKEN: "${{ secrets.GH_TOKEN }}"
-      - name: Update custom arch branch
-        shell: bash
-        run: |
-          git checkout x86-64-v3
-          commits_ahead=$(git rev-list --count x86-64-v3..origin/nixos-unstable-custom)
-          if [ $commits_ahead -eq 0 ]
-          then
-            exit 0
-          fi
-          git rebase origin/nixos-unstable-custom
-          git push --force-with-lease
-        env:
-          GH_TOKEN: "${{ secrets.GH_TOKEN }}"
