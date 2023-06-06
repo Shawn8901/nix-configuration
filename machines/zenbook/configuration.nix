@@ -66,7 +66,6 @@ in {
     };
     nftables.enable = true;
     hosts = {
-      "192.168.11.31" = lib.attrNames hosts.tank.config.services.nginx.virtualHosts;
       "134.255.226.114" = ["pointjig"];
       "2a05:bec0:1:16::114" = ["pointjig"];
       "78.128.127.235" = ["shelter"];
@@ -276,14 +275,10 @@ in {
       "zrepl/zenbook.crt".source = ../../files/public_certs/zrepl/zenbook.crt;
       "zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
     };
-    variables = {
-      AMD_VULKAN_ICD = "RADV";
-      MOZ_ENABLE_WAYLAND = "1";
-      MOZ_DISABLE_RDD_SANDBOX = "1";
-      MOZ_USE_XINPUT2 = "1";
-      NIXOS_OZONE_WL = "1";
-      QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-      _JAVA_AWT_WM_NONREPARENTING = "1";
+    sessionVariables = {
+      FLAKE = "/home/shawn/dev/nix-configuration";
+      WINEFSYNC = "1";
+      WINEDEBUG = "-all";
     };
     plasma5.excludePackages = with pkgs.libsForQt5; [kwrited elisa ktnef];
   };
