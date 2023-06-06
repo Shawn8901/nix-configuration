@@ -16,24 +16,42 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: "${{ secrets.GH_TOKEN }}"
-      - name: Install nix
-        uses: ./.github/actions/setup-env
-        with:
-          github_token: "${{ secrets.GH_TOKEN }}"
-          netrc_content: "${{ secrets.NETRC_CONTENT }}"
-          setup_cachix: false
-      - name: Update flake
-        run: nix flake update
-      - name: Check Flake
-        run: nix flake check --allow-import-from-derivation
       - name: Set up git
         shell: bash
         run: |
           git config user.email git@pointjig.de
           git config user.name "Git Bot"
-      - name: Create commit and push to staging branch
+      - name: Install nix
+        uses: ./.github/actions/setup-env
+        with:
+          github_token: "${{ secrets.GH_TOKEN }}"
+          netrc_content: "${{ secrets.NETRC_CONTENT }}"
+      - name: Update flake
         shell: bash
         run: |
+          has_pr_open=$(gh pr list --label CI --json id)
+          if [ $has_pr_open != "[]" ]
+          then
+            echo "There is already a update PR, dont create a new one."
+            exit 0
+          fi
+
+          nix flake update
+          nix flake check
+
           git diff-index --quiet HEAD -- && echo "no changes" && exit 0
-          git commit -am "flake.lock: Update"
-          git push origin HEAD:refs/heads/staging --force
+
+          git switch -c update-flake_$(date -I)
+
+          git commit -am "flake.lock: Update $(date -I)"
+
+          git push -u origin update-flake_$(date -I)
+          PR=$(gh pr create \
+          --assignee Shawn8901 \
+          --base main \
+          --body "Automatic package update for flake.lock on $(date -I)" \
+          --label bot --label CI \
+          --fill \
+          --title "Update for flake.lock $(date -I)")
+        env:
+          GH_TOKEN: ${{ github.token }}
