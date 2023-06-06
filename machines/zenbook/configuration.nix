@@ -1,4 +1,5 @@
 {
+  self',
   self,
   pkgs,
   lib,
@@ -7,56 +8,17 @@
   inputs,
   ...
 }: let
-  fPkgs = self.packages.${system};
+  fPkgs = self'.packages;
   hosts = self.nixosConfigurations;
-
   inherit (config.sops) secrets;
-  inherit (pkgs.hostPlatform) system;
-
-  # https://github.com/NixOS/nixpkgs/pull/195521/files
-  fontsPkg = pkgs: (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
-    mkdir -p "$out/share/fonts"
-    font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-    find ${toString config.fonts.fonts} -regex "$font_regexp" \
-      -exec ln -sf -t "$out/share/fonts" '{}' \;
-  '');
 in {
   sops.secrets = {
     zrepl = {restartUnits = ["zrepl.service"];};
     samba = {sopsFile = ./../../files/secrets-desktop.yaml;};
   };
 
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "deezer"
-      "discord"
-      "exodus"
-      "steam"
-      "steam-run"
-      "steam-original"
-      "vscode"
-      "vscode-extension-MS-python-vscode-pylance"
-      "tampermonkey"
-      "betterttv"
-    ];
-
-  nixpkgs.config.packageOverrides = pkgs: {
-    steam = pkgs.steam.override {
-      extraPkgs = pkgs:
-        with pkgs; [
-          # Victoria 3
-          ncurses
-          # Universim
-          (fontsPkg pkgs)
-        ];
-    };
-  };
-
   networking = {
     firewall = {
-      allowedUDPPortRanges = [];
-      allowedTCPPorts = [];
-      allowedTCPPortRanges = [];
       logReversePathDrops = true;
       checkReversePath = false;
     };
@@ -80,56 +42,14 @@ in {
 
   environment.systemPackages = with pkgs; [
     cifs-utils
-    plasma5Packages.skanlite
-    plasma5Packages.ark
-    plasma5Packages.kate
-    plasma5Packages.kalk
-    plasma5Packages.kmail
-    plasma5Packages.kdeplasma-addons
     zenmonitor
-    nixpkgs-review
   ];
-
-  fonts.fontconfig = {
-    defaultFonts = {
-      serif = ["Noto Serif"];
-      sansSerif = ["Noto Sans"];
-      monospace = ["Noto Sans Mono"];
-    };
-  };
 
   services = {
     udev = {
       packages = [pkgs.libmtp.out];
       extraRules = ''
       '';
-    };
-    xserver = {
-      enable = true;
-      layout = "de";
-      videoDrivers = ["amdgpu"];
-      displayManager.sddm = {
-        enable = true;
-        autoNumlock = true;
-        #package = self.packages.${system}.sddm-git;
-        #         settings = {
-        #           General = {
-        #             InputMethod = "";
-        # #            DisplayServer = "wayland";
-        #             GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
-        #           };
-        #           Wayland = {
-        #             CompositorCommand = "/run/wrappers/bin/kwin_wayland --no-lockscreen";
-        #           };
-        #         };
-      };
-      displayManager.defaultSession = "plasmawayland";
-      desktopManager.plasma5 = {
-        enable = true;
-        phononBackend = "vlc";
-      };
-      desktopManager.xterm.enable = false;
-      excludePackages = [pkgs.xterm];
     };
     openssh = {
       enable = true;
@@ -176,9 +96,9 @@ in {
             in {
               type = "tls";
               address = "tank.fritz.box:${toString zreplPort}";
-              ca = "/etc/zrepl/tank.crt";
-              cert = "/etc/zrepl/zenbook.crt";
-              key = "/etc/zrepl/zenbook.key";
+              ca = ../../files/public_certs/zrepl/tank.crt;
+              cert = ../../files/public_certs/zrepl/zenbook.crt;
+              key = secrets.zrepl.path;
               server_cn = "tank";
             };
             send = {
@@ -211,76 +131,27 @@ in {
         ];
       };
     };
-    avahi = {
-      enable = true;
-      nssmdns = true;
-      openFirewall = true;
-    };
-    journald.extraConfig = ''
-      SystemMaxUse=100M
-      SystemMaxFileSize=50M
-    '';
     acpid.enable = true;
     upower.enable = true;
-    pipewire = {
-      enable = true;
-      pulse.enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-    };
-  };
-  security = {
-    auditd.enable = false;
-    audit.enable = false;
-    pam.services.sddm.enableKwallet = true;
   };
   hardware = {
-    bluetooth.enable = true;
     sane.enable = true;
     keyboard.zsa.enable = true;
-    pulseaudio.enable = false;
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-      extraPackages = with pkgs; [libva];
-      extraPackages32 = with pkgs.pkgsi686Linux; [libva];
-    };
     asus-touchpad-numpad = {
       enable = true;
       package = fPkgs.asus-touchpad-numpad-driver;
       model = "ux433fa";
     };
   };
-  sound.enable = false;
   systemd.tmpfiles.rules = ["d /media/nas 0750 shawn users -"];
 
-  programs = {
-    steam = {
-      enable = true;
-      extraCompatPackages = [fPkgs.proton-ge-custom];
-    };
-    dconf.enable = true;
-    ssh.startAgent = true;
-    ausweisapp = {
-      enable = true;
-      openFirewall = true;
-    };
-  };
-
   environment = {
-    etc = {
-      "zrepl/zenbook.key".source = secrets.zrepl.path;
-      "samba/credentials_shawn".source = secrets.samba.path;
-      "zrepl/zenbook.crt".source = ../../files/public_certs/zrepl/zenbook.crt;
-      "zrepl/tank.crt".source = ../../files/public_certs/zrepl/tank.crt;
-    };
+    etc."samba/credentials_shawn".source = secrets.samba.path;
     sessionVariables = {
       FLAKE = "/home/shawn/dev/nix-configuration";
       WINEFSYNC = "1";
       WINEDEBUG = "-all";
     };
-    plasma5.excludePackages = with pkgs.libsForQt5; [kwrited elisa ktnef];
   };
   users.users.shawn = {
     extraGroups = ["video" "audio" "scanner" "lp" "networkmanager" "nixbld"];
