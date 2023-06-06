@@ -331,22 +331,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-x86-64-v3": {
-      "locked": {
-        "lastModified": 1685928929,
-        "narHash": "sha256-57vKPzTwO9NP3hxPMv7aib9a+7xKT77NkHAtXlOXORA=",
-        "owner": "Shawn8901",
-        "repo": "nixpkgs",
-        "rev": "17bdc54b9e17096e5181c31cbafc33f224d115a9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Shawn8901",
-        "ref": "x86-64-v3",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "attic": "attic",
@@ -360,7 +344,6 @@
         "nh": "nh",
         "nixpkgs": "nixpkgs",
         "nixpkgs-23_05": "nixpkgs-23_05",
-        "nixpkgs-x86-64-v3": "nixpkgs-x86-64-v3",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "sops-nix": "sops-nix",
         "stfc-bot": "stfc-bot"
