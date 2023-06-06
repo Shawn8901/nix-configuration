@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
-    nixpkgs-x86-64-v3.url = "github:Shawn8901/nixpkgs/x86-64-v3";
     nixpkgs-23_05.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
@@ -95,12 +94,4 @@
         };
       };
     };
-
-  #   hydraJobs = {
-  #     nixos = mapAttrs (_: cfg: cfg.config.system.build.toplevel) (filterAttrs (name: _: !builtins.elem name ["pointalpha-vm"]) nixosConfigurations);
-  #     "flake-update" = pkgs.releaseTools.aggregate {
-  #       name = "flake-update";
-  #       meta = {schedulingPriority = 50;};
-  #       constituents = map (n: "nixos." + n) (builtins.attrNames hydraJobs.nixos);
-  #     };
 }

@@ -21,7 +21,6 @@ in {
     };
 
     pointalpha = {
-      nixpkgs = inputs.nixpkgs-x86-64-v3;
       profiles = ["desktop" "optimized" "gaming"];
       homeManager.shawn = {
         profiles = ["base" "development" "browser" "finance"];
