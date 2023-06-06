@@ -1,0 +1,30 @@
+{
+  "enabled": 1,
+  "hidden": false,
+  "description": "system flake",
+  "nixexprinput": "nixexpr",
+  "nixexprpath": ".hydra/jobsets.nix",
+  "checkinterval": 60,
+  "schedulingshares": 100,
+  "enableemail": false,
+  "emailoverride": "",
+  "keepnr": 3,
+  "type": 0,
+  "inputs": {
+    "nixexpr": {
+      "value": "https://github.com/shawn8901/nix-configuration pr_test",
+      "type": "git",
+      "emailresponsible": false
+    },
+    "nixpkgs": {
+      "value": "https://github.com/NixOS/nixpkgs 7409480d5c8584a1a83c422530419efe4afb0d19",
+      "type": "git",
+      "emailresponsible": false
+    },
+    "pulls": {
+      "type": "githubpulls",
+      "value": "shawn8901 nix-configuration",
+      "emailresponsible": false
+    }
+  }
+}
