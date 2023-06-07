@@ -8,6 +8,12 @@
 }: let
   fPkgs = self'.packages;
 in {
+  sops = {
+    secrets = {
+      attic = {path = "${config.xdg.configHome}/attic/config.toml";};
+    };
+  };
+
   home.packages = with pkgs; [alejandra nil nix-tree] ++ [fPkgs.generate-zrepl-ssl] ++ [inputs'.nh.packages.default];
 
   programs.git = {

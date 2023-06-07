@@ -124,7 +124,7 @@ in {
             ++ lib.optionals (builtins.pathExists darlings) [darlings]
             ++ lib.optionals (conf.homeManager != {}) [
               inputs.home-manager.nixosModule
-              {
+              ({config, ...}: {
                 home-manager = {
                   useGlobalPkgs = true;
                   useUserPackages = true;
@@ -134,15 +134,28 @@ in {
                     ++ (attrValues self.flakeModules.homeManager);
                   users =
                     mapAttrs (
-                      name: hmConf: {
-                        imports = generateModulesFromHmProfiles hmConf.profiles;
+                      name: hmConf: let
+                        user = config.users.users.${name};
+                      in {
+                        imports =
+                          [
+                            ({config, ...}: {
+                              sops = {
+                                age.keyFile = "${config.xdg.configHome}/sops/age/keys.txt";
+                                defaultSopsFile = "${configDir}/secrets-home.yaml";
+                                defaultSymlinkPath = "/run/user/${toString user.uid}/secrets";
+                                defaultSecretsMountPoint = "/run/user/${toString user.uid}/secrets.d";
+                              };
+                            })
+                          ]
+                          ++ (generateModulesFromHmProfiles hmConf.profiles);
                         home.stateVersion = hmConf.stateVersion;
                         nix.registry.nixpkgs.flake = conf.nixpkgs;
                       }
                     )
                     conf.homeManager;
                 };
-              }
+              })
             ];
         })
   );
