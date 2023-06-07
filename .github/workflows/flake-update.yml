@@ -47,7 +47,6 @@ jobs:
 
           git push -u origin update-flake_$(date -I)
           PR=$(gh pr create \
-          --assignee Shawn8901 \
           --base main \
           --body "Automatic package update for flake.lock on $(date -I)" \
           --label bot --label CI \

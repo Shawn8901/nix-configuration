@@ -68,11 +68,10 @@ jobs:
           git switch -c updates-${{ matrix.package }}_$(date -I)
           git push -u origin updates-${{ matrix.package }}_$(date -I)
           PR=$(gh pr create \
-          --assignee Shawn8901 \
           --base main \
           --body "Automatic package update for ${{ matrix.package }} on $(date -I)" \
           --fill \
-          --label bot \
+          --label bot --label package \
           --title "Package update for ${{ matrix.package }} $(date -I)")
           gh pr merge $PR --merge --delete-branch
         env:
