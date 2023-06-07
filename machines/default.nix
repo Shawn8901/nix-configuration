@@ -21,7 +21,11 @@ in {
     };
 
     pointalpha = {
-      profiles = ["desktop" "optimized" "gaming"];
+      profiles = [
+        "desktop"
+        # "optimized"
+        "gaming"
+      ];
       homeManager.shawn = {
         profiles = ["base" "development" "browser" "finance"];
       };
