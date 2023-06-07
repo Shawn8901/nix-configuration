@@ -29,11 +29,22 @@ jobs:
       - name: Update flake
         shell: bash
         run: |
-          has_pr_open=$(gh pr list --label CI --json id)
+          has_pr_open=$(gh pr list --label CI --json number)
           if [ $has_pr_open != "[]" ]
           then
             echo "There is already a update PR, dont create a new one."
+
+            gh pr checkout $(gh pr list --label CI  --json number | jq ".[].number")
+            commits_ahead=$(git rev-list --count HEAD..origin/main)
+
+            if [ $commits_ahead -ne 0 ]
+            then
+              git rebase origin/main
+              git push --force-with-lease
+            fi
+
             exit 0
+
           fi
 
           nix flake update
