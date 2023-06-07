@@ -71,14 +71,21 @@ in {
       };
 
       hydra = let
-        advance_branch = pkgs.writeScriptBin "advance_branch" ''
-          ${pkgs.curl}/bin/curl \
-          -X POST \
+        merge_pr = pkgs.writeScriptBin "merge_pr" ''
+          job_name=$(${lib.getExe pkgs.jq} ".jobset | tonumber" $HYDRA_JSON)
+          if [[ "$job_name" -eq "main" ]]; then
+            echo "Job $job_name is not a PR but the main branch."
+            exit 0
+          fi
+          echo "Job $job_name is a PR merge back to main branch."
+
+          ${lib.getExe pkgs.curl} -L \
+          -X PUT \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer $(<${cfg.writeTokenFile})" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/shawn8901/nix-configuration/merges \
-          -d '{"base":"main","head":"staging","commit_message":"Built flake update!"}'
+          https://api.github.com/repos/shawn8901/nix-configuration/pulls/$job_name/merge \
+          -d '{"merge_method":"rebase"}'
         '';
       in {
         enable = true;
@@ -102,8 +109,8 @@ in {
             shawn8901 = Bearer #github_token#
           </github_authorization>
           <runcommand>
-            job = *:*:flake-update
-            command = ${advance_branch}/bin/advance_branch
+            job = *:*:merge-pr
+            command = ${lib.getExe merge_pr}
           </runcommand>
         '';
       };

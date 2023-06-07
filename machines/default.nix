@@ -88,10 +88,10 @@ in {
 
   config.flake.hydraJobs = {
     nixos = lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) config.flake.nixosConfigurations;
-    "flake-update" = withSystem "x86_64-linux" (
+    "merge-pr" = withSystem "x86_64-linux" (
       {pkgs, ...}:
         pkgs.releaseTools.aggregate {
-          name = "flake-update";
+          name = "merge-pr";
           meta = {schedulingPriority = 50;};
           constituents = map (n: "nixos." + n) (builtins.attrNames config.flake.hydraJobs.nixos);
         }
