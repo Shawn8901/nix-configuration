@@ -71,16 +71,20 @@ in {
       };
 
       hydra = let
-        advance_branch = pkgs.writeScriptBin "advance_branch" ''
+        merge_pr = pkgs.writeScriptBin "merge_pr" ''
           echo $HYDRA_JSON
-          cat $HYDRA_JSON
-          # ${pkgs.curl}/bin/curl \
-          # -X POST \
-          # -H "Accept: application/vnd.github+json" \
-          # -H "Authorization: Bearer $(<${cfg.writeTokenFile})" \
-          # -H "X-GitHub-Api-Version: 2022-11-28" \
-          # https://api.github.com/repos/shawn8901/nix-configuration/merges \
-          # -d '{"base":"main","head":"staging","commit_message":"Built flake update!"}'
+          job_name=''$(${lib.getExe pkgs.jq} ".jobset" $HYDRA_JSON)
+          if [[ "$job_name"=="main" ]]; then
+            exit 0
+          fi
+
+          ${lib.getExe pkgs.curl} -L \
+          -X PUT \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $(<${cfg.writeTokenFile})" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/shawn8901/nix-configuration/pulls/''$()/merge \
+          -d '{"merge_method":"rebase"}'
         '';
       in {
         enable = true;
@@ -104,8 +108,8 @@ in {
             shawn8901 = Bearer #github_token#
           </github_authorization>
           <runcommand>
-            job = *:*:flake-update
-            command = ${advance_branch}/bin/advance_branch
+            job = *:*:merge-pr
+            command = ${lib.getExe merge_pr}
           </runcommand>
         '';
       };

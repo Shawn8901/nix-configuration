@@ -12,7 +12,7 @@
   "type": 0,
   "inputs": {
     "nixexpr": {
-      "value": "https://github.com/shawn8901/nix-configuration pr_test",
+      "value": "https://github.com/shawn8901/nix-configuration main",
       "type": "git",
       "emailresponsible": false
     },
