@@ -104,7 +104,7 @@ in {
             shawn8901 = Bearer #github_token#
           </github_authorization>
           <runcommand>
-            job = *:staging:flake-update
+            job = *:*:flake-update
             command = ${advance_branch}/bin/advance_branch
           </runcommand>
         '';
