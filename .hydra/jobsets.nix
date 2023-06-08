@@ -12,7 +12,7 @@
         enabled = 1;
         hidden = false;
         description = "PR ${num}: ${info.title}";
-        checkinterval = 30;
+        checkinterval = 60;
         schedulingshares = 20;
         enableemail = false;
         emailoverride = "";
@@ -24,7 +24,7 @@
     prs;
   mkFlakeJobset = branch: {
     description = "Build ${branch}";
-    checkinterval = "60";
+    checkinterval = "3600";
     enabled = "1";
     schedulingshares = 100;
     enableemail = false;

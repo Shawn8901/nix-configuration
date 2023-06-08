@@ -4,7 +4,7 @@
   "description": "system flake",
   "nixexprinput": "nixexpr",
   "nixexprpath": ".hydra/jobsets.nix",
-  "checkinterval": 60,
+  "checkinterval": 3600,
   "schedulingshares": 100,
   "enableemail": false,
   "emailoverride": "",
