@@ -13,7 +13,7 @@ in {
     };
   };
 
-  home.packages = with pkgs; [alejandra nil nix-tree] ++ [fPkgs.generate-zrepl-ssl];
+  home.packages = with pkgs; [alejandra nil nix-tree nixpkgs-review] ++ [fPkgs.generate-zrepl-ssl];
 
   programs.vscode = {
     enable = true;
@@ -125,15 +125,15 @@ in {
     matchBlocks = {
       tank = {
         hostname = "tank";
-        user = "shawh";
+        user = "shawn";
       };
       shelter = {
         hostname = "shelter.pointjig.de";
-        user = "shawh";
+        user = "shawn";
       };
       cache = {
         hostname = "cache.pointjig.de";
-        user = "shawh";
+        user = "shawn";
       };
       sap = {
         hostname = "clansap.org";
@@ -146,7 +146,7 @@ in {
 
       pointjig = {
         hostname = "pointjig.de";
-        user = "shawh";
+        user = "shawn";
       };
       sapsrv01 = {
         hostname = "sapsrv01.clansap.org";
