@@ -37,9 +37,9 @@ jobs:
             gh pr checkout $(gh pr list --label CI  --json number | jq ".[].number")
             commits_ahead=$(git rev-list --count HEAD..origin/main)
             echo "Commits ahead: $commits_ahead"
-            git log --oneline 
+            git log --oneline -5
             echo "_---------"
-            git log --oneline origin/main
+            git log --oneline -5 origin/main
             if [ $commits_ahead -ne 0 ]
             then
               git fetch origin
