@@ -45,6 +45,7 @@ in {
     zenmonitor
   ];
 
+  nix.package = pkgs.nixVersions.nix_2_16;
   services = {
     udev = {
       packages = [pkgs.libmtp.out];
@@ -153,7 +154,5 @@ in {
       WINEDEBUG = "-all";
     };
   };
-  users.users.shawn = {
-    extraGroups = ["video" "audio" "scanner" "lp" "networkmanager" "nixbld"];
-  };
+  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager"];
 }
