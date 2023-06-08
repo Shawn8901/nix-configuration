@@ -8,6 +8,10 @@
   config.shawn8901.profiles = {
     home-manager = {
       base.modules = ["base.nix"];
+      desktop = {
+        profiles = ["base"];
+        modules = ["desktop.nix"];
+      };
       development.modules = ["development.nix"];
       browser.modules = ["browser.nix"];
       finance.modules = ["finance.nix"];

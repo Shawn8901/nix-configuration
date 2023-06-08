@@ -12,42 +12,11 @@ in {
     enableZshIntegration = true;
   };
 
-  xdg.enable = true;
-  xdg.mime.enable = true;
-  xdg.configFile."chromium-flags.conf".text = ''
-    --ozone-platform-hint=auto
-    --enable-features=WaylandWindowDecorations
-  '';
-  services = {
-    nextcloud-client = {
-      enable = true;
-      startInBackground = true;
-    };
-    gpg-agent = {
-      enable = true;
-      pinentryFlavor = "qt";
-    };
+  programs.git = {
+    enable = true;
+    userName = "Shawn8901";
+    userEmail = "shawn8901@googlemail.com";
+    ignores = ["*.swp"];
+    extraConfig = {init = {defaultBranch = "main";};};
   };
-
-  home.packages = with pkgs;
-    [
-      samba
-      nextcloud-client
-      keepassxc
-      (discord.override {nss = pkgs.nss_latest;})
-      teamspeak_client
-      signal-desktop
-      wally-cli
-      vlc
-      plasma-integration
-      libreoffice-qt
-      krita
-    ]
-    ++ (with fPkgs; [
-      deezer
-      nas
-      rogerrouter
-      s25rttr
-      vdhcoapp
-    ]);
 }

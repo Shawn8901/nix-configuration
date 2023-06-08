@@ -12,6 +12,7 @@ in {
   config.shawn8901.nixosConfigurations = {
     cache = {
       profiles = ["server" "managed-user"];
+      homeManager.shawn.profiles = ["base"];
       hostPlatform.system = "aarch64-linux";
       nixpkgs = inputs.nixpkgs-23_05;
     };
@@ -23,11 +24,11 @@ in {
     pointalpha = {
       profiles = [
         "desktop"
-        # "optimized"
+        "optimized"
         "gaming"
       ];
       homeManager.shawn = {
-        profiles = ["base" "development" "browser" "finance"];
+        profiles = ["desktop" "development" "browser" "finance"];
       };
       unfreeSoftware = [
         "steam"
@@ -45,6 +46,7 @@ in {
     };
     pointjig = {
       profiles = ["server" "managed-user"];
+      homeManager.shawn.profiles = ["base"];
       nixpkgs = inputs.nixpkgs-23_05;
       extraModules = [
         inputs.simple-nixos-mailserver.nixosModules.default
@@ -54,10 +56,12 @@ in {
     };
     shelter = {
       profiles = ["server" "managed-user"];
+      homeManager.shawn.profiles = ["base"];
       nixpkgs = inputs.nixpkgs-23_05;
     };
     tank = {
       profiles = ["server" "managed-user"];
+      homeManager.shawn.profiles = ["base"];
       nixpkgs = inputs.nixpkgs-23_05;
       extraModules = [
         inputs.mimir.nixosModules.default
@@ -67,7 +71,7 @@ in {
     zenbook = {
       profiles = ["desktop" "gaming"];
       homeManager.shawn = {
-        profiles = ["base" "development" "browser"];
+        profiles = ["desktop" "development" "browser"];
       };
       unfreeSoftware = [
         "steam"

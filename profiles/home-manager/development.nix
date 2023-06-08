@@ -15,14 +15,6 @@ in {
 
   home.packages = with pkgs; [alejandra nil nix-tree] ++ [fPkgs.generate-zrepl-ssl];
 
-  programs.git = {
-    enable = true;
-    userName = "Shawn8901";
-    userEmail = "shawn8901@googlemail.com";
-    ignores = ["*.swp"];
-    extraConfig = {init = {defaultBranch = "main";};};
-  };
-
   programs.vscode = {
     enable = true;
     enableExtensionUpdateCheck = false;

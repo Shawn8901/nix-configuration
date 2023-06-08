@@ -48,12 +48,7 @@
     mutableUsers = false;
     defaultUserShell = pkgs.zsh;
     users = {
-      root = {
-        passwordFile = config.sops.secrets.root.path;
-        openssh.authorizedKeys.keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
-        ];
-      };
+      root.passwordFile = config.sops.secrets.root.path;
       shawn = {
         passwordFile = config.sops.secrets.shawn.path;
         isNormalUser = true;
