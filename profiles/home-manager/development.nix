@@ -3,7 +3,6 @@
   config,
   lib,
   pkgs,
-  inputs',
   ...
 }: let
   fPkgs = self'.packages;
@@ -14,7 +13,7 @@ in {
     };
   };
 
-  home.packages = with pkgs; [alejandra nil nix-tree] ++ [fPkgs.generate-zrepl-ssl] ++ [inputs'.nh.packages.default];
+  home.packages = with pkgs; [alejandra nil nix-tree] ++ [fPkgs.generate-zrepl-ssl];
 
   programs.git = {
     enable = true;

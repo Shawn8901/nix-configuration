@@ -1,4 +1,5 @@
 {
+  inputs',
   pkgs,
   lib,
   ...
@@ -25,13 +26,16 @@
 
   services.lvm.enable = false;
 
-  environment.systemPackages = with pkgs; [
-    git
-    htop
-    nano
-    vim
-    sops
-  ];
+  environment.sessionVariables.FLAKE = lib.mkDefault "github:shawn8901/nix-configuration";
+  environment.systemPackages = with pkgs;
+    [
+      git
+      htop
+      nano
+      vim
+      sops
+    ]
+    ++ [inputs'.nh.packages.default];
 
   services = {
     journald.extraConfig = ''
