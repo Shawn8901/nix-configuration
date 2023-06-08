@@ -2,7 +2,7 @@ name: Package Updater
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "5 1 * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -72,6 +72,5 @@ jobs:
           --fill \
           --label bot --label package \
           --title "Package update for ${{ matrix.package }} $(date -I)")
-          gh pr merge $PR --merge --delete-branch
         env:
           GH_TOKEN: ${{ github.token }}
