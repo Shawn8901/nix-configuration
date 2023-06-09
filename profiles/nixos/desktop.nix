@@ -30,11 +30,11 @@
       wireplumber.enable = true;
     };
     xserver = {
-      enable = true;
+      enable = lib.mkDefault true;
       layout = "de";
       videoDrivers = ["amdgpu"];
       displayManager.sddm = {
-        enable = true;
+        enable = lib.mkDefault true;
         autoNumlock = true;
         settings = {
           General = {
@@ -57,7 +57,6 @@
     rtkit.enable = true;
     auditd.enable = false;
     audit.enable = false;
-    pam.services.sddm.enableKwallet = true;
   };
 
   programs = {

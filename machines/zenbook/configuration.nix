@@ -155,4 +155,10 @@ in {
     };
   };
   users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager"];
+
+  services.xserver.displayManager.sddm.enable = false;
+  programs.qtgreet = {
+    package = fPkgs.qtgreet;
+    enable = true;
+  };
 }
