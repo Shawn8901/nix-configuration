@@ -7,7 +7,8 @@
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
       url = "github:zhaofengli/attic";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-23_05";
+      inputs.nixpkgs-stable.follows = "nixpkgs-23_05";
       inputs.flake-utils.follows = "flake-utils";
       inputs.flake-compat.follows = "flake-compat";
     };
