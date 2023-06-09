@@ -72,6 +72,8 @@ in {
 
       hydra = let
         merge_pr = pkgs.writeScriptBin "merge_pr" ''
+          echo $HYDRA_JSON
+          cat $$HYDRA_JSON
           job_name=$(${lib.getExe pkgs.jq} ".jobset | tonumber" $HYDRA_JSON)
           if [[ "$job_name" -eq "main" ]]; then
             echo "Job $job_name is not a PR but the main branch."
