@@ -1,31 +1,33 @@
 {
   self',
+  config,
   lib,
+  pkgs,
   ...
 }: let
   fPkgs = self'.packages;
 in {
-  nixpkgs.config.packageOverrides = pkgs: {
-    steam = pkgs.steam.override {
-      extraPkgs = pkgs:
-        with pkgs; [
-          # Victoria 3
-          ncurses
-          # Fix fonts for Unity games
-          # https://github.com/NixOS/nixpkgs/pull/195521/files
-          (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
-            mkdir -p "$out/share/fonts"
-            font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-            find ${toString [pkgs.liberation_ttf pkgs.dejavu_fonts]} -regex "$font_regexp" \
-              -exec ln -sf -t "$out/share/fonts" '{}' \;
-          '')
-        ];
-    };
-  };
-
   programs = {
     steam = {
       enable = true;
+      package = pkgs.steam-small.override {
+        extraEnv = {
+          AMD_VULKAN_ICD = config.environment.sessionVariables.AMD_VULKAN_ICD;
+        };
+        extraLibraries = p:
+          with p; [
+            # Fix Unity Fonts
+            (runCommand "share-fonts" {preferLocalBuild = true;} ''
+              mkdir -p "$out/share/fonts"
+              font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+              find ${toString [liberation_ttf dejavu_fonts]} -regex "$font_regexp" \
+                -exec ln -sf -t "$out/share/fonts" '{}' \;
+            '')
+
+            # https://nixpk.gs/pr-tracker.html?pr=236606
+            attr
+          ];
+      };
       extraCompatPackages = [fPkgs.proton-ge-custom];
     };
     haguichi.enable = false;
