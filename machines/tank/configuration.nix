@@ -64,7 +64,7 @@ in {
       wait-online = {ignoredInterfaces = ["enp4s0"];};
     };
   };
-
+  nix.settings.cores = 4;
   services = {
     openssh = {
       hostKeys = [
