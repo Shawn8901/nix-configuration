@@ -78,7 +78,7 @@ in {
     enable = true;
     fqdn = "mail.pointjig.de";
     domains = ["pointjig.de"];
-    certificateScheme = 3; # Upgrade to "acme-nginx";
+    certificateScheme = "acme-nginx";
     loginAccounts = {
       "shawn@pointjig.de" = {
         hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
