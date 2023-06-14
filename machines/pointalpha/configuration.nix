@@ -41,11 +41,7 @@ in {
   systemd.network.wait-online.anyInterface = true;
 
   services = {
-    udev = {
-      packages = [pkgs.libmtp.out];
-      extraRules = ''
-      '';
-    };
+    udev.packages = [pkgs.libmtp.out];
     openssh = {
       enable = true;
       hostKeys = [

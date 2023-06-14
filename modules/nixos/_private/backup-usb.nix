@@ -33,11 +33,9 @@ in {
     # FIXME: Sound support shoud be configurable
     sound.enable = true;
     environment.systemPackages = with pkgs; [cifs-utils];
-    services = {
-      udev.extraRules = ''
-        SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="${cfg.device.idVendor}", ATTRS{idProduct}=="${cfg.device.idProduct}", ATTR{partition}=="${cfg.device.partition}", TAG+="systemd", ENV{SYSTEMD_WANTS}="backup-usb@%k.service"
-      '';
-    };
+    services.udev.extraRules = ''
+      SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="${cfg.device.idVendor}", ATTRS{idProduct}=="${cfg.device.idProduct}", ATTR{partition}=="${cfg.device.partition}", TAG+="systemd", ENV{SYSTEMD_WANTS}="backup-usb@%k.service"
+    '';
 
     systemd.services."backup-usb@" = let
       backupUsb = cfg.package.override {inherit (cfg) backupPath mountPoint;};

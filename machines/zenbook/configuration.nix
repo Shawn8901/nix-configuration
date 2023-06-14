@@ -47,11 +47,7 @@ in {
 
   nix.package = pkgs.nixVersions.nix_2_16;
   services = {
-    udev = {
-      packages = [pkgs.libmtp.out];
-      extraRules = ''
-      '';
-    };
+    udev.packages = [pkgs.libmtp.out];
     openssh = {
       enable = true;
       hostKeys = [
