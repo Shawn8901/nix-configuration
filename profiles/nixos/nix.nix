@@ -28,7 +28,7 @@ in {
   system.build = {inherit nixos-rebuild;};
 
   nix = {
-    package = lib.mkDefault pkgs.nix;
+    package = lib.mkDefault pkgs.nixVersions.nix_2_16;
     settings = {
       auto-optimise-store = true;
       allow-import-from-derivation = false;

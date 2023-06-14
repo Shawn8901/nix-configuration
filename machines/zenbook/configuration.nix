@@ -45,7 +45,6 @@ in {
     zenmonitor
   ];
 
-  nix.package = pkgs.nixVersions.nix_2_16;
   services = {
     udev.packages = [pkgs.libmtp.out];
     openssh = {

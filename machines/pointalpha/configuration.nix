@@ -133,7 +133,6 @@ in {
     };
   };
 
-  nix.package = pkgs.nixVersions.nix_2_13;
   nix.settings = {
     keep-outputs = true;
     keep-derivations = true;
