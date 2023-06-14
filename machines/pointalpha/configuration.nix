@@ -137,7 +137,7 @@ in {
     };
   };
 
-  nix.package = pkgs.nixVersions.nix_2_16;
+  nix.package = pkgs.nixVersions.nix_2_13;
   nix.settings = {
     keep-outputs = true;
     keep-derivations = true;
@@ -158,5 +158,5 @@ in {
     };
   };
   users.users.root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
-  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager"];
+  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager" "nixbld"];
 }

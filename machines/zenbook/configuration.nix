@@ -154,7 +154,7 @@ in {
       WINEDEBUG = "-all";
     };
   };
-  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager"];
+  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager" "nixbld"];
 
   services.xserver.displayManager.sddm.enable = false;
   programs.qtgreet = {
