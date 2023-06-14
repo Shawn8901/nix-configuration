@@ -104,7 +104,8 @@ in {
                   nixpkgs.flake = conf.nixpkgs;
                   nixos-config.flake = inputs.self;
                 };
-                nix.nixPath = ["nixpkgs=${conf.nixpkgs}"];
+                environment.etc."nix/inputs/nixpkgs".source = conf.nixpkgs.outPath;
+                nix.nixPath = ["nixpkgs=/etc/nix/inputs/nixpkgs"];
                 system.configurationRevision = self.rev or "dirty";
                 system.stateVersion = conf.stateVersion;
                 sops.defaultSopsFile = "${configDir}/secrets.yaml";
@@ -137,6 +138,7 @@ in {
                       name: hmConf: let
                         user = config.users.users.${name};
                       in {
+                        home.stateVersion = hmConf.stateVersion;
                         imports =
                           [
                             ({config, ...}: {
@@ -146,11 +148,11 @@ in {
                                 defaultSymlinkPath = "/run/user/${toString user.uid}/secrets";
                                 defaultSecretsMountPoint = "/run/user/${toString user.uid}/secrets.d";
                               };
+                              xdg.configFile."nix/inputs/nixpkgs".source = conf.nixpkgs.outPath;
+                              home.sessionVariables.NIX_PATH = "nixpkgs=${config.xdg.configHome}/nix/inputs/nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
                             })
                           ]
                           ++ (generateModulesFromHmProfiles hmConf.profiles);
-                        home.stateVersion = hmConf.stateVersion;
-                        nix.registry.nixpkgs.flake = conf.nixpkgs;
                       }
                     )
                     conf.homeManager;
