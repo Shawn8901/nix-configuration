@@ -58,7 +58,7 @@ in {
   shawn8901 = {
     postgresql = {
       enable = true;
-      package = pkgs.postgresql_14;
+      package = pkgs.postgresql_15;
     };
     attic = {
       enable = true;
