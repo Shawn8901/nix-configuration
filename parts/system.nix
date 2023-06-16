@@ -56,6 +56,10 @@ in {
                   type = types.listOf types.str;
                   default = [];
                 };
+                hmInput = mkOption {
+                  type = types.unspecified;
+                  default = inputs.home-manager;
+                };
                 homeManager = mkOption {
                   default = {};
                   type = types.attrsOf (types.submodule (
@@ -124,7 +128,7 @@ in {
             ++ conf.extraModules
             ++ lib.optionals (builtins.pathExists darlings) [darlings]
             ++ lib.optionals (conf.homeManager != {}) [
-              inputs.home-manager.nixosModule
+              conf.hmInput.nixosModule
               ({config, ...}: {
                 home-manager = {
                   useGlobalPkgs = true;

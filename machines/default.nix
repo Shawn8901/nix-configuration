@@ -11,14 +11,15 @@
 in {
   config.shawn8901.nixosConfigurations = {
     cache = {
+      hostPlatform.system = "aarch64-linux";
+      nixpkgs = inputs.nixpkgs-stable;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      hostPlatform.system = "aarch64-linux";
-      nixpkgs = inputs.nixpkgs-23_05;
+      hmInput = inputs.home-manager-stable;
     };
     next = {
+      nixpkgs = inputs.nixpkgs-stable;
       profiles = ["server"];
-      nixpkgs = inputs.nixpkgs-23_05;
     };
 
     pointalpha = {
@@ -27,9 +28,6 @@ in {
         "optimized"
         "gaming"
       ];
-      homeManager.shawn = {
-        profiles = ["desktop" "development" "browser" "finance"];
-      };
       unfreeSoftware = [
         "steam"
         "steam-run"
@@ -43,11 +41,15 @@ in {
         "betterttv"
         "teamviewer"
       ];
+      homeManager.shawn = {
+        profiles = ["desktop" "development" "browser" "finance"];
+      };
     };
     pointjig = {
+      nixpkgs = inputs.nixpkgs-stable;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      nixpkgs = inputs.nixpkgs-23_05;
+      hmInput = inputs.home-manager-stable;
       extraModules = [
         inputs.simple-nixos-mailserver.nixosModules.default
         inputs.mimir.nixosModules.default
@@ -55,14 +57,16 @@ in {
       ];
     };
     shelter = {
+      nixpkgs = inputs.nixpkgs-stable;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      nixpkgs = inputs.nixpkgs-23_05;
+      hmInput = inputs.home-manager-stable;
     };
     tank = {
+      nixpkgs = inputs.nixpkgs-stable;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      nixpkgs = inputs.nixpkgs-23_05;
+      hmInput = inputs.home-manager-stable;
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
@@ -70,9 +74,6 @@ in {
     };
     zenbook = {
       profiles = ["desktop" "gaming"];
-      homeManager.shawn = {
-        profiles = ["desktop" "development" "browser"];
-      };
       unfreeSoftware = [
         "steam"
         "steam-run"
@@ -85,6 +86,9 @@ in {
         "tampermonkey"
         "betterttv"
       ];
+      homeManager.shawn = {
+        profiles = ["desktop" "development" "browser"];
+      };
     };
   };
 
