@@ -114,7 +114,7 @@ in
         --add-flags $out/share/deezer/app.asar \
         --chdir $out/share/deezer
 
-      ln -s ${desktop}/share/applications/* $out/share/applications
+      ln -s ${desktop}/share/applications/* $out/share/applications/deezer.desktop
 
       runHook postInstall
     '';
