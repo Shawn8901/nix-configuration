@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "gh-poi";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "seachicken";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "sha256-gRNoBbAYLLMD7UJPDvQHWR6jrt7RV3C0AZLAzaw1V1w=";
+    sha256 = "sha256-Oh0l+WUj2G6EBhyhF1YVlyTsbH9eyK0R5heAfp6zUUc=";
   };
   vendorSha256 = "sha256-D/YZLwwGJWCekq9mpfCECzJyJ/xSlg7fC6leJh+e8i0=";
 
