@@ -9,7 +9,7 @@
 
   system.autoUpgrade = {
     enable = true;
-    dates = "07:00";
+    dates = "04:14";
     flake = "github:shawn8901/nix-configuration";
     allowReboot = true;
     persistent = true;
