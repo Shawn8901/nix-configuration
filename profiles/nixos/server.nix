@@ -9,7 +9,7 @@
 
   system.autoUpgrade = {
     enable = true;
-    dates = "07:00";
+    dates = "05:14";
     flake = "github:shawn8901/nix-configuration";
     allowReboot = true;
     persistent = true;
@@ -84,5 +84,5 @@
     };
   };
 
-  nix.gc.options = "--delete-older-than 3d";
+  nix.gc.options = "--delete-older-than 2d";
 }
