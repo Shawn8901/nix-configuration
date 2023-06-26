@@ -73,14 +73,15 @@ in {
       hydra = let
         merge_pr = pkgs.writeScriptBin "merge_pr" ''
           cat $HYDRA_JSON
-          job_name=$(${lib.getExe pkgs.jq} ".jobset $HYDRA_JSON)
+          echo ""
+          job_name=$(${lib.getExe pkgs.jq} ".jobset" $HYDRA_JSON | tr -d '"')
           if [[ "$job_name" -eq "main" ]]; then
             echo "Job $job_name is not a PR but the main branch."
             exit 0
           fi
-          job_name=$(${lib.getExe pkgs.jq} ". | tonumber" <<< job_name)
+          echo ""
           echo "Job $job_name is a PR merge back to main branch."
-
+          echo ""
           ${lib.getExe pkgs.curl} -L \
           -X PUT \
           -H "Accept: application/vnd.github+json" \
