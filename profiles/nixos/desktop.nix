@@ -36,12 +36,7 @@
       displayManager.sddm = {
         enable = lib.mkDefault true;
         autoNumlock = true;
-        settings = {
-          General = {
-            InputMethod = "";
-            GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
-          };
-        };
+        enableKwinWayland = true;
       };
       displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5 = {
