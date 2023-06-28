@@ -75,10 +75,18 @@ in {
           cat $HYDRA_JSON
           echo ""
           job_name=$(${lib.getExe pkgs.jq} ".jobset" $HYDRA_JSON | tr -d '"')
-          if [[ "$job_name" -eq "main" ]]; then
+          event=$(${lib.getExe pkgs.jq} ".event" $HYDRA_JSON | tr -d '"')
+          finished=$(${lib.getExe pkgs.jq} ".finished" $HYDRA_JSON | tr -d '"')
+          if [[ "$job_name" = "main" ]]; then
             echo "Job $job_name is not a PR but the main branch."
             exit 0
           fi
+
+          if [[ "$event" = "buildFinished" ]] && [[ "$finished" = "true" ]]; then
+            echo "Build was not successful. Do not merge."
+            exit 1
+          fi
+
           echo ""
           echo "Job $job_name is a PR merge back to main branch."
           echo ""
