@@ -100,7 +100,7 @@ in {
       {pkgs, ...}:
         pkgs.releaseTools.aggregate {
           name = "merge-pr";
-          meta = {schedulingPriority = 150;};
+          meta = {schedulingPriority = 10;};
           constituents = map (n: "nixos." + n) (builtins.attrNames config.flake.hydraJobs.nixos);
         }
     );
