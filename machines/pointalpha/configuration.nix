@@ -153,5 +153,5 @@ in {
     };
   };
   users.users.root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
-  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager" "nixbld"];
+  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager"];
 }

@@ -149,5 +149,6 @@ in {
       WINEDEBUG = "-all";
     };
   };
-  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager" "nixbld"];
+
+  users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager"];
 }
