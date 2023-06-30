@@ -150,10 +150,4 @@ in {
     };
   };
   users.users.shawn.extraGroups = ["video" "audio" "scanner" "lp" "networkmanager" "nixbld"];
-
-  services.xserver.displayManager.sddm.enable = false;
-  programs.qtgreet = {
-    package = fPkgs.qtgreet;
-    enable = true;
-  };
 }

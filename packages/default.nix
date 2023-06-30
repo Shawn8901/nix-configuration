@@ -28,7 +28,7 @@
         ];
       };
 
-      packages = rec {
+      packages = {
         rtc-helper = pkgs.callPackage ./shellscripts/rtc-helper.nix {};
         nas = pkgs.callPackage ./shellscripts/nas.nix {};
         backup-usb = pkgs.callPackage ./shellscripts/backup-usb.nix {};
@@ -51,13 +51,6 @@
 
         deezer = pkgs.callPackage ./deezer {};
         vdhcoapp = pkgs.callPackage ./vdhcoapp {};
-
-        dfipc = pkgs.libsForQt5.callPackage ./dfipc {};
-        dflogin1 = pkgs.libsForQt5.callPackage ./dflogin1 {};
-        dfutils = pkgs.libsForQt5.callPackage ./dfutils {};
-        dfapplications = pkgs.libsForQt5.callPackage ./dfapplications {inherit dfipc;};
-        qtgreet = pkgs.libsForQt5.callPackage ./qtgreet {inherit wayqt dfapplications dfutils dflogin1;};
-        wayqt = pkgs.libsForQt5.callPackage ./wayqt {};
       };
     in {
       packages."${system}" = packages;
