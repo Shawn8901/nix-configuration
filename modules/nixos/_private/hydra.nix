@@ -82,7 +82,7 @@ in {
             exit 0
           fi
 
-          if [[ "$event" = "buildFinished" ]] && [[ "$finished" = "true" ]]; then
+          if [[ "$event" != "buildFinished" ]] || [[ "$finished" != "true" ]]; then
             echo "Build was not successful. Do not merge."
             exit 1
           fi
