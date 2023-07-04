@@ -36,7 +36,7 @@
       displayManager.sddm = {
         enable = lib.mkDefault true;
         autoNumlock = true;
-        enableKwinWayland = true;
+        enableKwinWayland = false;
       };
       displayManager.defaultSession = "plasmawayland";
       desktopManager.plasma5 = {
