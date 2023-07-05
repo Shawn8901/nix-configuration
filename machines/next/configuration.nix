@@ -59,7 +59,7 @@ in {
       hostName = "next.clansap.org";
       adminPasswordFile = secrets.nextcloud-admin.path;
       home = "/var/lib/nextcloud";
-      package = pkgs.nextcloud25;
+      package = pkgs.nextcloud26;
       prometheus.passwordFile = secrets.prometheus-nextcloud.path;
     };
     postgresql = {
