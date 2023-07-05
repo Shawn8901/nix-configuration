@@ -80,6 +80,11 @@ in {
           apcu = false;
           memcached = false;
         };
+        phpOptions = {
+          "opcache.interned_strings_buffer" = "16";
+          "opcache.enable" = "1";
+          "opcache.save_comments" = "1";
+        };
         extraOptions."overwrite.cli.url" = "https://${cfg.hostName}";
       };
       postgresql = {
