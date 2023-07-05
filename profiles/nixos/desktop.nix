@@ -88,6 +88,7 @@
       NIXOS_OZONE_WL = "1";
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       _JAVA_AWT_WM_NONREPARENTING = "1";
+      GTK_USE_PORTAL = "1";
     };
     plasma5.excludePackages = with pkgs.plasma5Packages; [elisa khelpcenter];
   };
