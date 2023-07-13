@@ -9,7 +9,7 @@ index de51acb..e2c0b9e 100644
 -                this.powerSave.check(),
 -                this.deepLink.getSchemes().forEach((scheme) => {
 -                  external_electron_namespaceObject.app.setAsDefaultProtocolClient(
--                    scheme
+-                    scheme,
 -                  );
 -                });
 +                this.powerSave.check();
