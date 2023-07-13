@@ -21,10 +21,10 @@
     startupWMClass = "deezer";
     exec = "deezer %u";
   };
-  version = "5.30.570";
+  version = "5.30.580";
   deezer-windows-app = fetchurl {
     url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${version}";
-    hash = "sha256-xe1KWqhlDL1nS7gMXrqC2iDlNCZ40WjlzGZ06ZlehKY=";
+    hash = "sha256-oUebThUpfI0poL65kG9kesarnGqOSQFycCgSYueVlQQ=";
   };
 in
   stdenv.mkDerivation {
