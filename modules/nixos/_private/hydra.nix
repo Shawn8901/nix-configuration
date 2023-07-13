@@ -74,15 +74,14 @@ in {
         merge_pr = pkgs.writeScriptBin "merge_pr" ''
           cat $HYDRA_JSON
           echo ""
-          job_name=$(${lib.getExe pkgs.jq} ".jobset" $HYDRA_JSON | tr -d '"')
-          event=$(${lib.getExe pkgs.jq} ".event" $HYDRA_JSON | tr -d '"')
-          finished=$(${lib.getExe pkgs.jq} ".finished" $HYDRA_JSON | tr -d '"')
+          job_name=$(${lib.getExe pkgs.jq} --raw-output ".jobset" $HYDRA_JSON)
+          buildStatus=$(${lib.getExe pkgs.jq} ".buildStatus" $HYDRA_JSON)
           if [[ "$job_name" = "main" ]]; then
             echo "Job $job_name is not a PR but the main branch."
             exit 0
           fi
 
-          if [[ "$event" != "buildFinished" ]] || [[ "$finished" != "true" ]]; then
+          if [[ $buildStatus != 0 ]]; then
             echo "Build was not successful. Do not merge."
             exit 1
           fi
