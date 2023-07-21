@@ -23,11 +23,7 @@ in {
     };
 
     pointalpha = {
-      profiles = [
-        "desktop"
-        "optimized"
-        "gaming"
-      ];
+      profiles = ["desktop" "optimized" "gaming"];
       unfreeSoftware = [
         "steam"
         "steam-run"
@@ -73,7 +69,7 @@ in {
       ];
     };
     zenbook = {
-      profiles = ["desktop" "gaming"];
+      profiles = ["desktop" "optimized" "gaming"];
       unfreeSoftware = [
         "steam"
         "steam-run"
