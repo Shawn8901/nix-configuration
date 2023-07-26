@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     libsamplerate
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString ["-Wno-error=deprecated-declarations"];
+
   patches = [./cmake_file_placeholder.patch];
 
   cmakeBuildType = "Release";
