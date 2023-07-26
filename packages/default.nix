@@ -37,7 +37,6 @@
           SDL2 = pkgs.SDL2.override {withStatic = true;};
         };
         proton-ge-custom = pkgs.callPackage ./proton-ge-custom {};
-        noisetorch = pkgs.callPackage ./noisetorch {};
         pytr = pkgs.python3.pkgs.callPackage ./pytr {};
         asus-touchpad-numpad-driver = pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver {};
 
