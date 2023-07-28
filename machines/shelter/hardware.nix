@@ -8,7 +8,7 @@
 
   boot = {
     initrd.availableKernelModules = ["ata_piix" "uhci_hcd"];
-    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    kernelPackages = pkgs.linuxPackage;
     zfs.devNodes = "/dev/";
     zfs.extraPools = ["zbackup"];
     zfs.requestEncryptionCredentials = false;
