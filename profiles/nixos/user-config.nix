@@ -38,11 +38,18 @@
       bindkey '5~' kill-word
     '';
   };
-  fonts = {
-    enableDefaultFonts = !config.environment.noXlibs;
-    fontconfig.enable = !config.environment.noXlibs;
-    fonts = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
-  };
+  fonts = lib.mkMerge [
+    {fontconfig.enable = lib.mkDefault (!config.environment.noXlibs);}
+    (lib.optionalAttrs (builtins.hasAttr "packages" config.fonts) {
+      enableDefaultPackages = lib.mkDefault (!config.environment.noXlibs);
+      packages = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
+    })
+    # Remove with 23.11
+    (lib.optionalAttrs (!builtins.hasAttr "packages" config.fonts) {
+      enableDefaultFonts = !config.environment.noXlibs;
+      fonts = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
+    })
+  ];
 
   users = {
     mutableUsers = false;

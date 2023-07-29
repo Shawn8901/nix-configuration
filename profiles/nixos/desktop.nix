@@ -1,19 +1,30 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: {
-  fonts = {
-    enableDefaultFonts = lib.mkDefault true;
-    fontconfig = {
-      defaultFonts = {
-        serif = ["Noto Serif"];
-        sansSerif = ["Noto Sans"];
-        monospace = ["Noto Sans Mono"];
+  fonts = lib.mkMerge [
+    {
+      fontconfig = {
+        defaultFonts = {
+          serif = ["Noto Serif"];
+          sansSerif = ["Noto Sans"];
+          monospace = ["Noto Sans Mono"];
+        };
       };
-    };
-    fonts = [pkgs.noto-fonts];
-  };
+    }
+    (lib.optionalAttrs (builtins.hasAttr "packages" config.fonts) {
+      enableDefaultPackages = lib.mkDefault true;
+      packages = [pkgs.noto-fonts];
+    })
+    # Remove with 23.11
+    (lib.optionalAttrs (!builtins.hasAttr "packages" config.fonts) {
+      enableDefaultFonts = lib.mkDefault true;
+      fonts = [pkgs.noto-fonts];
+    })
+  ];
+
   services = {
     acpid.enable = true;
     avahi = {
