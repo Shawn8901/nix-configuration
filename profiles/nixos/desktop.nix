@@ -4,7 +4,7 @@
   ...
 }: {
   fonts = {
-    enableDefaultFonts = lib.mkDefault true;
+    enableDefaultPackages = lib.mkDefault true;
     fontconfig = {
       defaultFonts = {
         serif = ["Noto Serif"];
@@ -12,7 +12,7 @@
         monospace = ["Noto Sans Mono"];
       };
     };
-    fonts = [pkgs.noto-fonts];
+    packages = [pkgs.noto-fonts];
   };
   services = {
     acpid.enable = true;
