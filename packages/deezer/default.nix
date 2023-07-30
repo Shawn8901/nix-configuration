@@ -20,11 +20,12 @@
     mimeTypes = ["x-scheme-handler/deezer"];
     startupWMClass = "deezer";
     exec = "deezer %u";
+    startupNotify = true;
   };
-  version = "5.30.580";
+  version = "5.30.590";
   deezer-windows-app = fetchurl {
     url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${version}";
-    hash = "sha256-oUebThUpfI0poL65kG9kesarnGqOSQFycCgSYueVlQQ=";
+    hash = "sha256-hPzttlJZCGcM85CdSlfUxDA0cZR4sJ3/9R/8o7RXDhY=";
   };
 in
   stdenv.mkDerivation {
