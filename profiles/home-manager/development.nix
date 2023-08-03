@@ -22,18 +22,17 @@ in {
     mutableExtensionsDir = false;
     package = pkgs.vscode;
     extensions = with pkgs.vscode-extensions; [
+      mhutchie.git-graph
       editorconfig.editorconfig
-      esbenp.prettier-vscode
-      jnoortheen.nix-ide
       mkhl.direnv
+      usernamehw.errorlens
+
+      jnoortheen.nix-ide
+
       ms-python.python
       ms-python.vscode-pylance
 
-      mhutchie.git-graph
-      usernamehw.errorlens
-
-      rust-lang.rust-analyzer
-
+      esbenp.prettier-vscode
       wix.vscode-import-cost
     ];
     keybindings = [
