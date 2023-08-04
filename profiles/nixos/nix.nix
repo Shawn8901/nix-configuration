@@ -6,6 +6,8 @@
   ...
 }: let
   inherit (pkgs.hostPlatform) system;
+  inherit (lib) genAttrs;
+
   attic-client = inputs.attic.packages.${system}.attic-client;
   nixos-rebuild = pkgs.nixos-rebuild.override {nix = config.nix.package.out;};
 in {
@@ -26,6 +28,8 @@ in {
 
   system.disableInstallerTools = true;
   system.build = {inherit nixos-rebuild;};
+
+  users.users = genAttrs config.nix.settings.trusted-users (name: {extraGroups = [config.users.groups.nixbld.name];});
 
   nix = {
     package = lib.mkDefault pkgs.nixVersions.nix_2_16;
