@@ -38,7 +38,6 @@ in {
       allow-import-from-derivation = false;
       substituters = ["https://cache.pointjig.de/nixos" "https://nix-community.cachix.org"];
       trusted-public-keys = ["nixos:Uj2EOFZu9/Y6r6qVlxeCyiGVqyz30fMybzT3kBDsPg8=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
-      trusted-users = ["root"];
       cores = lib.mkDefault 6;
       max-jobs = lib.mkDefault 2;
       experimental-features = "nix-command flakes";
