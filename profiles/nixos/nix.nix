@@ -2,13 +2,13 @@
   pkgs,
   lib,
   config,
-  inputs,
+  inputs',
   ...
 }: let
   inherit (pkgs.hostPlatform) system;
   inherit (lib) genAttrs;
 
-  attic-client = inputs.attic.packages.${system}.attic-client;
+  attic-client = inputs'.attic.packages.attic-client;
   nixos-rebuild = pkgs.nixos-rebuild.override {nix = config.nix.package.out;};
 in {
   sops.secrets = {
