@@ -14,19 +14,15 @@ in {
         extraEnv = {
           AMD_VULKAN_ICD = config.environment.sessionVariables.AMD_VULKAN_ICD;
         };
-        extraLibraries = p:
-          with p; [
-            # Fix Unity Fonts
-            (runCommand "share-fonts" {preferLocalBuild = true;} ''
-              mkdir -p "$out/share/fonts"
-              font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-              find ${toString [liberation_ttf dejavu_fonts]} -regex "$font_regexp" \
-                -exec ln -sf -t "$out/share/fonts" '{}' \;
-            '')
-
-            # https://nixpk.gs/pr-tracker.html?pr=236606
-            attr
-          ];
+        extraLibraries = p: [
+          # Fix Unity Fonts
+          (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
+            mkdir -p "$out/share/fonts"
+            font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+            find ${toString [pkgs.liberation_ttf pkgs.dejavu_fonts]} -regex "$font_regexp" \
+              -exec ln -sf -t "$out/share/fonts" '{}' \;
+          '')
+        ];
       };
       extraCompatPackages = [fPkgs.proton-ge-custom];
     };
