@@ -7,7 +7,11 @@
   fonts = lib.mkMerge [
     {
       fontconfig = {
+        hinting.autohint = true;
+        cache32Bit = true;
+        subpixel.lcdfilter = "light";
         defaultFonts = {
+          emoji = ["Noto Color Emoji"];
           serif = ["Noto Serif"];
           sansSerif = ["Noto Sans"];
           monospace = ["Noto Sans Mono"];
