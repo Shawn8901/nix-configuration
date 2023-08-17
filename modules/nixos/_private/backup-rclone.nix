@@ -18,26 +18,26 @@ in {
         type = types.str;
       };
     };
-    config = mkIf cfg.enable {
-      systemd = {
-        services."backup-${cfg.sourceDir}" = {
-          wants = ["network-online.target"];
-          after = ["network-online.target"];
-          description = "Copy nextcloud stuff to dropbox";
-          serviceConfig = {
-            Type = "oneshot";
-            User = "shawn";
-            ExecStart = "${lib.getExe pkgs.rclone} copy ${cfg.sourceDir} ${cfg.destDir}";
-          };
+  };
+  config = mkIf cfg.enable {
+    systemd = {
+      services."backup-${cfg.sourceDir}" = {
+        wants = ["network-online.target"];
+        after = ["network-online.target"];
+        description = "Copy nextcloud stuff to dropbox";
+        serviceConfig = {
+          Type = "oneshot";
+          User = "shawn";
+          ExecStart = "${lib.getExe pkgs.rclone} copy ${cfg.sourceDir} ${cfg.destDir}";
         };
-        timers."backup-${cfg.sourceDir}" = {
-          wantedBy = ["timers.target"];
-          partOf = ["backup-${cfg.sourceDir}"];
-          timerConfig = {
-            OnCalendar = ["daily"];
-            Persistent = true;
-            OnBootSec = "15min";
-          };
+      };
+      timers."backup-${cfg.sourceDir}" = {
+        wantedBy = ["timers.target"];
+        partOf = ["backup-${cfg.sourceDir}"];
+        timerConfig = {
+          OnCalendar = ["daily"];
+          Persistent = true;
+          OnBootSec = "15min";
         };
       };
     };
