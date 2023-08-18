@@ -20,8 +20,10 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    systemd = {
-      services."backup-${cfg.sourceDir}" = {
+    systemd = let
+      serviceName = cfg.sourceDir; #"backup-${builtins.replaceStrings ["/"] ["-"] safePath}";
+    in {
+      services.${serviceName} = {
         wants = ["network-online.target"];
         after = ["network-online.target"];
         description = "Copy nextcloud stuff to dropbox";
@@ -31,9 +33,8 @@ in {
           ExecStart = "${lib.getExe pkgs.rclone} copy ${cfg.sourceDir} ${cfg.destDir}";
         };
       };
-      timers."backup-${cfg.sourceDir}" = {
+      timers.${serviceName} = {
         wantedBy = ["timers.target"];
-        partOf = ["backup-${cfg.sourceDir}"];
         timerConfig = {
           OnCalendar = ["daily"];
           Persistent = true;
