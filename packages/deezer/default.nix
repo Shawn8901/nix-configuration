@@ -22,10 +22,10 @@
     exec = "deezer %u";
     startupNotify = true;
   };
-  version = "5.30.600";
+  version = "5.30.610";
   deezer-windows-app = fetchurl {
     url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${version}";
-    hash = "sha256-sg8TOVowuYasdMnFgcxjRrMSpI/qV0fOFkqWNCe/I1w=";
+    hash = "sha256-07OwBMfe0g+7lGoWEMMmgvcMxp6gQasmnfPnhCbwDBY=";
   };
 in
   stdenv.mkDerivation {
