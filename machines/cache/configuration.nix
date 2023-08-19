@@ -24,6 +24,7 @@ in {
     domain = "";
     useDHCP = true;
   };
+  systemd.network.wait-online.anyInterface = true;
 
   services = {
     nginx.package = pkgs.nginxQuic;
