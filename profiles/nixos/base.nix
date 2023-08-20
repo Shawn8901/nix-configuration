@@ -23,6 +23,7 @@
     keyMap = "de";
   };
 
+  boot.tmp.useTmpfs = true;
   boot.tmp.cleanOnBoot = true;
 
   services.lvm.enable = false;
