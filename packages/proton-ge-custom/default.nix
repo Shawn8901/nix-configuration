@@ -6,11 +6,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "proton-ge-custom";
-  version = "GE-Proton8-11";
+  version = "GE-Proton8-12";
 
   src = fetchurl {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-ldJBwp/9Cjb5k9FBrc6iz4/rnMhU5Ayf35+kNTAvXCg=";
+    sha256 = "sha256-9ZGuHCh5yISVOr8ggo7xRtWk+MWiGY7rIEXBLiBu48M=";
   };
 
   passthru.runUpdate = true;
