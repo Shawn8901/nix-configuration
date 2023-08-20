@@ -13,10 +13,10 @@ in {
   sops.secrets = {
     root = {neededForUsers = true;};
     attic-env = {};
-    grafana-env = {
-      owner = "grafana";
-      group = "grafana";
-    };
+    # grafana-env = {
+    #   owner = "grafana";
+    #   group = "grafana";
+    # };
   };
 
   networking = {
@@ -68,7 +68,7 @@ in {
       credentialsFile = secrets.attic-env.path;
     };
     grafana = {
-      enable = true;
+      enable = false;
       hostName = "grafana.pointjig.de";
       credentialsFile = secrets.grafana-env.path;
       datasources = [
