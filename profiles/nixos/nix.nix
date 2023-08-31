@@ -9,7 +9,6 @@
   inherit (lib) genAttrs;
 
   attic = inputs'.attic.packages.attic-nixpkgs;
-  nixos-rebuild = pkgs.nixos-rebuild.override {nix = config.nix.package.out;};
 in {
   sops.secrets = {
     nix-gh-token-ro = {
@@ -29,11 +28,7 @@ in {
       nix = config.nix.package;
       clientOnly = true;
     })
-    nixos-rebuild
   ];
-
-  system.disableInstallerTools = true;
-  system.build = {inherit nixos-rebuild;};
 
   nix = {
     package = lib.mkDefault pkgs.nixVersions.nix_2_17;
