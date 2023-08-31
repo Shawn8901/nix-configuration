@@ -8,7 +8,7 @@
   inherit (pkgs.hostPlatform) system;
   inherit (lib) genAttrs;
 
-  attic-client = inputs'.attic.packages.attic-client;
+  attic = inputs'.attic.packages.attic-nixpkgs;
   nixos-rebuild = pkgs.nixos-rebuild.override {nix = config.nix.package.out;};
 in {
   sops.secrets = {
@@ -24,13 +24,19 @@ in {
     };
   };
 
-  environment.systemPackages = [attic-client nixos-rebuild];
+  environment.systemPackages = [
+    (attic.override {
+      nix = config.nix.package;
+      clientOnly = true;
+    })
+    nixos-rebuild
+  ];
 
   system.disableInstallerTools = true;
   system.build = {inherit nixos-rebuild;};
 
   nix = {
-    package = lib.mkDefault pkgs.nixVersions.nix_2_16;
+    package = lib.mkDefault pkgs.nixVersions.nix_2_17;
     settings = {
       auto-optimise-store = true;
       allow-import-from-derivation = false;
