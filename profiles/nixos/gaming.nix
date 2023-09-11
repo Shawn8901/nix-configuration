@@ -22,6 +22,7 @@ in {
             find ${toString [pkgs.liberation_ttf pkgs.dejavu_fonts]} -regex "$font_regexp" \
               -exec ln -sf -t "$out/share/fonts" '{}' \;
           '')
+          p.getent
         ];
       };
       extraCompatPackages = [fPkgs.proton-ge-custom];
