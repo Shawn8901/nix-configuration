@@ -11,6 +11,7 @@ in {
       owner = "nextcloud";
       group = "nextcloud";
     };
+    prometheus-nextcloud = {};
   };
 
   systemd = {

@@ -1,4 +1,5 @@
 {
+  self',
   pkgs,
   lib,
   config,
@@ -11,7 +12,7 @@ in {
   options = {
     shawn8901.grafana = {
       enable = mkEnableOption "Enables a preconfigured grafana instance";
-      hostName = mkOption {
+      hostname = mkOption {
         type = types.str;
         description = "full qualified hostname of the grafana instance";
       };
@@ -20,6 +21,13 @@ in {
       };
       datasources = mkOption {
         type = types.listOf types.raw;
+      };
+      declarativePlugins = mkOption {
+        type = with types; nullOr (listOf path);
+        default = null;
+      };
+      settings = mkOption {
+        type = types.attrs;
       };
     };
   };
@@ -36,7 +44,7 @@ in {
         recommendedOptimisation = true;
         recommendedTlsSettings = true;
         virtualHosts = {
-          "${config.services.grafana.settings.server.domain}" = {
+          "${cfg.hostname}" = {
             enableACME = true;
             forceSSL = true;
             http3 = true;
@@ -62,43 +70,52 @@ in {
       };
       grafana = {
         enable = true;
-        settings = {
-          server = {
-            domain = cfg.hostName;
-            http_addr = "127.0.0.1";
-            http_port = 3001;
-            root_url = "https://${cfg.hostName}/";
-            enable_gzip = true;
-          };
-          database = {
-            type = "postgres";
-            host = "/run/postgresql";
-            user = "grafana";
-            password = "$__env{DB_PASSWORD}";
-          };
-          security = {
-            admin_password = "$__env{ADMIN_PASSWORD}";
-            secret_key = "$__env{SECRET_KEY}";
-            cookie_secure = true;
-            content_security_policy = true;
-          };
-          smtp = {
-            enabled = true;
-            host = "pointjig.de:465";
-            user = "noreply@pointjig.de";
-            password = "$__env{SMTP_PASSWORD}";
-            from_address = "noreply@pointjig.de";
-          };
-          analytics = {
-            check_for_updates = false;
-            reporting_enabled = false;
-          };
-          alerting.enabled = false;
-          unified_alerting.enabled = true;
-        };
+        declarativePlugins = cfg.declarativePlugins;
+        settings =
+          {
+            server = {
+              domain = cfg.hostname;
+              http_addr = "127.0.0.1";
+              http_port = 3001;
+              root_url = "https://${cfg.hostname}/";
+              enable_gzip = true;
+            };
+            database = {
+              type = "postgres";
+              host = "/run/postgresql";
+              user = "grafana";
+              password = "$__env{DB_PASSWORD}";
+            };
+            security = {
+              admin_password = "$__env{ADMIN_PASSWORD}";
+              secret_key = "$__env{SECRET_KEY}";
+              cookie_secure = true;
+              content_security_policy = true;
+            };
+            smtp = {
+              enabled = true;
+              host = "pointjig.de:465";
+              user = "noreply@pointjig.de";
+              password = "$__env{SMTP_PASSWORD}";
+              from_address = "noreply@pointjig.de";
+            };
+            analytics = {
+              check_for_updates = false;
+              reporting_enabled = false;
+            };
+            alerting.enabled = false;
+            unified_alerting.enabled = true;
+          }
+          // cfg.settings;
         provision = {
           enable = true;
           datasources.settings.datasources = cfg.datasources;
+          datasources.settings.deleteDatasources = [
+            {
+              orgId = 1;
+              name = "localhost";
+            }
+          ];
         };
       };
     };
