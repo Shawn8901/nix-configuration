@@ -23,28 +23,18 @@ in {
         enable = mkDefault true;
         package = cfg.package;
       };
-      prometheus = {
-        scrapeConfigs = let
-          postgresPort = toString config.services.prometheus.exporters.postgres.port;
-          labels = {machine = "${config.networking.hostName}";};
-        in [
-          {
-            job_name = "postgres";
-            static_configs = [
-              {
-                targets = ["localhost:${postgresPort}"];
-                inherit labels;
-              }
-            ];
-          }
-        ];
-        exporters.postgres = {
-          enable = true;
-          listenAddress = "127.0.0.1";
-          port = 9187;
-          runAsLocalSuperUser = true;
-        };
+      prometheus.exporters.postgres = {
+        enable = true;
+        listenAddress = "127.0.0.1";
+        port = 9187;
+        runAsLocalSuperUser = true;
       };
+      vmagent.prometheusConfig.scrape_configs = [
+        {
+          job_name = "postgres";
+          static_configs = [{targets = ["localhost:${toString config.services.prometheus.exporters.postgres.port}"];}];
+        }
+      ];
     };
   };
 }

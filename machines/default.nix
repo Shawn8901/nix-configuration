@@ -16,10 +16,14 @@ in {
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
       hmInput = inputs.home-manager-stable;
+      disabledModules = ["services/monitoring/vmagent.nix"];
+      extraModules = [(inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")];
     };
     next = {
       nixpkgs = inputs.nixpkgs-stable;
       profiles = ["server"];
+      disabledModules = ["services/monitoring/vmagent.nix"];
+      extraModules = [(inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")];
     };
 
     pointalpha = {
@@ -50,13 +54,17 @@ in {
         inputs.simple-nixos-mailserver.nixosModules.default
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
+        (inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")
       ];
+      disabledModules = ["services/monitoring/vmagent.nix"];
     };
     shelter = {
       nixpkgs = inputs.nixpkgs-stable;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
       hmInput = inputs.home-manager-stable;
+      disabledModules = ["services/monitoring/vmagent.nix"];
+      extraModules = [(inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")];
     };
     tank = {
       nixpkgs = inputs.nixpkgs-stable;
@@ -66,7 +74,9 @@ in {
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
+        (inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")
       ];
+      disabledModules = ["services/monitoring/vmagent.nix"];
     };
     zenbook = {
       profiles = ["desktop" "gaming"];

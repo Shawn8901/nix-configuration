@@ -23,6 +23,8 @@ in {
       owner = "nextcloud";
       group = "nextcloud";
     };
+    prometheus-nextcloud = {};
+    prometheus-fritzbox = {};
     # GitHub access token is stored on all systems with group right for nixbld
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
@@ -52,6 +54,8 @@ in {
   };
 
   systemd = {
+    # TODO: Prepare a PR to fix/make it configurable that upstream
+    services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.prometheus-fritzbox.path;
     network = {
       enable = true;
       networks = {
@@ -79,6 +83,16 @@ in {
         }
       ];
     };
+    prometheus.exporters.fritzbox = {
+      enable = true;
+      listenAddress = "localhost";
+    };
+    vmagent.prometheusConfig.scrape_configs = [
+      {
+        targets = ["localhost:${toString config.services.prometheus.exporters.fritzbox.port}"];
+        job_name = "fritzbox";
+      }
+    ];
     zfs = {
       trim.enable = true;
       autoScrub = {

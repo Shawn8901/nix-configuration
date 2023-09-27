@@ -32,7 +32,7 @@ in {
       authConfig = (pkgs.formats.yaml {}).generate "auth.yml" {
         users = [
           {
-            username = "%{USERNAME}";
+            username = "vm";
             password = "%{PASSWORD}";
             url_prefix = "http://${config.services.victoriametrics.listenAddress}";
           }

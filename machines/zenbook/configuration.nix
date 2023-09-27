@@ -77,6 +77,15 @@ in {
       enable = true;
       package = pkgs.zrepl;
       settings = {
+        global = {
+          monitoring = [
+            {
+              type = "prometheus";
+              listen = ":9811";
+              listen_freebind = true;
+            }
+          ];
+        };
         jobs = [
           {
             name = "zenbook";

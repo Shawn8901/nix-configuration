@@ -3,20 +3,21 @@
   self',
   config,
   pkgs,
+  lib,
   inputs',
   ...
 }: let
-  hosts = self.nixosConfigurations;
   inherit (config.sops) secrets;
   inherit (inputs') attic;
 in {
   sops.secrets = {
     root = {neededForUsers = true;};
     attic-env = {};
-    # grafana-env = {
-    #   owner = "grafana";
-    #   group = "grafana";
-    # };
+    grafana-env = {
+      owner = "grafana";
+      group = "grafana";
+    };
+    vmauth = {};
   };
 
   networking = {
@@ -28,22 +29,10 @@ in {
 
   services = {
     nginx.package = pkgs.nginxQuic;
-    nginx.virtualHosts."influxdb.pointjig.de" = {
-      enableACME = true;
-      forceSSL = true;
-      http3 = true;
-      kTLS = true;
-      locations."/" = {
-        proxyPass = "http://${config.services.influxdb2.settings.http-bind-address}";
-        recommendedProxySettings = true;
-      };
-    };
-    influxdb2 = {
-      enable = true;
-      settings = {
-        "reporting-disabled" = true;
-        "http-bind-address" = "127.0.0.1:8086";
-      };
+    vmagent = {
+      package = pkgs.victoriametrics;
+      remoteWriteUrl = lib.mkForce "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
+      extraArgs = lib.mkForce ["-remoteWrite.label=machine=${config.networking.hostName}"];
     };
   };
 
@@ -67,65 +56,22 @@ in {
       package = attic.packages.attic;
       credentialsFile = secrets.attic-env.path;
     };
+    victoriametrics = {
+      enable = true;
+      hostname = "vm.pointjig.de";
+      credentialsFile = secrets.vmauth.path;
+    };
     grafana = {
-      enable = false;
-      hostName = "grafana.pointjig.de";
+      enable = true;
+      hostname = "grafana.pointjig.de";
       credentialsFile = secrets.grafana-env.path;
+      declarativePlugins = [self'.packages.vm-grafana-datasource];
+      settings.plugins = {allow_loading_unsigned_plugins = "victoriametrics-datasource";};
       datasources = [
         {
-          name = "localhost";
-          type = "prometheus";
-          url = "http://localhost:${toString config.services.prometheus.port}";
-        }
-        {
-          name = "tank";
-          type = "prometheus";
-          url = "http://tank.fritz.box:${toString hosts.tank.config.services.prometheus.port}";
-          basicAuth = true;
-          withCredentials = true;
-          basicAuthUser = "admin";
-          secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
-          jsonData.prometheusType = "Prometheus";
-        }
-        {
-          name = "pointalpha";
-          type = "prometheus";
-          url = "http://pointalpha.fritz.box:${toString hosts.pointalpha.config.services.prometheus.port}";
-          basicAuth = true;
-          withCredentials = true;
-          basicAuthUser = "admin";
-          secureJsonData.basicAuthPassword = "$__env{INTERNAL_PASSWORD}";
-          jsonData.prometheusType = "Prometheus";
-        }
-        {
-          name = "pointjig";
-          type = "prometheus";
-          url = "https://status.pointjig.de";
-          basicAuth = true;
-          withCredentials = true;
-          basicAuthUser = "admin";
-          secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-          jsonData.prometheusType = "Prometheus";
-        }
-        {
-          name = "shelter";
-          type = "prometheus";
-          url = "https://status.shelter.pointjig.de";
-          basicAuth = true;
-          withCredentials = true;
-          basicAuthUser = "admin";
-          secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-          jsonData.prometheusType = "Prometheus";
-        }
-        {
-          name = "next";
-          type = "prometheus";
-          url = "https://status.next.clansap.org";
-          basicAuth = true;
-          withCredentials = true;
-          basicAuthUser = "admin";
-          secureJsonData.basicAuthPassword = "$__env{PUBLIC_PASSWORD}";
-          jsonData.prometheusType = "Prometheus";
+          name = "VictoriaMetrics";
+          type = "victoriametrics-datasource";
+          url = "http://${config.services.victoriametrics.listenAddress}";
         }
       ];
     };

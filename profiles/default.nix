@@ -20,7 +20,7 @@
       base.modules = [
         "base.nix"
         "nix.nix"
-        "telegraf.nix"
+        "vmagent.nix"
       ];
       server = {
         modules = ["server.nix"];

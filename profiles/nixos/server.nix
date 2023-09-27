@@ -58,30 +58,6 @@
       bantime-increment.enable = true;
       ignoreIP = ["192.168.11.0/24"];
     };
-
-    prometheus = let
-      nodePort = toString config.services.prometheus.exporters.node.port;
-    in {
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [
-            {
-              targets = ["localhost:${nodePort}"];
-              labels = {machine = "${config.networking.hostName}";};
-            }
-          ];
-        }
-      ];
-      exporters = {
-        node = {
-          enable = true;
-          listenAddress = "localhost";
-          port = 9101;
-          enabledCollectors = ["systemd"];
-        };
-      };
-    };
   };
 
   nix.gc.options = "--delete-older-than 2d";
