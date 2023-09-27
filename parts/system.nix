@@ -23,6 +23,10 @@
       type = types.listOf types.unspecified;
       default = [];
     };
+    disabledModules = mkOption {
+      type = types.listOf types.unspecified;
+      default = [];
+    };
   };
 in {
   options = {
@@ -114,6 +118,7 @@ in {
                 system.stateVersion = conf.stateVersion;
                 sops.defaultSopsFile = "${configDir}/secrets.yaml";
                 nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) conf.unfreeSoftware;
+                disabledModules = conf.disabledModules;
               }
 
               "${configDir}/configuration.nix"
