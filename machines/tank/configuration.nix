@@ -89,7 +89,7 @@ in {
     };
     vmagent.prometheusConfig.scrape_configs = [
       {
-        targets = ["localhost:${toString config.services.prometheus.exporters.fritzbox.port}"];
+        static_configs = [{targets = ["localhost:${toString config.services.prometheus.exporters.fritzbox.port}"];}];
         job_name = "fritzbox";
       }
     ];
