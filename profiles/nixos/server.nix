@@ -15,11 +15,6 @@
     persistent = true;
   };
 
-  fonts = {
-    fontconfig.enable = lib.mkDefault false;
-  };
-  environment.noXlibs = true;
-
   networking = {
     firewall.logRefusedConnections = false;
     networkmanager.enable = false;
