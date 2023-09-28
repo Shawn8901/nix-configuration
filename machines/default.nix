@@ -67,16 +67,14 @@ in {
       extraModules = [(inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")];
     };
     tank = {
-      nixpkgs = inputs.nixpkgs-stable;
+      nixpkgs = inputs.nixpkgs;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      hmInput = inputs.home-manager-stable;
+      hmInput = inputs.home-manager;
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
-        (inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")
       ];
-      disabledModules = ["services/monitoring/vmagent.nix"];
     };
     zenbook = {
       profiles = ["desktop" "gaming"];
