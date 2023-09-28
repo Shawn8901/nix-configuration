@@ -86,16 +86,6 @@ in {
         }
       ];
     };
-    prometheus.exporters.fritzbox = {
-      enable = true;
-      listenAddress = "localhost";
-    };
-    vmagent.prometheusConfig.scrape_configs = [
-      {
-        static_configs = [{targets = ["localhost:${toString config.services.prometheus.exporters.fritzbox.port}"];}];
-        job_name = "fritzbox";
-      }
-    ];
     zfs = {
       trim.enable = true;
       autoScrub = {
