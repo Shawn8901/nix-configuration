@@ -11,7 +11,10 @@ in {
       owner = "nextcloud";
       group = "nextcloud";
     };
-    prometheus-nextcloud = {};
+    prometheus-nextcloud = {
+      owner = config.services.prometheus.exporters.nextcloud.user;
+      group = config.services.prometheus.exporters.nextcloud.group;
+    };
   };
 
   systemd = {
