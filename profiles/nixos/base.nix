@@ -43,7 +43,7 @@
   environment.systemPackages = with pkgs;
     [
       git
-      htop
+      btop
       nano
       vim
       sops
