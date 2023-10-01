@@ -103,8 +103,6 @@ in {
               check_for_updates = false;
               reporting_enabled = false;
             };
-            alerting.enabled = false;
-            unified_alerting.enabled = true;
           }
           // cfg.settings;
         provision = {
