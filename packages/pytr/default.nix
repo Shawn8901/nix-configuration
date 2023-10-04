@@ -2,6 +2,7 @@
   lib,
   buildPythonApplication,
   fetchFromGitHub,
+  fetchpatch,
   writeScript,
   certifi,
   coloredlogs,
@@ -34,6 +35,13 @@ buildPythonApplication rec {
     requests-futures
     shtab
     websockets
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/marzzzello/pytr/pull/43/commits/5df2e7a1d0ff949319d05bb57c85e888b21623ea.patch";
+      sha256 = "sha256-y/ZQv1rKxMfD9c3xm6pfmx37G2YmCRdVx/6JfDeKQ6A=";
+    })
   ];
 
   pythonImportsCheck = ["pytr"];
