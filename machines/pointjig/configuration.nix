@@ -97,7 +97,6 @@ in {
           "git@pointjig.de"
           "megaprimus@pointjig.de"
           "mindfactory@pointjig.de"
-          "ninjatrader@pointjig.de"
           "parqet@pointjig.de"
           "planetside@pointjig.de"
           "smite@pointjig.de"
