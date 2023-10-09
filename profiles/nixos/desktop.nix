@@ -95,6 +95,8 @@
     plasma5Packages.kdeplasma-addons
   ];
 
+  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
+
   environment = {
     sessionVariables = {
       AMD_VULKAN_ICD = "RADV";
