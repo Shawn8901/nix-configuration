@@ -94,7 +94,7 @@ in {
             };
             smtp = {
               enabled = true;
-              host = "pointjig.de:465";
+              host = "mail.pointjig.de:465";
               user = "noreply@pointjig.de";
               password = "$__env{SMTP_PASSWORD}";
               from_address = "noreply@pointjig.de";
