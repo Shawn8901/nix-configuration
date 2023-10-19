@@ -63,7 +63,6 @@ in {
         };
         enable = true;
         configureRedis = true;
-        enableBrokenCiphersForSSE = false;
         https = true;
         autoUpdateApps.enable = true;
         autoUpdateApps.startAt = "Sun 14:00:00";
