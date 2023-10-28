@@ -5,7 +5,6 @@
   ...
 }: let
   inherit (lib) mkOption types filterAttrs genAttrs concatMap unique;
-  inherit (builtins) hasAttr;
 
   inherit (config.shawn8901.module-generator) generateModule;
 

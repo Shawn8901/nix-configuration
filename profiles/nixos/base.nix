@@ -28,11 +28,11 @@
       tmp.useTmpfs = lib.mkDefault true;
       tmp.cleanOnBoot = true;
     }
-    (lib.optionalAttrs (builtins.hasAttr "swraid" config.boot) {
+    (lib.optionalAttrs (config.boot ? "swraid") {
       swraid.enable = lib.mkDefault false;
     })
     # Remove with 23.11
-    (lib.optionalAttrs (!builtins.hasAttr "swraid" config.boot) {
+    (lib.optionalAttrs (! config.boot ? "swraid") {
       initrd.services.swraid.enable = lib.mkDefault false;
     })
   ];

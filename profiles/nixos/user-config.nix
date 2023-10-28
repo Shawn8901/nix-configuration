@@ -40,12 +40,12 @@
   };
   fonts = lib.mkMerge [
     {fontconfig.enable = lib.mkDefault (!config.environment.noXlibs);}
-    (lib.optionalAttrs (builtins.hasAttr "packages" config.fonts) {
+    (lib.optionalAttrs (config.fonts ? "packages") {
       enableDefaultPackages = lib.mkDefault (!config.environment.noXlibs);
       packages = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
     })
     # Remove with 23.11
-    (lib.optionalAttrs (!builtins.hasAttr "packages" config.fonts) {
+    (lib.optionalAttrs (! config.fonts ? "packages") {
       enableDefaultFonts = !config.environment.noXlibs;
       fonts = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
     })

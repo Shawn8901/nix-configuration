@@ -18,12 +18,12 @@
         };
       };
     }
-    (lib.optionalAttrs (builtins.hasAttr "packages" config.fonts) {
+    (lib.optionalAttrs (config.fonts ? "packages") {
       enableDefaultPackages = lib.mkDefault true;
       packages = [pkgs.noto-fonts];
     })
     # Remove with 23.11
-    (lib.optionalAttrs (!builtins.hasAttr "packages" config.fonts) {
+    (lib.optionalAttrs (! config.fonts ? "packages") {
       enableDefaultFonts = lib.mkDefault true;
       fonts = [pkgs.noto-fonts];
     })
