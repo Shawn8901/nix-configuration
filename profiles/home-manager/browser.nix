@@ -20,7 +20,7 @@ in {
   programs.firefox = {
     enable = true;
     package = pkgs.wrapFirefox unoptimized.firefox-unwrapped {
-      extraNativeMessagingHosts = [fPkgs.vdhcoapp];
+      nativeMessagingHosts = [fPkgs.vdhcoapp];
     };
     profiles."shawn" = {
       extensions = with firefox-addon-packages; [
