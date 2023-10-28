@@ -18,12 +18,12 @@
         };
       };
     }
-    (lib.optionalAttrs (config.fonts ? "packages") {
+    (lib.optionalAttrs (!lib.versionOlder config.system.nixos.release "23.11") {
       enableDefaultPackages = lib.mkDefault true;
       packages = [pkgs.noto-fonts];
     })
     # Remove with 23.11
-    (lib.optionalAttrs (! config.fonts ? "packages") {
+    (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
       enableDefaultFonts = lib.mkDefault true;
       fonts = [pkgs.noto-fonts];
     })

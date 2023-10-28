@@ -381,7 +381,7 @@ in {
   users.users = {
     root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
     ela = {
-      passwordFile = secrets.ela.path;
+      hashedPasswordFile = secrets.ela.path;
       isNormalUser = true;
       group = "users";
       uid = 1001;

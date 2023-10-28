@@ -88,9 +88,9 @@ in {
           extraOptions."overwrite.cli.url" = "https://${cfg.hostName}";
         }
         # Remove with 23.11
-        (lib.optionals
-          (config.services.nextcloud ? "enableBrokenCiphersForSSE")
-          {enableBrokenCiphersForSSE = false;})
+        (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
+          enableBrokenCiphersForSSE = false;
+        })
       ];
 
       postgresql = {

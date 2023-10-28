@@ -28,11 +28,11 @@
       tmp.useTmpfs = lib.mkDefault true;
       tmp.cleanOnBoot = true;
     }
-    (lib.optionalAttrs (config.boot ? "swraid") {
+    (lib.optionalAttrs (!lib.versionOlder config.system.nixos.release "23.11") {
       swraid.enable = lib.mkDefault false;
     })
     # Remove with 23.11
-    (lib.optionalAttrs (! config.boot ? "swraid") {
+    (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
       initrd.services.swraid.enable = lib.mkDefault false;
     })
   ];
