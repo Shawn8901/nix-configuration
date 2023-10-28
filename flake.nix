@@ -7,10 +7,10 @@
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
       url = "github:zhaofengli/attic";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.flake-compat.follows = "flake-compat";
+      #inputs.nixpkgs.follows = "nixpkgs-stable";
+      #inputs.nixpkgs-stable.follows = "nixpkgs-stable";
+      #inputs.flake-utils.follows = "flake-utils";
+      #inputs.flake-compat.follows = "flake-compat";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
