@@ -439,6 +439,7 @@ in {
       mailAdress = "hydra@pointjig.de";
       writeTokenFile = secrets.github-write-token.path;
       builder.sshKeyFile = secrets.ssh-builder-key.path;
+      attic.enable = false;
       attic.package = inputs'.attic.packages.attic-client;
     };
   };

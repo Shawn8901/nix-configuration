@@ -23,12 +23,12 @@ in {
     };
   };
 
-  environment.systemPackages = [
-    (attic.override {
-      nix = config.nix.package;
-      clientOnly = true;
-    })
-  ];
+  # environment.systemPackages = [
+  #   (attic.override {
+  #     nix = config.nix.package;
+  #     clientOnly = true;
+  #   })
+  # ];
 
   nix = {
     package = lib.mkDefault pkgs.nixVersions.nix_2_17;
