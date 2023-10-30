@@ -21,8 +21,11 @@ in {
       writeTokenFile = mkOption {
         type = types.path;
       };
-      attic.package = mkOption {
-        type = types.package;
+      attic = {
+        enable = mkEnableOption "Enables usage of attic as binary cache";
+        package = mkOption {
+          type = types.package;
+        };
       };
       builder = {
         sshKeyFile = mkOption {
@@ -126,24 +129,28 @@ in {
       };
     };
 
-    systemd.services = {
-      hydra-init = {
-        after = ["network-online.target"];
-        preStart = lib.mkAfter ''
-          sed -i -e "s|#github_token#|$(<${cfg.writeTokenFile})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
-        '';
-      };
-      attic-watch-store = {
-        wantedBy = ["multi-user.target"];
-        after = ["network-online.target"];
-        description = "Upload all store content to binary catch";
-        serviceConfig = {
-          User = "attic";
-          Restart = "always";
-          ExecStart = " ${cfg.attic.package}/bin/attic watch-store nixos";
+    systemd.services = lib.mkMerge [
+      {
+        hydra-init = {
+          after = ["network-online.target"];
+          preStart = lib.mkAfter ''
+            sed -i -e "s|#github_token#|$(<${cfg.writeTokenFile})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
+          '';
         };
-      };
-    };
+      }
+      (lib.optionalAttrs cfg.attic.enable {
+        attic-watch-store = {
+          wantedBy = ["multi-user.target"];
+          after = ["network-online.target"];
+          description = "Upload all store content to binary catch";
+          serviceConfig = {
+            User = "attic";
+            Restart = "always";
+            ExecStart = " ${cfg.attic.package}/bin/attic watch-store nixos";
+          };
+        };
+      })
+    ];
 
     nix.buildMachines = let
       sshUser = cfg.builder.userName;
