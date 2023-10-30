@@ -16,13 +16,13 @@
 }:
 buildPythonApplication rec {
   pname = "pytr";
-  version = "0.1.5";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "marzzzello";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u++ekTXk7FRU6wbmfGaDdm/EuYMElg2BEay1ZF/Fgj0=";
+    hash = "sha256-AK7nrRvrJ5n9ngU2jmET2MC/6qP8FEMa9QIjFOWPX1A=";
   };
 
   propagatedBuildInputs = [
@@ -35,11 +35,6 @@ buildPythonApplication rec {
     requests-futures
     shtab
     websockets
-  ];
-
-  patches = [
-    # Originally: https://github.com/marzzzello/pytr/pull/43
-    ./connect_id.patch
   ];
 
   pythonImportsCheck = ["pytr"];
