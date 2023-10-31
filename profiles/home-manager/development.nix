@@ -3,9 +3,11 @@
   config,
   lib,
   pkgs,
+  inputs',
   ...
 }: let
   fPkgs = self'.packages;
+  inherit (inputs'.attic.packages) attic;
 in {
   sops = {
     secrets = {
@@ -13,7 +15,18 @@ in {
     };
   };
 
-  home.packages = with pkgs; [alejandra nil nix-tree nixpkgs-review] ++ [fPkgs.generate-zrepl-ssl];
+  home.packages = with pkgs;
+    [
+      alejandra
+      nil
+      nix-tree
+      nixpkgs-review
+      (attic.override {
+        nix = config.nix.package;
+        clientOnly = true;
+      })
+    ]
+    ++ [fPkgs.generate-zrepl-ssl];
 
   programs.vscode = {
     enable = true;
