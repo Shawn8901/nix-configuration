@@ -373,7 +373,16 @@ in {
       };
     };
     smartd.enable = true;
+    nextcloud.extraOptions."memories.vod.ffmpeg" = "${lib.getExe pkgs.ffmpeg-headless}";
+    nextcloud.extraOptions."memories.vod.ffprobe" = "${pkgs.ffmpeg-headless}/bin/ffprobe";
+    nextcloud.extraOptions."preview_ffmpeg_path" = "${lib.getExe pkgs.ffmpeg-headless}";
   };
+  systemd.services.nextcloud-cron = {
+    path = [pkgs.perl];
+  };
+
+  environment.systemPackages = [pkgs.nodejs_18];
+
   security = {
     auditd.enable = false;
     audit.enable = false;
