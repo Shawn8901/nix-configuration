@@ -115,6 +115,18 @@ in {
       };
     };
   };
+
+  programs.git = {
+    enable = true;
+    userName = "Shawn8901";
+    userEmail = "shawn8901@googlemail.com";
+    ignores = ["*.swp"];
+    extraConfig = {
+      init = {defaultBranch = "main";};
+      push = {autoSetupRemote = "true";};
+    };
+  };
+
   programs.gh = {
     enable = true;
     extensions = [pkgs.gh-dash fPkgs.gh-poi];
