@@ -7,8 +7,6 @@
 }: let
   inherit (pkgs.hostPlatform) system;
   inherit (lib) genAttrs;
-
-  attic = inputs'.attic.packages.attic-nixpkgs;
 in {
   sops.secrets = {
     nix-gh-token-ro = {
@@ -22,13 +20,6 @@ in {
       mode = "0444";
     };
   };
-
-  # environment.systemPackages = [
-  #   (attic.override {
-  #     nix = config.nix.package;
-  #     clientOnly = true;
-  #   })
-  # ];
 
   nix = {
     package = lib.mkDefault pkgs.nixVersions.nix_2_17;
