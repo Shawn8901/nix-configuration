@@ -51,7 +51,7 @@ in {
       package = pkgs.postgresql_15;
     };
     attic = {
-      enable = false;
+      enable = true;
       hostName = "cache.pointjig.de";
       package = attic.packages.attic;
       credentialsFile = secrets.attic-env.path;
