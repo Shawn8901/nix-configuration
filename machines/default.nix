@@ -13,9 +13,9 @@ in {
     cache = {
       hostPlatform.system = "aarch64-linux";
       nixpkgs = inputs.nixpkgs-stable;
+      hmInput = inputs.home-manager-stable;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      hmInput = inputs.home-manager-stable;
       disabledModules = ["services/monitoring/vmagent.nix"];
       extraModules = [(inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")];
     };
@@ -25,8 +25,9 @@ in {
       disabledModules = ["services/monitoring/vmagent.nix"];
       extraModules = [(inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")];
     };
-
     pointalpha = {
+      nixpkgs = inputs.nixpkgs;
+      hmInput = inputs.home-manager;
       profiles = ["desktop" "gaming"];
       unfreeSoftware = [
         "steam"
@@ -47,9 +48,9 @@ in {
     };
     pointjig = {
       nixpkgs = inputs.nixpkgs-stable;
+      hmInput = inputs.home-manager-stable;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      hmInput = inputs.home-manager-stable;
       extraModules = [
         inputs.simple-nixos-mailserver.nixosModules.default
         inputs.mimir.nixosModules.default
@@ -60,23 +61,25 @@ in {
     };
     shelter = {
       nixpkgs = inputs.nixpkgs-stable;
+      hmInput = inputs.home-manager-stable;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      hmInput = inputs.home-manager-stable;
       disabledModules = ["services/monitoring/vmagent.nix"];
       extraModules = [(inputs.nixpkgs.outPath + "/nixos/modules/services/monitoring/vmagent.nix")];
     };
     tank = {
       nixpkgs = inputs.nixpkgs;
+      hmInput = inputs.home-manager;
       profiles = ["server" "managed-user"];
       homeManager.shawn.profiles = ["base"];
-      hmInput = inputs.home-manager;
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
       ];
     };
     zenbook = {
+      nixpkgs = inputs.nixpkgs;
+      hmInput = inputs.home-manager;
       profiles = ["desktop" "gaming"];
       unfreeSoftware = [
         "steam"
