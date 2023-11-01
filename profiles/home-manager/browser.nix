@@ -1,13 +1,5 @@
-{
-  self,
-  self',
-  config,
-  lib,
-  pkgs,
-  inputs,
-  inputs',
-  ...
-}: let
+{ self, self', config, lib, pkgs, inputs, inputs', ... }:
+let
   inherit (lib) mkEnableOption mkIf;
   inherit (inputs.firefox-addons.lib.${system}) buildFirefoxXpiAddon;
   inherit (pkgs.hostPlatform) system;
@@ -20,7 +12,7 @@ in {
   programs.firefox = {
     enable = true;
     package = pkgs.wrapFirefox unoptimized.firefox-unwrapped {
-      nativeMessagingHosts = [fPkgs.vdhcoapp];
+      nativeMessagingHosts = [ fPkgs.vdhcoapp ];
     };
     profiles."shawn" = {
       extensions = with firefox-addon-packages; [
@@ -32,17 +24,18 @@ in {
         # firefox addons are from a input, that does not share pkgs with the host and some can not pass a
         # nixpkgs.config.allowUnfreePredicate to a flake input.
         # So overriding the stdenv is the only solution here to use the hosts nixpkgs.config.allowUnfreePredicate.
-        (tampermonkey.override {inherit (pkgs) stdenv fetchurl;})
-        (betterttv.override {inherit (pkgs) stdenv fetchurl;})
+        (tampermonkey.override { inherit (pkgs) stdenv fetchurl; })
+        (betterttv.override { inherit (pkgs) stdenv fetchurl; })
 
         # Download all plugins which are not in the repo manually
         (buildFirefoxXpiAddon {
           pname = "Video-DownloadHelper";
           version = "7.6.0";
           addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-          url = "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
+          url =
+            "https://addons.mozilla.org/firefox/downloads/file/3804074/video_downloadhelper-7.6.0-fx.xpi";
           sha256 = "sha256-vVHZwQZOhpogQDAS4BAxm0bvCrcrsz8ioxDdOqsnelM=";
-          meta = {};
+          meta = { };
         })
       ];
       settings = {

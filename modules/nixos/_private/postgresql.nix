@@ -1,9 +1,5 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
+{ config, lib, pkgs, ... }:
+let
   cfg = config.shawn8901.postgresql;
   inherit (lib) mkEnableOption mkOption mkDefault mkIf types literalExpression;
 in {
@@ -29,12 +25,16 @@ in {
         port = 9187;
         runAsLocalSuperUser = true;
       };
-      vmagent.prometheusConfig.scrape_configs = [
-        {
-          job_name = "postgres";
-          static_configs = [{targets = ["localhost:${toString config.services.prometheus.exporters.postgres.port}"];}];
-        }
-      ];
+      vmagent.prometheusConfig.scrape_configs = [{
+        job_name = "postgres";
+        static_configs = [{
+          targets = [
+            "localhost:${
+              toString config.services.prometheus.exporters.postgres.port
+            }"
+          ];
+        }];
+      }];
     };
   };
 }

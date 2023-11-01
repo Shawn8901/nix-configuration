@@ -1,15 +1,11 @@
-{ stdenv
-, lib
-, fetchurl
-, writeScript
-,
-}:
+{ stdenv, lib, fetchurl, writeScript, }:
 stdenv.mkDerivation (finalAttrs: {
   name = "proton-ge-custom";
   version = "GE-Proton8-22";
 
   src = fetchurl {
-    url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
+    url =
+      "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
     sha256 = "sha256-JBS1CFdiOCKLWwavx/o+TFHUPFAA/wygrFcyO9SK9cc=";
   };
 
@@ -21,7 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Compatibility tool for Steam Play based on Wine and additional components";
+    description =
+      "Compatibility tool for Steam Play based on Wine and additional components";
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];

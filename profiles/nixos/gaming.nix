@@ -1,11 +1,5 @@
-{
-  self',
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
-  fPkgs = self'.packages;
+{ self', config, lib, pkgs, ... }:
+let fPkgs = self'.packages;
 in {
   programs = {
     steam = {
@@ -16,16 +10,18 @@ in {
         };
         extraLibraries = p: [
           # Fix Unity Fonts
-          (pkgs.runCommand "share-fonts" {preferLocalBuild = true;} ''
+          (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
             mkdir -p "$out/share/fonts"
             font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-            find ${toString [pkgs.liberation_ttf pkgs.dejavu_fonts]} -regex "$font_regexp" \
+            find ${
+              toString [ pkgs.liberation_ttf pkgs.dejavu_fonts ]
+            } -regex "$font_regexp" \
               -exec ln -sf -t "$out/share/fonts" '{}' \;
           '')
           p.getent
         ];
       };
-      extraCompatPackages = [fPkgs.proton-ge-custom];
+      extraCompatPackages = [ fPkgs.proton-ge-custom ];
     };
     haguichi.enable = false;
   };

@@ -1,12 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
-  inherit (config.sops) secrets;
+{ config, pkgs, ... }:
+let inherit (config.sops) secrets;
 in {
   sops.secrets = {
-    root = {};
+    root = { };
     nextcloud-admin = {
       owner = "nextcloud";
       group = "nextcloud";
@@ -23,17 +19,16 @@ in {
       networks = {
         "20-wired" = {
           matchConfig.Name = "enp6s18";
-          networkConfig.Address = ["134.255.226.115/28" "2a05:bec0:1:16::115/64"];
+          networkConfig.Address =
+            [ "134.255.226.115/28" "2a05:bec0:1:16::115/64" ];
           networkConfig.DNS = "8.8.8.8";
           networkConfig.Gateway = "134.255.226.113";
-          routes = [
-            {
-              routeConfig = {
-                Gateway = "2a05:bec0:1:16::1";
-                GatewayOnLink = "yes";
-              };
-            }
-          ];
+          routes = [{
+            routeConfig = {
+              Gateway = "2a05:bec0:1:16::1";
+              GatewayOnLink = "yes";
+            };
+          }];
         };
       };
     };

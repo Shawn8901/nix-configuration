@@ -1,24 +1,15 @@
-{
-  self',
-  self,
-  config,
-  fConfig,
-  pkgs,
-  lib,
-  inputs,
-  inputs',
-  ...
-}: let
+{ self', self, config, fConfig, pkgs, lib, inputs, inputs', ... }:
+let
   hosts = self.nixosConfigurations;
   fPkgs = self'.packages;
 
   inherit (config.sops) secrets;
 in {
   sops.secrets = {
-    ssh-builder-key = {owner = "hydra-queue-runner";};
-    zfs-ztank-key = {};
-    zrepl = {};
-    ela = {};
+    ssh-builder-key = { owner = "hydra-queue-runner"; };
+    zfs-ztank-key = { };
+    zrepl = { };
+    ela = { };
     nextcloud-admin = {
       owner = "nextcloud";
       group = "nextcloud";
@@ -27,7 +18,7 @@ in {
       owner = config.services.prometheus.exporters.nextcloud.user;
       group = config.services.prometheus.exporters.nextcloud.group;
     };
-    prometheus-fritzbox = {};
+    prometheus-fritzbox = { };
     # GitHub access token is stored on all systems with group right for nixbld
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
@@ -49,7 +40,8 @@ in {
   };
 
   networking = {
-    firewall.allowedTCPPorts = fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
+    firewall.allowedTCPPorts =
+      fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
     hosts = {
       "127.0.0.1" = lib.attrNames config.services.nginx.virtualHosts;
       "::1" = lib.attrNames config.services.nginx.virtualHosts;
@@ -58,7 +50,8 @@ in {
 
   systemd = {
     # TODO: Prepare a PR to fix/make it configurable that upstream
-    services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile = lib.mkForce secrets.prometheus-fritzbox.path;
+    services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile =
+      lib.mkForce secrets.prometheus-fritzbox.path;
     network = {
       enable = true;
       networks = {
@@ -68,7 +61,7 @@ in {
           networkConfig.Domains = "fritz.box ~box ~.";
         };
       };
-      wait-online = {ignoredInterfaces = ["enp4s0"];};
+      wait-online = { ignoredInterfaces = [ "enp4s0" ]; };
     };
   };
   nix.settings.cores = 4;
@@ -90,7 +83,7 @@ in {
       trim.enable = true;
       autoScrub = {
         enable = true;
-        pools = ["rpool" "ztank"];
+        pools = [ "rpool" "ztank" ];
       };
     };
     zrepl = {
@@ -98,19 +91,17 @@ in {
       package = pkgs.zrepl;
       settings = {
         global = {
-          monitoring = [
-            {
-              type = "prometheus";
-              listen = ":9811";
-              listen_freebind = true;
-            }
-          ];
+          monitoring = [{
+            type = "prometheus";
+            listen = ":9811";
+            listen_freebind = true;
+          }];
         };
         jobs = [
           {
             name = "rpool_safe";
             type = "snap";
-            filesystems = {"rpool/safe<" = true;};
+            filesystems = { "rpool/safe<" = true; };
             snapshotting = {
               type = "periodic";
               interval = "1h";
@@ -144,23 +135,21 @@ in {
               key = secrets.zrepl.path;
               server_cn = "pointalpha";
             };
-            recv = {placeholder = {encryption = "inherit";};};
+            recv = { placeholder = { encryption = "inherit"; }; };
             pruning = {
               keep_sender = [
-                {type = "not_replicated";}
+                { type = "not_replicated"; }
                 {
                   type = "grid";
                   grid = "3x1d";
                   regex = "^zrepl_.*";
                 }
               ];
-              keep_receiver = [
-                {
-                  type = "grid";
-                  grid = "7x1d(keep=all) | 3x30d";
-                  regex = "^zrepl_.*";
-                }
-              ];
+              keep_receiver = [{
+                type = "grid";
+                grid = "7x1d(keep=all) | 3x30d";
+                regex = "^zrepl_.*";
+              }];
             };
           }
           {
@@ -173,9 +162,9 @@ in {
               ca = ../../files/public_certs/zrepl/zenbook.crt;
               cert = ../../files/public_certs/zrepl/tank.crt;
               key = secrets.zrepl.path;
-              client_cns = ["zenbook"];
+              client_cns = [ "zenbook" ];
             };
-            recv = {placeholder = {encryption = "inherit";};};
+            recv = { placeholder = { encryption = "inherit"; }; };
           }
           {
             name = "sapsrv01";
@@ -190,22 +179,18 @@ in {
               key = secrets.zrepl.path;
               server_cn = "sapsrv01";
             };
-            recv = {placeholder = {encryption = "inherit";};};
+            recv = { placeholder = { encryption = "inherit"; }; };
             pruning = {
-              keep_receiver = [
-                {
-                  type = "grid";
-                  grid = "7x1d(keep=all) | 3x30d";
-                  regex = "^auto_daily.*";
-                }
-              ];
-              keep_sender = [
-                {
-                  type = "last_n";
-                  count = 10;
-                  regex = "^auto_daily.*";
-                }
-              ];
+              keep_receiver = [{
+                type = "grid";
+                grid = "7x1d(keep=all) | 3x30d";
+                regex = "^auto_daily.*";
+              }];
+              keep_sender = [{
+                type = "last_n";
+                count = 10;
+                regex = "^auto_daily.*";
+              }];
             };
           }
           {
@@ -221,28 +206,24 @@ in {
               key = secrets.zrepl.path;
               server_cn = "sapsrv02";
             };
-            recv = {placeholder = {encryption = "inherit";};};
+            recv = { placeholder = { encryption = "inherit"; }; };
             pruning = {
-              keep_receiver = [
-                {
-                  type = "grid";
-                  grid = "7x1d(keep=all) | 3x30d";
-                  regex = "^auto_daily.*";
-                }
-              ];
-              keep_sender = [
-                {
-                  type = "last_n";
-                  count = 10;
-                  regex = "^auto_daily.*";
-                }
-              ];
+              keep_receiver = [{
+                type = "grid";
+                grid = "7x1d(keep=all) | 3x30d";
+                regex = "^auto_daily.*";
+              }];
+              keep_sender = [{
+                type = "last_n";
+                count = 10;
+                regex = "^auto_daily.*";
+              }];
             };
           }
           {
             name = "tank_data";
             type = "snap";
-            filesystems = {"ztank/data<" = true;};
+            filesystems = { "ztank/data<" = true; };
             snapshotting = {
               type = "periodic";
               interval = "1h";
@@ -266,14 +247,15 @@ in {
           {
             name = "tank_replica";
             type = "push";
-            filesystems = {"ztank/replica<" = true;};
+            filesystems = { "ztank/replica<" = true; };
             snapshotting = {
               type = "periodic";
               interval = "1h";
               prefix = "zrepl_";
             };
             connect = let
-              zreplPort = fConfig.shawn8901.zrepl.servePorts hosts.shelter.config.services.zrepl;
+              zreplPort = fConfig.shawn8901.zrepl.servePorts
+                hosts.shelter.config.services.zrepl;
             in {
               type = "tls";
               address = "shelter.pointjig.de:${toString zreplPort}";
@@ -288,7 +270,7 @@ in {
             };
             pruning = {
               keep_sender = [
-                {type = "not_replicated";}
+                { type = "not_replicated"; }
                 {
                   type = "last_n";
                   count = 10;
@@ -304,13 +286,11 @@ in {
                   regex = "^zrepl_.*";
                 }
               ];
-              keep_receiver = [
-                {
-                  type = "grid";
-                  grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
-                  regex = "^zrepl_.*";
-                }
-              ];
+              keep_receiver = [{
+                type = "grid";
+                grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
+                regex = "^zrepl_.*";
+              }];
             };
           }
         ];
@@ -373,22 +353,25 @@ in {
       };
     };
     smartd.enable = true;
-    nextcloud.extraOptions."memories.vod.ffmpeg" = "${lib.getExe pkgs.ffmpeg-headless}";
-    nextcloud.extraOptions."memories.vod.ffprobe" = "${pkgs.ffmpeg-headless}/bin/ffprobe";
-    nextcloud.extraOptions."preview_ffmpeg_path" = "${lib.getExe pkgs.ffmpeg-headless}";
+    nextcloud.extraOptions."memories.vod.ffmpeg" =
+      "${lib.getExe pkgs.ffmpeg-headless}";
+    nextcloud.extraOptions."memories.vod.ffprobe" =
+      "${pkgs.ffmpeg-headless}/bin/ffprobe";
+    nextcloud.extraOptions."preview_ffmpeg_path" =
+      "${lib.getExe pkgs.ffmpeg-headless}";
   };
-  systemd.services.nextcloud-cron = {
-    path = [pkgs.perl];
-  };
+  systemd.services.nextcloud-cron = { path = [ pkgs.perl ]; };
 
-  environment.systemPackages = [pkgs.nodejs_18];
+  environment.systemPackages = [ pkgs.nodejs_18 ];
 
   security = {
     auditd.enable = false;
     audit.enable = false;
   };
   users.users = {
-    root.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"];
+    root.openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"
+    ];
     ela = {
       hashedPasswordFile = secrets.ela.path;
       isNormalUser = true;
@@ -401,7 +384,7 @@ in {
       isSystemUser = true;
       group = "users";
     };
-    shawn = {extraGroups = ["nextcloud"];};
+    shawn = { extraGroups = [ "nextcloud" ]; };
     attic = {
       isNormalUser = false;
       isSystemUser = true;
@@ -453,7 +436,5 @@ in {
     };
   };
 
-  environment = {
-    etc.".ztank_key".source = secrets.zfs-ztank-key.path;
-  };
+  environment = { etc.".ztank_key".source = secrets.zfs-ztank-key.path; };
 }

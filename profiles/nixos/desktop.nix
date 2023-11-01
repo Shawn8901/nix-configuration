@@ -1,9 +1,4 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}: {
+{ pkgs, lib, config, ... }: {
   fonts = lib.mkMerge [
     {
       fontconfig = {
@@ -11,21 +6,21 @@
         cache32Bit = true;
         subpixel.lcdfilter = "light";
         defaultFonts = {
-          emoji = ["Noto Color Emoji"];
-          serif = ["Noto Serif"];
-          sansSerif = ["Noto Sans"];
-          monospace = ["Noto Sans Mono"];
+          emoji = [ "Noto Color Emoji" ];
+          serif = [ "Noto Serif" ];
+          sansSerif = [ "Noto Sans" ];
+          monospace = [ "Noto Sans Mono" ];
         };
       };
     }
     (lib.optionalAttrs (!lib.versionOlder config.system.nixos.release "23.11") {
       enableDefaultPackages = lib.mkDefault true;
-      packages = [pkgs.noto-fonts];
+      packages = [ pkgs.noto-fonts ];
     })
     # Remove with 23.11
     (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
       enableDefaultFonts = lib.mkDefault true;
-      fonts = [pkgs.noto-fonts];
+      fonts = [ pkgs.noto-fonts ];
     })
   ];
 
@@ -47,7 +42,7 @@
     xserver = {
       enable = lib.mkDefault true;
       layout = "de";
-      videoDrivers = ["amdgpu"];
+      videoDrivers = [ "amdgpu" ];
       displayManager.sddm = {
         enable = lib.mkDefault true;
         autoNumlock = true;
@@ -59,7 +54,7 @@
         phononBackend = "vlc";
       };
       desktopManager.xterm.enable = false;
-      excludePackages = [pkgs.xterm];
+      excludePackages = [ pkgs.xterm ];
     };
   };
 
@@ -69,9 +64,7 @@
     audit.enable = false;
   };
 
-  programs = {
-    dconf.enable = true;
-  };
+  programs = { dconf.enable = true; };
 
   hardware = {
     bluetooth.enable = true;
@@ -80,8 +73,8 @@
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = with pkgs; [libva];
-      extraPackages32 = with pkgs.pkgsi686Linux; [libva];
+      extraPackages = with pkgs; [ libva ];
+      extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
     };
   };
   sound.enable = false;
@@ -95,7 +88,7 @@
     plasma5Packages.kdeplasma-addons
   ];
 
-  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   environment = {
     sessionVariables = {
@@ -107,6 +100,6 @@
       _JAVA_AWT_WM_NONREPARENTING = "1";
       GTK_USE_PORTAL = "1";
     };
-    plasma5.excludePackages = with pkgs.plasma5Packages; [elisa khelpcenter];
+    plasma5.excludePackages = with pkgs.plasma5Packages; [ elisa khelpcenter ];
   };
 }

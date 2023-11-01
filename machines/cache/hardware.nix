@@ -1,9 +1,13 @@
-{modulesPath, ...}: {
-  imports = [(modulesPath + "/profiles/qemu-guest.nix") (modulesPath + "/profiles/minimal.nix")];
+{ modulesPath, ... }: {
+  imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
+    (modulesPath + "/profiles/minimal.nix")
+  ];
   boot = {
     initrd = {
-      availableKernelModules = ["ata_piix" "uhci_hcd" "xen_blkfront" "xhci_pci" "usbhid"];
-      kernelModules = ["nvme"];
+      availableKernelModules =
+        [ "ata_piix" "uhci_hcd" "xen_blkfront" "xhci_pci" "usbhid" ];
+      kernelModules = [ "nvme" ];
     };
     loader = {
       efi.efiSysMountPoint = "/boot/efi";

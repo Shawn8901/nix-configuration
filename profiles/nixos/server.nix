@@ -1,11 +1,5 @@
-{
-  lib,
-  config,
-  ...
-}: {
-  documentation = {
-    man.enable = false;
-  };
+{ lib, config, ... }: {
+  documentation = { man.enable = false; };
 
   system.autoUpgrade = {
     enable = true;
@@ -51,7 +45,7 @@
       maxretry = 3;
       bantime = "1h";
       bantime-increment.enable = true;
-      ignoreIP = ["192.168.11.0/24"];
+      ignoreIP = [ "192.168.11.0/24" ];
     };
   };
 

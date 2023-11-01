@@ -1,10 +1,5 @@
-{
-  self,
-  config,
-  lib,
-  moduleWithSystem,
-  ...
-}: let
+{ self, config, lib, moduleWithSystem, ... }:
+let
   inherit (builtins) readDir attrNames;
   inherit (lib) filterAttrs genAttrs;
   inherit (config.shawn8901.module-generator) generateModules;

@@ -1,14 +1,9 @@
-{
-  config,
-  inputs',
-  pkgs,
-  ...
-}: let
-  inherit (config.sops) secrets;
+{ config, inputs', pkgs, ... }:
+let inherit (config.sops) secrets;
 in {
   sops.secrets = {
-    sms-technical-passwd = {};
-    sms-shawn-passwd = {};
+    sms-technical-passwd = { };
+    sms-shawn-passwd = { };
     mimir-env = {
       owner = "mimir";
       group = "mimir";
@@ -20,8 +15,8 @@ in {
   };
 
   networking.firewall = {
-    allowedUDPPorts = [443];
-    allowedTCPPorts = [80 443];
+    allowedUDPPorts = [ 443 ];
+    allowedTCPPorts = [ 80 443 ];
   };
 
   systemd = {
@@ -30,17 +25,16 @@ in {
       networks = {
         "20-wired" = {
           matchConfig.Name = "enp6s18";
-          networkConfig.Address = ["134.255.226.114/28" "2a05:bec0:1:16::114/64"];
+          networkConfig.Address =
+            [ "134.255.226.114/28" "2a05:bec0:1:16::114/64" ];
           networkConfig.DNS = "8.8.8.8";
           networkConfig.Gateway = "134.255.226.113";
-          routes = [
-            {
-              routeConfig = {
-                Gateway = "2a05:bec0:1:16::1";
-                GatewayOnLink = "yes";
-              };
-            }
-          ];
+          routes = [{
+            routeConfig = {
+              Gateway = "2a05:bec0:1:16::1";
+              GatewayOnLink = "yes";
+            };
+          }];
         };
       };
       wait-online.anyInterface = true;
@@ -77,7 +71,7 @@ in {
   mailserver = {
     enable = true;
     fqdn = "mail.pointjig.de";
-    domains = ["pointjig.de"];
+    domains = [ "pointjig.de" ];
     certificateScheme = "acme-nginx";
     loginAccounts = {
       "shawn@pointjig.de" = {
@@ -114,9 +108,7 @@ in {
       };
       "dorman@pointjig.de" = {
         hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
-        aliases = [
-          "ninjatrader@pointjig.de"
-        ];
+        aliases = [ "ninjatrader@pointjig.de" ];
       };
       "noreply@pointjig.de" = {
         hashedPasswordFile = "${secrets.sms-technical-passwd.path}";
@@ -132,7 +124,5 @@ in {
     audit.enable = false;
   };
 
-  shawn8901 = {
-    postgresql.enable = true;
-  };
+  shawn8901 = { postgresql.enable = true; };
 }

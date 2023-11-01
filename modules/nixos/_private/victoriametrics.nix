@@ -1,16 +1,13 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}: let
+{ pkgs, lib, config, ... }:
+let
   inherit (lib) types mkEnableOption mkOption mkDefault mkIf;
 
   cfg = config.shawn8901.victoriametrics;
 in {
   options = {
     shawn8901.victoriametrics = {
-      enable = mkEnableOption "Enables a preconfigured victoria metrics instance";
+      enable =
+        mkEnableOption "Enables a preconfigured victoria metrics instance";
       hostname = mkOption {
         type = types.str;
         description = "full qualified hostname of the grafana instance";
@@ -19,28 +16,23 @@ in {
         type = types.int;
         default = 8427;
       };
-      credentialsFile = mkOption {
-        type = types.path;
-      };
-      datasources = mkOption {
-        type = types.listOf types.raw;
-      };
+      credentialsFile = mkOption { type = types.path; };
+      datasources = mkOption { type = types.listOf types.raw; };
     };
   };
   config = mkIf cfg.enable {
     systemd.services.vmauth = let
-      authConfig = (pkgs.formats.yaml {}).generate "auth.yml" {
-        users = [
-          {
-            username = "vm";
-            password = "%{PASSWORD}";
-            url_prefix = "http://${config.services.victoriametrics.listenAddress}";
-          }
-        ];
+      authConfig = (pkgs.formats.yaml { }).generate "auth.yml" {
+        users = [{
+          username = "vm";
+          password = "%{PASSWORD}";
+          url_prefix =
+            "http://${config.services.victoriametrics.listenAddress}";
+        }];
       };
     in {
       description = "VictoriaMetrics basic auth proxy";
-      after = ["network.target"];
+      after = [ "network.target" ];
       startLimitBurst = 5;
       serviceConfig = {
         Restart = "on-failure";
@@ -53,7 +45,7 @@ in {
             -httpListenAddr=:${toString cfg.port}
         '';
       };
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
     };
 
     services = {

@@ -1,10 +1,5 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs',
-  ...
-}: let
+{ pkgs, lib, config, inputs', ... }:
+let
   inherit (pkgs.hostPlatform) system;
   inherit (lib) genAttrs;
 in {
@@ -26,8 +21,14 @@ in {
     settings = {
       auto-optimise-store = true;
       allow-import-from-derivation = false;
-      substituters = ["https://cache.pointjig.de/nixos" "https://nix-community.cachix.org"];
-      trusted-public-keys = ["nixos:Uj2EOFZu9/Y6r6qVlxeCyiGVqyz30fMybzT3kBDsPg8=" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
+      substituters = [
+        "https://cache.pointjig.de/nixos"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "nixos:Uj2EOFZu9/Y6r6qVlxeCyiGVqyz30fMybzT3kBDsPg8="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
       cores = lib.mkDefault 6;
       max-jobs = lib.mkDefault 2;
       experimental-features = "nix-command flakes";

@@ -1,9 +1,5 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}: let
+{ pkgs, lib, config, ... }:
+let
   inherit (lib) types mkEnableOption mkOption mkDefault mkIf;
 
   cfg = config.shawn8901.attic;
@@ -15,18 +11,14 @@ in {
         type = types.str;
         description = "full qualified hostname of the attic instance";
       };
-      package = mkOption {
-        type = types.package;
-      };
-      credentialsFile = mkOption {
-        type = types.path;
-      };
+      package = mkOption { type = types.package; };
+      credentialsFile = mkOption { type = types.path; };
     };
   };
   config = mkIf cfg.enable {
     networking.firewall = {
-      allowedUDPPorts = [443];
-      allowedTCPPorts = [80 443];
+      allowedUDPPorts = [ 443 ];
+      allowedTCPPorts = [ 80 443 ];
     };
 
     services = {
@@ -58,7 +50,7 @@ in {
 
         enable = true;
         settings = {
-          allowed-hosts = [cfg.hostName];
+          allowed-hosts = [ cfg.hostName ];
           api-endpoint = "https://${cfg.hostName}/";
           database = {
             url = "postgresql:///attic?host=/run/postgresql";
@@ -70,7 +62,7 @@ in {
             avg-size = 65536;
             max-size = 262144;
           };
-          compression = {type = "zstd";};
+          compression = { type = "zstd"; };
           garbage-collection = {
             interval = "12 hours";
             default-retention-period = "1 months";
@@ -78,15 +70,11 @@ in {
         };
       };
       postgresql = {
-        ensureDatabases = [
-          "attic"
-        ];
-        ensureUsers = [
-          {
-            name = "atticd";
-            ensurePermissions = {"DATABASE attic" = "ALL PRIVILEGES";};
-          }
-        ];
+        ensureDatabases = [ "attic" ];
+        ensureUsers = [{
+          name = "atticd";
+          ensurePermissions = { "DATABASE attic" = "ALL PRIVILEGES"; };
+        }];
       };
     };
   };

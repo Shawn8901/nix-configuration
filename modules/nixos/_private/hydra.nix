@@ -1,9 +1,5 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
+{ config, lib, pkgs, ... }:
+let
   cfg = config.shawn8901.hydra;
   inherit (lib) mkEnableOption mkOption mkDefault types literalExpression;
 in {
@@ -18,19 +14,13 @@ in {
         type = types.str;
         description = "Adress to send notifications to";
       };
-      writeTokenFile = mkOption {
-        type = types.path;
-      };
+      writeTokenFile = mkOption { type = types.path; };
       attic = {
         enable = mkEnableOption "Enables usage of attic as binary cache";
-        package = mkOption {
-          type = types.package;
-        };
+        package = mkOption { type = types.package; };
       };
       builder = {
-        sshKeyFile = mkOption {
-          type = types.path;
-        };
+        sshKeyFile = mkOption { type = types.path; };
         userName = mkOption {
           type = types.str;
           default = "root";
@@ -41,8 +31,8 @@ in {
 
   config = lib.mkIf cfg.enable {
     networking.firewall = {
-      allowedUDPPorts = [443];
-      allowedTCPPorts = [80 443];
+      allowedUDPPorts = [ 443 ];
+      allowedTCPPorts = [ 80 443 ];
     };
     services = {
       nginx = {
@@ -57,20 +47,20 @@ in {
           http3 = true;
           kTLS = true;
           locations."/" = {
-            proxyPass = "http://${config.services.hydra.listenHost}:${toString config.services.hydra.port}";
+            proxyPass = "http://${config.services.hydra.listenHost}:${
+                toString config.services.hydra.port
+              }";
             recommendedProxySettings = true;
           };
         };
       };
       postgresql = {
         enable = mkDefault true;
-        ensureDatabases = ["hydra"];
-        ensureUsers = [
-          {
-            name = "hydra";
-            ensurePermissions = {"DATABASE hydra" = "ALL PRIVILEGES";};
-          }
-        ];
+        ensureDatabases = [ "hydra" ];
+        ensureUsers = [{
+          name = "hydra";
+          ensurePermissions = { "DATABASE hydra" = "ALL PRIVILEGES"; };
+        }];
       };
 
       hydra = let
@@ -132,7 +122,7 @@ in {
     systemd.services = lib.mkMerge [
       {
         hydra-init = {
-          after = ["network-online.target"];
+          after = [ "network-online.target" ];
           preStart = lib.mkAfter ''
             sed -i -e "s|#github_token#|$(<${cfg.writeTokenFile})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
           '';
@@ -140,8 +130,8 @@ in {
       }
       (lib.optionalAttrs cfg.attic.enable {
         attic-watch-store = {
-          wantedBy = ["multi-user.target"];
-          after = ["network-online.target"];
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network-online.target" ];
           description = "Upload all store content to binary catch";
           serviceConfig = {
             User = "attic";
@@ -158,15 +148,16 @@ in {
     in [
       {
         hostName = "localhost";
-        systems = ["x86_64-linux" "i686-linux"];
-        supportedFeatures = ["gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
+        systems = [ "x86_64-linux" "i686-linux" ];
+        supportedFeatures =
+          [ "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
         maxJobs = 2;
         inherit sshUser sshKey;
       }
       {
         hostName = "cache.pointjig.de";
-        systems = ["aarch64-linux"];
-        supportedFeatures = ["benchmark" "big-parallel" "kvm" "nixos-test"];
+        systems = [ "aarch64-linux" ];
+        supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
         maxJobs = 2;
         inherit sshUser sshKey;
       }

@@ -1,15 +1,14 @@
-{
-  config,
-  pkgs,
-  modulesPath,
-  ...
-}: {
-  imports = [(modulesPath + "/profiles/qemu-guest.nix") (modulesPath + "/profiles/minimal.nix")];
+{ config, pkgs, modulesPath, ... }: {
+  imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
+    (modulesPath + "/profiles/minimal.nix")
+  ];
 
   boot = {
-    initrd.availableKernelModules = ["uhci_hcd" "ehci_pci" "ahci" "sd_mod" "sr_mod"];
+    initrd.availableKernelModules =
+      [ "uhci_hcd" "ehci_pci" "ahci" "sd_mod" "sr_mod" ];
     kernelPackages = pkgs.linuxPackages;
-    kernelParams = ["memhp_default_state=online"];
+    kernelParams = [ "memhp_default_state=online" ];
     loader.grub = {
       enable = true;
       device = "/dev/sda";
@@ -26,7 +25,8 @@
     fsType = "vfat";
   };
 
-  swapDevices = [{device = "/dev/disk/by-uuid/6f049e18-ba0e-478b-a917-775abca0d3c2";}];
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/6f049e18-ba0e-478b-a917-775abca0d3c2"; }];
 
   hardware.cpu.intel.updateMicrocode = true;
 }

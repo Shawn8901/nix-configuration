@@ -1,10 +1,4 @@
-{
-  inputs',
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{ inputs', config, pkgs, lib, ... }: {
   documentation = {
     doc.enable = false;
     nixos.enable = false;
@@ -39,16 +33,10 @@
 
   services.lvm.enable = false;
 
-  environment.sessionVariables.FLAKE = lib.mkDefault "github:shawn8901/nix-configuration";
+  environment.sessionVariables.FLAKE =
+    lib.mkDefault "github:shawn8901/nix-configuration";
   environment.systemPackages = with pkgs;
-    [
-      git
-      btop
-      nano
-      vim
-      sops
-    ]
-    ++ [inputs'.nh.packages.default];
+    [ git btop nano vim sops ] ++ [ inputs'.nh.packages.default ];
 
   services = {
     journald.extraConfig = ''
@@ -56,8 +44,9 @@
       SystemMaxFileSize=50M
     '';
 
-    udev.extraRules = lib.optionalString (builtins.elem "zfs" config.boot.supportedFilesystems) ''
-      ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
-    '';
+    udev.extraRules = lib.optionalString
+      (builtins.elem "zfs" config.boot.supportedFilesystems) ''
+        ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
+      '';
   };
 }

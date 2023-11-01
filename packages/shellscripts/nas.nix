@@ -1,4 +1,4 @@
-{stdenvNoCC}:
+{ stdenvNoCC }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "nas_mount";
   version = "0.0.1";

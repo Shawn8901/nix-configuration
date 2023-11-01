@@ -1,10 +1,5 @@
-{
-  self,
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
+{ self, config, lib, pkgs, ... }:
+let
   cfg = config.shawn8901.shutdown-wakeup;
 
   inherit (lib) mkIf mkEnableOption mkOption types;
@@ -16,9 +11,7 @@ in {
         type = types.str;
         description = "Time when shutdown timer starts";
       };
-      package = mkOption {
-        type = types.package;
-      };
+      package = mkOption { type = types.package; };
       wakeupTime = mkOption {
         type = types.str;
         description = "Time when device should wakeup again";
@@ -36,27 +29,27 @@ in {
         };
       };
       timers.sched-shutdown = {
-        wantedBy = ["timers.target"];
-        partOf = ["sched-shutdown.service"];
-        timerConfig = {OnCalendar = ["*-*-* ${cfg.shutdownTime}"];};
+        wantedBy = [ "timers.target" ];
+        partOf = [ "sched-shutdown.service" ];
+        timerConfig = { OnCalendar = [ "*-*-* ${cfg.shutdownTime}" ]; };
       };
 
-      services.rtcwakeup = let
-        rtcHelper = cfg.package.override {inherit (cfg) wakeupTime;};
-      in {
-        description = "Automatic wakeup";
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${rtcHelper}/bin/rtc-helper";
+      services.rtcwakeup =
+        let rtcHelper = cfg.package.override { inherit (cfg) wakeupTime; };
+        in {
+          description = "Automatic wakeup";
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${rtcHelper}/bin/rtc-helper";
+          };
         };
-      };
       timers.rtcwakeup = {
-        wantedBy = ["timers.target"];
-        partOf = ["sched-shutdown.service"];
+        wantedBy = [ "timers.target" ];
+        partOf = [ "sched-shutdown.service" ];
         timerConfig = {
           Persistent = true;
           OnBootSec = "1min";
-          OnCalendar = ["*-*-* ${cfg.wakeupTime}"];
+          OnCalendar = [ "*-*-* ${cfg.wakeupTime}" ];
         };
       };
     };

@@ -1,9 +1,5 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}: let
+{ pkgs, config, lib, ... }:
+let
   cfg = config.shawn8901.nextcloud;
   inherit (lib) mkEnableOption mkDefault mkOption types literalExpression;
 in {
@@ -18,12 +14,8 @@ in {
         type = types.str;
         description = "Home directory of the nextcloud";
       };
-      package = mkOption {
-        type = types.package;
-      };
-      adminPasswordFile = mkOption {
-        type = types.path;
-      };
+      package = mkOption { type = types.package; };
+      adminPasswordFile = mkOption { type = types.path; };
       notify_push.package = mkOption {
         type = types.nullOr types.package;
         default = null;
@@ -39,12 +31,12 @@ in {
 
   config = lib.mkIf cfg.enable {
     networking.firewall = {
-      allowedUDPPorts = [443];
-      allowedTCPPorts = [80 443];
+      allowedUDPPorts = [ 443 ];
+      allowedTCPPorts = [ 80 443 ];
     };
 
     systemd = {
-      services.nextcloud-setup.after = ["postgresql.service"];
+      services.nextcloud-setup.after = [ "postgresql.service" ];
       services.nextcloud-notify_push = {
         serviceConfig = {
           Restart = "on-failure";
@@ -88,21 +80,21 @@ in {
           extraOptions."overwrite.cli.url" = "https://${cfg.hostName}";
         }
         # Remove with 23.11
-        (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
-          enableBrokenCiphersForSSE = false;
-        })
+        (lib.optionalAttrs
+          (lib.versionOlder config.system.nixos.release "23.11") {
+            enableBrokenCiphersForSSE = false;
+          })
       ];
 
       postgresql = {
-        ensureDatabases = [
-          "${config.services.nextcloud.config.dbname}"
-        ];
-        ensureUsers = [
-          {
-            name = "${config.services.nextcloud.config.dbuser}";
-            ensurePermissions = {"DATABASE ${config.services.nextcloud.config.dbname}" = "ALL PRIVILEGES";};
-          }
-        ];
+        ensureDatabases = [ "${config.services.nextcloud.config.dbname}" ];
+        ensureUsers = [{
+          name = "${config.services.nextcloud.config.dbuser}";
+          ensurePermissions = {
+            "DATABASE ${config.services.nextcloud.config.dbname}" =
+              "ALL PRIVILEGES";
+          };
+        }];
       };
       nginx = {
         enable = mkDefault true;
@@ -124,12 +116,17 @@ in {
         inherit (cfg.prometheus) passwordFile;
       };
 
-      vmagent.prometheusConfig.scrape_configs = lib.mkIf config.services.prometheus.exporters.nextcloud.enable [
-        {
+      vmagent.prometheusConfig.scrape_configs =
+        lib.mkIf config.services.prometheus.exporters.nextcloud.enable [{
           job_name = "nextcloud";
-          static_configs = [{targets = ["localhost:${toString config.services.prometheus.exporters.nextcloud.port}"];}];
-        }
-      ];
+          static_configs = [{
+            targets = [
+              "localhost:${
+                toString config.services.prometheus.exporters.nextcloud.port
+              }"
+            ];
+          }];
+        }];
     };
   };
 }

@@ -1,16 +1,18 @@
-{inputs', ...}: let
-  unoptimized = inputs'.nixpkgs.legacyPackages;
+{ inputs', ... }:
+let unoptimized = inputs'.nixpkgs.legacyPackages;
 in {
   #aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sse sse2 sse3 sse4_1 sse4_2 ssse3
 
-  nix.settings.system-features = ["gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test"];
+  nix.settings.system-features =
+    [ "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
   nixpkgs.hostPlatform.gcc.arch = "x86-64-v3";
 
   nixpkgs.config.packageOverrides = pkgs: {
     inherit (unoptimized) openexr_3;
     haskellPackages = pkgs.haskellPackages.override {
       overrides = haskellPackagesNew: haskellPackagesOld: {
-        inherit (unoptimized.haskellPackages) cryptonite hermes-json hermes-json_0_2_0_1;
+        inherit (unoptimized.haskellPackages)
+          cryptonite hermes-json hermes-json_0_2_0_1;
       };
     };
 

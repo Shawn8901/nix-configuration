@@ -1,19 +1,6 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  fetchpatch,
-  writeScript,
-  certifi,
-  coloredlogs,
-  ecdsa,
-  packaging,
-  pathvalidate,
-  pygments,
-  requests-futures,
-  shtab,
-  websockets,
-}:
+{ lib, buildPythonApplication, fetchFromGitHub, fetchpatch, writeScript, certifi
+, coloredlogs, ecdsa, packaging, pathvalidate, pygments, requests-futures, shtab
+, websockets, }:
 buildPythonApplication rec {
   pname = "pytr";
   version = "0.1.9";
@@ -37,16 +24,17 @@ buildPythonApplication rec {
     websockets
   ];
 
-  pythonImportsCheck = ["pytr"];
+  pythonImportsCheck = [ "pytr" ];
 
   passthru.runUpdate = true;
 
   meta = with lib; {
     homepage = "https://github.com/marzzzello/pytr";
-    description = "Use TradeRepublic in terminal and mass download all documents ";
+    description =
+      "Use TradeRepublic in terminal and mass download all documents ";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [shawn8901];
+    maintainers = with maintainers; [ shawn8901 ];
     mainProgram = "pytr";
   };
 }

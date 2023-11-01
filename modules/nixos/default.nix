@@ -1,8 +1,5 @@
-{
-  self,
-  config,
-  ...
-}: let
+{ self, config, ... }:
+let
   inherit (config.shawn8901.module-generator) generateModules;
 
   modules = generateModules "${self}/modules/nixos";

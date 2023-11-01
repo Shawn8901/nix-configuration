@@ -1,8 +1,5 @@
-{
-  lib,
-  flake-parts-lib,
-  ...
-}: let
+{ lib, flake-parts-lib, ... }:
+let
   inherit (lib) mkOption types literalExpression;
   inherit (flake-parts-lib) mkSubmoduleOptions;
 in {
@@ -10,11 +7,11 @@ in {
     flake = mkSubmoduleOptions {
       flakeModules = mkOption {
         type = types.lazyAttrsOf types.raw;
-        default = {};
+        default = { };
       };
       modules = mkOption {
         type = types.lazyAttrsOf types.raw;
-        default = {};
+        default = { };
       };
     };
   };

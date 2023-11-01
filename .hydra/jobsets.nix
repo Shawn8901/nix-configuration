@@ -1,27 +1,20 @@
-{
-  nixpkgs,
-  pulls,
-  ...
-}: let
-  pkgs = import nixpkgs {};
+{ nixpkgs, pulls, ... }:
+let
+  pkgs = import nixpkgs { };
 
   prs = builtins.fromJSON (builtins.readFile pulls);
-  prJobsets =
-    pkgs.lib.mapAttrs (
-      num: info: {
-        enabled = 1;
-        hidden = false;
-        description = "PR ${num}: ${info.title}";
-        checkinterval = 60;
-        schedulingshares = 20;
-        enableemail = false;
-        emailoverride = "";
-        keepnr = 1;
-        type = 1;
-        flake = "github:shawn8901/nix-configuration/pull/${num}/head";
-      }
-    )
-    prs;
+  prJobsets = pkgs.lib.mapAttrs (num: info: {
+    enabled = 1;
+    hidden = false;
+    description = "PR ${num}: ${info.title}";
+    checkinterval = 60;
+    schedulingshares = 20;
+    enableemail = false;
+    emailoverride = "";
+    keepnr = 1;
+    type = 1;
+    flake = "github:shawn8901/nix-configuration/pull/${num}/head";
+  }) prs;
   mkFlakeJobset = branch: {
     description = "Build ${branch}";
     checkinterval = "3600";
@@ -35,18 +28,14 @@
     flake = "github:shawn8901/nix-configuration/${branch}";
   };
 
-  desc =
-    prJobsets
-    // {
-      "main" = mkFlakeJobset "main";
-    };
+  desc = prJobsets // { "main" = mkFlakeJobset "main"; };
 
   log = {
     pulls = prs;
     jobsets = desc;
   };
 in {
-  jobsets = pkgs.runCommand "spec-jobsets.json" {} ''
+  jobsets = pkgs.runCommand "spec-jobsets.json" { } ''
     cat >$out <<EOF
     ${builtins.toJSON desc}
     EOF

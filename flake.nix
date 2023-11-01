@@ -53,25 +53,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
     };
-    flake-parts = {url = "github:hercules-ci/flake-parts";};
+    flake-parts = { url = "github:hercules-ci/flake-parts"; };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
     };
   };
 
-  outputs = inputs @ {
-    self,
-    flake-parts,
-    ...
-  }:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs = inputs@{ self, flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
       debug = false;
 
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
+      systems = [ "x86_64-linux" "aarch64-linux" ];
 
       imports = [
         ./parts/hydra-jobs.nix
@@ -89,14 +82,9 @@
         ./machines
       ];
 
-      perSystem = {pkgs, ...}: {
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            direnv
-            nix-direnv
-            statix
-          ];
-        };
+      perSystem = { pkgs, ... }: {
+        devShells.default =
+          pkgs.mkShell { packages = with pkgs; [ direnv nix-direnv statix ]; };
       };
     };
 }

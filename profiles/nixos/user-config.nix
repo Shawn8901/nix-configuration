@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+{ config, lib, pkgs, ... }: {
   sops.secrets = {
     shawn = {
       sopsFile = ../../files/secrets-common.yaml;
@@ -39,15 +34,23 @@
     '';
   };
   fonts = lib.mkMerge [
-    {fontconfig.enable = lib.mkDefault (!config.environment.noXlibs);}
+    { fontconfig.enable = lib.mkDefault (!config.environment.noXlibs); }
     (lib.optionalAttrs (!lib.versionOlder config.system.nixos.release "23.11") {
       enableDefaultPackages = lib.mkDefault (!config.environment.noXlibs);
-      packages = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
+      packages = [
+        (pkgs.nerdfonts.override {
+          fonts = [ "Meslo" "DroidSansMono" "LiberationMono" "Terminus" ];
+        })
+      ];
     })
     # Remove with 23.11
     (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
       enableDefaultFonts = !config.environment.noXlibs;
-      fonts = [(pkgs.nerdfonts.override {fonts = ["Meslo" "DroidSansMono" "LiberationMono" "Terminus"];})];
+      fonts = [
+        (pkgs.nerdfonts.override {
+          fonts = [ "Meslo" "DroidSansMono" "LiberationMono" "Terminus" ];
+        })
+      ];
     })
   ];
 
@@ -56,35 +59,39 @@
     defaultUserShell = pkgs.zsh;
     users = {
       root = lib.mkMerge [
-        (lib.optionalAttrs (!lib.versionOlder config.system.nixos.release "23.11") {
-          hashedPasswordFile = config.sops.secrets.root.path;
-        })
-        (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
-          passwordFile = config.sops.secrets.root.path;
-        })
+        (lib.optionalAttrs
+          (!lib.versionOlder config.system.nixos.release "23.11") {
+            hashedPasswordFile = config.sops.secrets.root.path;
+          })
+        (lib.optionalAttrs
+          (lib.versionOlder config.system.nixos.release "23.11") {
+            passwordFile = config.sops.secrets.root.path;
+          })
       ];
       shawn = lib.mkMerge [
         {
           isNormalUser = true;
           group = "users";
-          extraGroups = ["wheel"];
+          extraGroups = [ "wheel" ];
           uid = 1000;
           openssh.authorizedKeys.keys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
           ];
         }
-        (lib.optionalAttrs (!lib.versionOlder config.system.nixos.release "23.11") {
-          hashedPasswordFile = config.sops.secrets.shawn.path;
-        })
-        (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
-          passwordFile = config.sops.secrets.shawn.path;
-        })
+        (lib.optionalAttrs
+          (!lib.versionOlder config.system.nixos.release "23.11") {
+            hashedPasswordFile = config.sops.secrets.shawn.path;
+          })
+        (lib.optionalAttrs
+          (lib.versionOlder config.system.nixos.release "23.11") {
+            passwordFile = config.sops.secrets.shawn.path;
+          })
       ];
     };
   };
 
-  nix.settings.trusted-users = ["shawn"];
+  nix.settings.trusted-users = [ "shawn" ];
 
-  environment.systemPackages = [pkgs.fzf]; # Used by zsh-interactive-cd
-  environment = {variables.EDITOR = "nano";};
+  environment.systemPackages = [ pkgs.fzf ]; # Used by zsh-interactive-cd
+  environment = { variables.EDITOR = "nano"; };
 }

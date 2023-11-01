@@ -1,27 +1,20 @@
-{
-  self,
-  self',
-  config,
-  pkgs,
-  lib,
-  inputs',
-  ...
-}: let
+{ self, self', config, pkgs, lib, inputs', ... }:
+let
   inherit (config.sops) secrets;
   inherit (inputs') attic;
 in {
   sops.secrets = {
-    root = {neededForUsers = true;};
-    attic-env = {};
+    root = { neededForUsers = true; };
+    attic-env = { };
     grafana-env = {
       owner = "grafana";
       group = "grafana";
     };
-    vmauth = {};
+    vmauth = { };
   };
 
   networking = {
-    nameservers = ["208.67.222.222" "208.67.220.220"];
+    nameservers = [ "208.67.222.222" "208.67.220.220" ];
     domain = "";
     useDHCP = true;
   };
@@ -31,8 +24,10 @@ in {
     nginx.package = pkgs.nginxQuic;
     vmagent = {
       package = pkgs.victoriametrics;
-      remoteWriteUrl = lib.mkForce "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
-      extraArgs = lib.mkForce ["-remoteWrite.label=machine=${config.networking.hostName}"];
+      remoteWriteUrl = lib.mkForce
+        "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
+      extraArgs = lib.mkForce
+        [ "-remoteWrite.label=machine=${config.networking.hostName}" ];
     };
   };
 
@@ -65,15 +60,15 @@ in {
       enable = true;
       hostname = "grafana.pointjig.de";
       credentialsFile = secrets.grafana-env.path;
-      declarativePlugins = [self'.packages.vm-grafana-datasource];
-      settings.plugins = {allow_loading_unsigned_plugins = "victoriametrics-datasource";};
-      datasources = [
-        {
-          name = "VictoriaMetrics";
-          type = "victoriametrics-datasource";
-          url = "http://${config.services.victoriametrics.listenAddress}";
-        }
-      ];
+      declarativePlugins = [ self'.packages.vm-grafana-datasource ];
+      settings.plugins = {
+        allow_loading_unsigned_plugins = "victoriametrics-datasource";
+      };
+      datasources = [{
+        name = "VictoriaMetrics";
+        type = "victoriametrics-datasource";
+        url = "http://${config.services.victoriametrics.listenAddress}";
+      }];
     };
   };
 }

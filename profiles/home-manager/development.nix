@@ -1,17 +1,11 @@
-{
-  self',
-  config,
-  lib,
-  pkgs,
-  inputs',
-  ...
-}: let
+{ self', config, lib, pkgs, inputs', ... }:
+let
   fPkgs = self'.packages;
   attic = inputs'.attic.packages.attic-nixpkgs;
 in {
   sops = {
     secrets = {
-      attic = {path = "${config.xdg.configHome}/attic/config.toml";};
+      attic = { path = "${config.xdg.configHome}/attic/config.toml"; };
     };
   };
 
@@ -25,8 +19,7 @@ in {
       #   nix = config.nix.package;
       #   clientOnly = true;
       # })
-    ]
-    ++ [fPkgs.generate-zrepl-ssl];
+    ] ++ [ fPkgs.generate-zrepl-ssl ];
 
   programs.vscode = {
     enable = true;
@@ -87,9 +80,7 @@ in {
         "editor.formatOnPaste" = true;
         "editor.formatOnType" = false;
       };
-      "[rust]" = {
-        "editor.defaultFormatter" = "rust-lang.rust-analyzer";
-      };
+      "[rust]" = { "editor.defaultFormatter" = "rust-lang.rust-analyzer"; };
       "[python]" = {
         "editor.formatOnSave" = true;
         "editor.formatOnPaste" = true;
@@ -111,12 +102,8 @@ in {
       "nix.serverPath" = "${lib.getExe pkgs.nil}";
       "nix.serverSettings" = {
         "nil" = {
-          "diagnostics" = {
-            "ignored" = ["unused_binding" "unused_with"];
-          };
-          "formatting" = {
-            "command" = ["nixfmt"];
-          };
+          "diagnostics" = { "ignored" = [ "unused_binding" "unused_with" ]; };
+          "formatting" = { "command" = [ "nixfmt" ]; };
         };
       };
     };
@@ -131,9 +118,7 @@ in {
         "warn_timeout" = "10s";
         "load_dotenv" = true;
       };
-      "whitelist" = {
-        prefix = ["${config.home.homeDirectory}/dev"];
-      };
+      "whitelist" = { prefix = [ "${config.home.homeDirectory}/dev" ]; };
     };
   };
 
@@ -141,16 +126,16 @@ in {
     enable = true;
     userName = "Shawn8901";
     userEmail = "shawn8901@googlemail.com";
-    ignores = ["*.swp"];
+    ignores = [ "*.swp" ];
     extraConfig = {
-      init = {defaultBranch = "main";};
-      push = {autoSetupRemote = "true";};
+      init = { defaultBranch = "main"; };
+      push = { autoSetupRemote = "true"; };
     };
   };
 
   programs.gh = {
     enable = true;
-    extensions = [pkgs.gh-dash fPkgs.gh-poi];
+    extensions = [ pkgs.gh-dash fPkgs.gh-poi ];
   };
   programs.ssh = {
     enable = true;

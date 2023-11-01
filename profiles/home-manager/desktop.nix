@@ -1,10 +1,5 @@
-{
-  pkgs,
-  self',
-  lib,
-  ...
-}: let
-  fPkgs = self'.packages;
+{ pkgs, self', lib, ... }:
+let fPkgs = self'.packages;
 in {
   xdg.enable = true;
   xdg.mime.enable = true;
@@ -39,12 +34,5 @@ in {
       plasma-integration
       libreoffice-qt
       krita
-    ]
-    ++ (with fPkgs; [
-      deezer
-      nas
-      rogerrouter
-      s25rttr
-      vdhcoapp
-    ]);
+    ] ++ (with fPkgs; [ deezer nas rogerrouter s25rttr vdhcoapp ]);
 }
