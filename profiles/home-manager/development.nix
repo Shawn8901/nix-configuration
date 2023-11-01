@@ -7,7 +7,7 @@
   ...
 }: let
   fPkgs = self'.packages;
-  inherit (inputs'.attic.packages) attic;
+  attic = inputs'.attic.packages.attic-nixpkgs;
 in {
   sops = {
     secrets = {
