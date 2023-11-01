@@ -17,7 +17,7 @@ in {
 
   home.packages = with pkgs;
     [
-      alejandra
+      nixfmt
       nil
       nix-tree
       nixpkgs-review
@@ -107,15 +107,15 @@ in {
       "diffEditor.ignoreTrimWhitespace" = false;
       "editor.formatOnSave" = true;
       "nix.enableLanguageServer" = true;
-      "nix.formatterPath" = "${pkgs.alejandra}/bin/alejandra";
-      "nix.serverPath" = "${pkgs.nil}/bin/nil";
+      "nix.formatterPath" = "${lib.getExe pkgs.nixfmt}";
+      "nix.serverPath" = "${lib.getExe pkgs.nil}";
       "nix.serverSettings" = {
         "nil" = {
           "diagnostics" = {
             "ignored" = ["unused_binding" "unused_with"];
           };
           "formatting" = {
-            "command" = ["alejandra"];
+            "command" = ["nixfmt"];
           };
         };
       };
