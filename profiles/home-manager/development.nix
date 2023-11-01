@@ -21,10 +21,10 @@ in {
       nil
       nix-tree
       nixpkgs-review
-      (attic.override {
-        nix = config.nix.package;
-        clientOnly = true;
-      })
+      # (attic.override {
+      #   nix = config.nix.package;
+      #   clientOnly = true;
+      # })
     ]
     ++ [fPkgs.generate-zrepl-ssl];
 
