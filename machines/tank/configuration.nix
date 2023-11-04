@@ -360,7 +360,9 @@ in {
     nextcloud.extraOptions."preview_ffmpeg_path" =
       "${lib.getExe pkgs.ffmpeg-headless}";
   };
-  systemd.services.nextcloud-cron = { path = [ pkgs.perl ]; };
+  systemd.services.nextcloud-cron = {
+    path = [ pkgs.perl pkgs.libtensorflow ];
+  };
 
   environment.systemPackages = [ pkgs.nodejs_18 ];
 
