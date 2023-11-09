@@ -41,6 +41,7 @@ in {
         "tampermonkey"
         "betterttv"
         "teamviewer"
+        "keymapp"
       ];
       homeManager.shawn = {
         profiles = [ "desktop" "development" "browser" "finance" ];

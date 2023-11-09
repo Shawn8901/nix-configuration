@@ -150,4 +150,6 @@ in {
   ];
   users.users.shawn.extraGroups =
     [ "video" "audio" "scanner" "lp" "networkmanager" ];
+
+  users.users.shawn.packages = [ self'.packages.keymapp ];
 }
