@@ -45,6 +45,8 @@
 
         deezer = pkgs.callPackage ./deezer { };
         vdhcoapp = pkgs.callPackage ./vdhcoapp { };
+
+        keymapp = pkgs.callPackage ./keymapp { };
       };
     in {
       packages."${system}" = packages;
