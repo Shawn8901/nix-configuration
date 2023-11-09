@@ -108,6 +108,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     maintainers = with maintainers; [ shawn8901 ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
 }
