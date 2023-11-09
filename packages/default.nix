@@ -16,7 +16,7 @@
     let
       pkgs = import inputs.nixpkgs {
         inherit system;
-        config.nixpkgs.config.allowUnfreePredicate = pkg:
+        config.allowUnfreePredicate = pkg:
           builtins.elem (inputs.nixpkgs.lib.getName pkg) [ "deezer" ];
         config.permittedInsecurePackages = [ "electron-13.6.9" ];
       };
