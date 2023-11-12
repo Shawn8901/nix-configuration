@@ -36,7 +36,7 @@
   environment.sessionVariables.FLAKE =
     lib.mkDefault "github:shawn8901/nix-configuration";
   environment.systemPackages = with pkgs;
-    [ git btop nano vim sops ] ++ [ inputs'.nh.packages.default ];
+    [ git btop vim sops ] ++ [ inputs'.nh.packages.default ];
 
   services = {
     journald.extraConfig = ''

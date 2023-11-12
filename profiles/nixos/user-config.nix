@@ -93,5 +93,4 @@
   nix.settings.trusted-users = [ "shawn" ];
 
   environment.systemPackages = [ pkgs.fzf ]; # Used by zsh-interactive-cd
-  environment = { variables.EDITOR = "nano"; };
 }
