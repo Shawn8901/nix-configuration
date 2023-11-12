@@ -134,7 +134,11 @@ in {
     keep-derivations = true;
   };
   environment = {
-    systemPackages = with pkgs; [ cifs-utils zenmonitor ];
+    systemPackages = with pkgs; [
+      cifs-utils
+      zenmonitor
+      self'.packages.keymapp
+    ];
     etc = {
       "samba/credentials_ela".source = secrets.samba-ela.path;
       "samba/credentials_shawn".source = secrets.samba.path;
@@ -151,5 +155,4 @@ in {
   users.users.shawn.extraGroups =
     [ "video" "audio" "scanner" "lp" "networkmanager" ];
 
-  users.users.shawn.packages = [ self'.packages.keymapp ];
 }
