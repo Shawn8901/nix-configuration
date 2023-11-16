@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, imagemagick, p7zip
-, nodePackages, electron_13, fetchFromGitHub, }:
+{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper
+, imagemagick, p7zip, nodePackages, electron_13, fetchFromGitHub, }:
 let
-  desktop = makeDesktopItem {
+  desktopItem = makeDesktopItem {
     name = "deezer";
     desktopName = "Deezer";
     comment = "Deezer audio streaming service";
@@ -32,8 +32,14 @@ in stdenv.mkDerivation {
     ./systray-buttons-fix.patch
   ];
 
-  nativeBuildInputs =
-    [ makeWrapper p7zip nodePackages.asar nodePackages.prettier imagemagick ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    p7zip
+    nodePackages.asar
+    nodePackages.prettier
+    imagemagick
+  ];
 
   dontConfigure = true;
 
@@ -101,10 +107,10 @@ in stdenv.mkDerivation {
       --add-flags $out/share/deezer/app.asar \
       --chdir $out/share/deezer
 
-    ln -s ${desktop}/share/applications/* $out/share/applications/deezer.desktop
-
     runHook postInstall
   '';
+
+  desktopItems = [ desktopItem ];
 
   meta = with lib; {
     maintainers = with maintainers; [ shawn8901 ];
