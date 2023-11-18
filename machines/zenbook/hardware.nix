@@ -26,7 +26,10 @@ in {
       "amd_pstate.shared_mem=1"
       "amdgpu.dcfeaturemask=0x8"
     ];
-    extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
+    extraModulePackages = with config.boot.kernelPackages; [
+      zenpower
+      cpupower
+    ];
     blacklistedKernelModules = [ "k10temp" ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=1610612736
@@ -81,4 +84,5 @@ in {
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
   powerManagement.enable = true;
+  powerManagement.powertop.enable = true;
 }
