@@ -34,5 +34,5 @@ in {
       plasma-integration
       libreoffice-qt
       krita
-    ] ++ (with fPkgs; [ deezer nas rogerrouter s25rttr vdhcoapp ]);
+    ] ++ (with fPkgs; [ deezer nas vdhcoapp ]);
 }
