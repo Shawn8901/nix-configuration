@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper
-, imagemagick, p7zip, nodePackages, electron_13, fetchFromGitHub, }:
+{ lib, stdenv, fetchurl, fetchzip, makeDesktopItem, copyDesktopItems
+, makeWrapper, writeScript, imagemagick, p7zip, nodePackages, electron_13, }:
 let
   desktopItem = makeDesktopItem {
     name = "deezer";
@@ -13,23 +13,32 @@ let
     exec = "deezer %u";
     startupNotify = true;
   };
-  version = "6.0.10";
-  deezer-windows-app = fetchurl {
-    url =
-      "https://www.deezer.com/desktop/download/artifact/win32/x86/${version}";
-    hash = "sha256-obdogAqMS35qLTkJu1NVMMkwcRAcXPBHTHDW54w4mqA=";
-  };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
+
+  version = "6.0.20";
   pname = "deezer";
-  inherit version;
+
+  src = fetchzip {
+    url =
+      "https://github.com/SibrenVasse/${finalAttrs.pname}/archive/refs/tags/v${finalAttrs.version}.tar.gz";
+    hash = "sha256-xPAVbkZenvt85IV1TY5Ipcyzm6VqDkTNcRu6DBfnxcQ=";
+  };
+
+  # this is a nasty workaround to trick nix-update to update your hash, whilst having src on the github repo
+  # that is providing patches, whilst also updating a second hash
+  go-modules = fetchurl {
+    url =
+      "https://www.deezer.com/desktop/download/artifact/win32/x86/${finalAttrs.version}";
+    hash = "sha256-OBvTK8lJmwvyLF/KZtXBkxvoJlEzhaKOCaI5bovX4g8=";
+  };
 
   patches = [
-    ./remove-kernel-version-from-user-agent.patch
-    ./avoid-change-default-texthtml-mime-type.patch
-    ./fix-isDev-usage.patch
-    ./start-hidden-in-tray.patch
-    ./quit.patch
-    ./systray-buttons-fix.patch
+    "${finalAttrs.src}/remove-kernel-version-from-user-agent.patch"
+    "${finalAttrs.src}/avoid-change-default-texthtml-mime-type.patch"
+    "${finalAttrs.src}/fix-isDev-usage.patch"
+    "${finalAttrs.src}/start-hidden-in-tray.patch"
+    "${finalAttrs.src}/quit.patch"
+    "${finalAttrs.src}/systray-buttons-fix.patch"
   ];
 
   nativeBuildInputs = [
@@ -43,9 +52,8 @@ in stdenv.mkDerivation {
 
   dontConfigure = true;
 
-  unpackPhase = ''
-    runHook preUnpack
-    7z x -so ${deezer-windows-app} "\$PLUGINSDIR/app-32.7z" > app-32.7z
+  prePatch = ''
+    7z x -so ${finalAttrs.go-modules} "\$PLUGINSDIR/app-32.7z" > app-32.7z
     7z x -y -bsp0 -bso0 app-32.7z
 
     cd resources
@@ -59,10 +67,6 @@ in stdenv.mkDerivation {
 
     cd ..
 
-    runHook postUnpack
-  '';
-
-  prePatch = ''
     cd resources/app
   '';
 
@@ -112,9 +116,11 @@ in stdenv.mkDerivation {
 
   desktopItems = [ desktopItem ];
 
+  passthru.runUpdate = true;
+
   meta = with lib; {
     maintainers = with maintainers; [ shawn8901 ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
-}
+})
