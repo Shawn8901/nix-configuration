@@ -6,4 +6,5 @@ in {
     enable = true;
     enableZshIntegration = true;
   };
+  manual.manpages.enable = false;
 }
