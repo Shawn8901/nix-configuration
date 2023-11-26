@@ -27,9 +27,6 @@ in {
         nss = pkgs.nss_latest;
         withOpenASAR = true;
       })
-      teamspeak_client
-      signal-desktop
-      wally-cli
       vlc
       plasma-integration
       libreoffice-qt
