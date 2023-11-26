@@ -1,7 +1,7 @@
 { self, config, inputs, lib, withSystem, ... }:
 let
-  inherit (lib) mkOption types concatMap;
-  inherit (builtins) readDir mapAttrs pathExists attrValues;
+  inherit (lib) mkOption types concatMap mapAttrs attrValues;
+  inherit (builtins) elem readDir pathExists substring hashString;
   inherit (config.shawn8901.profile-generator)
     generateModulesFromNixOSProfiles generateModulesFromHmProfiles;
 
@@ -78,8 +78,7 @@ in {
             _module.args = extraArgs;
             nixpkgs = { inherit (conf) hostPlatform; };
             networking.hostName = name;
-            networking.hostId =
-              builtins.substring 0 8 (builtins.hashString "md5" "${name}");
+            networking.hostId = substring 0 8 (hashString "md5" "${name}");
             nix.registry = {
               nixpkgs.flake = conf.nixpkgs;
               nixos-config.flake = inputs.self;
@@ -90,7 +89,7 @@ in {
             system.stateVersion = conf.stateVersion;
             sops.defaultSopsFile = "${configDir}/secrets.yaml";
             nixpkgs.config.allowUnfreePredicate = pkg:
-              builtins.elem (lib.getName pkg) conf.unfreeSoftware;
+              elem (lib.getName pkg) conf.unfreeSoftware;
             disabledModules = conf.disabledModules;
           }
 
@@ -103,7 +102,7 @@ in {
           ++ (attrValues self.flakeModules.private.nixos)
           ++ (generateModulesFromNixOSProfiles conf.profiles)
           ++ conf.extraModules
-          ++ lib.optionals (builtins.pathExists darlings) [ darlings ]
+          ++ lib.optionals (pathExists darlings) [ darlings ]
           ++ lib.optionals (conf.homeManager != { }) [
             conf.hmInput.nixosModule
             ({ config, ... }: {
@@ -114,7 +113,9 @@ in {
                 sharedModules = [ inputs.sops-nix.homeManagerModules.sops ]
                   ++ (attrValues self.flakeModules.homeManager);
                 users = mapAttrs (name: hmConf:
-                  let user = config.users.users.${name};
+                  let
+                    user = config.users.users.${name};
+                    homeFile = "${configDir}/home.nix";
                   in {
                     home.stateVersion = hmConf.stateVersion;
                     imports = [
@@ -133,7 +134,8 @@ in {
                         home.sessionVariables.NIX_PATH =
                           "nixpkgs=${config.xdg.configHome}/nix/inputs/nixpkgs\${NIX_PATH:+:$NIX_PATH}";
                       })
-                    ] ++ (generateModulesFromHmProfiles hmConf.profiles);
+                    ] ++ (generateModulesFromHmProfiles hmConf.profiles)
+                      ++ lib.optionals (pathExists homeFile) [ homeFile ];
                   }) conf.homeManager;
               };
             })
