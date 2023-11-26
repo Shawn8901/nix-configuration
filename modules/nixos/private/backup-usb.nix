@@ -1,4 +1,4 @@
-{ self, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.shawn8901.backup-usb;
   inherit (lib) mkIf mkEnableOption mkOption types;

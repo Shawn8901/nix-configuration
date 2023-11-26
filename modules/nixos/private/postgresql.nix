@@ -25,6 +25,7 @@ in {
         port = 9187;
         runAsLocalSuperUser = true;
       };
+
       vmagent.prometheusConfig.scrape_configs = [{
         job_name = "postgres";
         static_configs = [{

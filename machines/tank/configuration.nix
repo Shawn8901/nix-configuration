@@ -1,10 +1,12 @@
-{ self', self, config, fConfig, pkgs, lib, inputs, inputs', ... }:
+{ self', self, config, flakeConfig, pkgs, lib, inputs, inputs', ... }:
 let
   hosts = self.nixosConfigurations;
   fPkgs = self'.packages;
 
   inherit (config.sops) secrets;
 in {
+  imports = [ ./save-darlings.nix ];
+
   sops.secrets = {
     ssh-builder-key = { owner = "hydra-queue-runner"; };
     zfs-ztank-key = { };
@@ -41,7 +43,7 @@ in {
 
   networking = {
     firewall.allowedTCPPorts =
-      fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
+      flakeConfig.shawn8901.zrepl.servePorts config.services.zrepl;
     hosts = {
       "127.0.0.1" = lib.attrNames config.services.nginx.virtualHosts;
       "::1" = lib.attrNames config.services.nginx.virtualHosts;
@@ -254,7 +256,7 @@ in {
               prefix = "zrepl_";
             };
             connect = let
-              zreplPort = fConfig.shawn8901.zrepl.servePorts
+              zreplPort = flakeConfig.shawn8901.zrepl.servePorts
                 hosts.shelter.config.services.zrepl;
             in {
               type = "tls";
@@ -436,6 +438,8 @@ in {
       attic.enable = true;
       attic.package = inputs'.attic.packages.attic-client;
     };
+    server.enable = true;
+    managed-user.enable = true;
   };
 
   environment = { etc.".ztank_key".source = secrets.zfs-ztank-key.path; };

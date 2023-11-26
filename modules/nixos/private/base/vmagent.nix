@@ -1,7 +1,7 @@
-{ config, lib, pkgs, fConfig, ... }: {
+{ self, config, lib, pkgs, flakeConfig, ... }: {
   sops.secrets = {
     vmagent = {
-      sopsFile = ../../files/secrets-common.yaml;
+      sopsFile = "${self.outPath}/files/secrets-common.yaml";
       owner = config.services.vmagent.user;
       group = config.services.vmagent.group;
     };
@@ -62,7 +62,7 @@
             static_configs = [{
               targets = [
                 "localhost:${
-                  toString (fConfig.shawn8901.zrepl.monitoringPorts
+                  toString (flakeConfig.shawn8901.zrepl.monitoringPorts
                     config.services.zrepl)
                 }"
               ];

@@ -7,10 +7,10 @@
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
       url = "github:zhaofengli/attic";
-      # inputs.nixpkgs.follows = "nixpkgs-stable";
-      # inputs.nixpkgs-stable.follows = "nixpkgs-stable";
-      # inputs.flake-utils.follows = "flake-utils";
-      # inputs.flake-compat.follows = "flake-compat";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-compat.follows = "flake-compat";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -54,6 +54,11 @@
       inputs.flake-parts.follows = "flake-parts";
     };
     flake-parts = { url = "github:hercules-ci/flake-parts"; };
+    fp-rndp-lib = {
+      url = "github:Shawn8901/fp-rndp-lib";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
@@ -62,22 +67,19 @@
 
   outputs = inputs@{ self, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      debug = false;
+      debug = true;
 
       systems = [ "x86_64-linux" "aarch64-linux" ];
 
+      fp-rndp-lib.root = ./.;
+      fp-rndp-lib.modules.privateNamePrefix = "shawn8901";
+
       imports = [
-        ./parts/hydra-jobs.nix
-        ./parts/flake-modules.nix
-        ./parts/module-generator.nix
-        ./parts/system.nix
+        inputs.fp-rndp-lib.flakeModule
+
         ./parts/zrepl-helper.nix
-        ./parts/profiles.nix
 
-        ./modules/nixos
-        ./modules/home-manager
-
-        ./profiles
+        ./modules
         ./packages
         ./machines
       ];
