@@ -1,8 +1,8 @@
 { inputs', ... }:
 let unoptimized = inputs'.nixpkgs.legacyPackages;
 in {
-  #aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sse sse2 sse3 sse4_1 sse4_2 ssse3
-
+  # In case someone comes around, please be aware that the system feature "gccarch-x86-64-v3"
+  # has to be available on the builder before it can build for x86-64_v3
   nix.settings.system-features =
     [ "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
   nixpkgs.hostPlatform.gcc.arch = "x86-64-v3";
