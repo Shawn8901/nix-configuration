@@ -1,13 +1,13 @@
-{ inputs', config, pkgs, lib, ... }: {
+{ inputs', config, pkgs, lib, ... }:
+let inherit (lib) mkMerge mkDefault versionOlder optionalAttrs;
+in {
   documentation = {
     doc.enable = false;
     nixos.enable = false;
     info.enable = false;
-    man = {
-      enable = lib.mkDefault true;
-      generateCaches = lib.mkDefault true;
-    };
   };
+
+  system.stateVersion = mkDefault "23.05";
 
   time.timeZone = "Europe/Berlin";
 
@@ -17,17 +17,17 @@
     keyMap = "de";
   };
 
-  boot = lib.mkMerge [
+  boot = mkMerge [
     {
-      tmp.useTmpfs = lib.mkDefault true;
+      tmp.useTmpfs = mkDefault true;
       tmp.cleanOnBoot = true;
     }
-    (lib.optionalAttrs (!lib.versionOlder config.system.nixos.release "23.11") {
-      swraid.enable = lib.mkDefault false;
+    (optionalAttrs (!versionOlder config.system.nixos.release "23.11") {
+      swraid.enable = mkDefault false;
     })
     # Remove with 23.11
-    (lib.optionalAttrs (lib.versionOlder config.system.nixos.release "23.11") {
-      initrd.services.swraid.enable = lib.mkDefault false;
+    (lib.optionalAttrs (versionOlder config.system.nixos.release "23.11") {
+      initrd.services.swraid.enable = mkDefault false;
     })
   ];
 

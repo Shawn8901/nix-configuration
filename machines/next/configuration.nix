@@ -65,5 +65,6 @@ in {
       enable = true;
       package = pkgs.postgresql_15;
     };
+    server.enable = true;
   };
 }

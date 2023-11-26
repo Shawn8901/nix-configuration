@@ -1,16 +1,16 @@
-{ pkgs, lib, config, inputs', ... }:
+{ self, pkgs, lib, config, inputs', ... }:
 let
   inherit (pkgs.hostPlatform) system;
   inherit (lib) genAttrs;
 in {
   sops.secrets = {
     nix-gh-token-ro = {
-      sopsFile = ../../files/secrets-common.yaml;
+      sopsFile = "${self.outPath}/files/secrets-common.yaml";
       group = config.users.groups.nixbld.name;
       mode = "0444";
     };
     nix-netrc-ro = {
-      sopsFile = ../../files/secrets-common.yaml;
+      sopsFile = "${self.outPath}/files/secrets-common.yaml";
       group = config.users.groups.nixbld.name;
       mode = "0444";
     };

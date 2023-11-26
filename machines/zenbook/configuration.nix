@@ -1,9 +1,11 @@
-{ self', self, pkgs, lib, config, fConfig, inputs, ... }:
+{ self', self, pkgs, lib, config, flakeConfig, inputs, ... }:
 let
   fPkgs = self'.packages;
   hosts = self.nixosConfigurations;
   inherit (config.sops) secrets;
 in {
+  imports = [ ./save-darlings.nix ];
+
   sops.secrets = {
     zrepl = { restartUnits = [ "zrepl.service" ]; };
     samba = { sopsFile = ./../../files/secrets-desktop.yaml; };
@@ -83,7 +85,7 @@ in {
             prefix = "zrepl_";
           };
           connect = let
-            zreplPort = fConfig.shawn8901.zrepl.servePorts
+            zreplPort = flakeConfig.shawn8901.zrepl.servePorts
               hosts.tank.config.services.zrepl;
           in {
             type = "tls";
@@ -145,4 +147,9 @@ in {
 
   users.users.shawn.extraGroups =
     [ "video" "audio" "scanner" "lp" "networkmanager" ];
+
+  shawn8901 = {
+    desktop.enable = true;
+    managed-user.enable = true;
+  };
 }

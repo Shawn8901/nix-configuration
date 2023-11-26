@@ -1,10 +1,12 @@
-{ self, self', pkgs, lib, config, fConfig, inputs', ... }:
+{ self, self', pkgs, lib, config, flakeConfig, inputs', ... }:
 let
   fPkgs = self'.packages;
   hosts = self.nixosConfigurations;
 
   inherit (config.sops) secrets;
 in {
+  imports = [ ./save-darlings.nix ];
+
   sops.secrets = {
     zrepl = { };
     samba = { };
@@ -13,7 +15,7 @@ in {
 
   networking = {
     firewall.allowedTCPPorts =
-      fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
+      flakeConfig.shawn8901.zrepl.servePorts config.services.zrepl;
     networkmanager = {
       enable = true;
       plugins = lib.mkForce [ ];
@@ -151,4 +153,8 @@ in {
   users.users.shawn.extraGroups =
     [ "video" "audio" "scanner" "lp" "networkmanager" ];
 
+  shawn8901 = {
+    desktop.enable = true;
+    managed-user.enable = true;
+  };
 }

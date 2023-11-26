@@ -1,24 +1,25 @@
-{ self, inputs, lib, config, withSystem, ... }:
+{ self, self', inputs, lib, config, withSystem, ... }:
 let
   inherit (config.shawn8901.system-generator) generateSystem;
   cfg = config.shawn8901.nixosConfigurations;
 in {
-  config.shawn8901.nixosConfigurations = {
+  config.fp-rndp-lib.nixosConfigurations = {
     cache = {
       hostPlatform.system = "aarch64-linux";
       nixpkgs = inputs.nixpkgs-stable;
       hmInput = inputs.home-manager-stable;
-      profiles = [ "server" "managed-user" ];
-      homeManager.shawn.profiles = [ "base" ];
+      home-manager.shawn = { };
       disabledModules = [ "services/monitoring/vmagent.nix" ];
       extraModules = [
+        inputs.attic.nixosModules.atticd
         (inputs.nixpkgs.outPath
           + "/nixos/modules/services/monitoring/vmagent.nix")
+
+        "${self}/modules/nixos/attic-server"
       ];
     };
     next = {
       nixpkgs = inputs.nixpkgs-stable;
-      profiles = [ "server" ];
       disabledModules = [ "services/monitoring/vmagent.nix" ];
       extraModules = [
         (inputs.nixpkgs.outPath
@@ -28,7 +29,6 @@ in {
     pointalpha = {
       nixpkgs = inputs.nixpkgs;
       hmInput = inputs.home-manager;
-      profiles = [ "desktop" "gaming" ];
       unfreeSoftware = [
         "steam"
         "steam-run"
@@ -43,15 +43,12 @@ in {
         "teamviewer"
         "keymapp"
       ];
-      homeManager.shawn = {
-        profiles = [ "desktop" "development" "browser" "finance" ];
-      };
+      home-manager.shawn = { };
     };
     pointjig = {
       nixpkgs = inputs.nixpkgs-stable;
       hmInput = inputs.home-manager-stable;
-      profiles = [ "server" "managed-user" ];
-      homeManager.shawn.profiles = [ "base" ];
+      home-manager.shawn = { };
       extraModules = [
         inputs.simple-nixos-mailserver.nixosModules.default
         inputs.mimir.nixosModules.default
@@ -64,8 +61,7 @@ in {
     shelter = {
       nixpkgs = inputs.nixpkgs-stable;
       hmInput = inputs.home-manager-stable;
-      profiles = [ "server" "managed-user" ];
-      homeManager.shawn.profiles = [ "base" ];
+      home-manager.shawn = { };
       disabledModules = [ "services/monitoring/vmagent.nix" ];
       extraModules = [
         (inputs.nixpkgs.outPath
@@ -75,8 +71,7 @@ in {
     tank = {
       nixpkgs = inputs.nixpkgs;
       hmInput = inputs.home-manager;
-      profiles = [ "server" "managed-user" ];
-      homeManager.shawn.profiles = [ "base" ];
+      home-manager.shawn = { };
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
@@ -85,7 +80,6 @@ in {
     zenbook = {
       nixpkgs = inputs.nixpkgs;
       hmInput = inputs.home-manager;
-      profiles = [ "desktop" "gaming" ];
       unfreeSoftware = [
         "steam"
         "steam-run"
@@ -98,21 +92,7 @@ in {
         "tampermonkey"
         "betterttv"
       ];
-      homeManager.shawn = { profiles = [ "desktop" "development" "browser" ]; };
+      home-manager.shawn = { };
     };
-  };
-
-  config.flake.nixosConfigurations = generateSystem cfg;
-
-  config.flake.hydraJobs = {
-    nixos = lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel)
-      config.flake.nixosConfigurations;
-    "merge-pr" = withSystem "x86_64-linux" ({ pkgs, ... }:
-      pkgs.releaseTools.aggregate {
-        name = "merge-pr";
-        meta = { schedulingPriority = 10; };
-        constituents = map (n: "nixos." + n)
-          (builtins.attrNames config.flake.hydraJobs.nixos);
-      });
   };
 }

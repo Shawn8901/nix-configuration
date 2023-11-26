@@ -125,5 +125,9 @@ in {
     audit.enable = false;
   };
 
-  shawn8901 = { postgresql.enable = true; };
+  shawn8901 = {
+    postgresql.enable = true;
+    server.enable = true;
+    managed-user.enable = true;
+  };
 }

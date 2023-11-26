@@ -1,4 +1,4 @@
-{ self, self', config, fConfig, pkgs, inputs', ... }:
+{ self, self', config, flakeConfig, pkgs, inputs', ... }:
 let
   uPkgs = inputs'.nixpkgs.legacyPackages;
 
@@ -7,7 +7,8 @@ in {
   sops.secrets = { zrepl = { }; };
 
   networking.firewall = {
-    allowedTCPPorts = fConfig.shawn8901.zrepl.servePorts config.services.zrepl;
+    allowedTCPPorts =
+      flakeConfig.shawn8901.zrepl.servePorts config.services.zrepl;
   };
 
   systemd = {
@@ -55,8 +56,8 @@ in {
           serve = {
             type = "tls";
             listen = ":8888";
-            ca = ../../files/public_certs/zrepl/tank.crt;
-            cert = ../../files/public_certs/zrepl/shelter.crt;
+            ca = "${self.outPath}/files/public_certs/zrepl/tank.crt";
+            cert = "${self.outPath}/files/public_certs/zrepl/shelter.crt";
             key = secrets.zrepl.path;
             client_cns = [ "tank" ];
           };
@@ -68,5 +69,10 @@ in {
   security = {
     auditd.enable = false;
     audit.enable = false;
+  };
+
+  shawn8901 = {
+    server.enable = true;
+    managed-user.enable = true;
   };
 }

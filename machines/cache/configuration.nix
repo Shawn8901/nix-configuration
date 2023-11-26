@@ -70,5 +70,7 @@ in {
         url = "http://${config.services.victoriametrics.listenAddress}";
       }];
     };
+    server.enable = true;
+    managed-user.enable = true;
   };
 }
