@@ -65,7 +65,7 @@
     };
   };
 
-  outputs = inputs@{ self, flake-parts, ... }:
+  outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       debug = true;
 
@@ -83,6 +83,16 @@
         ./packages
         ./machines
       ];
+
+      # Create the merge-pr dummy job, its filled in machines and packages default.nix
+      flake.hydraJobs = let name = "merge-pr";
+      in {
+        ${name} = nixpkgs.legacyPackages.x86_64-linux.releaseTools.aggregate {
+          inherit name;
+          meta = { schedulingPriority = 10; };
+          constituents = [ ];
+        };
+      };
 
       perSystem = { pkgs, ... }: {
         devShells.default =

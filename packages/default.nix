@@ -1,5 +1,7 @@
-{ config, perSystem, withSystem, inputs, ... }: {
-  perSystem = { pkgs, ... }:
+{ config, lib, perSystem, withSystem, inputs, ... }:
+let genPackageName = system: packageName: "${system}.${packageName}";
+in {
+  perSystem = { pkgs, system, ... }:
     let
       packages = {
         pg-upgrade = pkgs.callPackage ./pg-upgrade { };
@@ -7,10 +9,11 @@
           pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix { };
         vm-grafana-datasource = pkgs.callPackage ./vm-grafana-datasource { };
       };
-    in {
-      inherit packages;
-      hydraJobs = packages;
-    };
+      hydraJobs = {
+        merge-pr.constituents =
+          map (n: genPackageName system n) (lib.attrNames packages);
+      } // packages;
+    in { inherit packages; };
 
   flake = withSystem "x86_64-linux" ({ system, ... }:
     let
@@ -50,6 +53,10 @@
       };
     in {
       packages."${system}" = packages;
-      hydraJobs."${system}" = packages;
+      hydraJobs = {
+        "${system}" = packages;
+        merge-pr.constituents =
+          map (n: genPackageName system n) (lib.attrNames packages);
+      };
     });
 }

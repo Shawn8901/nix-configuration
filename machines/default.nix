@@ -2,6 +2,8 @@
 let
   inherit (config.shawn8901.system-generator) generateSystem;
   cfg = config.shawn8901.nixosConfigurations;
+  hosts = map (n: "nixos." + n)
+    (lib.attrNames config.fp-rndp-lib.nixosConfigurations);
 in {
   config.fp-rndp-lib.nixosConfigurations = {
     cache = {
@@ -95,4 +97,6 @@ in {
       home-manager.shawn = { };
     };
   };
+
+  config.flake.hydraJobs.merge-pr.constituents = hosts;
 }
