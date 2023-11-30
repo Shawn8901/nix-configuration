@@ -1,5 +1,7 @@
-{ config, perSystem, withSystem, inputs, ... }: {
-  perSystem = { pkgs, ... }:
+{ config, lib, perSystem, withSystem, inputs, ... }:
+let genPackageName = system: packageName: "${system}.${packageName}";
+in {
+  perSystem = { pkgs, system, ... }:
     let
       packages = {
         pg-upgrade = pkgs.callPackage ./pg-upgrade { };

@@ -95,4 +95,10 @@ in {
       home-manager.shawn = { };
     };
   };
+
+  config.flake.hydraJobs = {
+    nixos = lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel)
+      config.flake.nixosConfigurations;
+  };
+
 }

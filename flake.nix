@@ -65,7 +65,7 @@
     };
   };
 
-  outputs = inputs@{ self, flake-parts, ... }:
+  outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       debug = true;
 
@@ -83,6 +83,21 @@
         ./packages
         ./machines
       ];
+
+      flake.hydraJobs = let
+        lib = nixpkgs.lib;
+        name = "merge-pr";
+        hosts = map (n: "nixos." + n) (lib.attrNames self.nixosConfigurations);
+        packages = lib.flatten (lib.attrValues (lib.mapAttrs
+          (system: attr: map (p: "${system}.${p}") (lib.attrNames attr))
+          self.packages));
+      in {
+        ${name} = nixpkgs.legacyPackages.x86_64-linux.releaseTools.aggregate {
+          inherit name;
+          meta = { schedulingPriority = 10; };
+          constituents = hosts ++ packages;
+        };
+      };
 
       perSystem = { pkgs, ... }: {
         devShells.default =
