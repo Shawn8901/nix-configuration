@@ -38,6 +38,7 @@ in {
       !include ${config.sops.secrets.nix-gh-token-ro.path}
       min-free = ${toString (1024 * 1024 * 1024)}
       max-free = ${toString (5 * 1024 * 1024 * 1024)}
+      pure-eval = true
     '';
     nrBuildUsers = lib.mkForce 16;
     daemonIOSchedClass = "idle";
