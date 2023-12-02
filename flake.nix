@@ -49,7 +49,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     nh = {
-      url = "github:viperML/nh";
+      url = "github:viperML/nh/4298c924bb6b52607207691af30ebeccdbfa359d";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-parts = { url = "github:hercules-ci/flake-parts"; };
