@@ -54,7 +54,7 @@ jobs:
           fi
 
           nix flake update
-          nix flake check
+          nix flake check --show-trace
 
           git diff-index --quiet HEAD -- && echo "no changes" && exit 0
 
