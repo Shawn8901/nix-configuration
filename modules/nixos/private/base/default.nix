@@ -13,6 +13,7 @@ in {
 
   i18n.defaultLocale = "de_DE.UTF-8";
   console = {
+    earlySetup = true;
     font = "Lat2-Terminus16";
     keyMap = "de";
   };
