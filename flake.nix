@@ -51,7 +51,6 @@
     nh = {
       url = "github:viperML/nh";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
     };
     flake-parts = { url = "github:hercules-ci/flake-parts"; };
     fp-rndp-lib = {
