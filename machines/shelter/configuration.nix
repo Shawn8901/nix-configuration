@@ -56,8 +56,8 @@ in {
           serve = {
             type = "tls";
             listen = ":8888";
-            ca = "${self.outPath}/files/public_certs/zrepl/tank.crt";
-            cert = "${self.outPath}/files/public_certs/zrepl/shelter.crt";
+            ca = ../../files/public_certs/zrepl/tank.crt;
+            cert = ../../files/public_certs/zrepl/shelter.crt;
             key = secrets.zrepl.path;
             client_cns = [ "tank" ];
           };

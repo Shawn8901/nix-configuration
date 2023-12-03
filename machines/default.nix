@@ -15,7 +15,7 @@ in {
         (inputs.nixpkgs.outPath
           + "/nixos/modules/services/monitoring/vmagent.nix")
 
-        "${self}/modules/nixos/attic-server"
+        ../modules/nixos/attic-server
       ];
     };
     next = {

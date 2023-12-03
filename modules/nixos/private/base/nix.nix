@@ -5,12 +5,12 @@ let
 in {
   sops.secrets = {
     nix-gh-token-ro = {
-      sopsFile = "${self.outPath}/files/secrets-common.yaml";
+      sopsFile = ../../../../files/secrets-common.yaml;
       group = config.users.groups.nixbld.name;
       mode = "0444";
     };
     nix-netrc-ro = {
-      sopsFile = "${self.outPath}/files/secrets-common.yaml";
+      sopsFile = ../../../../files/secrets-common.yaml;
       group = config.users.groups.nixbld.name;
       mode = "0444";
     };

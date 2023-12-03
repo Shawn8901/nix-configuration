@@ -1,7 +1,7 @@
 { self, config, lib, pkgs, flakeConfig, ... }: {
   sops.secrets = {
     vmagent = {
-      sopsFile = "${self.outPath}/files/secrets-common.yaml";
+      sopsFile = ../../../../files/secrets-common.yaml;
       owner = config.services.vmagent.user;
       group = config.services.vmagent.group;
     };

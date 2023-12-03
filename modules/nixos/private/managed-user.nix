@@ -11,11 +11,11 @@ in {
 
     sops.secrets = {
       shawn = {
-        sopsFile = "${self.outPath}/files/secrets-common.yaml";
+        sopsFile = ../../../files/secrets-common.yaml;
         neededForUsers = true;
       };
       root = {
-        sopsFile = "${self.outPath}/files/secrets-common.yaml";
+        sopsFile = ../../../files/secrets-common.yaml;
         neededForUsers = true;
       };
     };
@@ -29,7 +29,7 @@ in {
       autosuggestions.enable = true;
       promptInit = ''
         source "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme"
-        source "${self.outPath}/files/p10k.zsh"
+        source "${../../../files/p10k.zsh}"
         source "${pkgs.zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
         source "${pkgs.fzf}/share/fzf/completion.zsh"
         source "${pkgs.fzf}/share/fzf/key-bindings.zsh"
