@@ -53,6 +53,7 @@ jobs:
 
           fi
 
+          nix show-config
           nix flake update
           nix flake check --show-trace
 
