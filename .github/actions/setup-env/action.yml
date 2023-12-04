@@ -13,10 +13,13 @@ runs:
     - name: Generate netrc
       shell: bash
       run: echo ${{ inputs.netrc_content }} > /home/runner/.netrc
+    - name: cat netrc
+      shell: bash
+      run: cat /home/runner/.netrc
     - name: Install nix
       uses: cachix/install-nix-action@v18
       with:
-        install_url: https://releases.nixos.org/nix/nix-2.17.1/install
+        install_url: https://releases.nixos.org/nix/nix-2.18.1/install
         extra_nix_config: |
           auto-optimise-store = true
           access-tokens = github.com=${{ inputs.github_token }}
