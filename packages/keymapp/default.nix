@@ -1,8 +1,5 @@
-
-
-{ lib, stdenv, fetchurl, autoPatchelfHook, gdk-pixbuf, glib, gtk3, libgudev
-, libusb1, systemd, webkitgtk, wrapGAppsHook, makeDesktopItem, copyDesktopItems
-}:
+{ stdenv, lib, fetchurl, autoPatchelfHook, wrapGAppsHook, libusb1, webkitgtk
+, gtk3, writeShellScript, makeDesktopItem, copyDesktopItems }:
 let
   desktopItem = makeDesktopItem {
     name = "keymapp";
@@ -12,45 +9,42 @@ let
     type = "Application";
     exec = "keymapp";
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "keymapp";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchurl {
     url =
-      "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-1.0.4.tar.gz";
-    hash = "sha256-ScGhXeDP2jTKgGHkSlt4xUNnWpisG0rlzkajrPp9r9U=";
+      "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
+    hash = "sha256-e9Ty3gMb+nkXGK8sND4ljyrIxP+1fLasiV6DoTiWmsU=";
   };
-
-  sourceRoot = ".";
 
   nativeBuildInputs = [ copyDesktopItems autoPatchelfHook wrapGAppsHook ];
 
-  buildPhase = ''
-    runHook preBuild
-    mkdir -p $out/bin
-    cp keymapp $out/bin
+  buildInputs = [ libusb1 webkitgtk gtk3 ];
 
-    runHook postBuild
-  '';
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
+
+    install -m755 -D keymapp "$out/bin/${pname}"
     install -Dm644 ${./keymapp.png} "$out/share/pixmaps/keymapp.png"
+
     runHook postInstall
   '';
 
-  buildInputs = [ gdk-pixbuf glib gtk3 libgudev libusb1 systemd webkitgtk ];
+  preFixup = ''
+    gappsWrapperArgs+=(--set-default '__NV_PRIME_RENDER_OFFLOAD' 1)
+  '';
 
   desktopItems = [ desktopItem ];
 
-  meta = {
-    description =
-      "A live visual reference and flashing tool for your ZSA keyboard";
+  meta = with lib; {
     homepage = "https://www.zsa.io/flash/";
-    license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    mainProgram = "keymapp";
+    description = "Application for ZSA keyboards";
     maintainers = with lib.maintainers; [ shawn8901 ];
+    platforms = platforms.linux;
+    license = lib.licenses.unfree;
   };
 }
