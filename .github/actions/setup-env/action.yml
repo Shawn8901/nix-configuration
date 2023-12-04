@@ -12,7 +12,7 @@ runs:
   steps:
     - name: Generate netrc
       shell: bash
-      run: echo ${{ inputs.netrc_content }} > /home/runner/.netrc
+      run: echo "${{ inputs.netrc_content }}" > /home/runner/.netrc
     - name: cat netrc
       shell: bash
       run: cat /home/runner/.netrc
