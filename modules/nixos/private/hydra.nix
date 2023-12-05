@@ -103,8 +103,8 @@ in {
         extraConfig = ''
           evaluator_max_memory_size = 4096
           evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
-          evaluator_workers = 4
-          max_concurrent_evals = 2
+          evaluator_workers = 1
+          max_concurrent_evals = 1
           max_output_size = ${toString (5 * 1024 * 1024 * 1024)}
           max_db_connections = 150
           compress_build_logs = 1
