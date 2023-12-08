@@ -1,6 +1,6 @@
 { inputs', config, lib, pkgs, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf singleton const;
 
   cfg = config.shawn8901.server;
 in {
@@ -9,6 +9,16 @@ in {
   };
   config = mkIf cfg.enable {
     documentation = { man.enable = false; };
+
+    # FIXME https://github.com/NixOS/nixpkgs/issues/265675
+    nixpkgs = lib.optionalAttrs (config.environment.noXlibs) {
+      overlays = singleton (const (super: {
+        pipewire = super.pipewire.override {
+          x11Support = false;
+          ffadoSupport = false;
+        };
+      }));
+    };
 
     system.autoUpgrade = {
       enable = true;
