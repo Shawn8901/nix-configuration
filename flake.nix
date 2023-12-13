@@ -88,7 +88,8 @@
       flake.hydraJobs = let
         lib = nixpkgs.lib;
         name = "merge-pr";
-        hosts = map (n: "nixos." + n) (lib.attrNames self.nixosConfigurations);
+        hosts =
+          [ ]; # map (n: "nixos." + n) (lib.attrNames self.nixosConfigurations);
         packages = lib.flatten (lib.attrValues (lib.mapAttrs
           (system: attr: map (p: "${system}.${p}") (lib.attrNames attr))
           self.packages));
