@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, fetchzip, makeDesktopItem, copyDesktopItems
-, makeWrapper, writeScript, imagemagick, p7zip, nodePackages, electron_13, }:
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, writeScript
+, imagemagick
+, p7zip
+, nodePackages
+, electron_13
+,
+}:
 let
   desktopItem = makeDesktopItem {
     name = "deezer";
@@ -13,15 +25,16 @@ let
     exec = "deezer %u";
     startupNotify = true;
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
 
-  version = "6.0.20";
+  version = "6.0.30";
   pname = "deezer";
 
   src = fetchzip {
     url =
       "https://github.com/SibrenVasse/${finalAttrs.pname}/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-xPAVbkZenvt85IV1TY5Ipcyzm6VqDkTNcRu6DBfnxcQ=";
+    hash = "sha256-latyNooJqwQikWuruLRn9C6znMmcCpEnVaz5ITlbGdY=";
   };
 
   # this is a nasty workaround to trick nix-update to update your hash, whilst having src on the github repo
@@ -29,7 +42,7 @@ in stdenv.mkDerivation (finalAttrs: {
   go-modules = fetchurl {
     url =
       "https://www.deezer.com/desktop/download/artifact/win32/x86/${finalAttrs.version}";
-    hash = "sha256-OBvTK8lJmwvyLF/KZtXBkxvoJlEzhaKOCaI5bovX4g8=";
+    hash = "sha256-zLvzYFxl1z35WbLvWRjiAZMk8oPwHcyYSPqX4hfcwww=";
   };
 
   patches = [
