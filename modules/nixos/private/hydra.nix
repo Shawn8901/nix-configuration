@@ -105,6 +105,7 @@ in {
           evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
           evaluator_workers = 1
           max_concurrent_evals = 1
+          restrict-eval = false
           max_output_size = ${toString (5 * 1024 * 1024 * 1024)}
           max_db_connections = 150
           compress_build_logs = 1
@@ -164,7 +165,7 @@ in {
     ];
     nix.settings.max-jobs = 3;
     nix.extraOptions = ''
-      extra-allowed-uris = github:NixOS/ github:nixos/ github:hercules-ci/ github:numtide/ github:nix-community/ github:zhaofengli/attic/ github:Shawn8901/
+      extra-allowed-uris = github:NixOS/ github:nixos/ github:hercules-ci/ github:numtide/ github:nix-community/ github:Mic92/sops-nix/ github:ipetkov/crane/ github:zhaofengli/attic/ github:zhaofengli/nix-base32/ git+https://github.com/zhaofengli/nix-base32.git/ github:nix-systems/default github:Shawn8901/
     '';
   };
 }
