@@ -10,6 +10,10 @@ in {
         type = types.package;
         default = pkgs.postgresql_15;
       };
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/postgresql/15";
+      };
     };
   };
 
@@ -18,6 +22,7 @@ in {
       postgresql = {
         enable = mkDefault true;
         package = cfg.package;
+        dataDir = cfg.dataDir;
       };
       prometheus.exporters.postgres = {
         enable = true;
