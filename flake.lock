@@ -247,13 +247,13 @@
       "locked": {
         "lastModified": 1702070273,
         "narHash": "sha256-7pFWUvko++q5qyHtsHUNMesAGaaxw6zgNljd62Sz/58=",
-        "owner": "shawn8901",
+        "owner": "Shawn8901",
         "repo": "mimir",
         "rev": "6bea46ba3278a0f3c8daa9857e1fb15d8d7af1a1",
         "type": "github"
       },
       "original": {
-        "owner": "shawn8901",
+        "owner": "Shawn8901",
         "repo": "mimir",
         "type": "github"
       }
@@ -267,13 +267,13 @@
       "locked": {
         "lastModified": 1681587193,
         "narHash": "sha256-sThWjrO2UfUurZl5f3b+x41APz6YMPaOkD3T3rRD9VU=",
-        "owner": "shawn8901",
+        "owner": "Shawn8901",
         "repo": "mimir-client",
         "rev": "826aecbcba9fabc7f19ba7e3db8ff504b70ebc4c",
         "type": "github"
       },
       "original": {
-        "owner": "shawn8901",
+        "owner": "Shawn8901",
         "repo": "mimir-client",
         "type": "github"
       }
@@ -504,13 +504,13 @@
       "locked": {
         "lastModified": 1674664265,
         "narHash": "sha256-GvycR4uckjfEPB8O5PLR9MoJgKZ5kg2sHQCkuXM8n24=",
-        "owner": "shawn8901",
+        "owner": "Shawn8901",
         "repo": "stfc-bot",
         "rev": "eeac5b2d33daf71df2d3728c52be5ca612f97fcd",
         "type": "github"
       },
       "original": {
-        "owner": "shawn8901",
+        "owner": "Shawn8901",
         "repo": "stfc-bot",
         "type": "github"
       }

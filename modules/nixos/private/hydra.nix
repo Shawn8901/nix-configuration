@@ -105,6 +105,7 @@ in {
           evaluator_initial_heap_size = ${toString (1 * 1024 * 1024 * 1024)}
           evaluator_workers = 1
           max_concurrent_evals = 1
+          restrict-eval = false
           max_output_size = ${toString (5 * 1024 * 1024 * 1024)}
           max_db_connections = 150
           compress_build_logs = 1
@@ -163,8 +164,27 @@ in {
       }
     ];
     nix.settings.max-jobs = 3;
-    nix.extraOptions = ''
-      extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://git.sr.ht/~rycee/nmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
+    nix.extraOptions = let
+      urls = [
+        "https://gitlab.com/api/v4/projects/rycee%2Fnmd"
+        "https://git.sr.ht/~rycee/nmd"
+        "https://github.com/zhaofengli/"
+        "git+https://github.com/zhaofengli/"
+        "github:NixOS/"
+        "github:nix-community/"
+        "github:numtide/flake-utils"
+        "github:hercules-ci/flake-parts"
+        "github:nix-systems/default/"
+        "github:Mic92/sops-nix/"
+        "github:zhaofengli/"
+        "github:ipetkov/crane/"
+        "github:viperML/nh/"
+        "gitlab:rycee/nur-expressions/"
+        "gitlab:simple-nixos-mailserver/nixos-mailserver/"
+        "github:Shawn8901/"
+      ];
+    in ''
+      extra-allowed-uris = ${lib.concatStringsSep " " urls}
     '';
   };
 }
