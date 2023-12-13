@@ -164,7 +164,7 @@ in {
     ];
     nix.settings.max-jobs = 3;
     nix.extraOptions = ''
-      extra-allowed-uris = github:NixOS/ github:nixos/ github:hercules-ci/ github:numtide/ github:nix-community/ github:Shawn8901/
+      extra-allowed-uris = github:NixOS/ github:nixos/ github:hercules-ci/ github:numtide/ github:nix-community/ github:zhaofengli/attic/ github:Shawn8901/
     '';
   };
 }
