@@ -298,7 +298,6 @@ in {
         ];
       };
     };
-    postgresql.dataDir = "/persist/var/lib/postgresql/15";
     avahi = {
       enable = true;
       nssmdns = true;
@@ -428,7 +427,11 @@ in {
       package = pkgs.nextcloud27;
       prometheus.passwordFile = secrets.prometheus-nextcloud.path;
     };
-    postgresql.enable = true;
+    postgresql = {
+      enable = true;
+      package = pkgs.postgresql_16;
+      dataDir = "/persist/var/lib/postgresql/16";
+    };
     hydra = {
       enable = true;
       hostName = "hydra.pointjig.de";
