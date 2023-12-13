@@ -164,7 +164,7 @@ in {
     ];
     nix.settings.max-jobs = 3;
     nix.extraOptions = ''
-      extra-allowed-uris = https://gitlab.com/api/v4/projects/rycee%2Fnmd https://git.sr.ht/~rycee/nmd https://github.com/zhaofengli/nix-base32.git https://github.com/zhaofengli/sea-orm
+      extra-allowed-uris = github:NixOS/ github:nixos/ github:hercules-ci/ github:numtide/ github:nix-community/ github:Shawn8901/
     '';
   };
 }
