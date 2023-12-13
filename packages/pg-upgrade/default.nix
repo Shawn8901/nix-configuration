@@ -6,13 +6,13 @@ pkgs.writeScriptBin "upgrade-pg" ''
   BASE_DIR=''${1:-}
 
   # XXX replace `<new version>` with the psqlSchema here
-  export NEWDATA="$BASE_DIR/var/lib/postgresql/${pkgs.postgresql_15.psqlSchema}"
+  export NEWDATA="$BASE_DIR/var/lib/postgresql/${pkgs.postgresql_16.psqlSchema}"
 
   # XXX specify the postgresql package you'd like to upgrade to
-  export NEWBIN="${pkgs.postgresql_15}/bin"
+  export NEWBIN="${pkgs.postgresql_16}/bin"
 
-  export OLDDATA="$BASE_DIR/var/lib/postgresql/${pkgs.postgresql_14.psqlSchema}"
-  export OLDBIN="${pkgs.postgresql_14}/bin"
+  export OLDDATA="$BASE_DIR/var/lib/postgresql/${pkgs.postgresql_15.psqlSchema}"
+  export OLDBIN="${pkgs.postgresql_15}/bin"
 
   echo "\$NEWDATA=$NEWDATA"
   echo "\$OLDDATA=$OLDDATA"
@@ -29,7 +29,6 @@ pkgs.writeScriptBin "upgrade-pg" ''
     sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
     sudo -u postgres $NEWBIN/pg_upgrade \
       --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-      --old-bindir $OLDBIN --new-bindir $NEWBIN \
-      "$@"
+      --old-bindir $OLDBIN --new-bindir $NEWBIN
   fi
 ''
