@@ -354,18 +354,31 @@ in {
       };
     };
     smartd.enable = true;
-    nextcloud.extraOptions."memories.vod.ffmpeg" =
-      "${lib.getExe pkgs.ffmpeg-headless}";
-    nextcloud.extraOptions."memories.vod.ffprobe" =
-      "${pkgs.ffmpeg-headless}/bin/ffprobe";
-    nextcloud.extraOptions."preview_ffmpeg_path" =
-      "${lib.getExe pkgs.ffmpeg-headless}";
+    nextcloud.extraOptions = {
+      "memories.vod.ffmpeg" = "${lib.getExe pkgs.ffmpeg-headless}";
+      "memories.vod.ffprobe" = "${pkgs.ffmpeg-headless}/bin/ffprobe";
+      "preview_ffmpeg_path" = "${lib.getExe pkgs.ffmpeg-headless}";
+    };
+    phpfpm.pools.nextcloud.phpEnv.PATH = lib.mkForce
+      "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin:/etc/profiles/per-user/nextcloud/bin";
   };
-  systemd.services.nextcloud-cron = {
-    path = [ pkgs.perl pkgs.libtensorflow ];
-  };
-
-  environment.systemPackages = [ pkgs.nodejs_18 ];
+  systemd.services.nextcloud-setup.script = ''
+    export PATH=$PATH:/etc/profiles/per-user/nextcloud/bin:/run/current-system/sw/bin
+    if [[ ! -e "${config.services.nextcloud.home}/store-apps/recognize/node_modules/@tensorflow/tfjs-node/lib/napi-v8/tfjs_binding.node" ]]; then
+      if [[ -d "${config.services.nextcloud.home}/store-apps/recognize/node_modules/" ]]; then
+        cd "${config.services.nextcloud.home}/store-apps/recognize/node_modules/"
+        npm rebuild @tensorflow/tfjs-node --build-addon-from-source
+      fi
+    fi
+  '';
+  users.users.nextcloud.packages = with pkgs; [
+    # required for recognize app
+    gnumake # installation requirement
+    nodejs_18 # runtime and installation requirement
+    nodejs_18.pkgs.node-pre-gyp # installation requirement
+    python3 # requirement for node-pre-gyp otherwise fails with exit code 236
+    util-linux # runtime requirement for taskset
+  ];
 
   security = {
     auditd.enable = false;
@@ -398,7 +411,7 @@ in {
   shawn8901 = {
     backup-rclone = {
       enable = true;
-      sourceDir = "/var/lib/nextcloud/data/shawn/files/";
+      sourceDir = "${config.services.nextcloud.home}/data/shawn/files/";
       destDir = "dropbox:";
     };
     backup-usb = {
