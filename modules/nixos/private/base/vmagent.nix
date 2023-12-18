@@ -14,20 +14,15 @@
       extraArgs = [
         "-remoteWrite.basicAuth.username=vm"
         "-remoteWrite.basicAuth.passwordFile=${config.sops.secrets.vmagent.path}"
+        "-remoteWrite.label=instance=${config.networking.hostName}"
       ];
-      prometheusConfig = let
-        relabel_configs = [{
-          target_label = "instance";
-          replacement = config.networking.hostName;
-        }];
-      in {
+      prometheusConfig = {
         global = {
           scrape_interval = "1m";
           scrape_timeout = "30s";
         };
         scrape_configs = [{
           job_name = "node";
-          inherit relabel_configs;
           static_configs = [{
             targets = [
               "localhost:${
@@ -37,7 +32,6 @@
           }];
         }] ++ lib.optionals (config.services.prometheus.exporters.zfs.enable) [{
           job_name = "zfs";
-          inherit relabel_configs;
           static_configs = [{
             targets = [
               "localhost:${
@@ -48,7 +42,6 @@
         }] ++ lib.optionals
           (config.services.prometheus.exporters.smartctl.enable) [{
             job_name = "smartctl";
-            inherit relabel_configs;
             static_configs = [{
               targets = [
                 "localhost:${
@@ -58,7 +51,6 @@
             }];
           }] ++ lib.optionals (config.services.zrepl.enable) [{
             job_name = "zrepl";
-            inherit relabel_configs;
             static_configs = [{
               targets = [
                 "localhost:${
