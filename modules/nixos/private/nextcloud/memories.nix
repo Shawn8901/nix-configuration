@@ -126,7 +126,7 @@ in
           path = with pkgs; [ perl ];
           # fix memories app being unpacked without the x-bit on binaries
           # could be done in nextcloud-update-plugins but then manually updates would be broken until the next auto update
-          preStart = "${pkgs.coreutils}/bin/chmod +x /var/lib/nextcloud/store-apps/memories/bin-ext/*";
+          preStart = "${pkgs.coreutils}/bin/chmod +x ${config.services.nextcloud.home}/store-apps/memories/bin-ext/*";
         };
 
         nextcloud-cron-preview-generator = lib.mkIf cfg.configurePreviewSettings {
@@ -177,9 +177,9 @@ in
           script = /* bash */ ''
             export PATH=$PATH:/etc/profiles/per-user/nextcloud/bin:/run/current-system/sw/bin
 
-            if [[ ! -e /var/lib/nextcloud/store-apps/recognize/node_modules/@tensorflow/tfjs-node/lib/napi-v8/tfjs_binding.node ]]; then
-              if [[ -d /var/lib/nextcloud/store-apps/recognize/node_modules/ ]]; then
-                cd /var/lib/nextcloud/store-apps/recognize/node_modules/
+            if [[ ! -e "${config.services.nextcloud.home}/store-apps/recognize/node_modules/@tensorflow/tfjs-node/lib/napi-v8/tfjs_binding.node" ]]; then
+              if [[ -d "${config.services.nextcloud.home}/store-apps/recognize/node_modules/" ]]; then
+                cd "${config.services.nextcloud.home}/store-apps/recognize/node_modules/"
                 npm rebuild @tensorflow/tfjs-node --build-addon-from-source
               fi
             fi
