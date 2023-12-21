@@ -46,7 +46,7 @@ in {
 
   users.mutableUsers = false;
   users.users.root = {
-    passwordFile = secrets.root.path;
+    hashedPasswordFile = secrets.root.path;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
     ];
