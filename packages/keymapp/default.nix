@@ -11,12 +11,12 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "keymapp";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchurl {
     url =
       "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
-    hash = "sha256-e9Ty3gMb+nkXGK8sND4ljyrIxP+1fLasiV6DoTiWmsU=";
+    hash = "sha256-BmCLF/4wjBDxToMW0OYqI6PZwqmctgBs7nBygmJ+YOU=";
   };
 
   nativeBuildInputs = [ copyDesktopItems autoPatchelfHook wrapGAppsHook ];
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     runHook preInstall
 
     install -m755 -D keymapp "$out/bin/${pname}"
-    install -Dm644 ${./keymapp.png} "$out/share/pixmaps/keymapp.png"
+    install -Dm644 icon.png "$out/share/pixmaps/keymapp.png"
 
     runHook postInstall
   '';
