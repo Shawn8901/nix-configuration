@@ -17,8 +17,7 @@ in {
   };
 
   nix = {
-    package = mkIf (versionOlder config.system.nixos.release "23.11")
-      pkgs.nixVersions.nix_2_17;
+    package = pkgs.nix;
     settings = {
       auto-optimise-store = true;
       allow-import-from-derivation = false;

@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.11";
-    nixpkgs-oldstable.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
       url = "github:zhaofengli/attic";
@@ -21,19 +20,15 @@
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
-    home-manager-oldstable = {
-      url = "github:nix-community/home-manager/release-23.05";
-      inputs.nixpkgs.follows = "nixpkgs-oldstable";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
     simple-nixos-mailserver = {
-      url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.05";
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-23_05.follows = "nixpkgs-oldstable";
+      inputs.nixpkgs-23_11.follows = "nixpkgs-stable";
       inputs.flake-compat.follows = "flake-compat";
     };
     mimir = {

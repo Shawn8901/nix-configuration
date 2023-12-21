@@ -187,27 +187,6 @@
         "type": "github"
       }
     },
-    "home-manager-oldstable": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs-oldstable"
-        ]
-      },
-      "locked": {
-        "lastModified": 1702195668,
-        "narHash": "sha256-Lxmjez0nfNBptdqV5GsXKm7Bb7swjGsrxiLxWJu0tL8=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "33110fb3c7fe6a94b98b641866a5eddb64b7c23f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "ref": "release-23.05",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "home-manager-stable": {
       "inputs": {
         "nixpkgs": [
@@ -318,6 +297,21 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-23_05": {
+      "locked": {
+        "lastModified": 1703034876,
+        "narHash": "sha256-4bMPFv/bs5g1nEsXQwXlrAGJgjv1Ilr0ejdaTkBwQLs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "312ab59e8ade69e6083017bd9b98a2919f1fb86a",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-23.05",
+        "type": "indirect"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "dir": "lib",
@@ -332,22 +326,6 @@
         "dir": "lib",
         "owner": "NixOS",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-oldstable": {
-      "locked": {
-        "lastModified": 1703034876,
-        "narHash": "sha256-4bMPFv/bs5g1nEsXQwXlrAGJgjv1Ilr0ejdaTkBwQLs=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "312ab59e8ade69e6083017bd9b98a2919f1fb86a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-23.05",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -393,13 +371,11 @@
         "flake-utils": "flake-utils",
         "fp-rndp-lib": "fp-rndp-lib",
         "home-manager": "home-manager",
-        "home-manager-oldstable": "home-manager-oldstable",
         "home-manager-stable": "home-manager-stable",
         "mimir": "mimir",
         "mimir-client": "mimir-client",
         "nh": "nh",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-oldstable": "nixpkgs-oldstable",
         "nixpkgs-stable": "nixpkgs-stable",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "sops-nix": "sops-nix",
@@ -416,22 +392,23 @@
           "nixpkgs"
         ],
         "nixpkgs-22_11": "nixpkgs-22_11",
-        "nixpkgs-23_05": [
-          "nixpkgs-oldstable"
+        "nixpkgs-23_05": "nixpkgs-23_05",
+        "nixpkgs-23_11": [
+          "nixpkgs-stable"
         ],
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1687462267,
-        "narHash": "sha256-rNSputjn/0HEHHnsKfQ8mQVEPVchcBw7DsbND7Wg8dk=",
+        "lastModified": 1703023684,
+        "narHash": "sha256-XQU4OaacV0F2tf9cNAvIMqlC0HBIrAtvb0MLjIHt+7M=",
         "owner": "simple-nixos-mailserver",
         "repo": "nixos-mailserver",
-        "rev": "24128c3052090311688b09a400aa408ba61c6ee5",
+        "rev": "4bfb8eb058f098302c97b909df2d019926e11220",
         "type": "gitlab"
       },
       "original": {
         "owner": "simple-nixos-mailserver",
-        "ref": "nixos-23.05",
+        "ref": "nixos-23.11",
         "repo": "nixos-mailserver",
         "type": "gitlab"
       }

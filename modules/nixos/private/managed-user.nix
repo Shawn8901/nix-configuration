@@ -43,62 +43,31 @@ in {
         bindkey '5~' kill-word
       '';
     };
-    fonts = lib.mkMerge [
-      { fontconfig.enable = lib.mkDefault (!config.environment.noXlibs); }
-      (lib.optionalAttrs
-        (!lib.versionOlder config.system.nixos.release "23.11") {
-          enableDefaultPackages = lib.mkDefault (!config.environment.noXlibs);
-          packages = [
-            (pkgs.nerdfonts.override {
-              fonts = [ "Meslo" "DroidSansMono" "LiberationMono" "Terminus" ];
-            })
-          ];
+    fonts = {
+      fontconfig.enable = lib.mkDefault (!config.environment.noXlibs);
+      enableDefaultPackages = lib.mkDefault (!config.environment.noXlibs);
+      packages = [
+        (pkgs.nerdfonts.override {
+          fonts = [ "Meslo" "DroidSansMono" "LiberationMono" "Terminus" ];
         })
-      # Remove with 23.11
-      (lib.optionalAttrs
-        (lib.versionOlder config.system.nixos.release "23.11") {
-          enableDefaultFonts = !config.environment.noXlibs;
-          fonts = [
-            (pkgs.nerdfonts.override {
-              fonts = [ "Meslo" "DroidSansMono" "LiberationMono" "Terminus" ];
-            })
-          ];
-        })
-    ];
+      ];
+    };
 
     users = {
       mutableUsers = false;
       defaultUserShell = pkgs.zsh;
       users = {
-        root = lib.mkMerge [
-          (lib.optionalAttrs
-            (!lib.versionOlder config.system.nixos.release "23.11") {
-              hashedPasswordFile = config.sops.secrets.root.path;
-            })
-          (lib.optionalAttrs
-            (lib.versionOlder config.system.nixos.release "23.11") {
-              passwordFile = config.sops.secrets.root.path;
-            })
-        ];
-        shawn = lib.mkMerge [
-          {
-            isNormalUser = true;
-            group = "users";
-            extraGroups = [ "wheel" ];
-            uid = 1000;
-            openssh.authorizedKeys.keys = [
-              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
-            ];
-          }
-          (lib.optionalAttrs
-            (!lib.versionOlder config.system.nixos.release "23.11") {
-              hashedPasswordFile = config.sops.secrets.shawn.path;
-            })
-          (lib.optionalAttrs
-            (lib.versionOlder config.system.nixos.release "23.11") {
-              passwordFile = config.sops.secrets.shawn.path;
-            })
-        ];
+        root.hashedPasswordFile = config.sops.secrets.root.path;
+        shawn = {
+          isNormalUser = true;
+          group = "users";
+          extraGroups = [ "wheel" ];
+          uid = 1000;
+          openssh.authorizedKeys.keys = [
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
+          ];
+          hashedPasswordFile = config.sops.secrets.shawn.path;
+        };
       };
     };
 

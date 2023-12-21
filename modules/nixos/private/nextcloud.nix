@@ -46,45 +46,38 @@ in {
     };
 
     services = {
-      nextcloud = lib.mkMerge [
-        {
-          inherit (cfg) home hostName package;
-          notify_push = {
-            enable = cfg.notify_push.package != null;
-            package = cfg.notify_push.package;
-            bendDomainToLocalhost = true;
-          };
-          enable = true;
-          configureRedis = true;
-          https = true;
-          autoUpdateApps.enable = true;
-          autoUpdateApps.startAt = "Sun 14:00:00";
-          config = {
-            dbtype = "pgsql";
-            dbuser = "nextcloud";
-            dbhost = "/run/postgresql";
-            dbname = "nextcloud";
-            adminuser = "admin";
-            adminpassFile = cfg.adminPasswordFile;
-            defaultPhoneRegion = "DE";
-          };
-          caching = {
-            apcu = false;
-            memcached = false;
-          };
-          phpOptions = {
-            "opcache.interned_strings_buffer" = "16";
-            "opcache.enable" = "1";
-            "opcache.save_comments" = "1";
-          };
-          extraOptions."overwrite.cli.url" = "https://${cfg.hostName}";
-        }
-        # Remove with 23.11
-        (lib.optionalAttrs
-          (lib.versionOlder config.system.nixos.release "23.11") {
-            enableBrokenCiphersForSSE = false;
-          })
-      ];
+      nextcloud = {
+        inherit (cfg) home hostName package;
+        notify_push = {
+          enable = cfg.notify_push.package != null;
+          package = cfg.notify_push.package;
+          bendDomainToLocalhost = true;
+        };
+        enable = true;
+        configureRedis = true;
+        https = true;
+        autoUpdateApps.enable = true;
+        autoUpdateApps.startAt = "Sun 14:00:00";
+        config = {
+          dbtype = "pgsql";
+          dbuser = "nextcloud";
+          dbhost = "/run/postgresql";
+          dbname = "nextcloud";
+          adminuser = "admin";
+          adminpassFile = cfg.adminPasswordFile;
+          defaultPhoneRegion = "DE";
+        };
+        caching = {
+          apcu = false;
+          memcached = false;
+        };
+        phpOptions = {
+          "opcache.interned_strings_buffer" = "16";
+          "opcache.enable" = "1";
+          "opcache.save_comments" = "1";
+        };
+        extraOptions."overwrite.cli.url" = "https://${cfg.hostName}";
+      };
 
       postgresql = {
         ensureDatabases = [ "${config.services.nextcloud.config.dbname}" ];

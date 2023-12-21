@@ -24,32 +24,21 @@ in {
       };
     };
 
-    fonts = lib.mkMerge [
-      {
-        fontconfig = {
-          hinting.autohint = true;
-          cache32Bit = true;
-          subpixel.lcdfilter = "light";
-          defaultFonts = {
-            emoji = [ "Noto Color Emoji" ];
-            serif = [ "Noto Serif" ];
-            sansSerif = [ "Noto Sans" ];
-            monospace = [ "Noto Sans Mono" ];
-          };
+    fonts = {
+      fontconfig = {
+        hinting.autohint = true;
+        cache32Bit = true;
+        subpixel.lcdfilter = "light";
+        defaultFonts = {
+          emoji = [ "Noto Color Emoji" ];
+          serif = [ "Noto Serif" ];
+          sansSerif = [ "Noto Sans" ];
+          monospace = [ "Noto Sans Mono" ];
         };
-      }
-      (lib.optionalAttrs
-        (!lib.versionOlder config.system.nixos.release "23.11") {
-          enableDefaultPackages = lib.mkDefault true;
-          packages = [ pkgs.noto-fonts ];
-        })
-      # Remove with 23.11
-      (lib.optionalAttrs
-        (lib.versionOlder config.system.nixos.release "23.11") {
-          enableDefaultFonts = lib.mkDefault true;
-          fonts = [ pkgs.noto-fonts ];
-        })
-    ];
+      };
+      enableDefaultPackages = lib.mkDefault true;
+      packages = [ pkgs.noto-fonts ];
+    };
 
     services = {
       acpid.enable = true;

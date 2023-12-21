@@ -18,19 +18,11 @@ in {
     keyMap = "de";
   };
 
-  boot = mkMerge [
-    {
-      tmp.useTmpfs = mkDefault true;
-      tmp.cleanOnBoot = true;
-    }
-    (optionalAttrs (!versionOlder config.system.nixos.release "23.11") {
-      swraid.enable = mkDefault false;
-    })
-    # Remove with 23.11
-    (lib.optionalAttrs (versionOlder config.system.nixos.release "23.11") {
-      initrd.services.swraid.enable = mkDefault false;
-    })
-  ];
+  boot = {
+    tmp.useTmpfs = mkDefault true;
+    tmp.cleanOnBoot = true;
+    swraid.enable = mkDefault false;
+  };
 
   services.lvm.enable = false;
 

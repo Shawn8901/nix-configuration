@@ -19,7 +19,7 @@ in {
       ];
     };
     next = {
-      nixpkgs = inputs.nixpkgs-oldstable;
+      nixpkgs = inputs.nixpkgs-stable;
       disabledModules = [ "services/monitoring/vmagent.nix" ];
       extraModules = [
         (inputs.nixpkgs.outPath
@@ -46,8 +46,8 @@ in {
       home-manager.shawn = { };
     };
     pointjig = {
-      nixpkgs = inputs.nixpkgs-oldstable;
-      hmInput = inputs.home-manager-oldstable;
+      nixpkgs = inputs.nixpkgs-stable;
+      hmInput = inputs.home-manager-stable;
       home-manager.shawn = { };
       extraModules = [
         inputs.simple-nixos-mailserver.nixosModules.default
