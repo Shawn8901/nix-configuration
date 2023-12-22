@@ -12,7 +12,7 @@ in {
       };
       dataDir = mkOption {
         type = types.str;
-        default = "/var/lib/postgresql/15";
+        default = "/var/lib/postgresql/${cfg.package.psqlSchema}";
       };
     };
   };
