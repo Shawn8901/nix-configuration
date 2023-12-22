@@ -133,6 +133,10 @@ in {
       package = fPkgs.asus-touchpad-numpad-driver;
       model = "ux433fa";
     };
+    asus.battery = {
+      enable = true;
+      chargeUpto = 80;
+    };
   };
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
