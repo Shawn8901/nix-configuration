@@ -54,10 +54,7 @@ in {
           [ "${config.services.grafana.settings.database.name}" ];
         ensureUsers = [{
           name = "${config.services.grafana.settings.database.user}";
-          ensurePermissions = {
-            "DATABASE ${config.services.grafana.settings.database.name}" =
-              "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }];
       };
       grafana = {

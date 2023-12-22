@@ -53,7 +53,7 @@ in {
           allowed-hosts = [ cfg.hostName ];
           api-endpoint = "https://${cfg.hostName}/";
           database = {
-            url = "postgresql:///attic?host=/run/postgresql";
+            url = "postgresql:///atticd?host=/run/postgresql";
             heartbeat = true;
           };
           chunking = {
@@ -70,10 +70,10 @@ in {
         };
       };
       postgresql = {
-        ensureDatabases = [ "attic" ];
+        ensureDatabases = [ "atticd" ];
         ensureUsers = [{
           name = "atticd";
-          ensurePermissions = { "DATABASE attic" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }];
       };
     };

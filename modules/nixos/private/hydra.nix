@@ -59,7 +59,7 @@ in {
         ensureDatabases = [ "hydra" ];
         ensureUsers = [{
           name = "hydra";
-          ensurePermissions = { "DATABASE hydra" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }];
       };
 
