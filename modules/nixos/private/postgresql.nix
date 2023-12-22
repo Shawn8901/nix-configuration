@@ -8,7 +8,7 @@ in {
       enable = mkEnableOption "Enables a preconfigured postgresql instance";
       package = mkOption {
         type = types.package;
-        default = pkgs.postgresql_15;
+        default = pkgs.postgresql_16;
       };
       dataDir = mkOption {
         type = types.str;
