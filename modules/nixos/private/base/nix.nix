@@ -22,12 +22,12 @@ in {
       auto-optimise-store = true;
       allow-import-from-derivation = false;
       substituters = [
-        "https://cache.pointjig.de/nixos"
         "https://nix-community.cachix.org"
+        "https://cache.pointjig.de/nixos"
       ];
       trusted-public-keys = [
-        "nixos:Uj2EOFZu9/Y6r6qVlxeCyiGVqyz30fMybzT3kBDsPg8="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "nixos:5axzveeiERb8xAeioBUHNHq4SVLvwDcJkLMFsWq0l1E="
       ];
       cores = mkDefault 6;
       max-jobs = mkDefault 2;

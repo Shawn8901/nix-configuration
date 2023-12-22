@@ -23,4 +23,4 @@ runs:
           experimental-features = nix-command flakes
           netrc-file = /home/runner/.netrc
           substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.pointjig.de/nixos
-          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= nixos:Uj2EOFZu9/Y6r6qVlxeCyiGVqyz30fMybzT3kBDsPg8=
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= nixos:5axzveeiERb8xAeioBUHNHq4SVLvwDcJkLMFsWq0l1E=
