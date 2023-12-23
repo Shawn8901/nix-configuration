@@ -27,7 +27,7 @@ in {
       remoteWriteUrl = lib.mkForce
         "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
       extraArgs = lib.mkForce
-        [ "-remoteWrite.label=machine=${config.networking.hostName}" ];
+        [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
     };
   };
 
