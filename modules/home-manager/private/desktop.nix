@@ -297,8 +297,8 @@ in {
           hostname = "shelter.pointjig.de";
           user = "shawn";
         };
-        cache = {
-          hostname = "cache.pointjig.de";
+        watchtower = {
+          hostname = "watchtower.pointjig.de";
           user = "shawn";
         };
         sap = {
@@ -309,7 +309,6 @@ in {
           hostname = "next.clansap.org";
           user = "root";
         };
-
         pointjig = {
           hostname = "pointjig.de";
           user = "shawn";

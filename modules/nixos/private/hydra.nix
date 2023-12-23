@@ -156,7 +156,7 @@ in {
         inherit sshUser sshKey;
       }
       {
-        hostName = "cache.pointjig.de";
+        hostName = "watchtower.pointjig.de";
         systems = [ "aarch64-linux" ];
         supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
         maxJobs = 2;

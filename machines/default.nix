@@ -4,7 +4,7 @@ let
   cfg = config.shawn8901.nixosConfigurations;
 in {
   config.fp-rndp-lib.nixosConfigurations = {
-    cache = {
+    watchtower = {
       hostPlatform.system = "aarch64-linux";
       nixpkgs = inputs.nixpkgs-stable;
       hmInput = inputs.home-manager-stable;
