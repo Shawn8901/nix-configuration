@@ -62,13 +62,18 @@ in {
           ensureDBOwnership = true;
         }];
       };
+      vmagent.prometheusConfig.scrape_configs = [{
+        job_name = "hydra_notify";
+        static_configs = [{ targets = [ "localhost:9199" ]; }];
+      }];
 
       hydra = let
+        jq = lib.getExe pkgs.jq;
         merge_pr = pkgs.writeScriptBin "merge_pr" ''
           cat $HYDRA_JSON
           echo ""
-          job_name=$(${lib.getExe pkgs.jq} --raw-output ".jobset" $HYDRA_JSON)
-          buildStatus=$(${lib.getExe pkgs.jq} ".buildStatus" $HYDRA_JSON)
+          job_name=$(${jq} --raw-output ".jobset" $HYDRA_JSON)
+          buildStatus=$(${jq} ".buildStatus" $HYDRA_JSON)
           if [[ "$job_name" = "main" ]]; then
             echo "Job $job_name is not a PR but the main branch."
             exit 0
@@ -116,6 +121,12 @@ in {
             job = *:*:merge-pr
             command = ${lib.getExe merge_pr}
           </runcommand>
+          <hydra_notify>
+            <prometheus>
+              listen_address = 127.0.0.1
+              port = 9199
+            </prometheus>
+          </hydra_notify>
         '';
       };
     };
@@ -137,7 +148,7 @@ in {
           serviceConfig = {
             User = "attic";
             Restart = "always";
-            ExecStart = " ${cfg.attic.package}/bin/attic watch-store nixos";
+            ExecStart = "${cfg.attic.package}/bin/attic watch-store nixos";
           };
         };
       })
@@ -146,21 +157,19 @@ in {
     nix.buildMachines = let
       sshUser = cfg.builder.userName;
       sshKey = cfg.builder.sshKeyFile;
+      maxJobs = 2;
+      supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
     in [
       {
         hostName = "localhost";
         systems = [ "x86_64-linux" "i686-linux" ];
-        supportedFeatures =
-          [ "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
-        maxJobs = 2;
-        inherit sshUser sshKey;
+        supportedFeatures = supportedFeatures ++ [ "gccarch-x86-64-v3" ];
+        inherit sshUser sshKey maxJobs;
       }
       {
         hostName = "watchtower.pointjig.de";
         systems = [ "aarch64-linux" ];
-        supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
-        maxJobs = 2;
-        inherit sshUser sshKey;
+        inherit sshUser sshKey supportedFeatures maxJobs;
       }
     ];
     nix.settings.max-jobs = 3;
