@@ -9,23 +9,10 @@ in {
       nixpkgs = inputs.nixpkgs-stable;
       hmInput = inputs.home-manager-stable;
       home-manager.shawn = { };
-      disabledModules = [ "services/monitoring/vmagent.nix" ];
-      extraModules = [
-        inputs.attic.nixosModules.atticd
-        (inputs.nixpkgs.outPath
-          + "/nixos/modules/services/monitoring/vmagent.nix")
-
-        ../modules/nixos/attic-server
-      ];
+      extraModules =
+        [ inputs.attic.nixosModules.atticd ../modules/nixos/attic-server ];
     };
-    next = {
-      nixpkgs = inputs.nixpkgs-stable;
-      disabledModules = [ "services/monitoring/vmagent.nix" ];
-      extraModules = [
-        (inputs.nixpkgs.outPath
-          + "/nixos/modules/services/monitoring/vmagent.nix")
-      ];
-    };
+    next = { nixpkgs = inputs.nixpkgs-stable; };
     pointalpha = {
       nixpkgs = inputs.nixpkgs;
       hmInput = inputs.home-manager;
@@ -53,20 +40,12 @@ in {
         inputs.simple-nixos-mailserver.nixosModules.default
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
-        (inputs.nixpkgs.outPath
-          + "/nixos/modules/services/monitoring/vmagent.nix")
       ];
-      disabledModules = [ "services/monitoring/vmagent.nix" ];
     };
     shelter = {
       nixpkgs = inputs.nixpkgs-stable;
       hmInput = inputs.home-manager-stable;
       home-manager.shawn = { };
-      disabledModules = [ "services/monitoring/vmagent.nix" ];
-      extraModules = [
-        (inputs.nixpkgs.outPath
-          + "/nixos/modules/services/monitoring/vmagent.nix")
-      ];
     };
     tank = {
       nixpkgs = inputs.nixpkgs;
