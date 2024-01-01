@@ -58,6 +58,7 @@ in {
         https = true;
         autoUpdateApps.enable = true;
         autoUpdateApps.startAt = "Sun 14:00:00";
+        maxUploadSize = "1G";
         config = {
           dbtype = "pgsql";
           dbuser = "nextcloud";
@@ -72,7 +73,6 @@ in {
           memcached = false;
         };
         phpOptions = {
-          "opcache.interned_strings_buffer" = "16";
           "opcache.enable" = "1";
           "opcache.save_comments" = "1";
         };
