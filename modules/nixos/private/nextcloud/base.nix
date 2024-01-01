@@ -73,8 +73,10 @@ in {
           memcached = false;
         };
         phpOptions = {
+          "opcache.interned_strings_buffer" = "32";
           "opcache.enable" = "1";
           "opcache.save_comments" = "1";
+          "opcache.revalidate_freq" = "60";
         };
         extraOptions."overwrite.cli.url" = "https://${cfg.hostName}";
       };
