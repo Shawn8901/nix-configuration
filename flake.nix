@@ -2,7 +2,7 @@
   description = "Flake from a random person on the internet";
 
   inputs = {
-    nixpkgs.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
+    nixpkgs-unstable.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
@@ -11,10 +11,15 @@
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
       inputs.flake-utils.follows = "flake-utils";
       inputs.flake-compat.follows = "flake-compat";
+      inputs.crane.follows = "crane";
+    };
+    crane = {
+      url = "github:ipetkov/crane";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     home-manager-stable = {
       url = "github:nix-community/home-manager/release-23.11";
@@ -22,12 +27,12 @@
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
     simple-nixos-mailserver = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.nixpkgs-23_11.follows = "nixpkgs-stable";
       inputs.flake-compat.follows = "flake-compat";
     };
@@ -45,14 +50,17 @@
     };
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.flake-utils.follows = "flake-utils";
     };
-    nh = { url = "github:viperML/nh"; };
+    nh = {
+      url = "github:viperML/nh";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
     flake-parts = { url = "github:hercules-ci/flake-parts"; };
     fp-rndp-lib = {
       url = "github:Shawn8901/fp-rndp-lib";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.flake-parts.follows = "flake-parts";
     };
     flake-compat = {

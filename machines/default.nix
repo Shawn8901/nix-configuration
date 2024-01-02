@@ -14,7 +14,7 @@ in {
     };
     next = { nixpkgs = inputs.nixpkgs-stable; };
     pointalpha = {
-      nixpkgs = inputs.nixpkgs;
+      nixpkgs = inputs.nixpkgs-unstable;
       hmInput = inputs.home-manager;
       unfreeSoftware = [
         "steam"
@@ -48,7 +48,7 @@ in {
       home-manager.shawn = { };
     };
     tank = {
-      nixpkgs = inputs.nixpkgs;
+      nixpkgs = inputs.nixpkgs-unstable;
       hmInput = inputs.home-manager;
       home-manager.shawn = { };
       extraModules = [
@@ -57,7 +57,7 @@ in {
       ];
     };
     zenbook = {
-      nixpkgs = inputs.nixpkgs;
+      nixpkgs = inputs.nixpkgs-unstable;
       hmInput = inputs.home-manager;
       unfreeSoftware = [
         "steam"
