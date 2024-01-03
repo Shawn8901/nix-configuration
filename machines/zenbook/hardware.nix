@@ -1,5 +1,7 @@
-{ config, pkgs, lib, modulesPath, ... }:
-let zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
+{ self', config, pkgs, lib, modulesPath, ... }:
+let
+  inherit (pkgs.linuxKernel) packagesFor;
+  zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
 in {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -19,7 +21,7 @@ in {
       "amdgpu"
       "amd_pstate"
     ];
-    kernelPackages = pkgs.linuxPackages_xanmod;
+    kernelPackages = packagesFor self'.packages.linux_xanmod_x86_64_v3;
     kernelParams = [
       "initcall_blacklist=acpi_cpufreq_init"
       "amd_pstate=passive"
