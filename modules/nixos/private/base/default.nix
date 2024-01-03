@@ -22,6 +22,7 @@ in {
     tmp.useTmpfs = mkDefault true;
     tmp.cleanOnBoot = true;
     swraid.enable = mkDefault false;
+    enableContainers = false;
   };
 
   services.lvm.enable = false;
