@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub, stdenv, fetchzip, }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "grafana-datasource";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchzip {
     url =
       "https://github.com/VictoriaMetrics/${finalAttrs.pname}/releases/download/v${finalAttrs.version}/victoriametrics-datasource-v${finalAttrs.version}.zip";
-    hash = "sha256-sFqHY8O9V3nGbWhnpqeoSOw6QF4xOtQzrS+YgLp/Yd8=";
+    hash = "sha256-DbXkBhG0NoHuIEFXBwzDLZ0hBcIP4AcaC7GK9E2hZ1U=";
   };
 
   dontConfigure = true;
