@@ -83,7 +83,10 @@ in {
     programs = { dconf.enable = true; };
 
     hardware = {
-      bluetooth.enable = true;
+      bluetooth = {
+        enable = true;
+        settings = { General = { Experimental = true; }; };
+      };
       pulseaudio.enable = false;
       opengl = {
         enable = true;
