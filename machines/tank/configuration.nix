@@ -51,9 +51,6 @@ in {
   };
 
   systemd = {
-    # TODO: Prepare a PR to fix/make it configurable that upstream
-    services.prometheus-fritzbox-exporter.serviceConfig.EnvironmentFile =
-      lib.mkForce secrets.prometheus-fritzbox.path;
     network = {
       enable = true;
       networks = {
@@ -392,6 +389,21 @@ in {
       home = "/var/lib/attic";
     };
   };
+  services.prometheus-fritzbox-exporter = {
+    enable = true;
+    environmentFile = secrets.prometheus-fritzbox.path;
+  };
+  services.vmagent.prometheusConfig.scrape_configs = [{
+    job_name = "fritzbox-exporter";
+    static_configs = [{
+      targets = [
+        "localhost:${
+          toString config.services.prometheus-fritzbox-exporter.port
+        }"
+      ];
+    }];
+  }];
+
   shawn8901 = {
     backup-rclone = {
       enable = true;
