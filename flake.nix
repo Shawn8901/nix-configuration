@@ -99,7 +99,7 @@
         ${name} = nixpkgs.legacyPackages.x86_64-linux.releaseTools.aggregate {
           inherit name;
           meta = { schedulingPriority = 10; };
-          constituents = packages ++ hosts;
+          constituents = hosts;
         };
       };
 
