@@ -31,9 +31,9 @@ in {
         nas = pkgs.callPackage ./shellscripts/nas.nix { };
         backup-usb = pkgs.callPackage ./shellscripts/backup-usb.nix { };
 
-        s25rttr = pkgs.callPackage ./s25rttr {
-          SDL2 = pkgs.SDL2.override { withStatic = true; };
-        };
+        # s25rttr = pkgs.callPackage ./s25rttr {
+        #   SDL2 = pkgs.SDL2.override { withStatic = true; };
+        # };
         proton-ge-custom = pkgs.callPackage ./proton-ge-custom { };
         pytr = pkgs.python3.pkgs.callPackage ./pytr { };
         asus-touchpad-numpad-driver =
