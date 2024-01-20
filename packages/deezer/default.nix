@@ -1,17 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchzip
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, writeScript
-, imagemagick
-, p7zip
-, nodePackages
-, electron_13
-,
-}:
+{ lib, stdenv, fetchurl, fetchzip, makeDesktopItem, copyDesktopItems
+, makeWrapper, writeScript, imagemagick, p7zip, nodePackages, electron_13, }:
 let
   desktopItem = makeDesktopItem {
     name = "deezer";
@@ -25,16 +13,15 @@ let
     exec = "deezer %u";
     startupNotify = true;
   };
-in
-stdenv.mkDerivation (finalAttrs: {
+in stdenv.mkDerivation (finalAttrs: {
 
-  version = "6.0.40";
+  version = "6.0.50";
   pname = "deezer";
 
   src = fetchzip {
     url =
       "https://github.com/SibrenVasse/${finalAttrs.pname}/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-21Cb8G4DWXxlOy1wGjkudMnf5QTaeJKUnx1zAofD/cs=";
+    hash = "sha256-5MfWLecXhas5jRQ9g7+aez6+E0eoamn1GNv5aUUXGvc=";
   };
 
   # this is a nasty workaround to trick nix-update to update your hash, whilst having src on the github repo
@@ -42,17 +29,21 @@ stdenv.mkDerivation (finalAttrs: {
   go-modules = fetchurl {
     url =
       "https://www.deezer.com/desktop/download/artifact/win32/x86/${finalAttrs.version}";
-    hash = "sha256-YnksH9lLSJTHTAEiKcwTDkT/1g3Mqq77T2NAY8O1S9k=";
+    hash = "sha256-zlSxIlS6httqsQQZIN5MlMKVL8XhuQaGcH8c+0TcQyI=";
   };
 
   patches = [
     "${finalAttrs.src}/remove-kernel-version-from-user-agent.patch"
     "${finalAttrs.src}/avoid-change-default-texthtml-mime-type.patch"
-    "${finalAttrs.src}/fix-isDev-usage.patch"
     "${finalAttrs.src}/start-hidden-in-tray.patch"
     "${finalAttrs.src}/quit.patch"
     "${finalAttrs.src}/systray-buttons-fix.patch"
-  ];
+  ] ++ lib.optional (lib.versionAtLeast nodePackages.prettier.version "3.2.0")
+    [ "${finalAttrs.src}/fix-isDev-usage.patch" ]
+    ++ lib.optional (lib.versionOlder nodePackages.prettier.version "3.2.0")
+    [ ./nix-isDev-usage-old-prettier.patch ]
+
+  ;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -71,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     cd resources
     asar extract app.asar app
-
     prettier --write "app/build/*.js"
 
     substituteInPlace app/build/main.js \
