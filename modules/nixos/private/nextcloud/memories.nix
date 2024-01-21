@@ -50,7 +50,7 @@ in
 
       nextcloud = {
         # otherwise the Logging App does not function
-        logType = lib.mkIf cfg.recommendedDefaults "file";
+
 
         phpOptions = lib.mkIf cfg.recommendedDefaults {
           # https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#:~:text=opcache.jit%20%3D%201255%20opcache.jit_buffer_size%20%3D%20128m
@@ -59,6 +59,7 @@ in
         };
 
         extraOptions = lib.mkMerge [
+          {log_type = lib.mkIf cfg.recommendedDefaults "file";}
           (lib.mkIf cfg.configureImaginary {
             enabledPreviewProviders = [
               # default from https://github.com/nextcloud/server/blob/master/config/config.sample.php#L1295-L1304

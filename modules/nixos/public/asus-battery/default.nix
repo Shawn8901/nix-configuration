@@ -25,7 +25,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = lib.mkIf cfg.enableChargeUptoScript [ p ];
     systemd.services.battery-charge-threshold = {
-      wantedBy = [ "local-fs.target" "suspend.target" ];
+      requires = [ "local-fs.target" "suspend.target" ];
       after = [ "local-fs.target" "suspend.target" ];
       description =
         "Set the battery charge threshold to ${toString cfg.chargeUpto}%";

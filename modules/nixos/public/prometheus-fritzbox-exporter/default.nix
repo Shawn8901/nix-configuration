@@ -33,6 +33,7 @@ in {
     systemd.services.prometheus-fritzbox-exporter = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
       description = "Fetches data from fritzbox";
       environment = {
         FRITZ_PORT = toString cfg.port;

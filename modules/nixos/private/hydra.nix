@@ -135,6 +135,7 @@ in {
       {
         hydra-init = {
           after = [ "network-online.target" ];
+          requires = [ "network-online.target" ];
           preStart = lib.mkAfter ''
             sed -i -e "s|#github_token#|$(<${cfg.writeTokenFile})|" ${config.systemd.services.hydra-init.environment.HYDRA_DATA}/hydra.conf
           '';
@@ -144,6 +145,7 @@ in {
         attic-watch-store = {
           wantedBy = [ "multi-user.target" ];
           after = [ "network-online.target" ];
+          requires = [ "network-online.target" ];
           description = "Upload all store content to binary catch";
           serviceConfig = {
             User = "attic";

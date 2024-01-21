@@ -27,6 +27,7 @@ in {
       '';
       path = [ pkgs.i2c-tools ];
       after = [ "display-manager.service" ];
+      requires = [ "display-manager.service" ];
       wantedBy = [ "graphical.target" ];
     };
   };

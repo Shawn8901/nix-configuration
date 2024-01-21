@@ -66,7 +66,6 @@ in {
           dbname = "nextcloud";
           adminuser = "admin";
           adminpassFile = cfg.adminPasswordFile;
-          defaultPhoneRegion = "DE";
         };
         caching = {
           apcu = false;
@@ -78,7 +77,10 @@ in {
           "opcache.save_comments" = "1";
           "opcache.revalidate_freq" = "60";
         };
-        extraOptions."overwrite.cli.url" = "https://${cfg.hostName}";
+        extraOptions = {
+          "overwrite.cli.url" = "https://${cfg.hostName}";
+          default_phone_region = "DE";
+        };
       };
 
       postgresql = {

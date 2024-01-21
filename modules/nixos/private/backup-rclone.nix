@@ -17,7 +17,7 @@ in {
         cfg.sourceDir; # "backup-${builtins.replaceStrings ["/"] ["-"] safePath}";
     in {
       services.${serviceName} = {
-        wants = [ "network-online.target" ];
+        requires = [ "network-online.target" ];
         after = [ "network-online.target" ];
         description = "Copy nextcloud stuff to dropbox";
         serviceConfig = {

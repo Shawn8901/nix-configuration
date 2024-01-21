@@ -32,7 +32,8 @@ in {
       };
     in {
       description = "VictoriaMetrics basic auth proxy";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
       startLimitBurst = 5;
       serviceConfig = {
         Restart = "on-failure";
