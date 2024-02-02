@@ -13,23 +13,27 @@ let
     exec = "deezer %u";
     startupNotify = true;
   };
+  shortenVersion = v:
+    lib.concatStringsSep "." (lib.sublist 0 3 (lib.splitVersion v));
+
 in stdenv.mkDerivation (finalAttrs: {
 
-  version = "6.0.50";
+  version = "6.0.60-2";
   pname = "deezer";
 
   src = fetchzip {
     url =
       "https://github.com/SibrenVasse/${finalAttrs.pname}/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-5MfWLecXhas5jRQ9g7+aez6+E0eoamn1GNv5aUUXGvc=";
+    hash = "sha256-rK65OvqRbh+s70vncaBEmBPbRlHI4U8jQLH1I9xrAfc=";
   };
 
   # this is a nasty workaround to trick nix-update to update your hash, whilst having src on the github repo
   # that is providing patches, whilst also updating a second hash
   go-modules = fetchurl {
-    url =
-      "https://www.deezer.com/desktop/download/artifact/win32/x86/${finalAttrs.version}";
-    hash = "sha256-zlSxIlS6httqsQQZIN5MlMKVL8XhuQaGcH8c+0TcQyI=";
+    url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${
+        shortenVersion finalAttrs.version
+      }";
+    hash = "sha256-RjUIxCWi56A3IaGxo2vsfQ4h8JCht1RhHw/jDdd6JW8=";
   };
 
   patches = [
@@ -37,13 +41,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "${finalAttrs.src}/avoid-change-default-texthtml-mime-type.patch"
     "${finalAttrs.src}/start-hidden-in-tray.patch"
     "${finalAttrs.src}/quit.patch"
-    "${finalAttrs.src}/systray-buttons-fix.patch"
-  ] ++ lib.optional (lib.versionAtLeast nodePackages.prettier.version "3.2.0")
-    [ "${finalAttrs.src}/fix-isDev-usage.patch" ]
-    ++ lib.optional (lib.versionOlder nodePackages.prettier.version "3.2.0")
-    [ ./nix-isDev-usage-old-prettier.patch ]
-
-  ;
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
