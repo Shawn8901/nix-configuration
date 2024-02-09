@@ -67,7 +67,7 @@ in {
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/F66B-A20D";
+    device = "/dev/disk/by-label/EFI";
     fsType = "vfat";
     options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
   };
