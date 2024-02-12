@@ -68,7 +68,8 @@
           enable = true;
           listenAddress = "localhost";
           port = 9101;
-          enabledCollectors = [ "systemd" "processes" "interrupts" "cgroups" ];
+          enabledCollectors =
+            [ "systemd" "processes" "interrupts" "cgroups" "hwmon" ];
         };
       }
       (lib.optionalAttrs
