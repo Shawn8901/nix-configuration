@@ -11,9 +11,8 @@ in {
       kernelModules = [ "amdgpu" ];
       systemd.enable = true;
     };
-    kernelModules = [ "amdgpu" "kvm-amd" "cifs" "usb_storage" ];
+    kernelModules = [ "amdgpu" "kvm-amd" "cifs" "usb_storage" "k10temp" ];
     kernelPackages = packagesFor self'.packages.linux_xanmod_x86_64_v3;
-    blacklistedKernelModules = [ "k10temp" ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944
     '';
