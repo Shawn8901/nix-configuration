@@ -13,7 +13,6 @@ in {
     };
     kernelModules = [ "amdgpu" "kvm-amd" "cifs" "usb_storage" ];
     kernelPackages = packagesFor self'.packages.linux_xanmod_x86_64_v3;
-    extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
     blacklistedKernelModules = [ "k10temp" ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944

@@ -139,7 +139,7 @@ in {
     keep-derivations = true;
   };
   environment = {
-    systemPackages = with pkgs; [ cifs-utils zenmonitor ];
+    systemPackages = with pkgs; [ cifs-utils ];
     etc = {
       "samba/credentials_ela".source = secrets.samba-ela.path;
       "samba/credentials_shawn".source = secrets.samba.path;
