@@ -1,4 +1,4 @@
-{ self', pkgs, lib, config, ... }:
+{ self', pkgs, lib, config, inputs', ... }:
 let
   inherit (lib) mkEnableOption mkIf;
 
@@ -98,14 +98,16 @@ in {
     };
     sound.enable = false;
 
-    environment.systemPackages = with pkgs; [
-      plasma5Packages.skanlite
-      plasma5Packages.ark
-      plasma5Packages.kate
-      plasma5Packages.kalk
-      plasma5Packages.kmail
-      plasma5Packages.kdeplasma-addons
-    ];
+    environment.systemPackages = with pkgs;
+      [
+        plasma5Packages.skanlite
+        plasma5Packages.ark
+        plasma5Packages.kate
+        plasma5Packages.kalk
+        plasma5Packages.kmail
+        plasma5Packages.kdeplasma-addons
+        git
+      ] ++ [ inputs'.nh.packages.default ];
 
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 

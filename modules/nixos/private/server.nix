@@ -20,6 +20,8 @@ in {
       }));
     };
 
+    environment.systemPackages = [ pkgs.gitMinimal ];
+
     system.autoUpgrade = {
       enable = true;
       dates = "05:14";

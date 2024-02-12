@@ -29,8 +29,7 @@ in {
 
   environment.sessionVariables.FLAKE =
     lib.mkDefault "github:shawn8901/nix-configuration";
-  environment.systemPackages = with pkgs;
-    [ git btop vim sops ] ++ [ inputs'.nh.packages.default ];
+  environment.systemPackages = with pkgs; [ btop vim sops ];
 
   services = {
     journald.extraConfig = ''
