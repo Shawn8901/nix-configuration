@@ -62,7 +62,7 @@ in {
       trim.enable = true;
       autoScrub = {
         enable = true;
-        pools = [ "rpool" ];
+        pools = [ "rpool" "ztank" ];
       };
     };
     printing = {
@@ -112,7 +112,10 @@ in {
     sane.enable = true;
     keyboard.zsa.enable = true;
   };
-  systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
+  systemd.tmpfiles.rules = [
+    "d /media/nas 0750 shawn users -" # needed by own nas script for mounting
+    "d /etc/exports.d 0750 root root" # needed by zfs to run 'zfs mount -a'
+  ];
 
   programs = {
     ssh.startAgent = true;

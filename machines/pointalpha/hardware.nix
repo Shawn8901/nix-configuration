@@ -20,6 +20,7 @@ in {
     '';
     supportedFilesystems = [ "zfs" "ntfs" ];
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
+    zfs.extraPools = [ "ztank" ];
     zfs.devNodes = "/dev/disk/by-id";
 
     loader = {
@@ -61,7 +62,7 @@ in {
   };
 
   fileSystems."/steamlibrary" = {
-    device = "rpool/local/steamlibrary";
+    device = "ztank/local/steamlibrary";
     fsType = "zfs";
     options = zfsOptions;
   };
