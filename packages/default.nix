@@ -26,7 +26,7 @@ in {
         config.permittedInsecurePackages = [ "electron-13.6.9" ];
       };
 
-      packages = {
+      packages = rec {
         rtc-helper = pkgs.callPackage ./shellscripts/rtc-helper.nix { };
         nas = pkgs.callPackage ./shellscripts/nas.nix { };
         backup-usb = pkgs.callPackage ./shellscripts/backup-usb.nix { };
@@ -55,6 +55,16 @@ in {
 
         linux_xanmod_x86_64_v3 =
           import ./linux-xanmod-x86-64-v3 { inherit pkgs lib; };
+
+        dfl-ipc = pkgs.callPackage ./dfl-ipc { };
+        dfl-login1 = pkgs.callPackage ./dfl-login1 { };
+        dfl-utils = pkgs.callPackage ./dfl-utils { };
+        dfl-applications =
+          pkgs.callPackage ./dfl-applications { inherit dfl-ipc; };
+        qtgreet = pkgs.callPackage ./qtgreet {
+          inherit wayqt dfl-applications dfl-utils dfl-login1;
+        };
+        wayqt = pkgs.callPackage ./wayqt { };
       };
     in {
       packages."${system}" = packages;
