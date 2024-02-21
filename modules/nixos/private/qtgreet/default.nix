@@ -1,3 +1,5 @@
+# Be aware that this does not work its a WIP!
+
 { self', config, lib, pkgs, ... }:
 let
   cfg = config.programs.qtgreet;
