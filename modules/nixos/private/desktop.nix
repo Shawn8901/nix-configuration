@@ -147,7 +147,6 @@ in {
             p.getent
           ];
         };
-        extraCompatPackages = [ fPkgs.proton-ge-custom ];
       };
       haguichi.enable = false;
     };
