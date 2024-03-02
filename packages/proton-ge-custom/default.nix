@@ -12,8 +12,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.runUpdate = true;
 
   buildCommand = ''
-    mkdir -p $out/bin
-    tar -C $out/bin --strip=1 -x -f $src
+    mkdir -p $out/{bin,opt}
+    tar -C $out/opt --strip=1 -x -f $src
+
+    ln -s $out/opt/toolmanifest.vdf $out/bin/toolmanifest.vdf
+    install -Dm644 $out/opt/compatibilitytool.vdf $out/bin/compatibilitytool.vdf
+    sed -i "s#\"install_path\" \".\"#\"install_path\" \"$out\/opt\/\"#g"  $out/bin/compatibilitytool.vdf
   '';
 
   meta = with lib; {
