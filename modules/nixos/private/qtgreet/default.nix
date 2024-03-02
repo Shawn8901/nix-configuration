@@ -67,7 +67,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package pkgs.qt6Packages.qtwayland ];
     services.greetd.enable = true;
     services.greetd.settings.default_session.command = lib.getExe wrapper;
     environment.etc."qtgreet/config.ini".source =
