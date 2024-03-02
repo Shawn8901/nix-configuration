@@ -1,4 +1,6 @@
-{ self, config, lib, pkgs, flakeConfig, ... }: {
+{ self, config, lib, pkgs, flakeConfig, ... }:
+let inherit (lib) optionals mkMerge optionalAttrs versionOlder;
+in {
   sops.secrets = {
     vmagent = {
       sopsFile = ../../../../files/secrets-common.yaml;
@@ -39,8 +41,8 @@
               }"
             ];
           }];
-        }] ++ lib.optionals
-          (config.services.prometheus.exporters.smartctl.enable) [{
+        }]
+          ++ optionals (config.services.prometheus.exporters.smartctl.enable) [{
             job_name = "smartctl";
             static_configs = [{
               targets = [
@@ -49,7 +51,7 @@
                 }"
               ];
             }];
-          }] ++ lib.optionals (config.services.zrepl.enable) [{
+          }] ++ optionals (config.services.zrepl.enable) [{
             job_name = "zrepl";
             static_configs = [{
               targets = [
@@ -62,7 +64,7 @@
           }];
       };
     };
-    prometheus.exporters = lib.mkMerge [
+    prometheus.exporters = mkMerge [
       {
         node = {
           enable = true;
@@ -72,14 +74,23 @@
             [ "systemd" "processes" "interrupts" "cgroups" "hwmon" ];
         };
       }
-      (lib.optionalAttrs
-        (builtins.elem "zfs" config.boot.supportedFilesystems) {
+
+      (optionalAttrs (versionOlder config.system.nixos.release "24.05"
+        && builtins.elem "zfs" config.boot.supportedFilesystems) {
           zfs = {
             enable = true;
             listenAddress = "localhost";
           };
         })
-      (lib.optionalAttrs (config.services.smartd.enable) {
+      (optionalAttrs (!versionOlder config.system.nixos.release "24.05"
+        && (config.boot.supportedFilesystems.zfs or false)) {
+          zfs = {
+            enable = true;
+            listenAddress = "localhost";
+          };
+        })
+
+      (optionalAttrs (config.services.smartd.enable) {
         smartctl = {
           enable = true;
           listenAddress = "localhost";

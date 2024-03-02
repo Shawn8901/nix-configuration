@@ -1,6 +1,6 @@
 { self', pkgs, lib, config, inputs', ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf optionalAttrs versionOlder;
 
   cfg = config.shawn8901.desktop;
   fPkgs = self'.packages;
@@ -42,11 +42,19 @@ in {
 
     services = {
       acpid.enable = true;
-      avahi = {
-        enable = true;
-        nssmdns = true;
-        openFirewall = true;
-      };
+      avahi = lib.mkMerge [
+        {
+          enable = true;
+          openFirewall = true;
+        }
+        (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
+          nssmdns = true;
+        })
+        (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
+
+          nssmdns4 = true;
+        })
+      ];
       smartd.enable = true;
       pipewire = {
         enable = true;
@@ -55,23 +63,31 @@ in {
         alsa.support32Bit = true;
         wireplumber.enable = true;
       };
-      xserver = {
-        enable = lib.mkDefault true;
-        layout = "de";
-        videoDrivers = [ "amdgpu" ];
-        displayManager.sddm = {
+      xserver = lib.mkMerge [
+        {
           enable = lib.mkDefault true;
-          autoNumlock = true;
-          wayland.enable = true;
-        };
-        displayManager.defaultSession = "plasmawayland";
-        desktopManager.plasma5 = {
-          enable = true;
-          phononBackend = "vlc";
-        };
-        desktopManager.xterm.enable = false;
-        excludePackages = [ pkgs.xterm ];
-      };
+
+          videoDrivers = [ "amdgpu" ];
+          displayManager.sddm = {
+            enable = lib.mkDefault true;
+            autoNumlock = true;
+            wayland.enable = true;
+          };
+          displayManager.defaultSession = "plasmawayland";
+          desktopManager.plasma5 = {
+            enable = true;
+            phononBackend = "vlc";
+          };
+          desktopManager.xterm.enable = false;
+          excludePackages = [ pkgs.xterm ];
+        }
+        (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
+          layout = "de";
+        })
+        (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
+          xkb.layout = "de";
+        })
+      ];
     };
 
     security = {

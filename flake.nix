@@ -2,7 +2,7 @@
   description = "Flake from a random person on the internet";
 
   inputs = {
-    nixpkgs-unstable.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
+    nixpkgs.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
@@ -19,7 +19,7 @@
     };
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager-stable = {
       url = "github:nix-community/home-manager/release-23.11";
@@ -27,12 +27,12 @@
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
     simple-nixos-mailserver = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.11";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-23_11.follows = "nixpkgs-stable";
       inputs.flake-compat.follows = "flake-compat";
     };
@@ -50,7 +50,7 @@
     };
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
     nh = {
@@ -60,7 +60,7 @@
     flake-parts = { url = "github:hercules-ci/flake-parts"; };
     fp-rndp-lib = {
       url = "github:Shawn8901/fp-rndp-lib";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
     };
     flake-compat = {
