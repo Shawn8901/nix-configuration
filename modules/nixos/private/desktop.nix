@@ -51,7 +51,6 @@ in {
           nssmdns = true;
         })
         (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
-
           nssmdns4 = true;
         })
       ];
@@ -66,29 +65,29 @@ in {
       xserver = lib.mkMerge [
         {
           enable = lib.mkDefault true;
-
           videoDrivers = [ "amdgpu" ];
           displayManager.sddm = {
             enable = lib.mkDefault true;
             autoNumlock = true;
             wayland.enable = true;
           };
-          displayManager.defaultSession = "plasmawayland";
-          desktopManager.plasma5 = {
-            enable = true;
-            phononBackend = "vlc";
-          };
           desktopManager.xterm.enable = false;
           excludePackages = [ pkgs.xterm ];
         }
         (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
+          desktopManager.plasma5 = {
+            enable = true;
+            phononBackend = "vlc";
+          };
           layout = "de";
         })
         (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
           xkb.layout = "de";
         })
       ];
-    };
+    } // (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
+      desktopManager.plasma6 = { enable = true; };
+    });
 
     security = {
       rtkit.enable = true;
@@ -115,15 +114,20 @@ in {
     sound.enable = false;
 
     environment.systemPackages = with pkgs;
-      [
-        plasma5Packages.skanlite
-        plasma5Packages.ark
-        plasma5Packages.kate
-        plasma5Packages.kalk
-        plasma5Packages.kmail
-        plasma5Packages.kdeplasma-addons
-        git
-      ] ++ [ inputs'.nh.packages.default ];
+      lib.mkMerge [
+        (lib.optionals
+          (config.services.xserver.desktopManager.plasma5.enable) ([
+            plasma5Packages.skanlite
+            plasma5Packages.ark
+            plasma5Packages.kate
+            plasma5Packages.kalk
+            plasma5Packages.kmail
+            plasma5Packages.kdeplasma-addons
+          ]))
+        (lib.optionals (config.services.desktopManager.plasma6.enable)
+          (with pkgs.kdePackages; [ ark print-manager kate skanlite kmail ]))
+        [ git inputs'.nh.packages.default ]
+      ];
 
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
@@ -137,10 +141,13 @@ in {
         _JAVA_AWT_WM_NONREPARENTING = "1";
         GTK_USE_PORTAL = "1";
       };
-      plasma5.excludePackages = with pkgs.plasma5Packages; [
-        elisa
-        khelpcenter
-      ];
+      plasma5.excludePackages =
+        lib.optionals (config.services.xserver.desktopManager.plasma5.enable)
+        (with pkgs.plasma5Packages; [ elisa khelpcenter ]);
+
+      plasma6.excludePackages =
+        lib.optionals (config.services.desktopManager.plasma6.enable)
+        (with pkgs.kdePackages; [ elisa khelpcenter ]);
     };
 
     programs = {
