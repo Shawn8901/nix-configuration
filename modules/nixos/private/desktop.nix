@@ -112,43 +112,56 @@ in {
       };
     };
     sound.enable = false;
-
-    environment.systemPackages = with pkgs;
-      lib.mkMerge [
-        (lib.optionals
-          (config.services.xserver.desktopManager.plasma5.enable) ([
-            plasma5Packages.skanlite
-            plasma5Packages.ark
-            plasma5Packages.kate
-            plasma5Packages.kalk
-            plasma5Packages.kmail
-            plasma5Packages.kdeplasma-addons
-          ]))
-        (lib.optionals (config.services.desktopManager.plasma6.enable)
-          (with pkgs.kdePackages; [ ark print-manager kate skanlite kmail ]))
-        [ git inputs'.nh.packages.default ]
-      ];
-
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
-    environment = {
-      sessionVariables = {
-        AMD_VULKAN_ICD = "RADV";
-        MOZ_ENABLE_WAYLAND = "1";
-        MOZ_DISABLE_RDD_SANDBOX = "1";
-        NIXOS_OZONE_WL = "1";
-        QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-        _JAVA_AWT_WM_NONREPARENTING = "1";
-        GTK_USE_PORTAL = "1";
-      };
-      plasma5.excludePackages =
-        lib.optionals (config.services.xserver.desktopManager.plasma5.enable)
-        (with pkgs.plasma5Packages; [ elisa khelpcenter ]);
-
-      plasma6.excludePackages =
-        lib.optionals (config.services.desktopManager.plasma6.enable)
-        (with pkgs.kdePackages; [ elisa khelpcenter ]);
-    };
+    environment = lib.mkMerge [
+      {
+        sessionVariables = {
+          AMD_VULKAN_ICD = "RADV";
+          MOZ_ENABLE_WAYLAND = "1";
+          MOZ_DISABLE_RDD_SANDBOX = "1";
+          NIXOS_OZONE_WL = "1";
+          QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+          _JAVA_AWT_WM_NONREPARENTING = "1";
+          GTK_USE_PORTAL = "1";
+        };
+        systemPackages = with pkgs;
+          lib.mkMerge [
+            (lib.optionals
+              (config.services.xserver.desktopManager.plasma5.enable) ([
+                plasma5Packages.skanlite
+                plasma5Packages.ark
+                plasma5Packages.kate
+                plasma5Packages.kalk
+                plasma5Packages.kmail
+                plasma5Packages.kdeplasma-addons
+              ]))
+            (lib.optionals (config.services ? desktopManager
+              && config.services.desktopManager.plasma6.enable)
+              (with pkgs.kdePackages; [
+                ark
+                print-manager
+                kate
+                skanlite
+                kmail
+              ]))
+            [ git inputs'.nh.packages.default ]
+          ];
+      }
+      (lib.optionalAttrs
+        (config.services.xserver.desktopManager.plasma5.enable) {
+          plasma5.excludePackages = with pkgs.plasma5Packages; [
+            elisa
+            khelpcenter
+          ];
+        })
+      (lib.optionalAttrs (config.services ? desktopManager
+        && config.services.desktopManager.plasma6.enable) {
+          plasma6.excludePackages = with pkgs.kdePackages; [
+            elisa
+            khelpcenter
+          ];
+        })
+    ];
 
     programs = {
       steam = {
