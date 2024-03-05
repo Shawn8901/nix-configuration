@@ -11,9 +11,10 @@ in {
       [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
     kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
     kernelPackages = pkgs.linuxPackages;
-    extraModulePackages = [ ];
+    extraModulePackages = with config.boot.kernelPackages; [ it87 ];
     extraModprobeConfig = ''
       options zfs zfs_arc_max=2147483648
+      options it87 ignore_resource_conflict=1 force_id=0x862
     '';
 
     supportedFilesystems = [ "zfs" "ntfs" ];
