@@ -16,6 +16,7 @@ in {
     kernelPackages = packagesFor self'.packages.linux_xanmod_x86_64_v3;
     extraModprobeConfig = ''
       options zfs zfs_arc_max=6442450944
+      options nct6775 force_id=0xd420
     '';
     supportedFilesystems = [ "zfs" "ntfs" ];
     kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
