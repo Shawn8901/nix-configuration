@@ -100,7 +100,9 @@ in {
     hardware = {
       bluetooth = {
         enable = true;
+        package = pkgs.bluez5-experimental;
         settings = { General = { Experimental = true; }; };
+        input = { General = { ClassicBondedOnly = false; }; };
       };
       pulseaudio.enable = false;
       opengl = {
