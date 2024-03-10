@@ -67,7 +67,7 @@ jobs:
           --base main \
           --body "Automatic package update for ${{ matrix.package }} on $(date -I)" \
           --fill \
-          --label bot --label package \
+          --label bot --label ${{ matrix.package }} \
           --title "Package update for ${{ matrix.package }} $(date -I)")
         env:
           GH_TOKEN: ${{ github.token }}
