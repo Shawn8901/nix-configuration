@@ -30,12 +30,12 @@ jobs:
       - name: Update flake
         shell: bash
         run: |
-          has_pr_open=$(gh pr list --label CI --json number)
+          has_pr_open=$(gh pr list --label flake --json number)
           if [ $has_pr_open != "[]" ]
           then
             echo "There is already a update PR, dont create a new one."
 
-            gh pr checkout $(gh pr list --label CI  --json number | jq ".[].number")
+            gh pr checkout $(gh pr list --label flake  --json number | jq ".[].number")
             commits_ahead=$(git rev-list --count HEAD..origin/main)
             echo "Commits ahead: $commits_ahead"
             git log --oneline -5
@@ -53,21 +53,19 @@ jobs:
 
           fi
 
-          nix show-config
           nix flake update
-          nix flake check --show-trace
 
           git diff-index --quiet HEAD -- && echo "no changes" && exit 0
-
           git switch -c update-flake_$(date -I)
-
           git commit -am "flake.lock: Update $(date -I)"
+
+          nix flake check --show-trace
 
           git push -u origin update-flake_$(date -I)
           PR=$(gh pr create \
           --base main \
           --body "Automatic package update for flake.lock on $(date -I)" \
-          --label bot --label CI \
+          --label bot --label flake \
           --fill \
           --title "Update for flake.lock $(date -I)")
         env:
