@@ -31,7 +31,10 @@ in {
         # s25rttr = pkgs.callPackage ./s25rttr {
         #   SDL2 = pkgs.SDL2.override { withStatic = true; };
         # };
-        proton-ge-custom = pkgs.callPackage ./proton-ge-custom { };
+
+        # https://github.com/NixOS/nixpkgs/pull/294532, aliased for compatibility
+        # remove with 24.11
+        proton-ge-custom = pkgs.proton-ge-custom;
         pytr = pkgs.python3.pkgs.callPackage ./pytr { };
         asus-touchpad-numpad-driver =
           pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver { };
