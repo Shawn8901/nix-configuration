@@ -53,8 +53,7 @@ in {
 
         keymapp = pkgs.callPackage ./keymapp { };
 
-        linux_xanmod_x86_64_v3 =
-          import ./linux-xanmod-x86-64-v3 { inherit pkgs lib; };
+        linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
 
         dfl-ipc = pkgs.callPackage ./dfl-ipc { };
         dfl-login1 = pkgs.callPackage ./dfl-login1 { };
