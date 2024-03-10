@@ -145,6 +145,7 @@ in {
                 kate
                 skanlite
                 kmail
+                kalk
               ]))
             [ git inputs'.nh.packages.default ]
           ];
