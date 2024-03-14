@@ -69,7 +69,10 @@ in {
           displayManager.sddm = {
             enable = lib.mkDefault true;
             autoNumlock = true;
-            wayland.enable = true;
+            wayland = {
+              enable = true;
+              compositor = "kwin";
+            };
           };
           desktopManager.xterm.enable = false;
           excludePackages = [ pkgs.xterm ];
