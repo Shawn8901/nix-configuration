@@ -112,10 +112,13 @@ in {
         enable = true;
         startInBackground = true;
       };
-      gpg-agent = {
-        enable = true;
-        pinentryFlavor = "qt";
-      };
+      gpg-agent = lib.mkMerge [
+        { enable = true; }
+        (lib.optionalAttrs (!(config.services.gpg-agent ? pinteryPackage)) { })
+        (lib.optionalAttrs (config.services.gpg-agent ? pinteryPackage) {
+          pinteryPackage = pkgs.pinentry-qt;
+        })
+      ];
     };
 
     home.packages = with pkgs;
