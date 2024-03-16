@@ -394,14 +394,16 @@ in {
     prometheus.exporters.fritz = {
       enable = true;
       listenAddress = "127.0.0.1";
-      username = "prometheus";
-      password_file = secrets.prometheus-fritzbox.path;
+      settings.devices = [{
+        username = "prometheus";
+        password_file = secrets.prometheus-fritzbox.path;
+      }];
     };
     vmagent.prometheusConfig.scrape_configs = [{
       job_name = "fritzbox-exporter";
       static_configs = [{
         targets = let cfg = config.services.prometheus.exporters.fritz;
-        in [ "${cfg.listen_address}:${toString cfg.port}" ];
+        in [ "${cfg.listenAddress}:${toString cfg.port}" ];
       }];
     }];
   };
