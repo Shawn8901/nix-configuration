@@ -66,14 +66,6 @@ in {
         {
           enable = lib.mkDefault true;
           videoDrivers = [ "amdgpu" ];
-          displayManager.sddm = {
-            enable = lib.mkDefault true;
-            autoNumlock = true;
-            wayland = {
-              enable = true;
-              compositor = "kwin";
-            };
-          };
           desktopManager.xterm.enable = false;
           excludePackages = [ pkgs.xterm ];
         }
@@ -84,12 +76,25 @@ in {
           };
           layout = "de";
         })
-        (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
+        (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
           xkb.layout = "de";
+          displayManager.sddm = {
+            enable = lib.mkDefault true;
+            autoNumlock = true;
+            wayland = { enable = true; };
+          };
         })
       ];
     } // (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
-      desktopManager.plasma6 = { enable = true; };
+      desktopManager.plasma6.enable = true;
+      displayManager.sddm = {
+        enable = lib.mkDefault true;
+        autoNumlock = true;
+        wayland = {
+          enable = true;
+          compositor = "kwin";
+        };
+      };
     });
 
     security = {

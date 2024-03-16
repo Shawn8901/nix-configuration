@@ -271,12 +271,13 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1710454036,
-        "narHash": "sha256-SUZsdg7cJd+re3aGjmFtnQ9XluAOPBTsXAn2eAt1oBY=",
-        "owner": "Shawn8901",
-        "repo": "nixpkgs",
-        "rev": "24524e1bb6a24048a9831772e1cb48c7567f8403",
-        "type": "github"
+        "lastModified": 1710547169,
+        "narHash": "sha256-KR5uxiUIyIhBmjc+y/YBgP15Qn94xl/OZQopcUf6z1o=",
+        "ref": "refs/heads/nixos-unstable-custom",
+        "rev": "632529d7833b0dbf461da6ac1ae982321400a781",
+        "revCount": 596119,
+        "type": "git",
+        "url": "file:///home/shawn/dev/nixpkgs"
       },
       "original": {
         "owner": "Shawn8901",
