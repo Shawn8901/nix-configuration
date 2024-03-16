@@ -20,7 +20,10 @@ in {
       owner = config.services.prometheus.exporters.nextcloud.user;
       group = config.services.prometheus.exporters.nextcloud.group;
     };
-    prometheus-fritzbox = { };
+    prometheus-fritzbox = {
+      owner = config.services.prometheus.exporters.fritz.user;
+      group = config.services.prometheus.exporters.fritz.group;
+    };
     # GitHub access token is stored on all systems with group right for nixbld
     # but hydra-queue-runner has to be able to read them but can not be added
     # to nixbld (it then crashes as soon as its writing to the store).
