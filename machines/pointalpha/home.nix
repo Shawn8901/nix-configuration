@@ -4,7 +4,7 @@ in {
   shawn8901.desktop.enable = true;
 
   home.packages = [
-    self'.packages.keymapp
+    pkgs.keymapp
     pkgs.wally-cli
     pkgs.teamspeak_client
     pkgs.signal-desktop

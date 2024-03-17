@@ -152,8 +152,13 @@ in {
                 print-manager
                 kate
                 skanlite
-                kmail
                 kalk
+                kmail
+                kmail-account-wizard
+                kdepim-runtime
+                kdepim-addons
+                akonadi
+                akonadiconsole
               ]))
             [ git inputs'.nh.packages.default ]
           ];
