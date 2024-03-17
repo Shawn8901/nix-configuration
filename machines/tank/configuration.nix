@@ -398,6 +398,7 @@ in {
       enable = true;
       listenAddress = "127.0.0.1";
       settings.devices = [{
+        name = "Fritz!Box 7590 Router";
         username = "prometheus";
         password_file = secrets.prometheus-fritzbox.path;
       }];
