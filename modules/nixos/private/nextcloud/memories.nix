@@ -1,9 +1,9 @@
-# https://raw.githubusercontent.com/SuperSandro2000/nixos-modules/57d5d4fed3843af04ad8533a0bbf7ef0ee9a0748/modules/nextcloud.nix
-{ config, lib,pkgs, ... }:
+# https://github.com/SuperSandro2000/nixos-modules/blob/master/modules/nextcloud.nix
+{ config, lib,  options, pkgs, ... }:
 
 let
   cfg = config.services.nextcloud;
-  mkOpinionatedOption = text: lib.mkOption {
+    mkOpinionatedOption = text: lib.mkOption {
     type = lib.types.bool;
     default = false;
     description = lib.mdDoc "Whether to ${text}.";
@@ -12,7 +12,7 @@ in
 {
   options = {
     services.nextcloud = {
-      recommendedDefaults = mkOpinionatedOption "set recommended default settings for Nextcloud";
+      recommendedDefaults = mkOpinionatedOption "set recommended default settings";
 
       configureImaginary = mkOpinionatedOption "configure and use Imaginary for preview generation";
 
@@ -49,8 +49,6 @@ in
       };
 
       nextcloud = {
-        # otherwise the Logging App does not function
-
 
         phpOptions = lib.mkIf cfg.recommendedDefaults {
           # https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#:~:text=opcache.jit%20%3D%201255%20opcache.jit_buffer_size%20%3D%20128m
@@ -58,8 +56,13 @@ in
           "opcache.jit_buffer_size" = "128M";
         };
 
-        extraOptions = lib.mkMerge [
-          {log_type = lib.mkIf cfg.recommendedDefaults "file";}
+        # TODO: drop when 23.11 support is not longer required
+        ${if options.services.nextcloud?settings then "settings" else "extraOptions"} = lib.mkMerge [
+          (lib.mkIf cfg.recommendedDefaults {
+            # otherwise the Logging App does not function
+            log_type = "file";
+          })
+
           (lib.mkIf cfg.configureImaginary {
             enabledPreviewProviders = [
               # default from https://github.com/nextcloud/server/blob/master/config/config.sample.php#L1295-L1304
@@ -80,17 +83,16 @@ in
 
           (lib.mkIf cfg.configureMemories {
             enabledPreviewProviders = [
-              # https://github.com/pulsejet/memories/wiki/File-Type-Support
-              # TODO: not sure if this should be under configurePreviewSettings instead or both
+              # https://memories.gallery/file-types/
               ''OC\Preview\Image'' # alias for png,jpeg,gif,bmp
               ''OC\Preview\HEIC''
               ''OC\Preview\TIFF''
               ''OC\Preview\Movie''
             ];
 
-            "memories.exiftool" = "${pkgs.exiftool}/bin/exiftool";
+            "memories.exiftool" = lib.getExe pkgs.exiftool;
             "memories.vod.vaapi" = lib.mkIf cfg.configureMemoriesVaapi true;
-            "memories.vod.ffmpeg" = "${pkgs.ffmpeg-headless}/bin/ffmpeg";
+            "memories.vod.ffmpeg" = lib.getExe pkgs.ffmpeg-headless;
             "memories.vod.ffprobe" = "${pkgs.ffmpeg-headless}/bin/ffprobe";
           })
 
@@ -127,7 +129,7 @@ in
           path = with pkgs; [ perl ];
           # fix memories app being unpacked without the x-bit on binaries
           # could be done in nextcloud-update-plugins but then manually updates would be broken until the next auto update
-          preStart = "${pkgs.coreutils}/bin/chmod +x ${config.services.nextcloud.home}/store-apps/memories/bin-ext/*";
+          preStart = "${pkgs.coreutils}/bin/chmod +x ${cfg.home}/store-apps/memories/bin-ext/*";
         };
 
         nextcloud-cron-preview-generator = lib.mkIf cfg.configurePreviewSettings {
@@ -168,19 +170,19 @@ in
               # 1080 files/photos app when viewing picture
               ${occ} config:app:set --value="256 1080" previewgenerator heightSizes
             '';
-            serviceConfig = {
-              Type = "oneshot";
-              User = "nextcloud";
-            };
+          serviceConfig = {
+            Type = "oneshot";
+            User = "nextcloud";
+          };
         };
 
         nextcloud-setup = lib.mkIf cfg.configureRecognize {
           script = /* bash */ ''
             export PATH=$PATH:/etc/profiles/per-user/nextcloud/bin:/run/current-system/sw/bin
 
-            if [[ ! -e "${config.services.nextcloud.home}/store-apps/recognize/node_modules/@tensorflow/tfjs-node/lib/napi-v8/tfjs_binding.node" ]]; then
-              if [[ -d "${config.services.nextcloud.home}/store-apps/recognize/node_modules/" ]]; then
-                cd "${config.services.nextcloud.home}/store-apps/recognize/node_modules/"
+            if [[ ! -e ${cfg.home}/store-apps/recognize/node_modules/@tensorflow/tfjs-node/lib/napi-v8/tfjs_binding.node ]]; then
+              if [[ -d ${cfg.home}/store-apps/recognize/node_modules/ ]]; then
+                cd ${cfg.home}/store-apps/recognize/node_modules/
                 npm rebuild @tensorflow/tfjs-node --build-addon-from-source
               fi
             fi
