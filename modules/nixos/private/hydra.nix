@@ -159,7 +159,7 @@ in {
     nix.buildMachines = let
       sshUser = cfg.builder.userName;
       sshKey = cfg.builder.sshKeyFile;
-      maxJobs = 2;
+      maxJobs = 1;
       supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
     in [
       {
@@ -174,7 +174,7 @@ in {
         inherit sshUser sshKey supportedFeatures maxJobs;
       }
     ];
-    nix.settings.max-jobs = 3;
+    nix.settings.max-jobs = 2;
     nix.extraOptions = let
       urls = [
         "https://gitlab.com/api/v4/projects/rycee%2Fnmd"
