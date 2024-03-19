@@ -64,19 +64,17 @@ in {
       };
       xserver = lib.mkMerge [
         {
-          enable = lib.mkDefault true;
           videoDrivers = [ "amdgpu" ];
           desktopManager.xterm.enable = false;
           excludePackages = [ pkgs.xterm ];
         }
         (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
+          enable = lib.mkDefault true;
           desktopManager.plasma5 = {
             enable = true;
             phononBackend = "vlc";
           };
           layout = "de";
-        })
-        (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
           xkb.layout = "de";
           displayManager.sddm = {
             enable = lib.mkDefault true;
@@ -103,6 +101,7 @@ in {
       audit.enable = false;
     };
 
+    systemd.defaultUnit = "graphical.target";
     programs = { dconf.enable = true; };
 
     hardware = {
