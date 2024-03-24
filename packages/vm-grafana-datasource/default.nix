@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/VictoriaMetrics/grafana-datasource";
     description = "Grafana Plugin for VictoriaMetrics";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ shawn8901 ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
