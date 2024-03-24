@@ -1,5 +1,7 @@
 { config, lib, perSystem, withSystem, inputs, ... }:
-let genPackageName = system: packageName: "${system}.${packageName}";
+let
+  genPackageName = system: packageName: "${system}.${packageName}";
+  inherit (builtins) elem;
 in {
   perSystem = { pkgs, system, ... }:
     let
@@ -18,8 +20,13 @@ in {
     let
       pkgs = import inputs.nixpkgs {
         inherit system;
-        config.allowUnfreePredicate = pkg:
-          builtins.elem (inputs.nixpkgs.lib.getName pkg) [ "deezer" ];
+        config.allowUnfreePredicate = pkg: elem (lib.getName pkg) [ ];
+        config.permittedInsecurePackages = [ ];
+      };
+
+      pkgsStable = import inputs.nixpkgs-stable {
+        inherit system;
+        config.allowUnfreePredicate = pkg: elem (lib.getName pkg) [ "deezer" ];
         config.permittedInsecurePackages = [ "electron-13.6.9" ];
       };
 
@@ -48,7 +55,7 @@ in {
         rogerrouter =
           pkgs.callPackage ./rogerrouter { inherit (packages) librm; };
 
-        deezer = pkgs.callPackage ./deezer { };
+        deezer = pkgsStable.callPackage ./deezer { };
         vdhcoapp = pkgs.callPackage ./vdhcoapp { };
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
