@@ -62,7 +62,7 @@ in {
       trim.enable = true;
       autoScrub = {
         enable = true;
-        pools = [ "rpool" "ztank" ];
+        pools = [ "rpool" ];
       };
     };
     printing = {
