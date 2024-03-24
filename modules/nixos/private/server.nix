@@ -17,7 +17,7 @@ in {
       }));
     };
 
-    environment.systemPackages = [ pkgs.gitMinimal ];
+    environment.systemPackages = [ pkgs.gitMinimal pkgs.btop ];
 
     system.autoUpgrade = {
       enable = true;

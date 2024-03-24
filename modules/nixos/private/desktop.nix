@@ -159,7 +159,11 @@ in {
                 akonadi
                 akonadiconsole
               ]))
-            [ git inputs'.nh.packages.default ]
+            [
+              git
+              inputs'.nh.packages.default
+              (pkgs.btop.override { rocmSupport = true; })
+            ]
           ];
       }
       (lib.optionalAttrs
