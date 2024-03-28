@@ -56,7 +56,9 @@ in {
           pkgs.callPackage ./rogerrouter { inherit (packages) librm; };
 
         deezer = pkgsStable.callPackage ./deezer { };
-        vdhcoapp = pkgs.callPackage ./vdhcoapp { };
+        filepicker = pkgs.callPackage ./filepicker { };
+        vdhcoapp =
+          pkgs.callPackage ./vdhcoapp { inherit (packages) filepicker; };
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
       };

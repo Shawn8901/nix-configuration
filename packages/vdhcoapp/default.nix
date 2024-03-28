@@ -1,98 +1,67 @@
-{ pkgs, lib, stdenv, nodejs, ffmpeg, glibc, }:
-let
-  version = "1.6.3";
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, toml2json
+, nodejs
+, ffmpeg
+, filepicker
+, substituteAll
+, makeWrapper
+}:
 
-  src = pkgs.fetchFromGitHub {
-    owner = "mi-g";
+# This is an adaptation with buildNpmPackage based on https://github.com/milahu/nur-packages/commit/3022ffb3619182ffcd579194e1202e3978e4d55b
+buildNpmPackage rec {
+  pname = "vdhcoapp";
+  version = "2.0.19";
+
+  src = fetchFromGitHub {
+    owner = "aclap-dev";
     repo = "vdhcoapp";
     rev = "v${version}";
-    sha256 = "sha256-kLdBWfVsfF/kjL0CEdNwn3HWterNuCLicR9NL6eH8js=";
+    hash = "sha256-8xeZvqpRq71aShVogiwlVD3gQoPGseNOmz5E3KbsZxU=";
   };
 
-  composition = import ./composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
+  sourceRoot = "${src.name}/app";
+  npmDepsHash = "sha256-E032U2XZdyTER6ROkBosOTn7bweDXHl8voC3BQEz8Wg=";
+  dontNpmBuild = true;
 
-  nodeVdhcoapp = composition.nodeDependencies.override (old: {
-    dontNpmInstall = true;
-    inherit src;
-  });
-
-  appName = "net.downloadhelper.coapp";
-
-  generateManifest = { allowedSet ? { } }:
-    pkgs.writeText "${appName}.json" (builtins.toJSON (lib.recursiveUpdate {
-      name = appName;
-      description = "Video DownloadHelper companion app";
-      path = "DIR/${appName}";
-      type = "stdio";
-    } allowedSet));
-
-  firefoxManifest = generateManifest {
-    allowedSet = {
-      allowed_extensions = [
-        "weh-native-test@downloadhelper.net"
-        "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}"
-      ];
-    };
-  };
-  chromeManifest = generateManifest {
-    allowedSet = {
-      allowed_origins =
-        [ "chrome-extension://lmjnegcaeklhafolokijcfjliaokphfk/" ];
-    };
-  };
-in stdenv.mkDerivation {
-  pname = "vdhcoapp";
-  inherit version src;
-
-  nativeBuildInputs = with pkgs; [ makeWrapper ];
-
-  buildInputs = [ glibc nodeVdhcoapp ];
-
-  patches = [
-    (pkgs.substituteAll {
-      src = ./0001-Make-the-app-runnable-without-pkg.patch;
-      ffmpeg = "${ffmpeg}";
-    })
-    ./0001-Adding-brave-and-vivaldi-user-installation.patch
+  nativeBuildInputs = [
+    toml2json
+    makeWrapper
   ];
 
-  installPhase = ''
-    mkdir -p $out/share/vdhcoapp
+  patches = [
+    (substituteAll {
+      src = ./code.patch;
+      inherit ffmpeg;
+      filepicker = lib.getExe filepicker;
+    })
+  ];
 
-    chmod -x *.js *.json app/*.js assets/*
-    cp -pr -t $out/share/vdhcoapp/ \
-      app \
-      assets \
-      config.json \
-      index.js \
-      package.json \
-      ${nodeVdhcoapp}/lib/node_modules
-
-    installManifest() {
-      install -d $2
-      cp $1 $2/${appName}.json
-      substituteInPlace $2/${appName}.json --replace DIR $out/share/vdhcoapp
-    }
-    installManifest ${chromeManifest}  $out/etc/opt/chrome/native-messaging-hosts
-    installManifest ${chromeManifest}  $out/etc/chromium/native-messaging-hosts
-    installManifest ${firefoxManifest} $out/lib/mozilla/native-messaging-hosts
-
-    makeWrapper ${nodejs}/bin/node $out/share/vdhcoapp/${appName} \
-      --add-flags $out/share/vdhcoapp/index.js \
-      --set NODE_PATH $out/share/vdhcoapp/node_modules
+  postPatch = ''
+    # Cannot use patch, setting placeholder here
+    substituteInPlace src/native-autoinstall.js \
+      --replace process.execPath "\"${placeholder "out"}/bin/vdhcoapp\""
   '';
 
-  passthru.updateScript = ./update.sh;
+  preBuild = ''
+    toml2json --pretty ../config.toml > src/config.json
+  '';
 
-  meta = {
-    description =
-      "Companion application for the Video DownloadHelper browser add-on";
+  installPhase = ''
+    mkdir -p $out/opt/vdhcoapp
+
+    cp -r . "$out/opt/vdhcoapp"
+
+    makeWrapper ${nodejs}/bin/node $out/bin/vdhcoapp \
+      --add-flags $out/opt/vdhcoapp/src/main.js
+  '';
+
+  meta = with lib; {
+    description = "Companion application for the Video DownloadHelper browser add-on";
     homepage = "https://www.downloadhelper.net/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ wolfangaukang ];
-    inherit (nodejs.meta) platforms;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ wolfangaukang ];
+    mainProgram = "vdhcoapp";
   };
 }
