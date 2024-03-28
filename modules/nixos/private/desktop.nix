@@ -136,14 +136,14 @@ in {
         systemPackages = with pkgs;
           lib.mkMerge [
             (lib.optionals
-              (config.services.xserver.desktopManager.plasma5.enable) ([
+              config.services.xserver.desktopManager.plasma5.enable [
                 plasma5Packages.skanlite
                 plasma5Packages.ark
                 plasma5Packages.kate
                 plasma5Packages.kalk
                 plasma5Packages.kmail
                 plasma5Packages.kdeplasma-addons
-              ]))
+              ])
             (lib.optionals (config.services ? desktopManager
               && config.services.desktopManager.plasma6.enable)
               (with pkgs.kdePackages; [
@@ -166,13 +166,12 @@ in {
             ]
           ];
       }
-      (lib.optionalAttrs
-        (config.services.xserver.desktopManager.plasma5.enable) {
-          plasma5.excludePackages = with pkgs.plasma5Packages; [
-            elisa
-            khelpcenter
-          ];
-        })
+      (lib.optionalAttrs config.services.xserver.desktopManager.plasma5.enable {
+        plasma5.excludePackages = with pkgs.plasma5Packages; [
+          elisa
+          khelpcenter
+        ];
+      })
       (lib.optionalAttrs (config.services ? desktopManager
         && config.services.desktopManager.plasma6.enable) {
           plasma6.excludePackages = with pkgs.kdePackages; [
@@ -187,7 +186,7 @@ in {
         enable = true;
         package = pkgs.steam-small.override {
           extraEnv = {
-            AMD_VULKAN_ICD = config.environment.sessionVariables.AMD_VULKAN_ICD;
+            inherit (config.environment.sessionVariables) AMD_VULKAN_ICD;
           };
           extraLibraries = p: [
             # Fix Unity Fonts

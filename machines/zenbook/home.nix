@@ -1,1 +1,1 @@
-{ ... }: { shawn8901.desktop.enable = true; }
+_: { shawn8901.desktop.enable = true; }

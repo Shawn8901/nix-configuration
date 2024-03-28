@@ -11,7 +11,7 @@ in {
     documentation = { man.enable = false; };
 
     # FIXME https://github.com/NixOS/nixpkgs/issues/265675
-    nixpkgs = lib.optionalAttrs (config.environment.noXlibs) {
+    nixpkgs = lib.optionalAttrs config.environment.noXlibs {
       overlays = singleton (const (super: {
         pipewire = super.pipewire.override { ffadoSupport = false; };
       }));

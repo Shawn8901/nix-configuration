@@ -29,9 +29,7 @@ in {
         };
       };
 
-      krita = unoptimized.krita;
-      libreoffice-qt = unoptimized.libreoffice-qt;
-      portfolio = unoptimized.portfolio;
+      inherit (unoptimized) portfolio libreoffice-qt krita;
 
       udisks2 = pkgs.udisks2.override {
         btrfs-progs = null;

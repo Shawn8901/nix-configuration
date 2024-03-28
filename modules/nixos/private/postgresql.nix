@@ -21,8 +21,7 @@ in {
     services = {
       postgresql = {
         enable = mkDefault true;
-        package = cfg.package;
-        dataDir = cfg.dataDir;
+        inherit (cfg) dataDir package;
       };
       prometheus.exporters.postgres = {
         enable = true;

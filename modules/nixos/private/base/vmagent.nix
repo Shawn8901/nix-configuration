@@ -5,7 +5,7 @@ in {
     vmagent = {
       sopsFile = ../../../../files/secrets-common.yaml;
       owner = config.services.vmagent.user;
-      group = config.services.vmagent.group;
+      inherit (config.services.vmagent) group;
     };
   };
 
@@ -32,7 +32,7 @@ in {
               }"
             ];
           }];
-        }] ++ lib.optionals (config.services.prometheus.exporters.zfs.enable) [{
+        }] ++ lib.optionals config.services.prometheus.exporters.zfs.enable [{
           job_name = "zfs";
           static_configs = [{
             targets = [
@@ -41,27 +41,26 @@ in {
               }"
             ];
           }];
-        }]
-          ++ optionals (config.services.prometheus.exporters.smartctl.enable) [{
-            job_name = "smartctl";
-            static_configs = [{
-              targets = [
-                "localhost:${
-                  toString config.services.prometheus.exporters.smartctl.port
-                }"
-              ];
-            }];
-          }] ++ optionals (config.services.zrepl.enable) [{
-            job_name = "zrepl";
-            static_configs = [{
-              targets = [
-                "localhost:${
-                  toString (flakeConfig.shawn8901.zrepl.monitoringPorts
-                    config.services.zrepl)
-                }"
-              ];
-            }];
+        }] ++ optionals config.services.prometheus.exporters.smartctl.enable [{
+          job_name = "smartctl";
+          static_configs = [{
+            targets = [
+              "localhost:${
+                toString config.services.prometheus.exporters.smartctl.port
+              }"
+            ];
           }];
+        }] ++ optionals config.services.zrepl.enable [{
+          job_name = "zrepl";
+          static_configs = [{
+            targets = [
+              "localhost:${
+                toString (flakeConfig.shawn8901.zrepl.monitoringPorts
+                  config.services.zrepl)
+              }"
+            ];
+          }];
+        }];
       };
     };
     prometheus.exporters = mkMerge [
@@ -90,7 +89,7 @@ in {
           };
         })
 
-      (optionalAttrs (config.services.smartd.enable) {
+      (optionalAttrs config.services.smartd.enable {
         smartctl = {
           enable = true;
           listenAddress = "localhost";

@@ -7,9 +7,11 @@
   boot = {
     initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" ];
     kernelPackages = pkgs.linuxPackages;
-    zfs.devNodes = "/dev/";
-    zfs.extraPools = [ "zbackup" ];
-    zfs.requestEncryptionCredentials = false;
+    zfs = {
+      devNodes = "/dev/";
+      extraPools = [ "zbackup" ];
+      requestEncryptionCredentials = false;
+    };
     extraModprobeConfig = ''
       options zfs zfs_arc_max=209715200
     '';

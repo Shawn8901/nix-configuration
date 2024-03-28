@@ -53,7 +53,7 @@ in {
           inherit (cfg) home hostName package;
           notify_push = {
             enable = cfg.notify_push.package != null;
-            package = cfg.notify_push.package;
+            inherit (cfg.notify_push) package;
             bendDomainToLocalhost = true;
           };
           enable = true;

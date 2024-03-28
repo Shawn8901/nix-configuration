@@ -17,10 +17,11 @@ in {
       networks = {
         "20-wired" = {
           matchConfig.Name = "ens3";
-          networkConfig.Address =
-            [ "78.128.127.235/25" "2a01:8740:1:e4::2cd3/64" ];
-          networkConfig.DNS = "8.8.8.8";
-          networkConfig.Gateway = "78.128.127.129";
+          networkConfig = {
+            Address = [ "78.128.127.235/25" "2a01:8740:1:e4::2cd3/64" ];
+            DNS = "8.8.8.8";
+            Gateway = "78.128.127.129";
+          };
           routes = [{
             routeConfig = {
               Gateway = "2a01:8740:0001:0000:0000:0000:0000:0001";

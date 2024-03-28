@@ -45,41 +45,44 @@ in {
     };
   };
 
-  fileSystems."/" = {
-    device = "rpool/local/root";
-    fsType = "zfs";
-    options = zfsOptions;
-  };
+  fileSystems = {
+    "/" = {
+      device = "rpool/local/root";
+      fsType = "zfs";
+      options = zfsOptions;
+    };
 
-  fileSystems."/var/log" = {
-    device = "rpool/local/log";
-    fsType = "zfs";
-    options = zfsOptions;
-    neededForBoot = true;
-  };
+    "/var/log" = {
+      device = "rpool/local/log";
+      fsType = "zfs";
+      options = zfsOptions;
+      neededForBoot = true;
+    };
 
-  fileSystems."/persist" = {
-    device = "rpool/safe/persist";
-    fsType = "zfs";
-    options = zfsOptions;
-    neededForBoot = true;
-  };
+    "/persist" = {
+      device = "rpool/safe/persist";
+      fsType = "zfs";
+      options = zfsOptions;
+      neededForBoot = true;
+    };
 
-  fileSystems."/nix" = {
-    device = "rpool/local/nix";
-    fsType = "zfs";
-    options = zfsOptions;
-  };
+    "/nix" = {
+      device = "rpool/local/nix";
+      fsType = "zfs";
+      options = zfsOptions;
+    };
 
-  fileSystems."/home" = {
-    device = "rpool/safe/home";
-    fsType = "zfs";
-    options = zfsOptions;
-  };
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/BOOT";
-    fsType = "vfat";
-    options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
+    "/home" = {
+      device = "rpool/safe/home";
+      fsType = "zfs";
+      options = zfsOptions;
+    };
+    "/boot" = {
+      device = "/dev/disk/by-label/BOOT";
+      fsType = "vfat";
+      options =
+        [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
+    };
   };
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
 

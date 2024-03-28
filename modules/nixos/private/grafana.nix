@@ -59,7 +59,7 @@ in {
       };
       grafana = {
         enable = true;
-        declarativePlugins = cfg.declarativePlugins;
+        inherit (cfg) declarativePlugins;
         settings = {
           server = {
             domain = cfg.hostname;

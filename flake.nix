@@ -7,11 +7,13 @@
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
       url = "github:zhaofengli/attic";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.flake-compat.follows = "flake-compat";
-      inputs.crane.follows = "crane";
+      inputs = {
+        nixpkgs.follows = "nixpkgs-stable";
+        nixpkgs-stable.follows = "nixpkgs-stable";
+        flake-utils.follows = "flake-utils";
+        flake-compat.follows = "flake-compat";
+        crane.follows = "crane";
+      };
     };
     crane = {
       url = "github:ipetkov/crane";
@@ -27,14 +29,18 @@
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nixpkgs-stable.follows = "nixpkgs-stable";
+      };
     };
     simple-nixos-mailserver = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-23_11.follows = "nixpkgs-stable";
-      inputs.flake-compat.follows = "flake-compat";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nixpkgs-23_11.follows = "nixpkgs-stable";
+        flake-compat.follows = "flake-compat";
+      };
     };
     mimir = {
       url = "github:Shawn8901/mimir";
@@ -89,7 +95,7 @@
       ];
 
       flake.hydraJobs = let
-        lib = nixpkgs.lib;
+        inherit (nixpkgs) lib;
         name = "merge-pr";
         hosts = map (n: "nixos." + n) (lib.attrNames self.nixosConfigurations);
         packages = lib.flatten (lib.attrValues (lib.mapAttrs

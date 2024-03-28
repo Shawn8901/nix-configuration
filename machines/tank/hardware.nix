@@ -18,9 +18,11 @@ in {
     '';
 
     supportedFilesystems = [ "zfs" "ntfs" ];
-    zfs.devNodes = "/dev/disk/by-id";
-    zfs.extraPools = [ "ztank" ];
-    zfs.requestEncryptionCredentials = [ "ztank" ];
+    zfs = {
+      devNodes = "/dev/disk/by-id";
+      extraPools = [ "ztank" ];
+      requestEncryptionCredentials = [ "ztank" ];
+    };
     postBootCommands = lib.mkAfter ''
       ${pkgs.zfs}/bin/zfs mount -a
     '';
@@ -31,48 +33,51 @@ in {
     tmp.useTmpfs = false;
   };
 
-  fileSystems."/" = {
-    device = "rpool/local/root";
-    fsType = "zfs";
-    options = zfsOptions;
-  };
+  fileSystems = {
+    "/" = {
+      device = "rpool/local/root";
+      fsType = "zfs";
+      options = zfsOptions;
+    };
 
-  fileSystems."/nix" = {
-    device = "rpool/local/nix";
-    fsType = "zfs";
-    options = zfsOptions;
-  };
+    "/nix" = {
+      device = "rpool/local/nix";
+      fsType = "zfs";
+      options = zfsOptions;
+    };
 
-  fileSystems."/persist" = {
-    device = "rpool/safe/persist";
-    fsType = "zfs";
-    options = zfsOptions;
-    neededForBoot = true;
-  };
+    "/persist" = {
+      device = "rpool/safe/persist";
+      fsType = "zfs";
+      options = zfsOptions;
+      neededForBoot = true;
+    };
 
-  fileSystems."/var/log" = {
-    device = "rpool/local/log";
-    fsType = "zfs";
-    options = zfsOptions;
-    neededForBoot = true;
-  };
+    "/var/log" = {
+      device = "rpool/local/log";
+      fsType = "zfs";
+      options = zfsOptions;
+      neededForBoot = true;
+    };
 
-  fileSystems."/home" = {
-    device = "rpool/safe/home";
-    fsType = "zfs";
-    options = zfsOptions;
-  };
+    "/home" = {
+      device = "rpool/safe/home";
+      fsType = "zfs";
+      options = zfsOptions;
+    };
 
-  fileSystems."/persist/var/lib/nextcloud/data" = {
-    device = "ztank/replica/nextcloud";
-    fsType = "zfs";
-    options = zfsOptions ++ [ "noauto" ];
-  };
+    "/persist/var/lib/nextcloud/data" = {
+      device = "ztank/replica/nextcloud";
+      fsType = "zfs";
+      options = zfsOptions ++ [ "noauto" ];
+    };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/605D-0B3B";
-    fsType = "vfat";
-    options = [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
+    "/boot" = {
+      device = "/dev/disk/by-uuid/605D-0B3B";
+      fsType = "vfat";
+      options =
+        [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
+    };
   };
 
   swapDevices =

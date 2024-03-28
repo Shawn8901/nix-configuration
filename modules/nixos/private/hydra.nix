@@ -156,46 +156,48 @@ in {
       })
     ];
 
-    nix.buildMachines = let
-      sshUser = cfg.builder.userName;
-      sshKey = cfg.builder.sshKeyFile;
-      maxJobs = 1;
-      supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
-    in [
-      {
-        hostName = "localhost";
-        systems = [ "x86_64-linux" "i686-linux" ];
-        supportedFeatures = supportedFeatures ++ [ "gccarch-x86-64-v3" ];
-        inherit sshUser sshKey maxJobs;
-      }
-      {
-        hostName = "watchtower.pointjig.de";
-        systems = [ "aarch64-linux" ];
-        inherit sshUser sshKey supportedFeatures maxJobs;
-      }
-    ];
-    nix.settings.max-jobs = 2;
-    nix.extraOptions = let
-      urls = [
-        "https://gitlab.com/api/v4/projects/rycee%2Fnmd"
-        "https://git.sr.ht/~rycee/nmd"
-        "https://github.com/zhaofengli/"
-        "git+https://github.com/zhaofengli/"
-        "github:NixOS/"
-        "github:nix-community/"
-        "github:numtide/flake-utils"
-        "github:hercules-ci/flake-parts"
-        "github:nix-systems/default/"
-        "github:Mic92/sops-nix/"
-        "github:zhaofengli/"
-        "github:ipetkov/crane/"
-        "github:viperML/nh/"
-        "gitlab:rycee/nur-expressions/"
-        "gitlab:simple-nixos-mailserver/nixos-mailserver/"
-        "github:Shawn8901/"
+    nix = {
+      buildMachines = let
+        sshUser = cfg.builder.userName;
+        sshKey = cfg.builder.sshKeyFile;
+        maxJobs = 1;
+        supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
+      in [
+        {
+          hostName = "localhost";
+          systems = [ "x86_64-linux" "i686-linux" ];
+          supportedFeatures = supportedFeatures ++ [ "gccarch-x86-64-v3" ];
+          inherit sshUser sshKey maxJobs;
+        }
+        {
+          hostName = "watchtower.pointjig.de";
+          systems = [ "aarch64-linux" ];
+          inherit sshUser sshKey supportedFeatures maxJobs;
+        }
       ];
-    in ''
-      extra-allowed-uris = ${lib.concatStringsSep " " urls}
-    '';
+      settings.max-jobs = 2;
+      extraOptions = let
+        urls = [
+          "https://gitlab.com/api/v4/projects/rycee%2Fnmd"
+          "https://git.sr.ht/~rycee/nmd"
+          "https://github.com/zhaofengli/"
+          "git+https://github.com/zhaofengli/"
+          "github:NixOS/"
+          "github:nix-community/"
+          "github:numtide/flake-utils"
+          "github:hercules-ci/flake-parts"
+          "github:nix-systems/default/"
+          "github:Mic92/sops-nix/"
+          "github:zhaofengli/"
+          "github:ipetkov/crane/"
+          "github:viperML/nh/"
+          "gitlab:rycee/nur-expressions/"
+          "gitlab:simple-nixos-mailserver/nixos-mailserver/"
+          "github:Shawn8901/"
+        ];
+      in ''
+        extra-allowed-uris = ${lib.concatStringsSep " " urls}
+      '';
+    };
   };
 }
