@@ -89,5 +89,4 @@ in {
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
   powerManagement.enable = true;
-  powerManagement.powertop.enable = true;
 }
