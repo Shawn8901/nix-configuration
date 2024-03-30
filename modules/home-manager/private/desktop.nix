@@ -66,9 +66,8 @@ in {
     programs = {
       firefox = {
         enable = true;
-        package = pkgs.wrapFirefox unoptimized.firefox-unwrapped {
-          nativeMessagingHosts = [ fPkgs.vdhcoapp ];
-        };
+        package = pkgs.firefox;
+        nativeMessagingHosts = [ fPkgs.vdhcoapp ];
         profiles."shawn" = {
           extensions = with firefox-addon-packages; [
             ublock-origin
