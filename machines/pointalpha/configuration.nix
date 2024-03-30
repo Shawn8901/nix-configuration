@@ -118,7 +118,6 @@ in {
   ];
 
   programs = {
-    ssh.startAgent = true;
     ausweisapp = {
       enable = true;
       openFirewall = true;

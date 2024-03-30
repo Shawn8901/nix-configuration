@@ -102,7 +102,6 @@ in {
     };
 
     systemd.defaultUnit = "graphical.target";
-    programs = { dconf.enable = true; };
 
     hardware = {
       bluetooth = {
@@ -182,6 +181,8 @@ in {
     ];
 
     programs = {
+      dconf.enable = true;
+      ssh.startAgent = true;
       steam = {
         enable = true;
         package = pkgs.steam-small.override {
