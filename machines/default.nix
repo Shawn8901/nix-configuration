@@ -1,18 +1,31 @@
-{ self, self', inputs, lib, config, withSystem, ... }:
+{
+  self,
+  self',
+  inputs,
+  lib,
+  config,
+  withSystem,
+  ...
+}:
 let
   inherit (config.shawn8901.system-generator) generateSystem;
   cfg = config.shawn8901.nixosConfigurations;
-in {
+in
+{
   config.fp-rndp-lib.nixosConfigurations = {
     watchtower = {
       hostPlatform.system = "aarch64-linux";
       nixpkgs = inputs.nixpkgs-stable;
       hmInput = inputs.home-manager-stable;
       home-manager.shawn = { };
-      extraModules =
-        [ inputs.attic.nixosModules.atticd ../modules/nixos/attic-server ];
+      extraModules = [
+        inputs.attic.nixosModules.atticd
+        ../modules/nixos/attic-server
+      ];
     };
-    next = { nixpkgs = inputs.nixpkgs-stable; };
+    next = {
+      nixpkgs = inputs.nixpkgs-stable;
+    };
     pointalpha = {
       inherit (inputs) nixpkgs;
       hmInput = inputs.home-manager;
@@ -76,8 +89,6 @@ in {
   };
 
   config.flake.hydraJobs = {
-    nixos = lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel)
-      config.flake.nixosConfigurations;
+    nixos = lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) config.flake.nixosConfigurations;
   };
-
 }

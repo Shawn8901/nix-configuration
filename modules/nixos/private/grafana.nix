@@ -1,9 +1,22 @@
-{ self', pkgs, lib, config, ... }:
+{
+  self',
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
-  inherit (lib) types mkEnableOption mkOption mkDefault mkIf;
+  inherit (lib)
+    types
+    mkEnableOption
+    mkOption
+    mkDefault
+    mkIf
+    ;
 
   cfg = config.shawn8901.grafana;
-in {
+in
+{
   options = {
     shawn8901.grafana = {
       enable = mkEnableOption "Enables a preconfigured grafana instance";
@@ -21,11 +34,13 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    systemd.services.grafana.serviceConfig.EnvironmentFile =
-      [ cfg.credentialsFile ];
+    systemd.services.grafana.serviceConfig.EnvironmentFile = [ cfg.credentialsFile ];
     networking.firewall = {
       allowedUDPPorts = [ 443 ];
-      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPorts = [
+        80
+        443
+      ];
     };
     services = {
       nginx = {
@@ -40,9 +55,7 @@ in {
             http3 = true;
             kTLS = true;
             locations."/" = {
-              proxyPass = "http://127.0.0.1:${
-                  toString config.services.grafana.settings.server.http_port
-                }";
+              proxyPass = "http://127.0.0.1:${toString config.services.grafana.settings.server.http_port}";
               proxyWebsockets = true;
               recommendedProxySettings = true;
             };
@@ -50,12 +63,13 @@ in {
         };
       };
       postgresql = {
-        ensureDatabases =
-          [ "${config.services.grafana.settings.database.name}" ];
-        ensureUsers = [{
-          name = "${config.services.grafana.settings.database.user}";
-          ensureDBOwnership = true;
-        }];
+        ensureDatabases = [ "${config.services.grafana.settings.database.name}" ];
+        ensureUsers = [
+          {
+            name = "${config.services.grafana.settings.database.user}";
+            ensureDBOwnership = true;
+          }
+        ];
       };
       grafana = {
         enable = true;
@@ -96,23 +110,26 @@ in {
           enable = true;
           alerting.contactPoints.settings = {
             apiVersion = 1;
-            contactPoints = [{
-              orgId = 1;
-              name = "HomeDiscord";
-              receivers = [{
-                uid = "b7e00da1-b9c7-4f72-bc95-1ef3e7e5b4cf";
-                type = "discord";
-                settings = {
-                  url = "$__env{DISCORD_HOOK}";
-                  use_discord_username = false;
-                };
-                disableResolveMessage = false;
-              }];
-            }];
+            contactPoints = [
+              {
+                orgId = 1;
+                name = "HomeDiscord";
+                receivers = [
+                  {
+                    uid = "b7e00da1-b9c7-4f72-bc95-1ef3e7e5b4cf";
+                    type = "discord";
+                    settings = {
+                      url = "$__env{DISCORD_HOOK}";
+                      use_discord_username = false;
+                    };
+                    disableResolveMessage = false;
+                  }
+                ];
+              }
+            ];
           };
 
           datasources.settings.datasources = cfg.datasources;
-
         };
       };
     };

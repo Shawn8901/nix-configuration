@@ -1,11 +1,21 @@
-{ self, config, flakeConfig, lib, pkgs, ... }:
+{
+  self,
+  config,
+  flakeConfig,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
 
   cfg = config.shawn8901.managed-user;
-in {
+in
+{
   options = {
-    shawn8901.managed-user = { enable = mkEnableOption "preconfigured users"; };
+    shawn8901.managed-user = {
+      enable = mkEnableOption "preconfigured users";
+    };
   };
   config = mkIf cfg.enable {
 
@@ -48,7 +58,12 @@ in {
       enableDefaultPackages = lib.mkDefault (!config.environment.noXlibs);
       packages = [
         (pkgs.nerdfonts.override {
-          fonts = [ "Meslo" "DroidSansMono" "LiberationMono" "Terminus" ];
+          fonts = [
+            "Meslo"
+            "DroidSansMono"
+            "LiberationMono"
+            "Terminus"
+          ];
         })
       ];
     };

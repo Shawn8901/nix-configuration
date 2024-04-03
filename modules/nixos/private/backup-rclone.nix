@@ -1,9 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.shawn8901.backup-rclone;
 
-  inherit (lib) mkIf mkEnableOption mkOption types;
-in {
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    types
+    ;
+in
+{
   options = {
     shawn8901.backup-rclone = {
       enable = mkEnableOption "service to save personal files to dropbox";
@@ -12,29 +23,29 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    systemd = let
-      serviceName =
-        cfg.sourceDir; # "backup-${builtins.replaceStrings ["/"] ["-"] safePath}";
-    in {
-      services.${serviceName} = {
-        requires = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        description = "Copy nextcloud stuff to dropbox";
-        serviceConfig = {
-          Type = "oneshot";
-          User = "shawn";
-          ExecStart =
-            "${lib.getExe pkgs.rclone} copy ${cfg.sourceDir} ${cfg.destDir}";
+    systemd =
+      let
+        serviceName = cfg.sourceDir; # "backup-${builtins.replaceStrings ["/"] ["-"] safePath}";
+      in
+      {
+        services.${serviceName} = {
+          requires = [ "network-online.target" ];
+          after = [ "network-online.target" ];
+          description = "Copy nextcloud stuff to dropbox";
+          serviceConfig = {
+            Type = "oneshot";
+            User = "shawn";
+            ExecStart = "${lib.getExe pkgs.rclone} copy ${cfg.sourceDir} ${cfg.destDir}";
+          };
+        };
+        timers.${serviceName} = {
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnCalendar = [ "daily" ];
+            Persistent = true;
+            OnBootSec = "15min";
+          };
         };
       };
-      timers.${serviceName} = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = [ "daily" ];
-          Persistent = true;
-          OnBootSec = "15min";
-        };
-      };
-    };
   };
 }

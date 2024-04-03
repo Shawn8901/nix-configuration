@@ -1,10 +1,21 @@
-{ self, self', config, pkgs, lib, inputs', ... }:
+{
+  self,
+  self',
+  config,
+  pkgs,
+  lib,
+  inputs',
+  ...
+}:
 let
   inherit (config.sops) secrets;
   inherit (inputs') attic;
-in {
+in
+{
   sops.secrets = {
-    root = { neededForUsers = true; };
+    root = {
+      neededForUsers = true;
+    };
     attic-env = { };
     grafana-env = {
       owner = "grafana";
@@ -14,7 +25,10 @@ in {
   };
 
   networking = {
-    nameservers = [ "208.67.222.222" "208.67.220.220" ];
+    nameservers = [
+      "208.67.222.222"
+      "208.67.220.220"
+    ];
     domain = "";
     useDHCP = true;
   };
@@ -24,10 +38,8 @@ in {
     nginx.package = pkgs.nginxQuic;
     vmagent = {
       package = pkgs.victoriametrics;
-      remoteWriteUrl = lib.mkForce
-        "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
-      extraArgs = lib.mkForce
-        [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
+      remoteWriteUrl = lib.mkForce "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
+      extraArgs = lib.mkForce [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
     };
   };
 
@@ -64,11 +76,13 @@ in {
       settings.plugins = {
         allow_loading_unsigned_plugins = "victoriametrics-datasource";
       };
-      datasources = [{
-        name = "VictoriaMetrics";
-        type = "victoriametrics-datasource";
-        url = "http://${config.services.victoriametrics.listenAddress}";
-      }];
+      datasources = [
+        {
+          name = "VictoriaMetrics";
+          type = "victoriametrics-datasource";
+          url = "http://${config.services.victoriametrics.listenAddress}";
+        }
+      ];
     };
     server.enable = true;
     managed-user.enable = true;

@@ -1,9 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.shawn8901.shutdown-wakeup;
 
-  inherit (lib) mkIf mkEnableOption mkOption types;
-in {
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    types
+    ;
+in
+{
   options = {
     shawn8901.shutdown-wakeup = {
       enable = mkEnableOption "shutdown-wakeup service combo";
@@ -31,12 +42,16 @@ in {
       timers.sched-shutdown = {
         wantedBy = [ "timers.target" ];
         partOf = [ "sched-shutdown.service" ];
-        timerConfig = { OnCalendar = [ "*-*-* ${cfg.shutdownTime}" ]; };
+        timerConfig = {
+          OnCalendar = [ "*-*-* ${cfg.shutdownTime}" ];
+        };
       };
 
       services.rtcwakeup =
-        let rtcHelper = cfg.package.override { inherit (cfg) wakeupTime; };
-        in {
+        let
+          rtcHelper = cfg.package.override { inherit (cfg) wakeupTime; };
+        in
+        {
           description = "Automatic wakeup";
           serviceConfig = {
             Type = "oneshot";

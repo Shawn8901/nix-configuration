@@ -1,23 +1,26 @@
 # https://github.com/NixOS/nixos-hardware/blob/master/asus/battery.nix
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   p = pkgs.writeScriptBin "charge-upto" ''
     echo ''${0:-100} > /sys/class/power_supply/BAT?/charge_control_end_threshold
   '';
   cfg = config.hardware.asus.battery;
-
-in {
+in
+{
   options.hardware.asus.battery = {
     enable = lib.mkEnableOption "Enables the carge threshold module";
     chargeUpto = lib.mkOption {
-      description =
-        "Maximum level of charge for your battery, as a percentage.";
+      description = "Maximum level of charge for your battery, as a percentage.";
       default = 100;
       type = lib.types.int;
     };
     enableChargeUptoScript = lib.mkOption {
-      description =
-        "Whether to add charge-upto to environment.systemPackages. `charge-upto 75` temporarily sets the charge limit to 75%.";
+      description = "Whether to add charge-upto to environment.systemPackages. `charge-upto 75` temporarily sets the charge limit to 75%.";
       default = true;
       type = lib.types.bool;
     };
@@ -25,18 +28,21 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = lib.mkIf cfg.enableChargeUptoScript [ p ];
     systemd.services.battery-charge-threshold = {
-      requires = [ "local-fs.target" "suspend.target" ];
-      after = [ "local-fs.target" "suspend.target" ];
-      description =
-        "Set the battery charge threshold to ${toString cfg.chargeUpto}%";
+      requires = [
+        "local-fs.target"
+        "suspend.target"
+      ];
+      after = [
+        "local-fs.target"
+        "suspend.target"
+      ];
+      description = "Set the battery charge threshold to ${toString cfg.chargeUpto}%";
       startLimitBurst = 5;
       startLimitIntervalSec = 1;
       serviceConfig = {
         Type = "oneshot";
         Restart = "on-failure";
-        ExecStart = "${pkgs.runtimeShell} -c 'echo ${
-            toString cfg.chargeUpto
-          } > /sys/class/power_supply/BAT?/charge_control_end_threshold'";
+        ExecStart = "${pkgs.runtimeShell} -c 'echo ${toString cfg.chargeUpto} > /sys/class/power_supply/BAT?/charge_control_end_threshold'";
       };
     };
   };

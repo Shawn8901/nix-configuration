@@ -1,7 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-let cfg = config.services.autoadb;
-in {
+let
+  cfg = config.services.autoadb;
+in
+{
   options = {
     services.autoadb = {
       enable = mkEnableOption "autoadb service";
@@ -24,12 +31,14 @@ in {
     home.packages = cfg.package;
 
     systemd.user.services.autoadb = {
-      Unit = { Description = "Start autoadb"; };
-      Install = { WantedBy = [ "default.target" ]; };
+      Unit = {
+        Description = "Start autoadb";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
       Service = {
-        ExecStart = "${lib.getExe cfg.package} ${
-            lib.getExe cfg.scrcpy.package
-          } -b 16M --render-driver opengles2 -s '{}'";
+        ExecStart = "${lib.getExe cfg.package} ${lib.getExe cfg.scrcpy.package} -b 16M --render-driver opengles2 -s '{}'";
       };
     };
   };

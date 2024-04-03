@@ -1,9 +1,21 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
-  inherit (lib) types mkEnableOption mkOption mkDefault mkIf;
+  inherit (lib)
+    types
+    mkEnableOption
+    mkOption
+    mkDefault
+    mkIf
+    ;
 
   cfg = config.shawn8901.attic;
-in {
+in
+{
   options = {
     shawn8901.attic = {
       enable = mkEnableOption "Enables a preconfigured attic instance";
@@ -18,7 +30,10 @@ in {
   config = mkIf cfg.enable {
     networking.firewall = {
       allowedUDPPorts = [ 443 ];
-      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPorts = [
+        80
+        443
+      ];
     };
 
     services = {
@@ -62,7 +77,9 @@ in {
             avg-size = 65536;
             max-size = 262144;
           };
-          compression = { type = "zstd"; };
+          compression = {
+            type = "zstd";
+          };
           garbage-collection = {
             interval = "12 hours";
             default-retention-period = "1 months";
@@ -71,10 +88,12 @@ in {
       };
       postgresql = {
         ensureDatabases = [ "atticd" ];
-        ensureUsers = [{
-          name = "atticd";
-          ensureDBOwnership = true;
-        }];
+        ensureUsers = [
+          {
+            name = "atticd";
+            ensureDBOwnership = true;
+          }
+        ];
       };
     };
   };

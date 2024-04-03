@@ -1,6 +1,13 @@
-{ config, inputs', pkgs, ... }:
-let inherit (config.sops) secrets;
-in {
+{
+  config,
+  inputs',
+  pkgs,
+  ...
+}:
+let
+  inherit (config.sops) secrets;
+in
+{
   sops.secrets = {
     sms-technical-passwd = { };
     sms-shawn-passwd = { };
@@ -16,7 +23,10 @@ in {
 
   networking.firewall = {
     allowedUDPPorts = [ 443 ];
-    allowedTCPPorts = [ 80 443 ];
+    allowedTCPPorts = [
+      80
+      443
+    ];
   };
 
   systemd = {
@@ -26,16 +36,21 @@ in {
         "20-wired" = {
           matchConfig.Name = "enp6s18";
           networkConfig = {
-            Address = [ "134.255.226.114/28" "2a05:bec0:1:16::114/64" ];
+            Address = [
+              "134.255.226.114/28"
+              "2a05:bec0:1:16::114/64"
+            ];
             DNS = "8.8.8.8";
             Gateway = "134.255.226.113";
           };
-          routes = [{
-            routeConfig = {
-              Gateway = "2a05:bec0:1:16::1";
-              GatewayOnLink = "yes";
-            };
-          }];
+          routes = [
+            {
+              routeConfig = {
+                Gateway = "2a05:bec0:1:16::1";
+                GatewayOnLink = "yes";
+              };
+            }
+          ];
         };
       };
       wait-online.anyInterface = true;

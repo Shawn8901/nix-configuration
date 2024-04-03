@@ -1,22 +1,32 @@
-{ config, lib, perSystem, withSystem, inputs, ... }:
+{
+  config,
+  lib,
+  perSystem,
+  withSystem,
+  inputs,
+  ...
+}:
 let
   genPackageName = system: packageName: "${system}.${packageName}";
   inherit (builtins) elem;
-in {
-  perSystem = { pkgs, system, ... }:
+in
+{
+  perSystem =
+    { pkgs, system, ... }:
     let
       packages = {
         pg-upgrade = pkgs.callPackage ./pg-upgrade { };
-        generate-zrepl-ssl =
-          pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix { };
+        generate-zrepl-ssl = pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix { };
         vm-grafana-datasource = pkgs.callPackage ./vm-grafana-datasource { };
       };
-    in {
+    in
+    {
       inherit packages;
       hydraJobs = packages;
     };
 
-  flake = withSystem "x86_64-linux" ({ system, ... }:
+  flake = withSystem "x86_64-linux" (
+    { system, ... }:
     let
       pkgs = import inputs.nixpkgs {
         inherit system;
@@ -43,8 +53,7 @@ in {
         # remove with 24.11
         proton-ge-custom = pkgs.proton-ge-bin;
         pytr = pkgs.python3.pkgs.callPackage ./pytr { };
-        asus-touchpad-numpad-driver =
-          pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver { };
+        asus-touchpad-numpad-driver = pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver { };
 
         gh-poi = pkgs.callPackage ./gh-poi { };
 
@@ -52,18 +61,18 @@ in {
 
         libcapi = pkgs.callPackage ./libcapi { };
         librm = pkgs.callPackage ./librm { inherit (packages) libcapi; };
-        rogerrouter =
-          pkgs.callPackage ./rogerrouter { inherit (packages) librm; };
+        rogerrouter = pkgs.callPackage ./rogerrouter { inherit (packages) librm; };
 
         deezer = pkgsStable.callPackage ./deezer { };
         filepicker = pkgs.callPackage ./filepicker { };
-        vdhcoapp =
-          pkgs.callPackage ./vdhcoapp { inherit (packages) filepicker; };
+        vdhcoapp = pkgs.callPackage ./vdhcoapp { inherit (packages) filepicker; };
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
       };
-    in {
+    in
+    {
       packages."${system}" = packages;
       hydraJobs."${system}" = packages;
-    });
+    }
+  );
 }

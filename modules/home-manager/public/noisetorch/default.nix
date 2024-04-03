@@ -1,7 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-let cfg = config.services.noisetorch;
-in {
+let
+  cfg = config.services.noisetorch;
+in
+{
   options = {
     services.noisetorch = {
       enable = mkEnableOption "noisetorch service";
@@ -36,13 +43,13 @@ in {
         Requires = "${cfg.deviceUnit}";
         After = "${cfg.deviceUnit}";
       };
-      Install = { WantedBy = [ "default.target" ]; };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
       Service = {
         Type = "simple";
         RemainAfterExit = "yes";
-        ExecStart = "${cfg.package}/bin/noisetorch -i -s ${cfg.device} -t ${
-            builtins.toString cfg.threshold
-          }";
+        ExecStart = "${cfg.package}/bin/noisetorch -i -s ${cfg.device} -t ${builtins.toString cfg.threshold}";
         ExecStop = "${cfg.package}/bin/noisetorch -u";
         Restart = "on-failure";
         RestartSec = 3;

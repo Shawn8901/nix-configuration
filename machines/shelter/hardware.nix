@@ -1,11 +1,20 @@
-{ config, pkgs, modulesPath, ... }: {
+{
+  config,
+  pkgs,
+  modulesPath,
+  ...
+}:
+{
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     (modulesPath + "/profiles/minimal.nix")
   ];
 
   boot = {
-    initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" ];
+    initrd.availableKernelModules = [
+      "ata_piix"
+      "uhci_hcd"
+    ];
     kernelPackages = pkgs.linuxPackages;
     zfs = {
       devNodes = "/dev/";
@@ -27,8 +36,7 @@
     fsType = "ext4";
   };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/fdf6956a-9418-4da8-9702-45c8a670a0eb"; }];
+  swapDevices = [ { device = "/dev/disk/by-uuid/fdf6956a-9418-4da8-9702-45c8a670a0eb"; } ];
 
   hardware.cpu.intel.updateMicrocode = true;
 }

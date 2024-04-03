@@ -63,7 +63,9 @@
       url = "github:viperML/nh";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
-    flake-parts = { url = "github:hercules-ci/flake-parts"; };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+    };
     fp-rndp-lib = {
       url = "github:Shawn8901/fp-rndp-lib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -75,11 +77,20 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      flake-parts,
+      ...
+    }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       debug = false;
 
-      systems = [ "x86_64-linux" "aarch64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
 
       fp-rndp-lib.root = ./.;
       fp-rndp-lib.modules.privateNamePrefix = "shawn8901";
@@ -94,24 +105,37 @@
         ./machines
       ];
 
-      flake.hydraJobs = let
-        inherit (nixpkgs) lib;
-        name = "merge-pr";
-        hosts = map (n: "nixos." + n) (lib.attrNames self.nixosConfigurations);
-        packages = lib.flatten (lib.attrValues (lib.mapAttrs
-          (system: attr: map (p: "${system}.${p}") (lib.attrNames attr))
-          self.packages));
-      in {
-        ${name} = nixpkgs.legacyPackages.x86_64-linux.releaseTools.aggregate {
-          inherit name;
-          meta = { schedulingPriority = 10; };
-          constituents = hosts;
+      flake.hydraJobs =
+        let
+          inherit (nixpkgs) lib;
+          name = "merge-pr";
+          hosts = map (n: "nixos." + n) (lib.attrNames self.nixosConfigurations);
+          packages = lib.flatten (
+            lib.attrValues (
+              lib.mapAttrs (system: attr: map (p: "${system}.${p}") (lib.attrNames attr)) self.packages
+            )
+          );
+        in
+        {
+          ${name} = nixpkgs.legacyPackages.x86_64-linux.releaseTools.aggregate {
+            inherit name;
+            meta = {
+              schedulingPriority = 10;
+            };
+            constituents = hosts;
+          };
         };
-      };
 
-      perSystem = { pkgs, ... }: {
-        devShells.default =
-          pkgs.mkShell { packages = with pkgs; [ direnv nix-direnv statix ]; };
-      };
+      perSystem =
+        { pkgs, ... }:
+        {
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              direnv
+              nix-direnv
+              statix
+            ];
+          };
+        };
     };
 }

@@ -1,8 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkOption mkIf mdDoc types;
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkIf
+    mdDoc
+    types
+    ;
   cfg = config.hardware.asus-touchpad-numpad;
-in {
+in
+{
   options = {
     hardware.asus-touchpad-numpad = {
       enable = mkEnableOption "Enables support for asus touchpad numpads";
@@ -20,8 +32,7 @@ in {
     hardware.i2c.enable = true;
 
     systemd.services.asus-touchpad-numpad = {
-      description =
-        "Activate Numpad inside the touchpad with top right corner switch";
+      description = "Activate Numpad inside the touchpad with top right corner switch";
       script = ''
         ${cfg.package}/bin/asus_touchpad.py ${cfg.model}
       '';

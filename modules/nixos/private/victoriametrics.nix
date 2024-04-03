@@ -1,13 +1,24 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
-  inherit (lib) types mkEnableOption mkOption mkDefault mkIf;
+  inherit (lib)
+    types
+    mkEnableOption
+    mkOption
+    mkDefault
+    mkIf
+    ;
 
   cfg = config.shawn8901.victoriametrics;
-in {
+in
+{
   options = {
     shawn8901.victoriametrics = {
-      enable =
-        mkEnableOption "Enables a preconfigured victoria metrics instance";
+      enable = mkEnableOption "Enables a preconfigured victoria metrics instance";
       hostname = mkOption {
         type = types.str;
         description = "full qualified hostname of the grafana instance";
@@ -21,33 +32,36 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    systemd.services.vmauth = let
-      authConfig = (pkgs.formats.yaml { }).generate "auth.yml" {
-        users = [{
-          username = "vm";
-          password = "%{PASSWORD}";
-          url_prefix =
-            "http://${config.services.victoriametrics.listenAddress}";
-        }];
+    systemd.services.vmauth =
+      let
+        authConfig = (pkgs.formats.yaml { }).generate "auth.yml" {
+          users = [
+            {
+              username = "vm";
+              password = "%{PASSWORD}";
+              url_prefix = "http://${config.services.victoriametrics.listenAddress}";
+            }
+          ];
+        };
+      in
+      {
+        description = "VictoriaMetrics basic auth proxy";
+        after = [ "network-online.target" ];
+        requires = [ "network-online.target" ];
+        startLimitBurst = 5;
+        serviceConfig = {
+          Restart = "on-failure";
+          RestartSec = 1;
+          DynamicUser = true;
+          EnvironmentFile = cfg.credentialsFile;
+          ExecStart = ''
+            ${pkgs.victoriametrics}/bin/vmauth \
+              -auth.config=${authConfig} \
+              -httpListenAddr=:${toString cfg.port}
+          '';
+        };
+        wantedBy = [ "multi-user.target" ];
       };
-    in {
-      description = "VictoriaMetrics basic auth proxy";
-      after = [ "network-online.target" ];
-      requires = [ "network-online.target" ];
-      startLimitBurst = 5;
-      serviceConfig = {
-        Restart = "on-failure";
-        RestartSec = 1;
-        DynamicUser = true;
-        EnvironmentFile = cfg.credentialsFile;
-        ExecStart = ''
-          ${pkgs.victoriametrics}/bin/vmauth \
-            -auth.config=${authConfig} \
-            -httpListenAddr=:${toString cfg.port}
-        '';
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
 
     services = {
       nginx = {

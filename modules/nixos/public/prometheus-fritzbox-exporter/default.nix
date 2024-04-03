@@ -1,8 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkOption mkIf types literalExpression;
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkIf
+    types
+    literalExpression
+    ;
   cfg = config.services.prometheus-fritzbox-exporter;
-in {
+in
+{
   options = {
     services.prometheus-fritzbox-exporter = {
       enable = mkEnableOption "fritz-exporter service";
@@ -23,8 +35,7 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description =
-          "env file to load, should contain FRITZ_USERNAME and FRITZ_USERNAME";
+        description = "env file to load, should contain FRITZ_USERNAME and FRITZ_USERNAME";
       };
     };
   };

@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchzip
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, writeScript
-, imagemagick
-, p7zip
-, nodePackages
-, electron_13
-,
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  writeScript,
+  imagemagick,
+  p7zip,
+  nodePackages,
+  electron_13,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -18,16 +18,19 @@ let
     desktopName = "Deezer";
     comment = "Deezer audio streaming service";
     icon = "deezer";
-    categories = [ "Audio" "Music" "Player" "AudioVideo" ];
+    categories = [
+      "Audio"
+      "Music"
+      "Player"
+      "AudioVideo"
+    ];
     type = "Application";
     mimeTypes = [ "x-scheme-handler/deezer" ];
     startupWMClass = "deezer";
     exec = "deezer %u";
     startupNotify = true;
   };
-  shortenVersion = v:
-    lib.concatStringsSep "." (lib.sublist 0 3 (lib.splitVersion v));
-
+  shortenVersion = v: lib.concatStringsSep "." (lib.sublist 0 3 (lib.splitVersion v));
 in
 stdenv.mkDerivation (finalAttrs: {
 
@@ -35,17 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "deezer";
 
   src = fetchzip {
-    url =
-      "https://github.com/SibrenVasse/${finalAttrs.pname}/archive/refs/tags/v${finalAttrs.version}.tar.gz";
+    url = "https://github.com/SibrenVasse/${finalAttrs.pname}/archive/refs/tags/v${finalAttrs.version}.tar.gz";
     hash = "sha256-yNrwvO7vEm86vBwt1ubzbbh/m1pJiO5IhDzpVuzznx8=";
   };
 
   # this is a nasty workaround to trick nix-update to update your hash, whilst having src on the github repo
   # that is providing patches, whilst also updating a second hash
   go-modules = fetchurl {
-    url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${
-        shortenVersion finalAttrs.version
-      }";
+    url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${shortenVersion finalAttrs.version}";
     hash = "sha256-zYK3CJDzmIqq+CNJ5EGvrd74guaOEmZbKn0u5rONCZ4=";
   };
 

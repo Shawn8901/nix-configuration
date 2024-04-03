@@ -1,14 +1,22 @@
-{ self', config, lib, pkgs, inputs, inputs', ... }:
+{
+  self',
+  config,
+  lib,
+  pkgs,
+  inputs,
+  inputs',
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf getExe;
   inherit (inputs.firefox-addons.lib.${system}) buildFirefoxXpiAddon;
   inherit (pkgs.hostPlatform) system;
 
-  unoptimized = inputs'.nixpkgs.legacyPackages;
   fPkgs = self'.packages;
   cfg = config.shawn8901.desktop;
   firefox-addon-packages = inputs'.firefox-addons.packages;
-in {
+in
+{
 
   options = {
     shawn8901.desktop = {
@@ -19,7 +27,9 @@ in {
 
     sops = {
       secrets = {
-        attic = { path = "${config.xdg.configHome}/attic/config.toml"; };
+        attic = {
+          path = "${config.xdg.configHome}/attic/config.toml";
+        };
       };
     };
 
@@ -45,7 +55,8 @@ in {
       ];
     };
 
-    home.packages = with pkgs;
+    home.packages =
+      with pkgs;
       [
         samba
         nextcloud-client
@@ -61,7 +72,13 @@ in {
 
         nix-tree
         nixpkgs-review
-      ] ++ (with fPkgs; [ deezer nas vdhcoapp fPkgs.generate-zrepl-ssl ]);
+      ]
+      ++ (with fPkgs; [
+        deezer
+        nas
+        vdhcoapp
+        fPkgs.generate-zrepl-ssl
+      ]);
 
     programs = {
       firefox = lib.mkMerge [
@@ -86,8 +103,7 @@ in {
                 pname = "Video-DownloadHelper";
                 version = "8.2.2.8";
                 addonId = "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}";
-                url =
-                  "https://addons.mozilla.org/firefox/downloads/file/4251369/video_downloadhelper-8.2.2.8.xpi";
+                url = "https://addons.mozilla.org/firefox/downloads/file/4251369/video_downloadhelper-8.2.2.8.xpi";
                 sha256 = "sha256-l1+fZvdrT4BVMWQZxklQpTKqXLQBj/u5Js8pPtXzAN0=";
                 meta = { };
               })
@@ -97,8 +113,7 @@ in {
               "browser.crashReports.unsubmittedCheck.enabled" = false;
               "browser.newtab.preload" = false;
               "browser.newtabpage.activity-stream.enabled" = false;
-              "browser.newtabpage.activity-stream.feeds.section.topstories" =
-                false;
+              "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
               "browser.newtabpage.activity-stream.telemetry" = false;
               "browser.ping-centre.telemetry" = false;
               "browser.safebrowsing.malware.enabled" = true;
@@ -205,7 +220,9 @@ in {
             "editor.formatOnPaste" = true;
             "editor.formatOnType" = false;
           };
-          "[rust]" = { "editor.defaultFormatter" = "rust-lang.rust-analyzer"; };
+          "[rust]" = {
+            "editor.defaultFormatter" = "rust-lang.rust-analyzer";
+          };
           "[python]" = {
             "editor.formatOnSave" = true;
             "editor.formatOnPaste" = true;
@@ -223,14 +240,19 @@ in {
           "diffEditor.ignoreTrimWhitespace" = false;
           "editor.formatOnSave" = true;
           "nix.enableLanguageServer" = true;
-          "nix.formatterPath" = "${getExe pkgs.nixfmt}";
+          "nix.formatterPath" = "${getExe pkgs.nixfmt-rfc-style}";
           "nix.serverPath" = "${getExe pkgs.nil}";
           "nix.serverSettings" = {
             "nil" = {
               "diagnostics" = {
-                "ignored" = [ "unused_binding" "unused_with" ];
+                "ignored" = [
+                  "unused_binding"
+                  "unused_with"
+                ];
               };
-              "formatting" = { "command" = [ "${getExe pkgs.nixfmt}" ]; };
+              "formatting" = {
+                "command" = [ "${getExe pkgs.nixfmt-rfc-style}" ];
+              };
             };
           };
         };
@@ -278,7 +300,9 @@ in {
             "warn_timeout" = "10s";
             "load_dotenv" = true;
           };
-          "whitelist" = { prefix = [ "${config.home.homeDirectory}/dev" ]; };
+          "whitelist" = {
+            prefix = [ "${config.home.homeDirectory}/dev" ];
+          };
         };
       };
 
@@ -287,16 +311,25 @@ in {
         userName = "Shawn8901";
         userEmail = "shawn8901@googlemail.com";
         extraConfig = {
-          init = { defaultBranch = "main"; };
-          push = { autoSetupRemote = "true"; };
+          init = {
+            defaultBranch = "main";
+          };
+          push = {
+            autoSetupRemote = "true";
+          };
         };
       };
 
       gh = {
         enable = true;
         # Workaround for https://github.com/nix-community/home-manager/issues/4744
-        settings = { version = 1; };
-        extensions = [ pkgs.gh-dash fPkgs.gh-poi ];
+        settings = {
+          version = 1;
+        };
+        extensions = [
+          pkgs.gh-dash
+          fPkgs.gh-poi
+        ];
       };
       ssh = {
         enable = true;

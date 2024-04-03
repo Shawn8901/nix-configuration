@@ -1,11 +1,15 @@
-{ lib, fetchFromGitHub, stdenv, fetchzip, }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  fetchzip,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "grafana-datasource";
   version = "0.7.0";
 
   src = fetchzip {
-    url =
-      "https://github.com/VictoriaMetrics/${finalAttrs.pname}/releases/download/v${finalAttrs.version}/victoriametrics-datasource-v${finalAttrs.version}.zip";
+    url = "https://github.com/VictoriaMetrics/${finalAttrs.pname}/releases/download/v${finalAttrs.version}/victoriametrics-datasource-v${finalAttrs.version}.zip";
     hash = "sha256-uLj4vYOo0ON66Y5o5O/USp0Wz9DmoQjl8Xq/997bhgM=";
   };
 
@@ -25,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Grafana Plugin for VictoriaMetrics";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ shawn8901 ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

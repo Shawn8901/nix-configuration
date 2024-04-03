@@ -1,11 +1,16 @@
-{ modulesPath, ... }: {
+{ modulesPath, ... }:
+{
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     (modulesPath + "/profiles/minimal.nix")
   ];
   boot = {
-    initrd.availableKernelModules =
-      [ "xhci_pci" "virtio_pci" "virtio_scsi" "usbhid" ];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "virtio_pci"
+      "virtio_scsi"
+      "usbhid"
+    ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;

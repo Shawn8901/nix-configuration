@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule, }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 buildGoModule rec {
   pname = "gh-poi";
   version = "0.9.8";
@@ -11,7 +15,10 @@ buildGoModule rec {
   };
   vendorHash = "sha256-D/YZLwwGJWCekq9mpfCECzJyJ/xSlg7fC6leJh+e8i0=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # Does try to access some test repos (?)
   doCheck = false;

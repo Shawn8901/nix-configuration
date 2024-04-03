@@ -1,4 +1,5 @@
-{ self, ... }: {
+{ self, ... }:
+{
   config.fp-rndp-lib.modules.nixos = {
     public = ./nixos/public;
     private = ./nixos/private;
@@ -8,5 +9,4 @@
     public = ./home-manager/public;
     private = ./home-manager/private;
   };
-
 }

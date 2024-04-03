@@ -1,14 +1,28 @@
-{ self', self, pkgs, lib, config, flakeConfig, inputs, ... }:
+{
+  self',
+  self,
+  pkgs,
+  lib,
+  config,
+  flakeConfig,
+  inputs,
+  ...
+}:
 let
   fPkgs = self'.packages;
   hosts = self.nixosConfigurations;
   inherit (config.sops) secrets;
-in {
+in
+{
   imports = [ ./save-darlings.nix ];
 
   sops.secrets = {
-    zrepl = { restartUnits = [ "zrepl.service" ]; };
-    samba = { sopsFile = ./../../files/secrets-desktop.yaml; };
+    zrepl = {
+      restartUnits = [ "zrepl.service" ];
+    };
+    samba = {
+      sopsFile = ./../../files/secrets-desktop.yaml;
+    };
   };
 
   networking = {
@@ -34,7 +48,10 @@ in {
   services.resolved.enable = false;
   systemd.network.wait-online.anyInterface = true;
 
-  environment.systemPackages = with pkgs; [ cifs-utils zenmonitor ];
+  environment.systemPackages = with pkgs; [
+    cifs-utils
+    zenmonitor
+  ];
 
   services = {
     udev.packages = [ pkgs.libmtp.out ];
@@ -69,57 +86,66 @@ in {
       package = pkgs.zrepl;
       settings = {
         global = {
-          monitoring = [{
-            type = "prometheus";
-            listen = ":9811";
-            listen_freebind = true;
-          }];
+          monitoring = [
+            {
+              type = "prometheus";
+              listen = ":9811";
+              listen_freebind = true;
+            }
+          ];
         };
-        jobs = [{
-          name = "zenbook";
-          type = "push";
-          filesystems = { "rpool/safe<" = true; };
-          snapshotting = {
-            type = "periodic";
-            interval = "1h";
-            prefix = "zrepl_";
-          };
-          connect = let
-            zreplPort = flakeConfig.shawn8901.zrepl.servePorts
-              hosts.tank.config.services.zrepl;
-          in {
-            type = "tls";
-            address = "tank.fritz.box:${toString zreplPort}";
-            ca = ../../files/public_certs/zrepl/tank.crt;
-            cert = ../../files/public_certs/zrepl/zenbook.crt;
-            key = secrets.zrepl.path;
-            server_cn = "tank";
-          };
-          send = {
-            encrypted = true;
-            compressed = true;
-          };
-          pruning = {
-            keep_sender = [
-              { type = "not_replicated"; }
+        jobs = [
+          {
+            name = "zenbook";
+            type = "push";
+            filesystems = {
+              "rpool/safe<" = true;
+            };
+            snapshotting = {
+              type = "periodic";
+              interval = "1h";
+              prefix = "zrepl_";
+            };
+            connect =
+              let
+                zreplPort = flakeConfig.shawn8901.zrepl.servePorts hosts.tank.config.services.zrepl;
+              in
               {
-                type = "grid";
-                grid = "1x3h(keep=all) | 2x6h | 30x1d";
-                regex = "^zrepl_.*";
-              }
-              {
-                type = "regex";
-                negate = true;
-                regex = "^zrepl_.*";
-              }
-            ];
-            keep_receiver = [{
-              type = "grid";
-              grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
-              regex = "^zrepl_.*";
-            }];
-          };
-        }];
+                type = "tls";
+                address = "tank.fritz.box:${toString zreplPort}";
+                ca = ../../files/public_certs/zrepl/tank.crt;
+                cert = ../../files/public_certs/zrepl/zenbook.crt;
+                key = secrets.zrepl.path;
+                server_cn = "tank";
+              };
+            send = {
+              encrypted = true;
+              compressed = true;
+            };
+            pruning = {
+              keep_sender = [
+                { type = "not_replicated"; }
+                {
+                  type = "grid";
+                  grid = "1x3h(keep=all) | 2x6h | 30x1d";
+                  regex = "^zrepl_.*";
+                }
+                {
+                  type = "regex";
+                  negate = true;
+                  regex = "^zrepl_.*";
+                }
+              ];
+              keep_receiver = [
+                {
+                  type = "grid";
+                  grid = "1x3h(keep=all) | 2x6h | 30x1d | 6x30d | 1x365d";
+                  regex = "^zrepl_.*";
+                }
+              ];
+            };
+          }
+        ];
       };
     };
     acpid.enable = true;
@@ -149,8 +175,13 @@ in {
     };
   };
 
-  users.users.shawn.extraGroups =
-    [ "video" "audio" "scanner" "lp" "networkmanager" ];
+  users.users.shawn.extraGroups = [
+    "video"
+    "audio"
+    "scanner"
+    "lp"
+    "networkmanager"
+  ];
 
   shawn8901 = {
     desktop.enable = true;

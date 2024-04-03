@@ -1,8 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.shawn8901.postgresql;
-  inherit (lib) mkEnableOption mkOption mkDefault mkIf types literalExpression;
-in {
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkDefault
+    mkIf
+    types
+    literalExpression
+    ;
+in
+{
   options = {
     shawn8901.postgresql = {
       enable = mkEnableOption "Enables a preconfigured postgresql instance";
@@ -30,16 +43,14 @@ in {
         runAsLocalSuperUser = true;
       };
 
-      vmagent.prometheusConfig.scrape_configs = [{
-        job_name = "postgres";
-        static_configs = [{
-          targets = [
-            "localhost:${
-              toString config.services.prometheus.exporters.postgres.port
-            }"
+      vmagent.prometheusConfig.scrape_configs = [
+        {
+          job_name = "postgres";
+          static_configs = [
+            { targets = [ "localhost:${toString config.services.prometheus.exporters.postgres.port}" ]; }
           ];
-        }];
-      }];
+        }
+      ];
     };
   };
 }

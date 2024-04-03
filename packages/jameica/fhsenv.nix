@@ -1,15 +1,57 @@
-{ lib, buildFHSUserEnvBubblewrap, jameica, jre, stdenv, cairo, fontconfig
-, freetype, gdk-pixbuf, glib, glibc, gtk2, libX11, nspr, nss, pango, libxcb
-, libXi, libXrender, libXext, dbus, alsa-lib, libXScrnSaver, libXcursor, libXtst
-, libxshmfence, libGLU, libGL, at-spi2-core, libgcrypt, cups, libdrm, wayland
-, mesa, libxkbcommon, libXdamage, libXcomposite, libXfixes, libXrandr, libva
-, expat, udev, killall, webkitgtk, extraPkgs ? pkgs: [ ]
-, extraLibraries ? pkgs: [ ], }:
+{
+  lib,
+  buildFHSUserEnvBubblewrap,
+  jameica,
+  jre,
+  stdenv,
+  cairo,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gtk2,
+  libX11,
+  nspr,
+  nss,
+  pango,
+  libxcb,
+  libXi,
+  libXrender,
+  libXext,
+  dbus,
+  alsa-lib,
+  libXScrnSaver,
+  libXcursor,
+  libXtst,
+  libxshmfence,
+  libGLU,
+  libGL,
+  at-spi2-core,
+  libgcrypt,
+  cups,
+  libdrm,
+  wayland,
+  mesa,
+  libxkbcommon,
+  libXdamage,
+  libXcomposite,
+  libXfixes,
+  libXrandr,
+  libva,
+  expat,
+  udev,
+  killall,
+  webkitgtk,
+  extraPkgs ? pkgs: [ ],
+  extraLibraries ? pkgs: [ ],
+}:
 let
   fhsEnv = buildFHSUserEnvBubblewrap {
     name = "jameica";
     runScript = "jameica";
-    targetPkgs = pkgs:
+    targetPkgs =
+      pkgs:
       [
         jre
         jameica
@@ -55,8 +97,10 @@ let
         webkitgtk
 
         killall
-      ] ++ extraPkgs pkgs;
+      ]
+      ++ extraPkgs pkgs;
 
     inherit (jameica) meta;
   };
-in fhsEnv
+in
+fhsEnv

@@ -1,15 +1,42 @@
-{ config, lib, pkgs, modulesPath, ... }:
-let zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
-in {
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
+let
+  zfsOptions = [
+    "zfsutil"
+    "X-mount.mkdir"
+  ];
+in
+{
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  nix.settings.system-features =
-    [ "gccarch-x86-64-v3" "benchmark" "big-parallel" "kvm" "nixos-test" ];
+  nix.settings.system-features = [
+    "gccarch-x86-64-v3"
+    "benchmark"
+    "big-parallel"
+    "kvm"
+    "nixos-test"
+  ];
 
   boot = {
-    initrd.availableKernelModules =
-      [ "ahci" "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-    kernelModules = [ "kvm-intel" "cifs" "snd_pcsp" ];
+    initrd.availableKernelModules = [
+      "ahci"
+      "xhci_pci"
+      "nvme"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+      "sr_mod"
+    ];
+    kernelModules = [
+      "kvm-intel"
+      "cifs"
+      "snd_pcsp"
+    ];
     kernelPackages = pkgs.linuxPackages;
     extraModulePackages = with config.boot.kernelPackages; [ it87 ];
     extraModprobeConfig = ''
@@ -17,7 +44,10 @@ in {
       options it87 ignore_resource_conflict=1 force_id=0x862
     '';
 
-    supportedFilesystems = [ "zfs" "ntfs" ];
+    supportedFilesystems = [
+      "zfs"
+      "ntfs"
+    ];
     zfs = {
       devNodes = "/dev/disk/by-id";
       extraPools = [ "ztank" ];
@@ -75,13 +105,15 @@ in {
     "/boot" = {
       device = "/dev/disk/by-uuid/605D-0B3B";
       fsType = "vfat";
-      options =
-        [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
+      options = [
+        "x-systemd.idle-timeout=1min"
+        "x-systemd.automount"
+        "noauto"
+      ];
     };
   };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee"; }];
+  swapDevices = [ { device = "/dev/disk/by-uuid/63c7d09e-c829-400d-904d-4753b89358ee"; } ];
 
   hardware.cpu.intel.updateMicrocode = true;
 }

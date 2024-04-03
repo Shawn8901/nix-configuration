@@ -1,8 +1,22 @@
-{ self, pkgs, lib, config, inputs', ... }:
+{
+  self,
+  pkgs,
+  lib,
+  config,
+  inputs',
+  ...
+}:
 let
   inherit (pkgs.hostPlatform) system;
-  inherit (lib) genAttrs mkIf mkDefault mkForce versionOlder;
-in {
+  inherit (lib)
+    genAttrs
+    mkIf
+    mkDefault
+    mkForce
+    versionOlder
+    ;
+in
+{
   sops.secrets = {
     nix-gh-token-ro = {
       sopsFile = ../../../../files/secrets-common.yaml;

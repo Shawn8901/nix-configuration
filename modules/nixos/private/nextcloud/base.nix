@@ -1,10 +1,23 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   cfg = config.shawn8901.nextcloud;
   inherit (lib)
-    mkEnableOption mkDefault mkMerge mkOption types literalExpression
-    optionalAttrs versionOlder;
-in {
+    mkEnableOption
+    mkDefault
+    mkMerge
+    mkOption
+    types
+    literalExpression
+    optionalAttrs
+    versionOlder
+    ;
+in
+{
   options = {
     shawn8901.nextcloud = {
       enable = mkEnableOption "Enables a preconfigured nextcloud instance";
@@ -34,7 +47,10 @@ in {
   config = lib.mkIf cfg.enable {
     networking.firewall = {
       allowedUDPPorts = [ 443 ];
-      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPorts = [
+        80
+        443
+      ];
     };
 
     systemd = {
@@ -93,15 +109,16 @@ in {
             default_phone_region = "DE";
           };
         })
-
       ];
 
       postgresql = {
         ensureDatabases = [ "${config.services.nextcloud.config.dbname}" ];
-        ensureUsers = [{
-          name = "${config.services.nextcloud.config.dbuser}";
-          ensureDBOwnership = true;
-        }];
+        ensureUsers = [
+          {
+            name = "${config.services.nextcloud.config.dbuser}";
+            ensureDBOwnership = true;
+          }
+        ];
       };
       nginx = {
         enable = mkDefault true;
@@ -124,16 +141,15 @@ in {
       };
 
       vmagent.prometheusConfig.scrape_configs =
-        lib.mkIf config.services.prometheus.exporters.nextcloud.enable [{
-          job_name = "nextcloud";
-          static_configs = [{
-            targets = [
-              "localhost:${
-                toString config.services.prometheus.exporters.nextcloud.port
-              }"
-            ];
-          }];
-        }];
+        lib.mkIf config.services.prometheus.exporters.nextcloud.enable
+          [
+            {
+              job_name = "nextcloud";
+              static_configs = [
+                { targets = [ "localhost:${toString config.services.prometheus.exporters.nextcloud.port}" ]; }
+              ];
+            }
+          ];
     };
   };
 }

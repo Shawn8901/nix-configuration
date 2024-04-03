@@ -1,14 +1,31 @@
-{ self', config, pkgs, lib, modulesPath, ... }:
+{
+  self',
+  config,
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}:
 let
   inherit (pkgs.linuxKernel) packagesFor;
-  zfsOptions = [ "zfsutil" "X-mount.mkdir" ];
-in {
+  zfsOptions = [
+    "zfsutil"
+    "X-mount.mkdir"
+  ];
+in
+{
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot = {
     initrd = {
-      availableKernelModules =
-        [ "nvme" "xhci_pci" "rtsx_pci_sdmmc" "usbhid" "sd_mod" "sr_mod" ];
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "rtsx_pci_sdmmc"
+        "usbhid"
+        "sd_mod"
+        "sr_mod"
+      ];
       kernelModules = [ "amdgpu" ];
       systemd.enable = true;
     };
@@ -36,8 +53,13 @@ in {
     extraModprobeConfig = ''
       options zfs zfs_arc_max=1610612736
     '';
-    supportedFilesystems = [ "zfs" "ntfs" ];
-    kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
+    supportedFilesystems = [
+      "zfs"
+      "ntfs"
+    ];
+    kernel.sysctl = {
+      "vm.swappiness" = lib.mkDefault 1;
+    };
     zfs.devNodes = "/dev/disk/by-id";
     loader = {
       systemd-boot.enable = true;
@@ -80,11 +102,14 @@ in {
     "/boot" = {
       device = "/dev/disk/by-label/BOOT";
       fsType = "vfat";
-      options =
-        [ "x-systemd.idle-timeout=1min" "x-systemd.automount" "noauto" ];
+      options = [
+        "x-systemd.idle-timeout=1min"
+        "x-systemd.automount"
+        "noauto"
+      ];
     };
   };
-  swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
+  swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;

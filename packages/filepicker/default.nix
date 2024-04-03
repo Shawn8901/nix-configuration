@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, atk, gtk3, glib }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  atk,
+  gtk3,
+  glib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "filepicker";
@@ -13,7 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-aal7ppFkCpNc+QTS4Qklsb9WfJ65QqG6p1eOskiX+/Q=";
 
-  buildInputs = [ atk gtk3 glib ];
+  buildInputs = [
+    atk
+    gtk3
+    glib
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

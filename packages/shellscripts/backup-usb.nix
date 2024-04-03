@@ -1,5 +1,10 @@
-{ pkgs, lib, writeShellScriptBin, backupPath ? "/media/backup/"
-, mountPoint ? "/media/backup-usb", }:
+{
+  pkgs,
+  lib,
+  writeShellScriptBin,
+  backupPath ? "/media/backup/",
+  mountPoint ? "/media/backup-usb",
+}:
 writeShellScriptBin "backup-usb" ''
   BACKUP_SOURCE="${backupPath}"
   BACKUP_DEVICE="/dev/$1"

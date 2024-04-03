@@ -1,8 +1,16 @@
 { lib, flake-parts-lib, ... }:
 let
-  inherit (lib) mkOption types literalExpression toInt removePrefix filter;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    toInt
+    removePrefix
+    filter
+    ;
   inherit (flake-parts-lib) mkSubmoduleOptions;
-in {
+in
+{
   options = {
     shawn8901.zrepl = mkOption {
       type = types.lazyAttrsOf types.raw;
@@ -10,12 +18,17 @@ in {
     };
   };
 
-  config.shawn8901.zrepl.servePorts = zrepl:
-    map (serveEntry: toInt (removePrefix ":" serveEntry.serve.listen))
-    (filter (builtins.hasAttr "serve") zrepl.settings.jobs);
+  config.shawn8901.zrepl.servePorts =
+    zrepl:
+    map (serveEntry: toInt (removePrefix ":" serveEntry.serve.listen)) (
+      filter (builtins.hasAttr "serve") zrepl.settings.jobs
+    );
 
-  config.shawn8901.zrepl.monitoringPorts = zrepl:
-    builtins.head
-    (map (monitoringEntry: toInt (removePrefix ":" monitoringEntry.listen))
-      (filter (builtins.hasAttr "listen") zrepl.settings.global.monitoring));
+  config.shawn8901.zrepl.monitoringPorts =
+    zrepl:
+    builtins.head (
+      map (monitoringEntry: toInt (removePrefix ":" monitoringEntry.listen)) (
+        filter (builtins.hasAttr "listen") zrepl.settings.global.monitoring
+      )
+    );
 }

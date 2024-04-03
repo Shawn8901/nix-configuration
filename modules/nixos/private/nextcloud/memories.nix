@@ -1,13 +1,21 @@
 # https://github.com/SuperSandro2000/nixos-modules/blob/master/modules/nextcloud.nix
-{ config, lib,  options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.nextcloud;
-    mkOpinionatedOption = text: lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = lib.mdDoc "Whether to ${text}.";
-  };
+  mkOpinionatedOption =
+    text:
+    lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = lib.mdDoc "Whether to ${text}.";
+    };
 in
 {
   options = {
@@ -57,7 +65,7 @@ in
         };
 
         # TODO: drop when 23.11 support is not longer required
-        ${if options.services.nextcloud?settings then "settings" else "extraOptions"} = lib.mkMerge [
+        ${if options.services.nextcloud ? settings then "settings" else "extraOptions"} = lib.mkMerge [
           (lib.mkIf cfg.recommendedDefaults {
             # otherwise the Logging App does not function
             log_type = "file";
@@ -150,7 +158,8 @@ in
             let
               occ = "/run/current-system/sw/bin/nextcloud-occ";
             in
-              /* bash */ ''
+            # bash
+            ''
               # check with:
               # for size in squareSizes widthSizes heightSizes; do echo -n "$size: "; nextcloud-occ config:app:get previewgenerator $size; done
 
@@ -177,16 +186,17 @@ in
         };
 
         nextcloud-setup = lib.mkIf cfg.configureRecognize {
-          script = /* bash */ ''
-            export PATH=$PATH:/etc/profiles/per-user/nextcloud/bin:/run/current-system/sw/bin
+          script = # bash
+            ''
+              export PATH=$PATH:/etc/profiles/per-user/nextcloud/bin:/run/current-system/sw/bin
 
-            if [[ ! -e ${cfg.home}/store-apps/recognize/node_modules/@tensorflow/tfjs-node/lib/napi-v8/tfjs_binding.node ]]; then
-              if [[ -d ${cfg.home}/store-apps/recognize/node_modules/ ]]; then
-                cd ${cfg.home}/store-apps/recognize/node_modules/
-                npm rebuild @tensorflow/tfjs-node --build-addon-from-source
+              if [[ ! -e ${cfg.home}/store-apps/recognize/node_modules/@tensorflow/tfjs-node/lib/napi-v8/tfjs_binding.node ]]; then
+                if [[ -d ${cfg.home}/store-apps/recognize/node_modules/ ]]; then
+                  cd ${cfg.home}/store-apps/recognize/node_modules/
+                  npm rebuild @tensorflow/tfjs-node --build-addon-from-source
+                fi
               fi
-            fi
-          '';
+            '';
         };
 
         phpfpm-nextcloud.serviceConfig = lib.mkIf cfg.configureMemoriesVaapi {
@@ -208,7 +218,8 @@ in
       extraGroups = lib.mkIf cfg.configureMemoriesVaapi [
         "render" # access /dev/dri/renderD128
       ];
-      packages = with pkgs;
+      packages =
+        with pkgs;
         # generate video thumbnails with preview generator
         lib.optional cfg.configurePreviewSettings ffmpeg-headless
         # required for memories, duplicated with nextcloud-cron to better debug

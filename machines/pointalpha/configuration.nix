@@ -1,10 +1,20 @@
-{ self, self', pkgs, lib, config, flakeConfig, inputs', ... }:
+{
+  self,
+  self',
+  pkgs,
+  lib,
+  config,
+  flakeConfig,
+  inputs',
+  ...
+}:
 let
   fPkgs = self'.packages;
   hosts = self.nixosConfigurations;
 
   inherit (config.sops) secrets;
-in {
+in
+{
   imports = [ ./save-darlings.nix ];
 
   sops.secrets = {
@@ -14,16 +24,14 @@ in {
   };
 
   networking = {
-    firewall.allowedTCPPorts =
-      flakeConfig.shawn8901.zrepl.servePorts config.services.zrepl;
+    firewall.allowedTCPPorts = flakeConfig.shawn8901.zrepl.servePorts config.services.zrepl;
     networkmanager = {
       enable = true;
       plugins = lib.mkForce [ ];
     };
     nftables.enable = true;
     hosts = {
-      "192.168.11.31" =
-        lib.attrNames hosts.tank.config.services.nginx.virtualHosts;
+      "192.168.11.31" = lib.attrNames hosts.tank.config.services.nginx.virtualHosts;
       "134.255.226.114" = [ "pointjig" ];
       "2a05:bec0:1:16::114" = [ "pointjig" ];
       "78.128.127.235" = [ "shelter" ];
@@ -75,34 +83,40 @@ in {
       package = pkgs.zrepl;
       settings = {
         global = {
-          monitoring = [{
-            type = "prometheus";
-            listen = ":9811";
-            listen_freebind = true;
-          }];
+          monitoring = [
+            {
+              type = "prometheus";
+              listen = ":9811";
+              listen_freebind = true;
+            }
+          ];
         };
-        jobs = [{
-          name = "pointalpha_safe";
-          type = "source";
-          filesystems = { "rpool/safe<" = true; };
-          snapshotting = {
-            type = "periodic";
-            interval = "1h";
-            prefix = "zrepl_";
-          };
-          send = {
-            encrypted = false;
-            compressed = true;
-          };
-          serve = {
-            type = "tls";
-            listen = ":8888";
-            ca = ../../files/public_certs/zrepl/tank.crt;
-            cert = ../../files/public_certs/zrepl/pointalpha.crt;
-            key = secrets.zrepl.path;
-            client_cns = [ "tank" ];
-          };
-        }];
+        jobs = [
+          {
+            name = "pointalpha_safe";
+            type = "source";
+            filesystems = {
+              "rpool/safe<" = true;
+            };
+            snapshotting = {
+              type = "periodic";
+              interval = "1h";
+              prefix = "zrepl_";
+            };
+            send = {
+              encrypted = false;
+              compressed = true;
+            };
+            serve = {
+              type = "tls";
+              listen = ":8888";
+              ca = ../../files/public_certs/zrepl/tank.crt;
+              cert = ../../files/public_certs/zrepl/pointalpha.crt;
+              key = secrets.zrepl.path;
+              client_cns = [ "tank" ];
+            };
+          }
+        ];
       };
     };
     teamviewer.enable = true;
@@ -152,8 +166,13 @@ in {
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"
   ];
-  users.users.shawn.extraGroups =
-    [ "video" "audio" "scanner" "lp" "networkmanager" ];
+  users.users.shawn.extraGroups = [
+    "video"
+    "audio"
+    "scanner"
+    "lp"
+    "networkmanager"
+  ];
 
   shawn8901 = {
     desktop.enable = true;

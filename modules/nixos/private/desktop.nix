@@ -1,11 +1,23 @@
-{ self', pkgs, lib, config, inputs', ... }:
+{
+  self',
+  pkgs,
+  lib,
+  config,
+  inputs',
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkIf optionalAttrs versionOlder;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    optionalAttrs
+    versionOlder
+    ;
 
   cfg = config.shawn8901.desktop;
   fPkgs = self'.packages;
-
-in {
+in
+{
 
   options = {
     shawn8901.desktop = {
@@ -40,60 +52,60 @@ in {
       packages = [ pkgs.noto-fonts ];
     };
 
-    services = {
-      acpid.enable = true;
-      avahi = lib.mkMerge [
-        {
-          enable = true;
-          openFirewall = true;
-        }
-        (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
-          nssmdns = true;
-        })
-        (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
-          nssmdns4 = true;
-        })
-      ];
-      smartd.enable = true;
-      pipewire = {
-        enable = true;
-        pulse.enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        wireplumber.enable = true;
-      };
-      xserver = lib.mkMerge [
-        {
-          videoDrivers = [ "amdgpu" ];
-          desktopManager.xterm.enable = false;
-          excludePackages = [ pkgs.xterm ];
-        }
-        (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
-          enable = lib.mkDefault true;
-          desktopManager.plasma5 = {
+    services =
+      {
+        acpid.enable = true;
+        avahi = lib.mkMerge [
+          {
             enable = true;
-            phononBackend = "vlc";
-          };
-          layout = "de";
-          xkb.layout = "de";
-          displayManager.sddm = {
-            enable = lib.mkDefault true;
-            autoNumlock = true;
-            wayland = { enable = true; };
-          };
-        })
-      ];
-    } // (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
-      desktopManager.plasma6.enable = true;
-      displayManager.sddm = {
-        enable = lib.mkDefault true;
-        autoNumlock = true;
-        wayland = {
+            openFirewall = true;
+          }
+          (optionalAttrs (versionOlder config.system.nixos.release "24.05") { nssmdns = true; })
+          (optionalAttrs (!versionOlder config.system.nixos.release "24.05") { nssmdns4 = true; })
+        ];
+        smartd.enable = true;
+        pipewire = {
           enable = true;
-          compositor = "kwin";
+          pulse.enable = true;
+          alsa.enable = true;
+          alsa.support32Bit = true;
+          wireplumber.enable = true;
         };
-      };
-    });
+        xserver = lib.mkMerge [
+          {
+            videoDrivers = [ "amdgpu" ];
+            desktopManager.xterm.enable = false;
+            excludePackages = [ pkgs.xterm ];
+          }
+          (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
+            enable = lib.mkDefault true;
+            desktopManager.plasma5 = {
+              enable = true;
+              phononBackend = "vlc";
+            };
+            layout = "de";
+            xkb.layout = "de";
+            displayManager.sddm = {
+              enable = lib.mkDefault true;
+              autoNumlock = true;
+              wayland = {
+                enable = true;
+              };
+            };
+          })
+        ];
+      }
+      // (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
+        desktopManager.plasma6.enable = true;
+        displayManager.sddm = {
+          enable = lib.mkDefault true;
+          autoNumlock = true;
+          wayland = {
+            enable = true;
+            compositor = "kwin";
+          };
+        };
+      });
 
     security = {
       rtkit.enable = true;
@@ -107,8 +119,16 @@ in {
       bluetooth = {
         enable = true;
         package = pkgs.bluez5-experimental;
-        settings = { General = { Experimental = true; }; };
-        input = { General = { ClassicBondedOnly = false; }; };
+        settings = {
+          General = {
+            Experimental = true;
+          };
+        };
+        input = {
+          General = {
+            ClassicBondedOnly = false;
+          };
+        };
       };
       pulseaudio.enable = false;
       opengl = {
@@ -132,20 +152,20 @@ in {
           _JAVA_AWT_WM_NONREPARENTING = "1";
           GTK_USE_PORTAL = "1";
         };
-        systemPackages = with pkgs;
+        systemPackages =
+          with pkgs;
           lib.mkMerge [
-            (lib.optionals
-              config.services.xserver.desktopManager.plasma5.enable [
-                plasma5Packages.skanlite
-                plasma5Packages.ark
-                plasma5Packages.kate
-                plasma5Packages.kalk
-                plasma5Packages.kmail
-                plasma5Packages.kdeplasma-addons
-              ])
-            (lib.optionals (config.services ? desktopManager
-              && config.services.desktopManager.plasma6.enable)
-              (with pkgs.kdePackages; [
+            (lib.optionals config.services.xserver.desktopManager.plasma5.enable [
+              plasma5Packages.skanlite
+              plasma5Packages.ark
+              plasma5Packages.kate
+              plasma5Packages.kalk
+              plasma5Packages.kmail
+              plasma5Packages.kdeplasma-addons
+            ])
+            (lib.optionals (config.services ? desktopManager && config.services.desktopManager.plasma6.enable) (
+              with pkgs.kdePackages;
+              [
                 ark
                 print-manager
                 kate
@@ -157,7 +177,8 @@ in {
                 kdepim-addons
                 akonadi
                 akonadiconsole
-              ]))
+              ]
+            ))
             [
               git
               inputs'.nh.packages.default
@@ -171,13 +192,15 @@ in {
           khelpcenter
         ];
       })
-      (lib.optionalAttrs (config.services ? desktopManager
-        && config.services.desktopManager.plasma6.enable) {
+      (lib.optionalAttrs
+        (config.services ? desktopManager && config.services.desktopManager.plasma6.enable)
+        {
           plasma6.excludePackages = with pkgs.kdePackages; [
             elisa
             khelpcenter
           ];
-        })
+        }
+      )
     ];
 
     programs = {
@@ -195,7 +218,10 @@ in {
               mkdir -p "$out/share/fonts"
               font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
               find ${
-                toString [ pkgs.liberation_ttf pkgs.dejavu_fonts ]
+                toString [
+                  pkgs.liberation_ttf
+                  pkgs.dejavu_fonts
+                ]
               } -regex "$font_regexp" \
                 -exec ln -sf -t "$out/share/fonts" '{}' \;
             '')

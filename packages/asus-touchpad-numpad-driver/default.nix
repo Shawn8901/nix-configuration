@@ -1,4 +1,10 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python3, i2c-tools, }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  python3,
+  i2c-tools,
+}:
 buildPythonApplication rec {
   pname = "asus-touchpad-numpad-driver";
   version = "unstable-2022-03-11";
@@ -26,10 +32,8 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description =
-      "Up-to-date feature-rich linux driver for NumberPad(2.0) on Asus laptops";
-    homepage =
-      "https://github.com/asus-linux-drivers/asus-touchpad-numpad-driver";
+    description = "Up-to-date feature-rich linux driver for NumberPad(2.0) on Asus laptops";
+    homepage = "https://github.com/asus-linux-drivers/asus-touchpad-numpad-driver";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ shawn8901 ];

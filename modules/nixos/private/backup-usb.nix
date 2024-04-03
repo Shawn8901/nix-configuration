@@ -1,8 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.shawn8901.backup-usb;
-  inherit (lib) mkIf mkEnableOption mkOption types;
-in {
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    types
+    ;
+in
+{
   options = {
     shawn8901.backup-usb = {
       enable = mkEnableOption "automatic backup to usb disk";
@@ -30,15 +41,17 @@ in {
       SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="${cfg.device.idVendor}", ATTRS{idProduct}=="${cfg.device.idProduct}", ATTR{partition}=="${cfg.device.partition}", TAG+="systemd", ENV{SYSTEMD_WANTS}="backup-usb@%k.service"
     '';
 
-    systemd.services."backup-usb@" = let
-      backupUsb = cfg.package.override { inherit (cfg) backupPath mountPoint; };
-    in {
-      description = "Backups ${cfg.backupPath} to usb hdd";
-      serviceConfig = {
-        Type = "simple";
-        GuessMainPID = false;
-        ExecStart = "${lib.getExe backupUsb} %I";
+    systemd.services."backup-usb@" =
+      let
+        backupUsb = cfg.package.override { inherit (cfg) backupPath mountPoint; };
+      in
+      {
+        description = "Backups ${cfg.backupPath} to usb hdd";
+        serviceConfig = {
+          Type = "simple";
+          GuessMainPID = false;
+          ExecStart = "${lib.getExe backupUsb} %I";
+        };
       };
-    };
   };
 }

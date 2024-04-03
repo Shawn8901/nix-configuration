@@ -1,23 +1,44 @@
-{ inputs', config, lib, pkgs, ... }:
+{
+  inputs',
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkIf singleton const;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    singleton
+    const
+    ;
 
   cfg = config.shawn8901.server;
-in {
+in
+{
   options = {
-    shawn8901.server = { enable = mkEnableOption "server config for nixos"; };
+    shawn8901.server = {
+      enable = mkEnableOption "server config for nixos";
+    };
   };
   config = mkIf cfg.enable {
-    documentation = { man.enable = false; };
+    documentation = {
+      man.enable = false;
+    };
 
     # FIXME https://github.com/NixOS/nixpkgs/issues/265675
     nixpkgs = lib.optionalAttrs config.environment.noXlibs {
-      overlays = singleton (const (super: {
-        pipewire = super.pipewire.override { ffadoSupport = false; };
-      }));
+      overlays = singleton (
+        const (super: {
+          pipewire = super.pipewire.override { ffadoSupport = false; };
+        })
+      );
     };
 
-    environment.systemPackages = [ pkgs.gitMinimal pkgs.btop ];
+    environment.systemPackages = [
+      pkgs.gitMinimal
+      pkgs.btop
+    ];
 
     system.autoUpgrade = {
       enable = true;
