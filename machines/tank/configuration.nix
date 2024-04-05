@@ -79,6 +79,7 @@ in
         ignoredInterfaces = [ "enp4s0" ];
       };
     };
+    services.prometheus-fritz-exporter.after = [ "network-online.target" ];
   };
   nix.settings.cores = 4;
   services = {
