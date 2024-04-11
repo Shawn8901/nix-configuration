@@ -171,12 +171,6 @@ in
                 kate
                 skanlite
                 kalk
-                kmail
-                kmail-account-wizard
-                kdepim-runtime
-                kdepim-addons
-                akonadi
-                akonadiconsole
               ]
             ))
             [
@@ -203,33 +197,41 @@ in
       )
     ];
 
-    programs = {
-      dconf.enable = true;
-      ssh.startAgent = true;
-      steam = {
-        enable = true;
-        package = pkgs.steam-small.override {
-          extraEnv = {
-            inherit (config.environment.sessionVariables) AMD_VULKAN_ICD;
+    programs = lib.mkMerge [
+      {
+        dconf.enable = true;
+        ssh.startAgent = true;
+        steam = {
+          enable = true;
+          package = pkgs.steam-small.override {
+            extraEnv = {
+              inherit (config.environment.sessionVariables) AMD_VULKAN_ICD;
+            };
+            extraLibraries = p: [
+              # Fix Unity Fonts
+              (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
+                mkdir -p "$out/share/fonts"
+                font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+                find ${
+                  toString [
+                    pkgs.liberation_ttf
+                    pkgs.dejavu_fonts
+                  ]
+                } -regex "$font_regexp" \
+                  -exec ln -sf -t "$out/share/fonts" '{}' \;
+              '')
+              p.getent
+            ];
           };
-          extraLibraries = p: [
-            # Fix Unity Fonts
-            (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
-              mkdir -p "$out/share/fonts"
-              font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-              find ${
-                toString [
-                  pkgs.liberation_ttf
-                  pkgs.dejavu_fonts
-                ]
-              } -regex "$font_regexp" \
-                -exec ln -sf -t "$out/share/fonts" '{}' \;
-            '')
-            p.getent
-          ];
         };
-      };
-      haguichi.enable = false;
-    };
+        haguichi.enable = false;
+      }
+      (lib.optionalAttrs (config.programs ? kde-pim) {
+        kde-pim = {
+          enable = true;
+          kmail = true;
+        };
+      })
+    ];
   };
 }
