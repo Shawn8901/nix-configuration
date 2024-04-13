@@ -6,7 +6,7 @@
   toml2json,
   nodejs,
   ffmpeg,
-  filepicker,
+  filepicker ? pkgs.callPackage ./filepicker.nix { },
   substituteAll,
   makeWrapper,
 }:
