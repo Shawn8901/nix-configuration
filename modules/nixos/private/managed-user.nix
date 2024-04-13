@@ -7,7 +7,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    optionalAttrs
+    versionOlder
+    ;
 
   cfg = config.shawn8901.managed-user;
 in
@@ -30,28 +35,34 @@ in
       };
     };
 
-    programs.zsh = {
-      enable = true;
-      enableCompletion = true;
-      enableBashCompletion = true;
-      enableGlobalCompInit = true;
-      syntaxHighlighting.enable = true;
-      autosuggestions.enable = true;
-      promptInit = ''
-        source "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme"
-        source "${../../../files/p10k.zsh}"
-        source "${pkgs.zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
-        source "${pkgs.fzf}/share/fzf/completion.zsh"
-        source "${pkgs.fzf}/share/fzf/key-bindings.zsh"
-        source "${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh"
-        source "${pkgs.zsh-fzf-tab}/share/fzf-tab/lib/zsh-ls-colors/ls-colors.zsh"
-      '';
-      interactiveShellInit = ''
-        bindkey '^[[1;5C' forward-word        # ctrl right
-        bindkey '^[[1;5D' backward-word       # ctrl left
-        bindkey '^H' backward-kill-word
-        bindkey '5~' kill-word
-      '';
+    programs = {
+      fzf = {
+        fuzzyCompletion = true;
+        keybindings = true;
+      };
+      zsh = {
+        enable = true;
+        enableCompletion = true;
+        enableBashCompletion = true;
+        enableGlobalCompInit = true;
+        syntaxHighlighting.enable = true;
+        autosuggestions.enable = true;
+        promptInit = ''
+          source "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme"
+          source "${../../../files/p10k.zsh}"
+
+        '';
+        interactiveShellInit = ''
+          source "${pkgs.zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
+          source "${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh"
+          source "${pkgs.zsh-fzf-tab}/share/fzf-tab/lib/zsh-ls-colors/ls-colors.zsh"
+
+          bindkey '^[[1;5C' forward-word        # ctrl right
+          bindkey '^[[1;5D' backward-word       # ctrl left
+          bindkey '^H' backward-kill-word
+          bindkey '5~' kill-word
+        '';
+      };
     };
     fonts = {
       fontconfig.enable = lib.mkDefault (!config.environment.noXlibs);
