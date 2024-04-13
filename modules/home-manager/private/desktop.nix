@@ -157,7 +157,10 @@ in
           };
         }
         (lib.optionalAttrs (config.programs.firefox ? nativeMessagingHosts) {
-          nativeMessagingHosts = [ fPkgs.vdhcoapp ];
+          nativeMessagingHosts = [
+            fPkgs.vdhcoapp
+            pkgs.keepassxc
+          ];
         })
       ];
 
