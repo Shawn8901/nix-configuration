@@ -4,44 +4,14 @@
   fetchFromGitHub,
   buildNpmPackage,
   toml2json,
+  jq,
   nodejs,
   ffmpeg,
   filepicker ? pkgs.callPackage ./filepicker.nix { },
   substituteAll,
   makeWrapper,
 }:
-let
-  appName = "vdhcoapp";
 
-  generateManifest =
-    {
-      allowedSet ? { },
-    }:
-    pkgs.writeText "${appName}.json" (
-      builtins.toJSON (
-        lib.recursiveUpdate {
-          name = appName;
-          description = "Video DownloadHelper companion app";
-          path = "DIR/${appName}";
-          type = "stdio";
-        } allowedSet
-      )
-    );
-
-  firefoxManifest = generateManifest {
-    allowedSet = {
-      allowed_extensions = [
-        "weh-native-test@downloadhelper.net"
-        "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}"
-      ];
-    };
-  };
-  chromeManifest = generateManifest {
-    allowedSet = {
-      allowed_origins = [ "chrome-extension://lmjnegcaeklhafolokijcfjliaokphfk/" ];
-    };
-  };
-in
 # This is an adaptation with buildNpmPackage based on https://github.com/milahu/nur-packages/commit/3022ffb3619182ffcd579194e1202e3978e4d55b
 buildNpmPackage rec {
   pname = "vdhcoapp";
@@ -59,6 +29,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   nativeBuildInputs = [
+    jq
     toml2json
     makeWrapper
   ];
@@ -82,28 +53,35 @@ buildNpmPackage rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/opt/vdhcoapp
+    runHook preInstall
 
+    mkdir -p $out/opt/vdhcoapp
     cp -r . "$out/opt/vdhcoapp"
 
     makeWrapper ${nodejs}/bin/node $out/bin/vdhcoapp \
       --add-flags $out/opt/vdhcoapp/src/main.js
 
-    installManifest() {
-      install -d $2
-      cp $1 $2/${appName}.json
-      substituteInPlace $2/${appName}.json --replace DIR $out/bin
+    generateManifest() {
+      type=$1
+      outputFolder=$2
+      mkdir -p $outputFolder
+      manifestName=$(jq -r '.meta.id' src/config.json).json
+      jq '.store.'$type'.manifest * (.meta | with_entries(select (.key == "description")) * {"name": .id}) * {"path" : "@out@"}' src/config.json > $outputFolder/$manifestName
+      substituteInPlace $outputFolder/$manifestName --replace @out@ ${placeholder "out"}/bin/vdhcoapp
     }
-    installManifest ${chromeManifest}  $out/etc/opt/chrome/native-messaging-hosts
-    installManifest ${chromeManifest}  $out/etc/chromium/native-messaging-hosts
-    installManifest ${firefoxManifest} $out/lib/mozilla/native-messaging-hosts
+
+    generateManifest google $out/etc/opt/chrome/native-messaging-hosts
+    generateManifest google $out/etc/chromium/native-messaging-hosts
+    generateManifest mozilla $out/lib/mozilla/native-messaging-hosts
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Companion application for the Video DownloadHelper browser add-on";
     homepage = "https://www.downloadhelper.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [ shawn8901 ];
     mainProgram = "vdhcoapp";
   };
 }
