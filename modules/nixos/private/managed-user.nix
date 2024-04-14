@@ -7,7 +7,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    optionalAttrs
+    versionOlder
+    ;
 
   cfg = config.shawn8901.managed-user;
 in
@@ -30,32 +35,34 @@ in
       };
     };
 
-    programs = {
-      fzf.enable = true;
-      zsh = {
-        enable = true;
-        enableCompletion = true;
-        enableBashCompletion = true;
-        enableGlobalCompInit = true;
-        syntaxHighlighting.enable = true;
-        autosuggestions.enable = true;
-        promptInit = ''
-          source "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme"
-          source "${../../../files/p10k.zsh}"
+    programs = lib.mkMerge [
+      {
+        zsh = {
+          enable = true;
+          enableCompletion = true;
+          enableBashCompletion = true;
+          enableGlobalCompInit = true;
+          syntaxHighlighting.enable = true;
+          autosuggestions.enable = true;
+          promptInit = ''
+            source "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme"
+            source "${../../../files/p10k.zsh}"
 
-        '';
-        interactiveShellInit = ''
-          source "${pkgs.zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
-          source "${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh"
-          source "${pkgs.zsh-fzf-tab}/share/fzf-tab/lib/zsh-ls-colors/ls-colors.zsh"
+          '';
+          interactiveShellInit = ''
+            source "${pkgs.zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
+            source "${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh"
+            source "${pkgs.zsh-fzf-tab}/share/fzf-tab/lib/zsh-ls-colors/ls-colors.zsh"
 
-          bindkey '^[[1;5C' forward-word        # ctrl right
-          bindkey '^[[1;5D' backward-word       # ctrl left
-          bindkey '^H' backward-kill-word
-          bindkey '5~' kill-word
-        '';
-      };
-    };
+            bindkey '^[[1;5C' forward-word        # ctrl right
+            bindkey '^[[1;5D' backward-word       # ctrl left
+            bindkey '^H' backward-kill-word
+            bindkey '5~' kill-word
+          '';
+        };
+      }
+      ((optionalAttrs (!versionOlder config.system.nixos.release "24.05") { fzf.enable = true; }))
+    ];
     fonts = {
       fontconfig.enable = lib.mkDefault (!config.environment.noXlibs);
       enableDefaultPackages = lib.mkDefault (!config.environment.noXlibs);
@@ -92,6 +99,6 @@ in
     # Needed to access secrets for the builder.
     nix.settings.trusted-users = [ "shawn" ];
 
-    environment.systemPackages = [ pkgs.fzf ]; # Used by zsh-interactive-cd
+    environment.systemPackages = mkIf (versionOlder config.system.nixos.release "24.05") [ pkgs.fzf ];
   };
 }
