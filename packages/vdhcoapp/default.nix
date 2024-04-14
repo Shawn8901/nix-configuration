@@ -66,8 +66,7 @@ buildNpmPackage rec {
       outputFolder=$2
       mkdir -p $outputFolder
       manifestName=$(jq -r '.meta.id' src/config.json).json
-      jq '.store.'$type'.manifest * (.meta | with_entries(select (.key == "description")) * {"name": .id}) * {"path" : "@out@"}' src/config.json > $outputFolder/$manifestName
-      substituteInPlace $outputFolder/$manifestName --replace @out@ ${placeholder "out"}/bin/vdhcoapp
+      jq '.store.'$type'.manifest * (.meta | with_entries(select (.key == "description")) * {"name": .id}) * {"path" : "${placeholder "out"}/bin/vdhcoapp"}' src/config.json > $outputFolder/$manifestName
     }
 
     generateManifest google $out/etc/opt/chrome/native-messaging-hosts
