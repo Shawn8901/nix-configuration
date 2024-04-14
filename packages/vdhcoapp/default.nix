@@ -83,6 +83,7 @@ buildNpmPackage rec {
     description = "Companion application for the Video DownloadHelper browser add-on";
     homepage = "https://www.downloadhelper.net/";
     license = licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = with maintainers; [ shawn8901 ];
     mainProgram = "vdhcoapp";
   };
