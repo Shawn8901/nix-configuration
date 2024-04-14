@@ -12,7 +12,6 @@
   makeWrapper,
 }:
 
-# This is an adaptation with buildNpmPackage based on https://github.com/milahu/nur-packages/commit/3022ffb3619182ffcd579194e1202e3978e4d55b
 buildNpmPackage rec {
   pname = "vdhcoapp";
   version = "2.0.19";
