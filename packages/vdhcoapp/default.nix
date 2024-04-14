@@ -77,6 +77,8 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+  passthru.runUpdate = true;
+
   meta = with lib; {
     description = "Companion application for the Video DownloadHelper browser add-on";
     homepage = "https://www.downloadhelper.net/";
