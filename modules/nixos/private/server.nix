@@ -38,14 +38,18 @@ in
     environment.systemPackages = [
       pkgs.gitMinimal
       pkgs.btop
+      (pkgs.nixos-rebuild.override { nix = config.nix.package.out; })
     ];
 
-    system.autoUpgrade = {
-      enable = true;
-      dates = "05:14";
-      flake = "github:shawn8901/nix-configuration";
-      allowReboot = true;
-      persistent = true;
+    system = {
+      disableInstallerTools = true;
+      autoUpgrade = {
+        enable = true;
+        dates = "05:14";
+        flake = "github:shawn8901/nix-configuration";
+        allowReboot = true;
+        persistent = true;
+      };
     };
 
     networking = {
@@ -58,8 +62,10 @@ in
     };
 
     sound.enable = lib.mkDefault false;
-    hardware.pulseaudio.enable = false;
-    hardware.bluetooth.enable = false;
+    hardware = {
+      pulseaudio.enable = false;
+      bluetooth.enable = false;
+    };
     security = {
       acme = {
         acceptTerms = true;
