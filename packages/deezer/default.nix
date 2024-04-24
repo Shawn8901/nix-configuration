@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  writeScript,
-  imagemagick,
-  p7zip,
-  nodePackages,
-  electron_13,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, writeScript
+, imagemagick
+, p7zip
+, nodePackages
+, electron_13
+,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -34,19 +34,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
 
-  version = "6.0.90";
+  version = "6.0.110";
   pname = "deezer";
 
   src = fetchzip {
     url = "https://github.com/SibrenVasse/${finalAttrs.pname}/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-yNrwvO7vEm86vBwt1ubzbbh/m1pJiO5IhDzpVuzznx8=";
+    hash = "sha256-+oHi2MUpcMNNHTOStV1pXKhUzA+8rGz+/v8YqJg+350=";
   };
 
   # this is a nasty workaround to trick nix-update to update your hash, whilst having src on the github repo
   # that is providing patches, whilst also updating a second hash
   go-modules = fetchurl {
     url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${shortenVersion finalAttrs.version}";
-    hash = "sha256-zYK3CJDzmIqq+CNJ5EGvrd74guaOEmZbKn0u5rONCZ4=";
+    hash = "sha256-39Ho3AI8w+lmZ0S6nloqpnuYqGv8IqT0+ECxr1wiJBs=";
   };
 
   patches = [
