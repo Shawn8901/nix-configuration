@@ -8,6 +8,7 @@ let
   inherit (lib)
     types
     mkEnableOption
+    mkPackageOption
     mkOption
     mkDefault
     mkIf
@@ -19,6 +20,7 @@ in
   options = {
     shawn8901.victoriametrics = {
       enable = mkEnableOption "Enables a preconfigured victoria metrics instance";
+      package = mkPackageOption pkgs "victoriametrics" { };
       hostname = mkOption {
         type = types.str;
         description = "full qualified hostname of the grafana instance";
@@ -55,7 +57,7 @@ in
           DynamicUser = true;
           EnvironmentFile = cfg.credentialsFile;
           ExecStart = ''
-            ${pkgs.victoriametrics}/bin/vmauth \
+            ${cfg.package}/bin/vmauth \
               -auth.config=${authConfig} \
               -httpListenAddr=:${toString cfg.port}
           '';
@@ -84,6 +86,7 @@ in
         };
       };
       victoriametrics = {
+        inherit (cfg) package;
         enable = true;
         retentionPeriod = 12;
         listenAddress = "localhost:8428";
