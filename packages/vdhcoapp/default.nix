@@ -7,11 +7,12 @@
   jq,
   nodejs,
   ffmpeg,
-  filepicker ? pkgs.callPackage ./filepicker.nix { },
   substituteAll,
   makeWrapper,
 }:
-
+let
+  filePicker = pkgs.callPackage ./filepicker.nix { };
+in
 buildNpmPackage rec {
   pname = "vdhcoapp";
   version = "2.0.19";
@@ -37,7 +38,7 @@ buildNpmPackage rec {
     (substituteAll {
       src = ./code.patch;
       inherit ffmpeg;
-      filepicker = lib.getExe filepicker;
+      filepicker = lib.getExe filePicker;
     })
   ];
 
