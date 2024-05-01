@@ -10,6 +10,13 @@
 let
   inherit (config.sops) secrets;
   inherit (inputs') attic;
+
+  vmPackage = self'.packages.victoriametrics.override {
+    withBackupTools = false;
+    withVmAlert = false;
+    withVictoriaLogs = false;
+    withVmctl = false;
+  };
 in
 {
   sops.secrets = {
@@ -37,7 +44,7 @@ in
   services = {
     nginx.package = pkgs.nginxQuic;
     vmagent = {
-      package = pkgs.victoriametrics;
+      package = vmPackage;
       remoteWriteUrl = lib.mkForce "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
       extraArgs = lib.mkForce [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
     };
@@ -66,6 +73,7 @@ in
     victoriametrics = {
       enable = true;
       hostname = "vm.pointjig.de";
+      package = vmPackage;
       credentialsFile = secrets.vmauth.path;
     };
     grafana = {
