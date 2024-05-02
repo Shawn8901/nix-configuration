@@ -76,8 +76,8 @@ in
       ++ (with fPkgs; [
         deezer
         nas
-        vdhcoapp
-        fPkgs.generate-zrepl-ssl
+        vdhcoapp # migrate to upstream with 24.05
+        generate-zrepl-ssl
       ]);
 
     programs = {
@@ -158,7 +158,7 @@ in
         }
         (lib.optionalAttrs (config.programs.firefox ? nativeMessagingHosts) {
           nativeMessagingHosts = [
-            fPkgs.vdhcoapp
+            fPkgs.vdhcoapp # migrate to upstream with 24.05
             pkgs.keepassxc
           ];
         })
