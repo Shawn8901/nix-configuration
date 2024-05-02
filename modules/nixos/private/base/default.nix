@@ -11,6 +11,7 @@ let
     mkDefault
     versionOlder
     optionalAttrs
+    optionalString
     ;
 in
 {
@@ -38,22 +39,28 @@ in
     enableContainers = false;
   };
 
-  services.lvm.enable = false;
-
   environment.sessionVariables.FLAKE = lib.mkDefault "github:shawn8901/nix-configuration";
   environment.systemPackages = with pkgs; [
     vim
     sops
   ];
 
-  services = {
-    journald.extraConfig = ''
-      SystemMaxUse=100M
-      SystemMaxFileSize=50M
-    '';
+  services = mkMerge [
+    {
+      lvm.enable = false;
+      journald.extraConfig = ''
+        SystemMaxUse=100M
+        SystemMaxFileSize=50M
+      '';
 
-    udev.extraRules = lib.optionalString (config.boot.supportedFilesystems.zfs or false) ''
-      ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
-    '';
-  };
+      udev.extraRules = optionalString (config.boot.supportedFilesystems.zfs or false) ''
+        ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
+      '';
+    }
+    (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
+      dbus.implementation = "broker";
+    })
+  ]
+
+  ;
 }
