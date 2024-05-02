@@ -65,6 +65,7 @@
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     fp-rndp-lib = {
       url = "github:Shawn8901/fp-rndp-lib";
