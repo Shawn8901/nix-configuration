@@ -71,29 +71,6 @@ in
           alsa.support32Bit = true;
           wireplumber.enable = true;
         };
-        xserver = lib.mkMerge [
-          {
-            videoDrivers = [ "amdgpu" ];
-            desktopManager.xterm.enable = false;
-            excludePackages = [ pkgs.xterm ];
-          }
-          (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
-            enable = lib.mkDefault true;
-            desktopManager.plasma5 = {
-              enable = true;
-              phononBackend = "vlc";
-            };
-            layout = "de";
-            xkb.layout = "de";
-            displayManager.sddm = {
-              enable = lib.mkDefault true;
-              autoNumlock = true;
-              wayland = {
-                enable = true;
-              };
-            };
-          })
-        ];
       }
       // (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
         desktopManager.plasma6.enable = true;
@@ -155,14 +132,6 @@ in
         systemPackages =
           with pkgs;
           lib.mkMerge [
-            (lib.optionals config.services.xserver.desktopManager.plasma5.enable [
-              plasma5Packages.skanlite
-              plasma5Packages.ark
-              plasma5Packages.kate
-              plasma5Packages.kalk
-              plasma5Packages.kmail
-              plasma5Packages.kdeplasma-addons
-            ])
             (lib.optionals (config.services ? desktopManager && config.services.desktopManager.plasma6.enable) (
               with pkgs.kdePackages;
               [
@@ -180,12 +149,6 @@ in
             ]
           ];
       }
-      (lib.optionalAttrs config.services.xserver.desktopManager.plasma5.enable {
-        plasma5.excludePackages = with pkgs.plasma5Packages; [
-          elisa
-          khelpcenter
-        ];
-      })
       (lib.optionalAttrs
         (config.services ? desktopManager && config.services.desktopManager.plasma6.enable)
         {

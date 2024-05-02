@@ -65,7 +65,6 @@ in
     };
 
     services = {
-      xserver.enable = false;
       qemuGuest.enable = true;
       resolved.enable = true;
       vnstat.enable = true;
