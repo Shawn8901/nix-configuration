@@ -227,7 +227,6 @@ in
             "github:ipetkov/crane/"
             "github:viperML/nh/"
             "gitlab:rycee/nur-expressions/"
-            "gitlab:simple-nixos-mailserver/nixos-mailserver/"
             "github:Shawn8901/"
           ];
         in

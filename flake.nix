@@ -34,14 +34,6 @@
         nixpkgs-stable.follows = "nixpkgs-stable";
       };
     };
-    simple-nixos-mailserver = {
-      url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.11";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        nixpkgs-23_11.follows = "nixpkgs-stable";
-        flake-compat.follows = "flake-compat";
-      };
-    };
     mimir = {
       url = "github:Shawn8901/mimir";
       inputs.nixpkgs.follows = "nixpkgs-stable";
