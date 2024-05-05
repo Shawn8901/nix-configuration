@@ -1,6 +1,6 @@
 {
   lib,
-  buildFHSUserEnvBubblewrap,
+  buildFHSEnv,
   jameica,
   jre,
   stdenv,
@@ -47,7 +47,7 @@
   extraLibraries ? pkgs: [ ],
 }:
 let
-  fhsEnv = buildFHSUserEnvBubblewrap {
+  fhsEnv = buildFHSEnv {
     name = "jameica";
     runScript = "jameica";
     targetPkgs =
