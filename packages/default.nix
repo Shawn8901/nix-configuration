@@ -56,8 +56,6 @@ in
         pytr = pkgs.python3.pkgs.callPackage ./pytr { };
         asus-touchpad-numpad-driver = pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver { };
 
-        gh-poi = pkgs.callPackage ./gh-poi { };
-
         jameica-fhs = pkgs.callPackage ./jameica/fhsenv.nix { };
 
         libcapi = pkgs.callPackage ./libcapi { };

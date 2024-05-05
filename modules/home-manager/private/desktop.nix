@@ -325,14 +325,6 @@ in
 
       gh = {
         enable = true;
-        # Workaround for https://github.com/nix-community/home-manager/issues/4744
-        settings = {
-          version = 1;
-        };
-        extensions = [
-          pkgs.gh-dash
-          fPkgs.gh-poi
-        ];
       };
       ssh = {
         enable = true;
