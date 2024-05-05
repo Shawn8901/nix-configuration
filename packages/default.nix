@@ -68,6 +68,8 @@ in
         vdhcoapp = pkgs.vdhcoapp;
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
+
+        stalwart-mail = pkgs.callPackage ./stalwart-mail { };
       };
     in
     {
