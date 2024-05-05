@@ -82,6 +82,7 @@ in
         extraArgs = [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
       })
       (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
+        remoteWriteUrl = "https://vm.pointjig.de/api/v1/write";
         extraArgs = [
           "-remoteWrite.basicAuth.username=vm"
           "-remoteWrite.basicAuth.passwordFile=${config.sops.secrets.vmagent.path}"
