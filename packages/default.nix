@@ -66,7 +66,8 @@ in
 
         deezer = pkgsStable.callPackage ./deezer { };
 
-        vdhcoapp = pkgs.callPackage ./vdhcoapp { };
+        # remove with 24.11
+        vdhcoapp = pkgs.vdhcoapp;
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
       };

@@ -72,11 +72,11 @@ in
 
         nix-tree
         nixpkgs-review
+        vdhcoapp
       ]
       ++ (with fPkgs; [
         deezer
         nas
-        vdhcoapp # migrate to upstream with 24.05
         generate-zrepl-ssl
       ]);
 
@@ -157,9 +157,9 @@ in
           };
         }
         (lib.optionalAttrs (config.programs.firefox ? nativeMessagingHosts) {
-          nativeMessagingHosts = [
-            fPkgs.vdhcoapp # migrate to upstream with 24.05
-            pkgs.keepassxc
+          nativeMessagingHosts = with pkgs; [
+            vdhcoapp
+            keepassxc
           ];
         })
       ];
