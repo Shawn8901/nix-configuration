@@ -2,10 +2,13 @@
   config,
   inputs',
   pkgs,
+  self',
+  lib,
   ...
 }:
 let
   inherit (config.sops) secrets;
+  fPkgs = self'.packages;
 in
 {
   sops.secrets = {
@@ -19,6 +22,7 @@ in
       owner = "stfc-bot";
       group = "stfc-bot";
     };
+    stalwart-fallback-admin = { };
   };
 
   networking.firewall = {
@@ -68,7 +72,22 @@ in
       track_counts = true;
       track_io_timing = true;
     };
-    nginx.package = pkgs.nginxQuic;
+    nginx = {
+      package = pkgs.nginxQuic;
+      virtualHosts."mail.pointjig.de" = {
+        serverName = "mail.pointjig.de";
+        forceSSL = true;
+        enableACME = true;
+        http3 = true;
+        kTLS = true;
+        locations = {
+          "/" = {
+            proxyPass = "http://localhost:8080";
+            recommendedProxySettings = true;
+          };
+        };
+      };
+    };
     stne-mimir = {
       enable = true;
       domain = "mimir.pointjig.de";
@@ -82,59 +101,29 @@ in
       package = inputs'.stfc-bot.packages.default;
       envFile = secrets.stfc-env.path;
     };
-  };
-
-  mailserver = {
-    enable = true;
-    fqdn = "mail.pointjig.de";
-    domains = [ "pointjig.de" ];
-    certificateScheme = "acme-nginx";
-    loginAccounts = {
-      "shawn@pointjig.de" = {
-        hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
-        aliases = [
-          "aktienfinder@pointjig.de"
-          "alphavps@pointjig.de"
-          "caseking@pointjig.de"
-          "check24@pointjig.de"
-          "codeberg@pointjig.de"
-          "dropbox@pointjig.de"
-          "epic@pointjig.de"
-          "estateguru@pointjig.de"
-          "flexispot@pointjig.de"
-          "fritz@pointjig.de"
-          "geizhals@pointjig.de"
-          "git@pointjig.de"
-          "megaprimus@pointjig.de"
-          "mindfactory@pointjig.de"
-          "parqet@pointjig.de"
-          "planetside@pointjig.de"
-          "smite@pointjig.de"
-          "spocks@pointjig.de"
-          "spotify@pointjig.de"
-          "steam@pointjig.de"
-          "stfc@pointjig.de"
-          "stne@pointjig.de"
-          "sto@pointjig.de"
-          "supremegamers@pointjig.de"
-          "unity@pointjig.de"
-          "wb@pointjig.de"
-          "zsa@pointjig.de"
-          "nb@pointjig.de"
-          "aquatuning@pointjig.de"
-        ];
+    stalwart-mail = {
+      enable = true;
+      package = fPkgs.stalwart-mail;
+      http = {
+        listenAddress = "127.0.0.1";
+        port = 8080;
+        openFirewall = false;
       };
-      "dorman@pointjig.de" = {
-        hashedPasswordFile = "${secrets.sms-shawn-passwd.path}";
-        aliases = [ "ninjatrader@pointjig.de" ];
-      };
-      "noreply@pointjig.de" = {
-        hashedPasswordFile = "${secrets.sms-technical-passwd.path}";
-      };
-      "hydra@pointjig.de" = {
-        hashedPasswordFile = "${secrets.sms-technical-passwd.path}";
+      environmentFile = secrets.stalwart-fallback-admin.path;
+      hostname = "mail.pointjig.de";
+      settings = {
+        certificate.default = {
+          private-key = "%{file:/var/lib/acme/mail.pointjig.de/key.pem}%";
+          cert = "%{file:/var/lib/acme/mail.pointjig.de/cert.pem}%";
+          default = true;
+        };
+        server.http.use-x-forwarded = true;
       };
     };
+  };
+  systemd.services.stalwart-mail.serviceConfig = {
+    # Hack to read acme certificate from nginx
+    Group = "nginx";
   };
 
   security = {

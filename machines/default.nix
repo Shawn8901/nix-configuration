@@ -49,10 +49,12 @@ in
       nixpkgs = inputs.nixpkgs-stable;
       hmInput = inputs.home-manager-stable;
       home-manager.shawn = { };
+      disabledModules = [ "services/mail/stalwart-mail.nix" ];
       extraModules = [
         inputs.simple-nixos-mailserver.nixosModules.default
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
+        ../modules/nixos/stalwart-mail
       ];
     };
     shelter = {
