@@ -22,9 +22,7 @@ in
     };
   };
   config = mkIf cfg.enable {
-    documentation = {
-      man.enable = false;
-    };
+    documentation.man.enable = false;
 
     environment.systemPackages = [
       pkgs.gitMinimal

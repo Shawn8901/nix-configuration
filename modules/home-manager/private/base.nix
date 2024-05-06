@@ -1,6 +1,6 @@
 { lib, osConfig, ... }:
 let
-  inherit (lib) versionOlder;
+  inherit (lib) versionOlder mkDefault;
 in
 lib.mkMerge [
   {
@@ -13,7 +13,8 @@ lib.mkMerge [
       enable = true;
       enableZshIntegration = true;
     };
-    manual.manpages.enable = false;
+    manual.manpages.enable = mkDefault false;
+    programs.man.enable = mkDefault false;
   }
   (lib.optionalAttrs (!versionOlder osConfig.system.nixos.release "24.05") ({
     nix.gc = {

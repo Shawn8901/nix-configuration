@@ -16,9 +16,9 @@ let
 in
 {
   documentation = {
-    doc.enable = false;
-    nixos.enable = false;
-    info.enable = false;
+    doc.enable = mkDefault false;
+    nixos.enable = mkDefault false;
+    info.enable = mkDefault false;
   };
 
   system.stateVersion = mkDefault "23.05";

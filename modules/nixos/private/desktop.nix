@@ -26,14 +26,9 @@ in
   };
   config = mkIf cfg.enable {
 
-    documentation = {
-      doc.enable = false;
-      nixos.enable = false;
-      info.enable = false;
-      man = {
-        enable = lib.mkDefault true;
-        generateCaches = lib.mkDefault true;
-      };
+    documentation.man = {
+      enable = lib.mkDefault true;
+      generateCaches = lib.mkDefault true;
     };
 
     fonts = {

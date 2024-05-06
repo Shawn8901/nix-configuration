@@ -54,7 +54,6 @@ in
         })
       ];
     };
-
     home.packages =
       with pkgs;
       [
@@ -81,6 +80,7 @@ in
       ]);
 
     programs = {
+      man.enable = true;
       firefox = lib.mkMerge [
         {
           enable = true;
