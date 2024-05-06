@@ -64,6 +64,7 @@ in
       };
     };
 
+    programs.nano.enable = false;
     services = {
       qemuGuest.enable = true;
       resolved.enable = true;
