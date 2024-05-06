@@ -40,10 +40,7 @@ in
   };
 
   environment.sessionVariables.FLAKE = lib.mkDefault "github:shawn8901/nix-configuration";
-  environment.systemPackages = with pkgs; [
-    vim
-    sops
-  ];
+  environment.systemPackages = [ pkgs.vim ];
 
   services = mkMerge [
     {

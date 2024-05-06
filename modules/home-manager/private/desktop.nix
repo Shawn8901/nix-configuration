@@ -57,6 +57,7 @@ in
     home.packages =
       with pkgs;
       [
+        sops
         samba
         nextcloud-client
         keepassxc
