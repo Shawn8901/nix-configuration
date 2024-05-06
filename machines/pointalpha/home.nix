@@ -7,7 +7,6 @@ in
 
   home.packages = [
     pkgs.keymapp
-    pkgs.wally-cli
     pkgs.teamspeak_client
     pkgs.signal-desktop
     pkgs.portfolio
