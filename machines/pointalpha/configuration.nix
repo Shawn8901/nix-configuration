@@ -147,10 +147,7 @@ in
     };
   };
 
-  nix.settings = {
-    keep-outputs = true;
-    keep-derivations = true;
-  };
+  nix.settings.keep-outputs = true;
   environment = {
     systemPackages = with pkgs; [ cifs-utils ];
     etc = {
