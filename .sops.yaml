@@ -9,6 +9,7 @@ keys:
   - &watchtower age13gpwm947w05n65cz22pxyevml9sd80lq944d47glhw4lkvqulg4sqlccyq
 
   - &next age1uq4qun60snrl3t3yjqagrnjhsjma36kkdw3ypj9sntccwlgplfgq4ytdtj
+  - &triva-gs age1q6kuyae4tgdgtjy7syfhkj5tlgpxtyf66kkulm7h5c74az3uu5rqwvgca5
 
 all: &all
   - *shawn
@@ -19,6 +20,7 @@ all: &all
   - *watchtower
   - *shelter
   - *next
+  - *triva-gs
 
 creation_rules:
   - path_regex: files/secrets-desktop.yaml
@@ -75,3 +77,9 @@ creation_rules:
       - age:
           - *shawn
           - *watchtower
+
+  - path_regex: machines/triva-gs/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *shawn
+          - *triva-gs

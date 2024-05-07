@@ -87,6 +87,11 @@ in
       ];
       home-manager.shawn = { };
     };
+    triva-gs = {
+      nixpkgs = inputs.nixpkgs-stable;
+      disabledModules = [ "services/mail/stalwart-mail.nix" ];
+      extraModules = [ ../modules/nixos/stalwart-mail ];
+    };
   };
 
   config.flake.hydraJobs = {
