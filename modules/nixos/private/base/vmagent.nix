@@ -17,7 +17,7 @@ in
 {
   sops.secrets = {
     vmagent = lib.mkMerge [
-      { sopsFile = ../../../../files/secrets-managed.yaml; }
+      { sopsFile = ../../../../files/secrets-base.yaml; }
       (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
         owner = config.services.vmagent.user;
         inherit (config.services.vmagent) group;
