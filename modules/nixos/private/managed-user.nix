@@ -26,11 +26,11 @@ in
 
     sops.secrets = {
       shawn = {
-        sopsFile = ../../../files/secrets-common.yaml;
+        sopsFile = ../../../files/secrets-managed.yaml;
         neededForUsers = true;
       };
       root = {
-        sopsFile = ../../../files/secrets-common.yaml;
+        sopsFile = ../../../files/secrets-managed.yaml;
         neededForUsers = true;
       };
     };
