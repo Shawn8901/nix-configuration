@@ -1,22 +1,24 @@
 keys:
   - &shawn age1q5mka3zt3w0w4nqzlmdm5pwf3ktxnjf87qcdjjxdednsanryry2scfzh93
-  - &next age1uq4qun60snrl3t3yjqagrnjhsjma36kkdw3ypj9sntccwlgplfgq4ytdtj
   - &pointalpha age1fepqavsyfukjf72ajv9cwp6r62hnlz4h6hgxw4wsddrlaqm8e42sns70ws
+  - &zenbook age1q9wy9rnpusgr7w993dm03ec50zm0mgrylmqxdpph2avzf38k6gks3g4vp2
+
+  - &tank age1ejf78m4mn8ch2lusuwn3gwqkpz45n03368sf78ce2nunzxlgduuqlme66d
   - &pointjig age1wlznz542ulyhjvp9zxe57z5rgy738wt6ygy6qsgjyavl5e9vcd0q27mu3n
   - &shelter age1qx60k4ft2lvs9qa3s0xqhpkdf26zdc8yw4vr7a7424ta9mcq9g8qrseqv3
-  - &tank age1ejf78m4mn8ch2lusuwn3gwqkpz45n03368sf78ce2nunzxlgduuqlme66d
   - &watchtower age13gpwm947w05n65cz22pxyevml9sd80lq944d47glhw4lkvqulg4sqlccyq
-  - &zenbook age1q9wy9rnpusgr7w993dm03ec50zm0mgrylmqxdpph2avzf38k6gks3g4vp2
+
+  - &next age1uq4qun60snrl3t3yjqagrnjhsjma36kkdw3ypj9sntccwlgplfgq4ytdtj
 
 all: &all
   - *shawn
-  - *watchtower
-  - *next
   - *pointalpha
-  - *pointjig
-  - *shelter
-  - *tank
   - *zenbook
+  - *tank
+  - *pointjig
+  - *watchtower
+  - *shelter
+  - *next
 
 creation_rules:
   - path_regex: files/secrets-desktop.yaml
@@ -25,7 +27,17 @@ creation_rules:
           - *shawn
           - *pointalpha
           - *zenbook
-  - path_regex: files/secrets-common.yaml
+  - path_regex: files/secrets-managed.yaml
+    key_groups:
+      - age:
+          - *shawn
+          - *watchtower
+          - *pointalpha
+          - *pointjig
+          - *shelter
+          - *tank
+          - *zenbook
+  - path_regex: files/secrets-base.yaml
     key_groups:
       - age: *all
   - path_regex: machines/next/[^/]+\.yaml$

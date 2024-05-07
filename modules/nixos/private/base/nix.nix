@@ -19,12 +19,12 @@ in
 {
   sops.secrets = {
     nix-gh-token-ro = {
-      sopsFile = ../../../../files/secrets-common.yaml;
+      sopsFile = ../../../../files/secrets-base.yaml;
       group = config.users.groups.nixbld.name;
       mode = "0444";
     };
     nix-netrc-ro = {
-      sopsFile = ../../../../files/secrets-common.yaml;
+      sopsFile = ../../../../files/secrets-base.yaml;
       group = config.users.groups.nixbld.name;
       mode = "0444";
     };
