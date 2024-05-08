@@ -50,10 +50,6 @@ in
       package = fPkgs.stalwart-mail;
       environmentFile = secrets.stalwart-fallback-admin.path;
       hostname = "triva-gs.de";
-      http = {
-        port = 443;
-        tls = true;
-      };
     };
   };
 

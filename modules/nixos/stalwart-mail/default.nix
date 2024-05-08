@@ -84,7 +84,7 @@ in
     smtp = listenerOpts "smtp" 25 false;
     submissions = listenerOpts "submissions" 465 true;
     imap = listenerOpts "imap" 993 true;
-    http = listenerOpts "http" 80 false;
+    http = listenerOpts "http" 443 true;
     managesieve = listenerOpts "managesieve" 4190 false;
 
     spamfilter = mkOption {
