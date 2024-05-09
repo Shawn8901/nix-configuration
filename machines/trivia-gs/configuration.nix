@@ -61,6 +61,16 @@ in
     };
   };
 
+  security = {
+    acme = {
+      acceptTerms = true;
+      defaults.email = "barannikov.de@gmail.com";
+      certs."${config.services.stalwart-mail.hostname}" = {
+        group = "stalwart-mail";
+      };
+    };
+  };
+
   users = {
     mutableUsers = false;
     users.root = {
