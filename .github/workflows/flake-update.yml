@@ -2,7 +2,7 @@ name: Flake Updater
 
 on:
   schedule:
-    - cron: "0 12 * * *"
+    - cron: "30 10 * * *"
   workflow_dispatch: {}
 
 jobs:
