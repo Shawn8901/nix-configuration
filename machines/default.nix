@@ -87,7 +87,7 @@ in
       ];
       home-manager.shawn = { };
     };
-    triva-gs = {
+    trivia-gs = {
       nixpkgs = inputs.nixpkgs-stable;
       disabledModules = [ "services/mail/stalwart-mail.nix" ];
       extraModules = [ ../modules/nixos/stalwart-mail ];

@@ -45,11 +45,19 @@ in
 
   services = {
     fstrim.enable = true;
-    stalwart-mail = {
+    stalwart-mail = rec {
       enable = true;
       package = fPkgs.stalwart-mail;
       environmentFile = secrets.stalwart-fallback-admin.path;
-      hostname = "triva-gs.de";
+      hostname = "mail.trivia-gs.de";
+
+      settings = {
+        certificate.default = {
+          private-key = "%{file:/var/lib/acme/${hostname}/key.pem}%";
+          cert = "%{file:/var/lib/acme/${hostname}/cert.pem}%";
+          default = true;
+        };
+      };
     };
   };
 
