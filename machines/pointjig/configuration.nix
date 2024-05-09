@@ -108,6 +108,7 @@ in
         listenAddress = "127.0.0.1";
         port = 8080;
         openFirewall = false;
+        tls = false;
       };
       environmentFile = secrets.stalwart-fallback-admin.path;
       hostname = "mail.pointjig.de";
