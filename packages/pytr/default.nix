@@ -20,7 +20,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "marzzzello";
-    repo = pname;
+    repo = "pytr";
     rev = version;
     hash = "sha256-AK7nrRvrJ5n9ngU2jmET2MC/6qP8FEMa9QIjFOWPX1A=";
   };

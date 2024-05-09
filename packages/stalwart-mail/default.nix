@@ -19,7 +19,7 @@ let
     version = "8.10.0";
     src = fetchFromGitHub {
       owner = "facebook";
-      repo = pname;
+      repo = "rocksdb";
       rev = "v${version}";
       hash = "sha256-KGsYDBc1fz/90YYNGwlZ0LUKXYsP1zyhP29TnRQwgjQ=";
     };

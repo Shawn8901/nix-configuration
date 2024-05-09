@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchzip
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, writeScript
-, imagemagick
-, p7zip
-, nodePackages
-, electron_13
-,
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  writeScript,
+  imagemagick,
+  p7zip,
+  nodePackages,
+  electron_13,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "deezer";
 
   src = fetchzip {
-    url = "https://github.com/SibrenVasse/${finalAttrs.pname}/archive/refs/tags/v${finalAttrs.version}.tar.gz";
+    url = "https://github.com/SibrenVasse/deezer/archive/refs/tags/v${finalAttrs.version}.tar.gz";
     hash = "sha256-cGbrU1Yvpxv0YfIV7bI7azwnVyI1q4FtInF/FDdrNQo=";
   };
 
