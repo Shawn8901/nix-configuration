@@ -154,7 +154,10 @@ in
 
   nix.settings.keep-outputs = true;
   environment = {
-    systemPackages = [ pkgs.cifs-utils ];
+    systemPackages = [
+      pkgs.cifs-utils
+      inputs'.attic.packages.attic-client
+    ];
     etc = {
       "samba/credentials_ela".source = secrets.samba-ela.path;
       "samba/credentials_shawn".source = secrets.samba.path;
