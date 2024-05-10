@@ -58,7 +58,6 @@ in
           (optionalAttrs (versionOlder config.system.nixos.release "24.05") { nssmdns = true; })
           (optionalAttrs (!versionOlder config.system.nixos.release "24.05") { nssmdns4 = true; })
         ];
-        smartd.enable = true;
         pipewire = {
           enable = true;
           pulse.enable = true;

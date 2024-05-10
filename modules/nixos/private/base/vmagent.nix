@@ -134,7 +134,6 @@ in
         smartctl = {
           enable = true;
           listenAddress = "localhost";
-          devices = [ "/dev/sda" ];
           maxInterval = "5m";
         };
       })

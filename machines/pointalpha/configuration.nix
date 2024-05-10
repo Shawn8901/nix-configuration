@@ -42,10 +42,10 @@ in
     useNetworkd = false;
     useDHCP = false;
   };
-  services.resolved.enable = false;
   systemd.network.wait-online.anyInterface = true;
 
   services = {
+    resolved.enable = false;
     udev.packages = [ pkgs.libmtp.out ];
     udev.extraRules = ''
       # Keymapp / Wally Flashing rules for the Moonlander and Planck EZ
@@ -121,6 +121,10 @@ in
       };
     };
     teamviewer.enable = true;
+    smartd = {
+      enable = true;
+      devices = [ { device = "/dev/nvme1"; } ];
+    };
   };
 
   hardware = {

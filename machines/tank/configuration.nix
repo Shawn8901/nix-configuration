@@ -411,7 +411,18 @@ in
         };
       };
     };
-    smartd.enable = true;
+    smartd = {
+      enable = true;
+      devices = [
+        { device = "/dev/nvme0"; }
+        { device = "/dev/sda"; }
+        { device = "/dev/sdb"; }
+        { device = "/dev/sdc"; }
+        { device = "/dev/sdb"; }
+        { device = "/dev/sde"; }
+        { device = "/dev/sdf"; }
+      ];
+    };
     nextcloud = {
       recommendedDefaults = true;
       configureImaginary = true;
