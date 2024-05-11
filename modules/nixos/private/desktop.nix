@@ -180,6 +180,7 @@ in
               p.getent
             ];
           };
+          protontricks.enable = true;
         };
         haguichi.enable = false;
       }
