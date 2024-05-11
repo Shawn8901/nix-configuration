@@ -42,6 +42,7 @@ in
         "betterttv"
         "teamviewer"
         "keymapp"
+        "epsonscan2"
       ];
       home-manager.shawn = { };
     };

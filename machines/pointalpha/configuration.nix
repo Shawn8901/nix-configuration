@@ -128,7 +128,15 @@ in
   };
 
   hardware = {
-    sane.enable = true;
+    sane = {
+      enable = true;
+      extraBackends = [
+        (pkgs.epsonscan2.override {
+          withNonFreePlugins = true;
+          withGui = true;
+        })
+      ];
+    };
     keyboard.zsa.enable = true;
   };
   systemd.tmpfiles.rules = [
