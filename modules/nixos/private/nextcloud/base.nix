@@ -101,12 +101,14 @@ in
           extraOptions = {
             "overwrite.cli.url" = "https://${cfg.hostName}";
             default_phone_region = "DE";
+            maintenance_window_start = mkDefault "1";
           };
         })
         (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
           settings = {
             "overwrite.cli.url" = "https://${cfg.hostName}";
             default_phone_region = "DE";
+            maintenance_window_start = mkDefault "1";
           };
         })
       ];

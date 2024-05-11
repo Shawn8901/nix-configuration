@@ -430,6 +430,7 @@ in
       configureMemoriesVaapi = true;
       configurePreviewSettings = true;
       configureRecognize = true;
+      settings.maintenance_window_start = "100";
     };
   };
 
