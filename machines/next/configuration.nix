@@ -67,7 +67,7 @@ in
       adminPasswordFile = secrets.nextcloud-admin.path;
       notify_push.package = pkgs.nextcloud-notify_push;
       home = "/var/lib/nextcloud";
-      package = pkgs.nextcloud27;
+      package = pkgs.nextcloud28;
       prometheus.passwordFile = secrets.prometheus-nextcloud.path;
     };
     postgresql = {
