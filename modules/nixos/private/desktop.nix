@@ -149,6 +149,8 @@ in
           plasma6.excludePackages = with pkgs.kdePackages; [
             elisa
             khelpcenter
+            kate
+            gwenview
           ];
         }
       )
