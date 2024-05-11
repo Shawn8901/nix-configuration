@@ -65,6 +65,7 @@ in
       enable = true;
       hostName = "next.clansap.org";
       adminPasswordFile = secrets.nextcloud-admin.path;
+      notify_push.package = pkgs.nextcloud-notify_push;
       home = "/var/lib/nextcloud";
       package = pkgs.nextcloud27;
       prometheus.passwordFile = secrets.prometheus-nextcloud.path;
