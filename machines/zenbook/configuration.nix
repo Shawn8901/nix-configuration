@@ -187,5 +187,8 @@ in
     desktop.enable = true;
     managed-user.enable = true;
   };
-  programs.steam.extraCompatPackages = [ fPkgs.proton-ge-custom ];
+  programs.steam = {
+    extraCompatPackages = [ fPkgs.proton-ge-custom ];
+    protontricks.enable = true;
+  };
 }
