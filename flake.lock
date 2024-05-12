@@ -257,11 +257,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1715459966,
-        "narHash": "sha256-yvnMoMDmV4BScJQPmluySsHxE4okKEFipiNmigLr9y8=",
+        "lastModified": 1715515306,
+        "narHash": "sha256-Q0Wg4tH3VpYWrPxHHY4jSUpbLsKIDpsmkbQwEs6sSn0=",
         "owner": "Shawn8901",
         "repo": "nixpkgs",
-        "rev": "989496e5e81e573bb7ee9f1b6f02800df61e85cb",
+        "rev": "d8b06b06893758390c72a648fc8ce78788f9f1db",
         "type": "github"
       },
       "original": {
@@ -337,11 +337,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1715510046,
-        "narHash": "sha256-8vnBKbq8tLdeM6qbKmRAferbDOm7t6U3+slJH7ecI3I=",
+        "lastModified": 1715515425,
+        "narHash": "sha256-P38giLBpbJM5GbXp4sEsJgzzqX4jEeNDyzsx6aaJzCA=",
         "owner": "Shawn8901",
         "repo": "stfc-bot",
-        "rev": "4853ec779cba4bcb4076805d34d7216247ee179f",
+        "rev": "40815e4cfee6a48ac948bd3078f24aa3f911484e",
         "type": "github"
       },
       "original": {
