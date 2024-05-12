@@ -17,6 +17,7 @@ let
   stalwart_rocksdb = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "8.10.0";
+
     src = fetchFromGitHub {
       owner = "facebook";
       repo = "rocksdb";
@@ -24,10 +25,12 @@ let
       hash = "sha256-KGsYDBc1fz/90YYNGwlZ0LUKXYsP1zyhP29TnRQwgjQ=";
     };
   };
-in
-rustPlatform.buildRustPackage rec {
-  pname = "stalwart-mail";
+
   version = "0.7.3";
+in
+rustPlatform.buildRustPackage {
+  pname = "stalwart-mail";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
@@ -37,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "sha256-/q+27KM/syWmRUiXhrzRqG8arjD007jL5JedU4RGC20=";
+  cargoHash = "sha256-/q+27KM/syWmRUiXhrzRqG8arjD007jL5JedU4RGC20=";
 
   nativeBuildInputs = [
     pkg-config
@@ -80,6 +83,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/stalwartlabs/mail-server";
     changelog = "https://github.com/stalwartlabs/mail-server/blob/${version}/CHANGELOG";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [ shawn8901 ];
   };
 }
