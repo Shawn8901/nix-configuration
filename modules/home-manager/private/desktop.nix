@@ -183,7 +183,6 @@ in
 
           # python dev
           ms-python.python
-          ms-python.vscode-pylance
 
           # typescript dev
           esbenp.prettier-vscode
