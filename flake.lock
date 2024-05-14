@@ -5,9 +5,7 @@
         "crane": [
           "crane"
         ],
-        "flake-compat": [
-          "flake-compat"
-        ],
+        "flake-compat": "flake-compat",
         "flake-utils": [
           "flake-utils"
         ],
@@ -292,7 +290,6 @@
         "attic": "attic",
         "crane": "crane",
         "firefox-addons": "firefox-addons",
-        "flake-compat": "flake-compat",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "fp-rndp-lib": "fp-rndp-lib",

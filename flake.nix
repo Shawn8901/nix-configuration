@@ -11,7 +11,6 @@
         nixpkgs.follows = "nixpkgs-stable";
         nixpkgs-stable.follows = "nixpkgs-stable";
         flake-utils.follows = "flake-utils";
-        flake-compat.follows = "flake-compat";
         crane.follows = "crane";
       };
     };
@@ -63,10 +62,6 @@
       url = "github:Shawn8901/fp-rndp-lib";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
-    };
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
     };
   };
 
