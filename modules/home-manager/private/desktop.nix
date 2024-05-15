@@ -234,6 +234,7 @@ in
             "editor.formatOnSave" = true;
             "editor.formatOnPaste" = true;
             "editor.formatOnType" = false;
+            "editor.defaultFormatter" = "ms-python.autopep8";
           };
           "[typescript]" = {
             "editor.defaultFormatter" = "esbenp.prettier-vscode";
