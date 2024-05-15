@@ -183,6 +183,10 @@ in
 
           # python dev
           ms-python.python
+          ms-python.vscode-pylance
+          ms-python.debugpy
+          ms-python.isort
+          ms-python.autopep8
 
           # typescript dev
           esbenp.prettier-vscode
@@ -258,6 +262,8 @@ in
               };
             };
           };
+          "python.analysis.autoImportCompletions" = true;
+          "python.analysis.typeCheckingMode" = "standard";
         };
       };
 
