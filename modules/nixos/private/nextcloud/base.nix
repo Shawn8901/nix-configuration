@@ -53,23 +53,18 @@ in
       ];
     };
 
-    systemd =
-      let
-        cfgN = config.services.nextcloud;
-        nextcloudUrl = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
-      in
-      {
-        services.nextcloud-setup.after = [ "postgresql.service" ];
-        sockets.nextcloud-notify_push = {
-          socketConfig = {
-            ListenStream = config.services.nextcloud.notify_push.socketPath;
-            RemoveOnStop = true;
-            FlushPending = true;
-          };
-          wantedBy = [ "sockets.target" ];
+    systemd = {
+      services.nextcloud-setup.after = [ "postgresql.service" ];
+      sockets.nextcloud-notify_push = {
+        socketConfig = {
+          ListenStream = config.services.nextcloud.notify_push.socketPath;
+          RemoveOnStop = true;
+          FlushPending = true;
         };
-        services.nextcloud-notify_push.after = [ "nextcloud-notify_push.socket" ];
+        wantedBy = [ "sockets.target" ];
       };
+      services.nextcloud-notify_push.after = [ "nextcloud-notify_push.socket" ];
+    };
 
     services = {
       nextcloud = mkMerge [
