@@ -51,7 +51,6 @@ in
       environmentFile = secrets.stalwart-fallback-admin.path;
       hostname = "mail.trivia-gs.de";
       settings.acme."letsencrypt" = {
-        directory = "https://acme-staging-v02.api.letsencrypt.org/directory";
         challenge = "tls-alpn-01";
         contact = [ "barannikov.de@gmail.com" ];
         cache = "%{BASE_PATH}%/etc/acme";
