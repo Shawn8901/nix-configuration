@@ -62,11 +62,9 @@ in
         services.nextcloud-setup.after = [ "postgresql.service" ];
         sockets.nextcloud-notify_push = {
           socketConfig = {
-            socketConfig = {
-              ListenStream = config.services.nextcloud.notify_push.socketPath;
-              RemoveOnStop = true;
-              FlushPending = true;
-            };
+            ListenStream = config.services.nextcloud.notify_push.socketPath;
+            RemoveOnStop = true;
+            FlushPending = true;
           };
           wantedBy = [ "sockets.target" ];
         };
