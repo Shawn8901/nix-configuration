@@ -54,7 +54,6 @@ in
     };
 
     systemd = {
-      services.nextcloud-setup.after = [ "postgresql.service" ];
       sockets.nextcloud-notify_push = {
         socketConfig = {
           ListenStream = config.services.nextcloud.notify_push.socketPath;
@@ -83,6 +82,7 @@ in
           autoUpdateApps.enable = true;
           autoUpdateApps.startAt = "Sun 14:00:00";
           maxUploadSize = "1G";
+          database.createLocally = true;
           config = {
             dbtype = "pgsql";
             dbuser = "nextcloud";
