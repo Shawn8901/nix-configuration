@@ -54,13 +54,17 @@ in
     };
 
     systemd = {
-      services.nextcloud-setup.after = [ "postgresql.service" ];
-      services.nextcloud-notify_push = {
-        serviceConfig = {
-          Restart = "on-failure";
-          RestartSec = "5s";
+      sockets.nextcloud-notify_push = {
+        socketConfig = {
+          ListenStream = config.services.nextcloud.notify_push.socketPath;
+          FlushPending = true;
         };
+        wantedBy = [ "sockets.target" ];
       };
+      services.nextcloud-notify_push.after = [
+        "nextcloud-notify_push.socket"
+        "nginx-config-reload.service"
+      ];
     };
 
     services = {
@@ -78,6 +82,7 @@ in
           autoUpdateApps.enable = true;
           autoUpdateApps.startAt = "Sun 14:00:00";
           maxUploadSize = "1G";
+          database.createLocally = true;
           config = {
             dbtype = "pgsql";
             dbuser = "nextcloud";
