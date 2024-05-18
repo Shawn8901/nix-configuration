@@ -58,7 +58,6 @@ in
       sockets.nextcloud-notify_push = {
         socketConfig = {
           ListenStream = config.services.nextcloud.notify_push.socketPath;
-          RemoveOnStop = true;
           FlushPending = true;
         };
         wantedBy = [ "sockets.target" ];
