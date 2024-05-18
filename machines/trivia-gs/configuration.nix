@@ -17,6 +17,14 @@ in
     stalwart-fallback-admin = { };
   };
 
+  networking.firewall = {
+    allowedUDPPorts = [ 443 ];
+    allowedTCPPorts = [
+      80
+      443
+    ];
+  };
+
   systemd.network = {
     enable = true;
     networks = {
