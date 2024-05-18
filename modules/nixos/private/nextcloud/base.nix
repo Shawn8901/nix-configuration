@@ -55,14 +55,7 @@ in
 
     systemd = {
       services.nextcloud-setup.after = [ "postgresql.service" ];
-      sockets.nextcloud-notify_push = {
-        socketConfig = {
-          ListenStream = config.services.nextcloud.notify_push.socketPath;
-          FlushPending = true;
-        };
-        wantedBy = [ "sockets.target" ];
-      };
-      services.nextcloud-notify_push.after = [ "nextcloud-notify_push.socket" ];
+      services.nextcloud-notify_push.after = [ "nginx-config-reload.service" ];
     };
 
     services = {
