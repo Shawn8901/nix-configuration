@@ -12,12 +12,7 @@ in
   options = {
     services.noisetorch = {
       enable = mkEnableOption "noisetorch service";
-      package = mkOption {
-        type = types.package;
-        default = pkgs.noisetorch;
-        defaultText = literalExpression "pkgs.noisetorch";
-        description = "Which package to use for noisetorch";
-      };
+      package = mkPackageOption pkgs "noisetorch" { };
       threshold = mkOption {
         type = types.int;
         default = -1;
@@ -43,9 +38,7 @@ in
         Requires = "${cfg.deviceUnit}";
         After = "${cfg.deviceUnit}";
       };
-      Install = {
-        WantedBy = [ "default.target" ];
-      };
+      Install.WantedBy = [ "default.target" ];
       Service = {
         Type = "simple";
         RemainAfterExit = "yes";

@@ -55,11 +55,9 @@ in
       pulseaudio.enable = false;
       bluetooth.enable = false;
     };
-    security = {
-      acme = {
-        acceptTerms = true;
-        defaults.email = lib.mkDefault "shawn@pointjig.de";
-      };
+    security.acme = {
+      acceptTerms = true;
+      defaults.email = lib.mkDefault "shawn@pointjig.de";
     };
 
     programs.nano.enable = false;

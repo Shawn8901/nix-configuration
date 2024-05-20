@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkOption
+    mkPackageOption
     mkDefault
     mkIf
     types
@@ -19,10 +20,7 @@ in
   options = {
     shawn8901.postgresql = {
       enable = mkEnableOption "Enables a preconfigured postgresql instance";
-      package = mkOption {
-        type = types.package;
-        default = pkgs.postgresql_16;
-      };
+      package = mkPackageOption pkgs "postgresql_16" { };
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/postgresql/${cfg.package.psqlSchema}";

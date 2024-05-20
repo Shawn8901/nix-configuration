@@ -11,6 +11,7 @@ let
     mkDefault
     mkMerge
     mkOption
+    mkPackageOption
     types
     literalExpression
     optionalAttrs
@@ -29,13 +30,9 @@ in
         type = types.str;
         description = "Home directory of the nextcloud";
       };
-      package = mkOption { type = types.package; };
+      package = mkPackageOption pkgs "nextcloud29" { };
       adminPasswordFile = mkOption { type = types.path; };
-      notify_push.package = mkOption {
-        type = types.nullOr types.package;
-        default = null;
-        defaultText = literalExpression "null";
-      };
+      notify_push.package = mkPackageOption pkgs "nextcloud-notify_push" { };
       prometheus.passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -53,9 +50,7 @@ in
       ];
     };
 
-    systemd = {
-      services.nextcloud-setup.after = [ "nginx-config-reload.service" ];
-    };
+    systemd.services.nextcloud-setup.after = [ "nginx-config-reload.service" ];
 
     services = {
       nextcloud = mkMerge [

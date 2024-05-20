@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkIf
     mkEnableOption
+    mkPackageOption
     mkOption
     types
     ;
@@ -36,7 +37,7 @@ in
   config = mkIf cfg.enable {
     # FIXME: Sound support shoud be configurable
     sound.enable = true;
-    environment.systemPackages = with pkgs; [ cifs-utils ];
+    environment.systemPackages = [ pkgs.cifs-utils ];
     services.udev.extraRules = ''
       SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="${cfg.device.idVendor}", ATTRS{idProduct}=="${cfg.device.idProduct}", ATTR{partition}=="${cfg.device.partition}", TAG+="systemd", ENV{SYSTEMD_WANTS}="backup-usb@%k.service"
     '';

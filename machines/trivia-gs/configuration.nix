@@ -82,25 +82,19 @@ in
         enableACME = true;
         http3 = true;
         kTLS = true;
-        locations = {
-          "/" = {
-            proxyPass = "http://localhost:8080";
-            recommendedProxySettings = true;
-          };
+        locations."/" = {
+          proxyPass = "http://localhost:8080";
+          recommendedProxySettings = true;
         };
       };
     };
   };
-  systemd.services.stalwart-mail.serviceConfig = {
-    # Hack to read acme certificate from nginx
-    Group = "nginx";
-  };
+  # Hack to read acme certificate from nginx
+  systemd.services.stalwart-mail.serviceConfig.Group = "nginx";
 
-  security = {
-    acme = {
-      acceptTerms = true;
-      defaults.email = "barannikov.de@gmail.com";
-    };
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "barannikov.de@gmail.com";
   };
 
   users = {
@@ -113,7 +107,5 @@ in
     };
   };
 
-  shawn8901 = {
-    server.enable = true;
-  };
+  shawn8901.server.enable = true;
 }

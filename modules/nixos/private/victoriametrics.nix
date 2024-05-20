@@ -15,6 +15,17 @@ let
     ;
 
   cfg = config.shawn8901.victoriametrics;
+  yaml = pkgs.formats.yaml { };
+
+  authConfig = yaml.generate "auth.yml" {
+    users = [
+      {
+        username = "vm";
+        password = "%{PASSWORD}";
+        url_prefix = "http://${config.services.victoriametrics.listenAddress}";
+      }
+    ];
+  };
 in
 {
   options = {
@@ -34,36 +45,19 @@ in
     };
   };
   config = mkIf cfg.enable {
-    systemd.services.vmauth =
-      let
-        authConfig = (pkgs.formats.yaml { }).generate "auth.yml" {
-          users = [
-            {
-              username = "vm";
-              password = "%{PASSWORD}";
-              url_prefix = "http://${config.services.victoriametrics.listenAddress}";
-            }
-          ];
-        };
-      in
-      {
-        description = "VictoriaMetrics basic auth proxy";
-        after = [ "network-online.target" ];
-        requires = [ "network-online.target" ];
-        startLimitBurst = 5;
-        serviceConfig = {
-          Restart = "on-failure";
-          RestartSec = 1;
-          DynamicUser = true;
-          EnvironmentFile = cfg.credentialsFile;
-          ExecStart = ''
-            ${cfg.package}/bin/vmauth \
-              -auth.config=${authConfig} \
-              -httpListenAddr=:${toString cfg.port}
-          '';
-        };
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.vmauth = {
+      description = "VictoriaMetrics basic auth proxy";
+      after = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
+      serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = 5;
+        DynamicUser = true;
+        EnvironmentFile = cfg.credentialsFile;
+        ExecStart = "${cfg.package}/bin/vmauth -auth.config=${authConfig} -httpListenAddr=:${toString cfg.port}";
       };
+      wantedBy = [ "multi-user.target" ];
+    };
 
     services = {
       nginx = {
@@ -71,17 +65,15 @@ in
         recommendedGzipSettings = true;
         recommendedOptimisation = true;
         recommendedTlsSettings = true;
-        virtualHosts = {
-          "${cfg.hostname}" = {
-            enableACME = true;
-            forceSSL = true;
-            http3 = true;
-            kTLS = true;
-            locations."/" = {
-              proxyPass = "http://127.0.0.1:${toString cfg.port}";
-              proxyWebsockets = true;
-              recommendedProxySettings = true;
-            };
+        virtualHosts."${cfg.hostname}" = {
+          enableACME = true;
+          forceSSL = true;
+          http3 = true;
+          kTLS = true;
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:${toString cfg.port}";
+            proxyWebsockets = true;
+            recommendedProxySettings = true;
           };
         };
       };

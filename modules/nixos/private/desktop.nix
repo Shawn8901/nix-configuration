@@ -90,24 +90,16 @@ in
       bluetooth = {
         enable = true;
         package = pkgs.bluez5-experimental;
-        settings = {
-          General = {
-            Experimental = true;
-          };
-        };
-        input = {
-          General = {
-            ClassicBondedOnly = false;
-          };
-        };
+        settings.General.Experimental = true;
+        input.General.ClassicBondedOnly = false;
       };
       pulseaudio.enable = false;
       opengl = {
         enable = true;
         driSupport = true;
         driSupport32Bit = true;
-        extraPackages = with pkgs; [ libva ];
-        extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
+        extraPackages = [ pkgs.libva ];
+        extraPackages32 = [ pkgs.pkgsi686Linux.libva ];
       };
     };
     sound.enable = false;
@@ -122,25 +114,23 @@ in
           _JAVA_AWT_WM_NONREPARENTING = "1";
           GTK_USE_PORTAL = "1";
         };
-        systemPackages =
-          with pkgs;
-          lib.mkMerge [
-            (lib.optionals (config.services ? desktopManager && config.services.desktopManager.plasma6.enable) (
-              with pkgs.kdePackages;
-              [
-                ark
-                print-manager
-                kate
-                skanlite
-                kalk
-              ]
-            ))
+        systemPackages = lib.mkMerge [
+          (lib.optionals (config.services ? desktopManager && config.services.desktopManager.plasma6.enable) (
+            with pkgs.kdePackages;
             [
-              git
-              inputs'.nh.packages.default
-              (pkgs.btop.override { rocmSupport = true; })
+              ark
+              print-manager
+              kate
+              skanlite
+              kalk
             ]
-          ];
+          ))
+          [
+            pkgs.git
+            inputs'.nh.packages.default
+            (pkgs.btop.override { rocmSupport = true; })
+          ]
+        ];
       }
       (lib.optionalAttrs
         (config.services ? desktopManager && config.services.desktopManager.plasma6.enable)

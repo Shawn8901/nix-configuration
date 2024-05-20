@@ -7,6 +7,8 @@
 let
   cfg = config.shawn8901.shutdown-wakeup;
 
+  wakeupPackage = cfg.package.override { inherit (cfg) wakeupTime; };
+
   inherit (lib)
     mkIf
     mkEnableOption
@@ -42,22 +44,16 @@ in
       timers.sched-shutdown = {
         wantedBy = [ "timers.target" ];
         partOf = [ "sched-shutdown.service" ];
-        timerConfig = {
-          OnCalendar = [ "*-*-* ${cfg.shutdownTime}" ];
-        };
+        timerConfig.OnCalendar = [ "*-*-* ${cfg.shutdownTime}" ];
       };
 
-      services.rtcwakeup =
-        let
-          rtcHelper = cfg.package.override { inherit (cfg) wakeupTime; };
-        in
-        {
-          description = "Automatic wakeup";
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${rtcHelper}/bin/rtc-helper";
-          };
+      services.rtcwakeup = {
+        description = "Automatic wakeup";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${lib.getExe wakeupPackage}/bin/rtc-helper";
         };
+      };
       timers.rtcwakeup = {
         wantedBy = [ "timers.target" ];
         partOf = [ "sched-shutdown.service" ];

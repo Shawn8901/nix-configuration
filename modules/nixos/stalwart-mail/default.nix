@@ -17,6 +17,14 @@ let
 
   configFile = configFormat.generate "stalwart-mail.toml" cfg.settings;
 
+  mkListener =
+    config: protocol:
+    lib.mkIf config.enable {
+      inherit protocol;
+      bind = [ "${config.listenAddress}:${toString config.port}" ];
+      tls.implicit = config.tls;
+    };
+
   listenerOpts = name: port: tls: {
     enable = mkOption {
       type = types.bool;
@@ -203,23 +211,13 @@ in
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
 
-      server.listener =
-        let
-          mkListener =
-            config: protocol:
-            lib.mkIf config.enable ({
-              inherit protocol;
-              bind = [ "${config.listenAddress}:${toString config.port}" ];
-              tls.implicit = config.tls;
-            });
-        in
-        {
-          smtp = mkListener cfg.smtp "smtp";
-          submissions = mkListener cfg.submissions "smtp";
-          imap = mkListener cfg.imap "imap";
-          managesieve = mkListener cfg.managesieve "managesieve";
-          http = mkListener cfg.http "http";
-        };
+      server.listener = {
+        smtp = mkListener cfg.smtp "smtp";
+        submissions = mkListener cfg.submissions "smtp";
+        imap = mkListener cfg.imap "imap";
+        managesieve = mkListener cfg.managesieve "managesieve";
+        http = mkListener cfg.http "http";
+      };
 
       inherit (cfg) store storage directory;
 

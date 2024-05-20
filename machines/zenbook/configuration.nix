@@ -17,12 +17,8 @@ in
   imports = [ ./save-darlings.nix ];
 
   sops.secrets = {
-    zrepl = {
-      restartUnits = [ "zrepl.service" ];
-    };
-    samba = {
-      sopsFile = ./../../files/secrets-desktop.yaml;
-    };
+    zrepl.restartUnits = [ "zrepl.service" ];
+    samba.sopsFile = ./../../files/secrets-desktop.yaml;
   };
 
   networking = {
@@ -85,22 +81,18 @@ in
       enable = true;
       package = pkgs.zrepl;
       settings = {
-        global = {
-          monitoring = [
-            {
-              type = "prometheus";
-              listen = ":9811";
-              listen_freebind = true;
-            }
-          ];
-        };
+        global.monitoring = [
+          {
+            type = "prometheus";
+            listen = ":9811";
+            listen_freebind = true;
+          }
+        ];
         jobs = [
           {
             name = "zenbook";
             type = "push";
-            filesystems = {
-              "rpool/safe<" = true;
-            };
+            filesystems."rpool/safe<" = true;
             snapshotting = {
               type = "periodic";
               interval = "1h";

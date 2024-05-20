@@ -57,9 +57,7 @@ in
       "zfs"
       "ntfs"
     ];
-    kernel.sysctl = {
-      "vm.swappiness" = lib.mkDefault 1;
-    };
+    kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
     zfs.devNodes = "/dev/disk/by-id";
     loader = {
       systemd-boot.enable = true;
@@ -111,7 +109,9 @@ in
   };
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
-  hardware.cpu.amd.updateMicrocode = true;
-  hardware.enableRedistributableFirmware = true;
+  hardware = {
+    cpu.amd.updateMicrocode = true;
+    enableRedistributableFirmware = true;
+  };
   powerManagement.enable = true;
 }

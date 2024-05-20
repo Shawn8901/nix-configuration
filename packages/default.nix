@@ -58,14 +58,10 @@ in
 
         jameica-fhs = pkgs.callPackage ./jameica/fhsenv.nix { };
 
-        libcapi = pkgs.callPackage ./libcapi { };
-        librm = pkgs.callPackage ./librm { inherit (packages) libcapi; };
-        rogerrouter = pkgs.callPackage ./rogerrouter { inherit (packages) librm; };
-
         deezer = pkgsStable.callPackage ./deezer { };
 
         # remove with 24.11
-        vdhcoapp = pkgs.vdhcoapp;
+        inherit (pkgs) vdhcoapp;
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
 

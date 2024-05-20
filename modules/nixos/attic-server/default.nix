@@ -77,9 +77,7 @@ in
             avg-size = 65536;
             max-size = 262144;
           };
-          compression = {
-            type = "zstd";
-          };
+          compression.type = "zstd";
           garbage-collection = {
             interval = "12 hours";
             default-retention-period = "1 months";

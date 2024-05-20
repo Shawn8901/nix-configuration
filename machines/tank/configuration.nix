@@ -68,16 +68,12 @@ in
   systemd = {
     network = {
       enable = true;
-      networks = {
-        "20-wired" = {
-          matchConfig.Name = "eno1";
-          networkConfig.DHCP = "yes";
-          networkConfig.Domains = "fritz.box ~box ~.";
-        };
+      networks."20-wired" = {
+        matchConfig.Name = "eno1";
+        networkConfig.DHCP = "yes";
+        networkConfig.Domains = "fritz.box ~box ~.";
       };
-      wait-online = {
-        ignoredInterfaces = [ "enp4s0" ];
-      };
+      wait-online.ignoredInterfaces = [ "enp4s0" ];
     };
     services.prometheus-fritz-exporter = {
       requires = [ "network-online.target" ];
@@ -86,19 +82,17 @@ in
   };
   nix.settings.cores = 4;
   services = {
-    openssh = {
-      hostKeys = [
-        {
-          path = "/persist/etc/ssh/ssh_host_ed25519_key";
-          type = "ed25519";
-        }
-        {
-          path = "/persist/etc/ssh/ssh_host_rsa_key";
-          type = "rsa";
-          bits = 4096;
-        }
-      ];
-    };
+    openssh.hostKeys = [
+      {
+        path = "/persist/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+      {
+        path = "/persist/etc/ssh/ssh_host_rsa_key";
+        type = "rsa";
+        bits = 4096;
+      }
+    ];
     zfs = {
       trim.enable = true;
       autoScrub = {
@@ -113,15 +107,13 @@ in
       enable = true;
       package = pkgs.zrepl;
       settings = {
-        global = {
-          monitoring = [
-            {
-              type = "prometheus";
-              listen = ":9811";
-              listen_freebind = true;
-            }
-          ];
-        };
+        global.monitoring = [
+          {
+            type = "prometheus";
+            listen = ":9811";
+            listen_freebind = true;
+          }
+        ];
         jobs = [
           {
             name = "rpool_safe";
@@ -162,11 +154,7 @@ in
               key = secrets.zrepl.path;
               server_cn = "pointalpha";
             };
-            recv = {
-              placeholder = {
-                encryption = "inherit";
-              };
-            };
+            recv.placeholder.encryption = "inherit";
             pruning = {
               keep_sender = [
                 { type = "not_replicated"; }
@@ -197,11 +185,7 @@ in
               key = secrets.zrepl.path;
               client_cns = [ "zenbook" ];
             };
-            recv = {
-              placeholder = {
-                encryption = "inherit";
-              };
-            };
+            recv.placeholder.encryption = "inherit";
           }
           {
             name = "sapsrv01";
@@ -216,11 +200,7 @@ in
               key = secrets.zrepl.path;
               server_cn = "sapsrv01";
             };
-            recv = {
-              placeholder = {
-                encryption = "inherit";
-              };
-            };
+            recv.placeholder.encryption = "inherit";
             pruning = {
               keep_receiver = [
                 {
@@ -251,11 +231,7 @@ in
               key = secrets.zrepl.path;
               server_cn = "sapsrv02";
             };
-            recv = {
-              placeholder = {
-                encryption = "inherit";
-              };
-            };
+            recv.placeholder.encryption = "inherit";
             pruning = {
               keep_receiver = [
                 {
@@ -276,9 +252,7 @@ in
           {
             name = "tank_data";
             type = "snap";
-            filesystems = {
-              "ztank/data<" = true;
-            };
+            filesystems."ztank/data<" = true;
             snapshotting = {
               type = "periodic";
               interval = "1h";
@@ -302,9 +276,7 @@ in
           {
             name = "tank_replica";
             type = "push";
-            filesystems = {
-              "ztank/replica<" = true;
-            };
+            filesystems."ztank/replica<" = true;
             snapshotting = {
               type = "periodic";
               interval = "1h";
@@ -454,9 +426,7 @@ in
       isSystemUser = true;
       group = "users";
     };
-    shawn = {
-      extraGroups = [ "nextcloud" ];
-    };
+    shawn.extraGroups = [ "nextcloud" ];
     attic = {
       isNormalUser = false;
       isSystemUser = true;
@@ -542,7 +512,5 @@ in
     managed-user.enable = true;
   };
 
-  environment = {
-    etc.".ztank_key".source = secrets.zfs-ztank-key.path;
-  };
+  environment.etc.".ztank_key".source = secrets.zfs-ztank-key.path;
 }

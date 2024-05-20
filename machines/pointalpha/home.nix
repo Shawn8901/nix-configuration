@@ -6,7 +6,7 @@
 }:
 let
   fPkgs = self'.packages;
-  attic-client = inputs'.attic.packages.attic-client;
+  inherit (inputs'.attic.packages) attic-client;
 in
 {
   shawn8901.desktop.enable = true;

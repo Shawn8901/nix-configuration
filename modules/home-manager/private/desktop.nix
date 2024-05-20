@@ -25,13 +25,7 @@ in
   };
   config = mkIf cfg.enable {
 
-    sops = {
-      secrets = {
-        attic = {
-          path = "${config.xdg.configHome}/attic/config.toml";
-        };
-      };
-    };
+    sops.secrets.attic.path = "${config.xdg.configHome}/attic/config.toml";
 
     xdg = {
       enable = true;
@@ -321,18 +315,12 @@ in
         userName = "Shawn8901";
         userEmail = "shawn8901@googlemail.com";
         extraConfig = {
-          init = {
-            defaultBranch = "main";
-          };
-          push = {
-            autoSetupRemote = "true";
-          };
+          init.defaultBranch = "main";
+          push.autoSetupRemote = "true";
         };
       };
 
-      gh = {
-        enable = true;
-      };
+      gh.enable = true;
       ssh = {
         enable = true;
         matchBlocks = {
