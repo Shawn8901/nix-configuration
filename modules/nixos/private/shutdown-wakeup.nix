@@ -51,7 +51,7 @@ in
         description = "Automatic wakeup";
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${lib.getExe wakeupPackage}/bin/rtc-helper";
+          ExecStart = lib.getExe wakeupPackage;
         };
       };
       timers.rtcwakeup = {
