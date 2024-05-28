@@ -6,11 +6,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "grafana-datasource";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchzip {
     url = "https://github.com/VictoriaMetrics/${finalAttrs.pname}/releases/download/v${finalAttrs.version}/victoriametrics-datasource-v${finalAttrs.version}.zip";
-    hash = "sha256-wp/umPyEW3lwSltF4SpcdNjgNMfktKg7cR8klU381G4=";
+    hash = "sha256-UyRxWantFdhgB2+0cq8rQXBFQGXIdUFjezYRWbRjwnQ=";
   };
 
   dontConfigure = true;
