@@ -132,10 +132,9 @@ in
       };
     };
   };
-  systemd.services.stalwart-mail.serviceConfig = {
-    # Hack to read acme certificate from nginx
-    Group = "nginx";
-  };
+
+  # So that we can read acme certificate from nginx
+  users.users.stalwart-mail.extraGroups = [ "nginx" ];
 
   security = {
     auditd.enable = false;

@@ -89,8 +89,6 @@ in
       };
     };
   };
-  # Hack to read acme certificate from nginx
-  systemd.services.stalwart-mail.serviceConfig.Group = "nginx";
 
   security.acme = {
     acceptTerms = true;
@@ -99,11 +97,15 @@ in
 
   users = {
     mutableUsers = false;
-    users.root = {
-      hashedPasswordFile = secrets.root.path;
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
-      ];
+    users = {
+      # So that we can read acme certificate from nginx
+      stalwart-mail.extraGroups = [ "nginx" ];
+      root = {
+        hashedPasswordFile = secrets.root.path;
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMguHbKev03NMawY9MX6MEhRhd6+h2a/aPIOorgfB5oM shawn"
+        ];
+      };
     };
   };
 

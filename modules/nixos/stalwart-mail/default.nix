@@ -227,6 +227,14 @@ in
       };
     };
 
+    users = {
+      groups.stalwart-mail = { };
+      users.stalwart-mail = {
+        isSystemUser = true;
+        group = "stalwart-mail";
+      };
+    };
+
     systemd.services.stalwart-mail = {
       wantedBy = [ "multi-user.target" ];
       after = [
@@ -249,8 +257,8 @@ in
         StandardError = "journal";
         SyslogIdentifier = "stalwart-mail";
 
-        DynamicUser = true;
         User = "stalwart-mail";
+        Group = "stalwart-mail";
         StateDirectory = "stalwart-mail";
 
         # Bind standard privileged ports
