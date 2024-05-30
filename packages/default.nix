@@ -65,7 +65,22 @@ in
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
 
-        stalwart-mail = pkgs.callPackage ./stalwart-mail { };
+        stalwart-mail_0_7 = pkgs.stalwart-mail.overrideAttrs (old: rec {
+          pname = "stalwart-mail_0_7";
+          version = "0.7.3";
+          src = pkgs.fetchFromGitHub {
+            owner = "stalwartlabs";
+            repo = "mail-server";
+            rev = "v${version}";
+            hash = "sha256-Hpb7/GLrbZkruY3UTWdwIzwiwgcCT/JzFnUH5tCZaOQ=";
+            fetchSubmodules = true;
+          };
+          cargoDeps = old.cargoDeps.overrideAttrs (_: {
+            inherit src;
+            name = "${pname}-${version}-vendor.tar.gz";
+            outputHash = "sha256-k0CB1L8B6+bizBxcj1QM7CjFjC8spbRZ9ERU+9gqmgY=";
+          });
+        });
       };
     in
     {

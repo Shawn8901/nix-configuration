@@ -113,7 +113,7 @@ in
     };
     stalwart-mail = {
       enable = true;
-      package = fPkgs.stalwart-mail;
+      package = fPkgs.stalwart-mail_0_7;
       http = {
         listenAddress = "127.0.0.1";
         port = 8080;
