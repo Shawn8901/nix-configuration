@@ -7,16 +7,6 @@
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
       url = "github:zhaofengli/attic";
-      inputs = {
-        nixpkgs.follows = "nixpkgs-stable";
-        nixpkgs-stable.follows = "nixpkgs-stable";
-        flake-utils.follows = "flake-utils";
-        crane.follows = "crane";
-      };
-    };
-    crane = {
-      url = "github:ipetkov/crane";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
