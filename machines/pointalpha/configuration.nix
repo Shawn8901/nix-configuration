@@ -188,8 +188,4 @@ in
     managed-user.enable = true;
   };
 
-  programs.steam = {
-    extraCompatPackages = [ fPkgs.proton-ge-custom ];
-    protontricks.enable = true;
-  };
 }

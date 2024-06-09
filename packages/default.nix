@@ -50,9 +50,6 @@ in
         #   SDL2 = pkgs.SDL2.override { withStatic = true; };
         # };
 
-        # https://github.com/NixOS/nixpkgs/pull/294532, aliased for compatibility
-        # remove with 24.11
-        proton-ge-custom = pkgs.proton-ge-bin;
         pytr = pkgs.python3.pkgs.callPackage ./pytr { };
         asus-touchpad-numpad-driver = pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver { };
 

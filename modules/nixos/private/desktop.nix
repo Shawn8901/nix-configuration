@@ -151,6 +151,7 @@ in
         ssh.startAgent = true;
         steam = {
           enable = true;
+          extraCompatPackages = [ pkgs.proton-ge-bin ];
           package = pkgs.steam-small.override {
             extraEnv = {
               inherit (config.environment.sessionVariables) AMD_VULKAN_ICD;
@@ -172,7 +173,6 @@ in
             ];
           };
         };
-        haguichi.enable = false;
       }
       (lib.optionalAttrs (config.programs ? kde-pim) {
         kde-pim = {
