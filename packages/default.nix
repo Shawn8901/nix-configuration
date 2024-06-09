@@ -27,15 +27,9 @@ in
     };
 
   flake = withSystem "x86_64-linux" (
-    { system, ... }:
+    { system, pkgs, ... }:
     let
-      pkgs = import inputs.nixpkgs {
-        inherit system;
-        config.allowUnfreePredicate = pkg: elem (lib.getName pkg) [ ];
-        config.permittedInsecurePackages = [ ];
-      };
-
-      pkgsStable = import inputs.nixpkgs-stable {
+      pkgsDeezer = import inputs.nixpkgs-deezer {
         inherit system;
         config.allowUnfreePredicate = pkg: elem (lib.getName pkg) [ "deezer" ];
         config.permittedInsecurePackages = [ "electron-13.6.9" ];
@@ -55,7 +49,7 @@ in
 
         jameica-fhs = pkgs.callPackage ./jameica/fhsenv.nix { };
 
-        deezer = pkgsStable.callPackage ./deezer { };
+        deezer = pkgsDeezer.callPackage ./deezer { };
 
         # remove with 24.11
         inherit (pkgs) vdhcoapp;
