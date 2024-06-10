@@ -55,6 +55,14 @@ in
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
 
+        stalwart-mail = pkgs.stalwart-mail.overrideAttrs (old: {
+          postInstall = ''
+            mkdir -p $out/etc/stalwart
+            cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
+            cp -r resources/config/spamfilter $out/etc/stalwart/
+          '';
+        });
+
         stalwart-mail_0_7 = pkgs.stalwart-mail.overrideAttrs (old: rec {
           pname = "stalwart-mail_0_7";
           version = "0.7.3";
@@ -65,6 +73,7 @@ in
             hash = "sha256-Hpb7/GLrbZkruY3UTWdwIzwiwgcCT/JzFnUH5tCZaOQ=";
             fetchSubmodules = true;
           };
+
           postInstall = ''
             mkdir -p $out/etc/stalwart $out/share/web/
             cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
