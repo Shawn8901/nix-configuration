@@ -65,6 +65,13 @@ in
             hash = "sha256-Hpb7/GLrbZkruY3UTWdwIzwiwgcCT/JzFnUH5tCZaOQ=";
             fetchSubmodules = true;
           };
+          postInstall = ''
+            mkdir -p $out/etc/stalwart $out/share/web/
+            cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
+            cp -r resources/config/spamfilter $out/etc/stalwart/
+            cp resources/webadmin.zip $out/share/web/
+          '';
+
           cargoDeps = old.cargoDeps.overrideAttrs (_: {
             inherit src;
             name = "${pname}-${version}-vendor.tar.gz";
