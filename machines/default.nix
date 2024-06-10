@@ -47,14 +47,12 @@ in
       home-manager.shawn = { };
     };
     pointjig = {
-      nixpkgs = inputs.nixpkgs-stable;
-      hmInput = inputs.home-manager-stable;
+      inherit (inputs) nixpkgs;
+      hmInput = inputs.home-manager;
       home-manager.shawn = { };
-      disabledModules = [ "services/mail/stalwart-mail.nix" ];
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
-        ../modules/nixos/stalwart-mail
       ];
     };
     shelter = {

@@ -26,15 +26,15 @@
     };
     mimir = {
       url = "github:Shawn8901/mimir";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     mimir-client = {
       url = "github:Shawn8901/mimir-client";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     stfc-bot = {
       url = "github:Shawn8901/stfc-bot";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
