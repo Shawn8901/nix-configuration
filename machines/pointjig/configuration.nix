@@ -97,6 +97,11 @@ in
     };
     nginx = {
       package = pkgs.nginxQuic;
+      virtualHosts."pointjig.de" = {
+        enableACME = true;
+        forceSSL = true;
+        globalRedirect = mailHostname;
+      };
       virtualHosts."${mailHostname}" = {
         serverName = "${mailHostname}";
         forceSSL = true;
