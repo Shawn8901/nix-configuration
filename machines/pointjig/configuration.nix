@@ -19,8 +19,8 @@ in
       group = "mimir";
     };
     stfc-env = {
-      owner = "stfc-bot";
-      group = "stfc-bot";
+      owner = "stfcbot";
+      group = "stfcbot";
     };
     stalwart-fallback-admin = { };
   };

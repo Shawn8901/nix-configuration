@@ -52,8 +52,8 @@ in
     # };
     #  stfc-env-dev = {
     #   file = ../../secrets/stfc-env-dev.age;
-    #   owner = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
-    #   group = lib.mkIf config.services.stfc-bot.enable "stfc-bot";
+    #   owner = lib.mkIf config.services.stfc-bot.enable "stfcbot";
+    #   group = lib.mkIf config.services.stfc-bot.enable "stfcbot";
     # };
   };
 
