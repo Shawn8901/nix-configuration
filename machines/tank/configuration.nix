@@ -45,6 +45,11 @@ in
       owner = "hydra-queue-runner";
       group = "hydra";
     };
+    stalwart-fallback-admin = {
+      owner = "stalwart-mail";
+      group = "stalwart-mail";
+    };
+
     # mimir-env-dev = {
     #   file = ../../secrets/mimir-env-dev.age;
     #   owner = lib.mkIf config.services.stne-mimir.enable "mimir";
@@ -460,6 +465,94 @@ in
         ];
       }
     ];
+
+    nginx = {
+      package = pkgs.nginxQuic;
+      virtualHosts."tank.pointjig.de" = {
+        serverName = "tank.pointjig.de";
+        forceSSL = true;
+        enableACME = true;
+        http3 = true;
+        kTLS = true;
+        locations = {
+          "/" = {
+            proxyPass = "http://localhost:8080";
+            recommendedProxySettings = true;
+          };
+        };
+      };
+    };
+
+    stalwart-mail =
+      let
+        package = fPkgs.stalwart-mail;
+      in
+      {
+        enable = true;
+        inherit package;
+        settings = {
+          store = {
+            db.type = "rocksdb";
+            db.path = "/var/lib/stalwart-mail/db";
+            db.compression = "lz4";
+          };
+          storage.blob = "db";
+
+          config.resource = {
+            spam-filter = "file://${package}/etc/stalwart/spamfilter.toml";
+            webadmin = "file://${fPkgs.stalwart-webadmin.webadmin}/webadmin.zip";
+          };
+          authentication.fallback-admin = {
+            user = "admin";
+            secret = "%{env:FALLBACK_ADMIN_PASSWORD}%";
+          };
+          lookup.default.hostname = "tank.pointjig.de";
+          tracer.stdout = {
+            level = "trace";
+          };
+          certificate.default = {
+            private-key = "%{file:/var/lib/acme/tank.pointjig.de/key.pem}%";
+            cert = "%{file:/var/lib/acme/tank.pointjig.de/cert.pem}%";
+            default = true;
+          };
+          server.http.use-x-forwarded = true;
+          server.tls.enable = true;
+          server.listener = {
+            "submission" = {
+              bind = [ "[::]:587" ];
+              protocol = "smtp";
+            };
+            "submissions" = {
+              bind = [ "[::]:465" ];
+              protocol = "smtp";
+              tls.implicit = true;
+            };
+            "imaptls" = {
+              bind = [ "[::]:993" ];
+              protocol = "imap";
+              tls.implicit = true;
+            };
+            "sieve" = {
+              bind = [ "[::]:4190" ];
+              protocol = "managesieve";
+            };
+            "http" = {
+              bind = [ "127.0.0.1:8080" ];
+              protocol = "http";
+            };
+          };
+        };
+      };
+  };
+  users.users.stalwart-mail.extraGroups = [ "nginx" ];
+  systemd.services.stalwart-mail = {
+    preStart = ''
+      mkdir -p /var/lib/stalwart-mail/{queue,reports,db}
+    '';
+    serviceConfig = {
+      User = "stalwart-mail";
+      EnvironmentFile = [ secrets.stalwart-fallback-admin.path ];
+    };
   };
 
   shawn8901 = {
