@@ -204,15 +204,15 @@
     "mimir": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1716403098,
-        "narHash": "sha256-2LVYWEbxboPkktfPY4QTd0pziyltGNZut03iBt1mAno=",
+        "lastModified": 1718032557,
+        "narHash": "sha256-RjGgK4IgF/M/H4ojl6Hm+LDpmv68wsc1fLNGfkJ2274=",
         "owner": "Shawn8901",
         "repo": "mimir",
-        "rev": "e6ca114b04df9d33a8601b5dc06bc299debe1784",
+        "rev": "18bc0f361d4a3c06c8eece62fe7d39a1aa386d34",
         "type": "github"
       },
       "original": {
@@ -224,7 +224,7 @@
     "mimir-client": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -386,15 +386,15 @@
     "stfc-bot": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1718040922,
-        "narHash": "sha256-DxRNrBxlZaggXuczuWJqV6BWaXaQTT3oGwWHNDRvk0M=",
+        "lastModified": 1718053830,
+        "narHash": "sha256-g6oZRJmeI5VGrDJyop1Jj+co0JzUL+75dCDg843WoHs=",
         "owner": "Shawn8901",
         "repo": "stfc-bot",
-        "rev": "5ba762c81e8e7381f53bed4a4a175687d72147fa",
+        "rev": "807f65eb41bdb22928ed7fa3a0030c6c352ae24c",
         "type": "github"
       },
       "original": {
