@@ -90,8 +90,6 @@ in
     };
     trivia-gs = {
       inherit (inputs) nixpkgs;
-      disabledModules = [ "services/mail/stalwart-mail.nix" ];
-      extraModules = [ ../modules/nixos/stalwart-mail ];
     };
   };
 

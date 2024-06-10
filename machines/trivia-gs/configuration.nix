@@ -10,6 +10,8 @@
 let
   inherit (config.sops) secrets;
   fPkgs = self'.packages;
+
+  hostname = "mail.trivia-gs.de";
 in
 {
   sops.secrets = {
@@ -22,6 +24,11 @@ in
     allowedTCPPorts = [
       80
       443
+      # Mail ports for stalwart
+      587
+      465
+      993
+      4190
     ];
   };
 
@@ -40,10 +47,8 @@ in
         };
         routes = [
           {
-            routeConfig = {
-              Gateway = "2a05:bec0:1:16::1";
-              GatewayOnLink = "yes";
-            };
+            Gateway = "2a05:bec0:1:16::1";
+            GatewayOnLink = "yes";
           }
         ];
       };
@@ -51,33 +56,85 @@ in
     wait-online.anyInterface = true;
   };
 
+  systemd.services.stalwart-mail = {
+    preStart = ''
+      mkdir -p /var/lib/stalwart-mail/{queue,reports,db}
+    '';
+    serviceConfig = {
+      User = "stalwart-mail";
+      EnvironmentFile = [ secrets.stalwart-fallback-admin.path ];
+    };
+  };
+
   services = {
     fstrim.enable = true;
-    stalwart-mail = {
-      enable = true;
-      package = fPkgs.stalwart-mail_0_7;
-      http = {
-        listenAddress = "127.0.0.1";
-        port = 8080;
-        openFirewall = false;
-        tls = false;
-      };
-      environmentFile = secrets.stalwart-fallback-admin.path;
-      hostname = "mail.trivia-gs.de";
-      settings = {
-        certificate.default = {
-          private-key = "%{file:/var/lib/acme/mail.pointjig.de/key.pem}%";
-          cert = "%{file:/var/lib/acme/mail.pointjig.de/cert.pem}%";
-          default = true;
+    stalwart-mail =
+      let
+        package = fPkgs.stalwart-mail;
+      in
+      {
+        enable = true;
+        inherit package;
+        settings = {
+          store.db = {
+            type = "rocksdb";
+            path = "/var/lib/stalwart-mail/db";
+            compression = "lz4";
+          };
+          storage.blob = "db";
+
+          config.resource = {
+            spam-filter = "file://${package}/etc/stalwart/spamfilter.toml";
+            webadmin = "file://${fPkgs.stalwart-webadmin.webadmin}/webadmin.zip";
+          };
+          authentication.fallback-admin = {
+            user = "admin";
+            secret = "%{env:FALLBACK_ADMIN_PASSWORD}%";
+          };
+          lookup.default.hostname = hostname;
+          tracer.stdout = {
+            level = "trace";
+          };
+          certificate.default = {
+            private-key = "%{file:/var/lib/acme/${hostname}/key.pem}%";
+            cert = "%{file:/var/lib/acme/${hostname}/cert.pem}%";
+            default = true;
+          };
+          server = {
+            http.use-x-forwarded = true;
+            tls.enable = true;
+            listener = {
+              "submission" = {
+                bind = [ "[::]:587" ];
+                protocol = "smtp";
+              };
+              "submissions" = {
+                bind = [ "[::]:465" ];
+                protocol = "smtp";
+                tls.implicit = true;
+              };
+              "imaptls" = {
+                bind = [ "[::]:993" ];
+                protocol = "imap";
+                tls.implicit = true;
+              };
+              "sieve" = {
+                bind = [ "[::]:4190" ];
+                protocol = "managesieve";
+              };
+              "http" = {
+                bind = [ "127.0.0.1:8080" ];
+                protocol = "http";
+              };
+            };
+          };
         };
-        server.http.use-x-forwarded = true;
       };
-    };
     nginx = {
       enable = true;
       package = pkgs.nginxQuic;
-      virtualHosts."${config.services.stalwart-mail.hostname}" = {
-        serverName = "${config.services.stalwart-mail.hostname}";
+      virtualHosts."${hostname}" = {
+        serverName = "${hostname}";
         forceSSL = true;
         enableACME = true;
         http3 = true;
