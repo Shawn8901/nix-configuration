@@ -153,9 +153,6 @@ in
             secret = "%{env:FALLBACK_ADMIN_PASSWORD}%";
           };
           lookup.default.hostname = mailHostname;
-          tracer.stdout = {
-            level = "trace";
-          };
           certificate.default = {
             private-key = "%{file:/var/lib/acme/${mailHostname}/key.pem}%";
             cert = "%{file:/var/lib/acme/${mailHostname}/cert.pem}%";
