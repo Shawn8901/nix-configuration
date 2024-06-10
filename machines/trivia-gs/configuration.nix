@@ -133,6 +133,11 @@ in
     nginx = {
       enable = true;
       package = pkgs.nginxQuic;
+      virtualHosts."trivia-gs.de" = {
+        enableACME = true;
+        forceSSL = true;
+        globalRedirect = hostname;
+      };
       virtualHosts."${hostname}" = {
         serverName = "${hostname}";
         forceSSL = true;
