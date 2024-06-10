@@ -526,11 +526,6 @@ in
               bind = [ "[::]:587" ];
               protocol = "smtp";
             };
-            "submissions" = {
-              bind = [ "[::]:465" ];
-              protocol = "smtp";
-              tls.implicit = true;
-            };
             "imaptls" = {
               bind = [ "[::]:993" ];
               protocol = "imap";

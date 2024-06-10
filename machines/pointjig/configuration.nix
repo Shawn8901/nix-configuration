@@ -34,7 +34,6 @@ in
       # Mail ports for stalwart
       25
       587
-      465
       993
       4190
     ];
@@ -173,11 +172,6 @@ in
               "submission" = {
                 bind = [ "[::]:587" ];
                 protocol = "smtp";
-              };
-              "submissions" = {
-                bind = [ "[::]:465" ];
-                protocol = "smtp";
-                tls.implicit = true;
               };
               "imaptls" = {
                 bind = [ "[::]:993" ];
