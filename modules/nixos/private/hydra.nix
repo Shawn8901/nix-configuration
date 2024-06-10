@@ -225,7 +225,6 @@ in
             "github:Mic92/sops-nix/"
             "github:zhaofengli/"
             "github:ipetkov/crane/"
-            "github:viperML/nh/"
             "gitlab:rycee/nur-expressions/"
             "github:Shawn8901/"
           ];

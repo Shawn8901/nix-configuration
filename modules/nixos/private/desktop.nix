@@ -127,7 +127,7 @@ in
           ))
           [
             pkgs.git
-            inputs'.nh.packages.default
+            pkgs.nh
             (pkgs.btop.override { rocmSupport = true; })
           ]
         ];
