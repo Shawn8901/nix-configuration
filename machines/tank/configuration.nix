@@ -518,6 +518,10 @@ in
           server.http.use-x-forwarded = true;
           server.tls.enable = true;
           server.listener = {
+            "smtp" = {
+              bind = [ "[::]:25" ];
+              protocol = "smtp";
+            };
             "submission" = {
               bind = [ "[::]:587" ];
               protocol = "smtp";

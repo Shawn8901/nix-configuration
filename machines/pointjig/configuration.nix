@@ -32,6 +32,7 @@ in
       80
       443
       # Mail ports for stalwart
+      25
       587
       465
       993
@@ -165,6 +166,10 @@ in
             http.use-x-forwarded = true;
             tls.enable = true;
             listener = {
+              "smtp" = {
+                bind = [ "[::]:25" ];
+                protocol = "smtp";
+              };
               "submission" = {
                 bind = [ "[::]:587" ];
                 protocol = "smtp";
