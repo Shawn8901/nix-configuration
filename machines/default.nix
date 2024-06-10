@@ -15,8 +15,8 @@ in
   config.fp-rndp-lib.nixosConfigurations = {
     watchtower = {
       hostPlatform.system = "aarch64-linux";
-      nixpkgs = inputs.nixpkgs-stable;
-      hmInput = inputs.home-manager-stable;
+      nixpkgs = inputs.nixpkgs-oldstable;
+      hmInput = inputs.home-manager-oldstable;
       home-manager.shawn = { };
       extraModules = [
         inputs.attic.nixosModules.atticd
@@ -24,7 +24,7 @@ in
       ];
     };
     next = {
-      nixpkgs = inputs.nixpkgs-stable;
+      nixpkgs = inputs.nixpkgs-oldstable;
     };
     pointalpha = {
       inherit (inputs) nixpkgs;
@@ -56,8 +56,8 @@ in
       ];
     };
     shelter = {
-      nixpkgs = inputs.nixpkgs-stable;
-      hmInput = inputs.home-manager-stable;
+      nixpkgs = inputs.nixpkgs-oldstable;
+      hmInput = inputs.home-manager-oldstable;
       home-manager.shawn = { };
     };
     tank = {

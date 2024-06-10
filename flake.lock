@@ -180,10 +180,10 @@
         "type": "github"
       }
     },
-    "home-manager-stable": {
+    "home-manager-oldstable": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs-oldstable"
         ]
       },
       "locked": {
@@ -273,6 +273,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-oldstable": {
+      "locked": {
+        "lastModified": 1717880976,
+        "narHash": "sha256-BRvSCsKtDUr83NEtbGfHLUOdDK0Cgbezj2PtcHnz+sQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "4913a7c3d8b8d00cb9476a6bd730ff57777f740c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-23.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1711460390,
@@ -291,16 +307,16 @@
     },
     "nixpkgs-stable_2": {
       "locked": {
-        "lastModified": 1717880976,
-        "narHash": "sha256-BRvSCsKtDUr83NEtbGfHLUOdDK0Cgbezj2PtcHnz+sQ=",
+        "lastModified": 1718048385,
+        "narHash": "sha256-8UaxqnMghgo58lUNkp3za/Huaa6S1KaFsVLVRSW7//M=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "4913a7c3d8b8d00cb9476a6bd730ff57777f740c",
+        "rev": "9cdf81533a2698d2d9e259dcd539a02b24dd18ac",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-23.11",
+        "ref": "release-23.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -329,12 +345,12 @@
         "flake-utils": "flake-utils_2",
         "fp-rndp-lib": "fp-rndp-lib",
         "home-manager": "home-manager",
-        "home-manager-stable": "home-manager-stable",
+        "home-manager-oldstable": "home-manager-oldstable",
         "mimir": "mimir",
         "mimir-client": "mimir-client",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-deezer": "nixpkgs-deezer",
-        "nixpkgs-stable": "nixpkgs-stable_2",
+        "nixpkgs-oldstable": "nixpkgs-oldstable",
         "sops-nix": "sops-nix",
         "stfc-bot": "stfc-bot"
       }
@@ -344,9 +360,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "nixpkgs-stable": [
-          "nixpkgs-stable"
-        ]
+        "nixpkgs-stable": "nixpkgs-stable_2"
       },
       "locked": {
         "lastModified": 1717902109,
