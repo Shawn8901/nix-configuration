@@ -63,7 +63,13 @@ in
   };
 
   networking = {
-    firewall.allowedTCPPorts = flakeConfig.shawn8901.zrepl.servePorts config.services.zrepl;
+    firewall.allowedTCPPorts = (flakeConfig.shawn8901.zrepl.servePorts config.services.zrepl) ++ [
+      # Mail ports for stalwart
+      25
+      587
+      993
+      4190
+    ];
     hosts = {
       "127.0.0.1" = lib.attrNames config.services.nginx.virtualHosts;
       "::1" = lib.attrNames config.services.nginx.virtualHosts;
