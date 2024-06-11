@@ -11,7 +11,7 @@ let
   inherit (config.sops) secrets;
   inherit (inputs') attic;
 
-  vmPackage = pkgs.victoriametrics.override {
+  vmPackage = self'.packages.victoriametrics.override {
     withBackupTools = false;
     withVmAlert = false;
     withVictoriaLogs = false;

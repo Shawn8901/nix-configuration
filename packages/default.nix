@@ -19,6 +19,7 @@ in
         generate-zrepl-ssl = pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix { };
         vm-grafana-datasource = pkgs.callPackage ./vm-grafana-datasource { };
         stalwart-webadmin = pkgs.callPackage ./stalwart-webadmin { };
+        victoriametrics = pkgs.callPackage ./victoriametrics { };
       };
     in
     {
