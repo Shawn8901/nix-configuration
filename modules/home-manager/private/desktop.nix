@@ -320,7 +320,10 @@ in
         };
       };
 
-      gh.enable = true;
+      gh = {
+        enable = true;
+        extensions = [ pkgs.gh-poi ];
+      };
       ssh = {
         enable = true;
         matchBlocks = {
