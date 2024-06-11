@@ -84,6 +84,15 @@
       ];
     };
 
+    "/var/lib/stalwart-mail" = {
+      device = "/persist/var/lib/stalwart-mail";
+      options = [
+        "bind"
+        "noauto"
+        "x-systemd.automount"
+      ];
+    };
+
     "/var/lib/nixos" = {
       device = "/persist/var/lib/nixos";
       noCheck = true;
