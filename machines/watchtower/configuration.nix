@@ -46,7 +46,7 @@ in
     nginx.package = pkgs.nginxQuic;
     vmagent = {
       package = vmPackage;
-      remoteWriteUrl = lib.mkForce "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
+      remoteWrite.url = lib.mkForce "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
       extraArgs = lib.mkForce [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
     };
   };
