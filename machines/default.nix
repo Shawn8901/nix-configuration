@@ -56,8 +56,8 @@ in
       ];
     };
     shelter = {
-      nixpkgs = inputs.nixpkgs-oldstable;
-      hmInput = inputs.home-manager-oldstable;
+      nixpkgs = inputs.nixpkgs-stable;
+      hmInput = inputs.home-manager-stable;
       home-manager.shawn = { };
     };
     tank = {
