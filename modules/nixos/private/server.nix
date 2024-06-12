@@ -22,13 +22,14 @@ in
     };
   };
   config = mkIf cfg.enable {
-    documentation.man.enable = false;
-
-    environment.systemPackages = [
-      pkgs.gitMinimal
-      pkgs.btop
-      (pkgs.nixos-rebuild.override { nix = config.nix.package.out; })
-    ];
+    environment = {
+      noXlibs = false;
+      systemPackages = [
+        pkgs.gitMinimal
+        pkgs.btop
+        (pkgs.nixos-rebuild.override { nix = config.nix.package.out; })
+      ];
+    };
 
     system = {
       disableInstallerTools = true;
