@@ -15,8 +15,8 @@ in
   config.fp-rndp-lib.nixosConfigurations = {
     watchtower = {
       hostPlatform.system = "aarch64-linux";
-      nixpkgs = inputs.nixpkgs-oldstable;
-      hmInput = inputs.home-manager-oldstable;
+      nixpkgs = inputs.nixpkgs-stable;
+      hmInput = inputs.home-manager-stable;
       home-manager.shawn = { };
       extraModules = [
         inputs.attic.nixosModules.atticd
