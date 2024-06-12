@@ -24,7 +24,7 @@ in
       ];
     };
     next = {
-      nixpkgs = inputs.nixpkgs-oldstable;
+      nixpkgs = inputs.nixpkgs-stable;
     };
     pointalpha = {
       inherit (inputs) nixpkgs;
