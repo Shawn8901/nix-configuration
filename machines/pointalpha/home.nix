@@ -2,11 +2,11 @@
   self',
   inputs',
   pkgs,
+  lib,
   ...
 }:
 let
   fPkgs = self'.packages;
-  inherit (inputs'.attic.packages) attic-client;
 in
 {
   shawn8901.desktop.enable = true;
@@ -16,9 +16,9 @@ in
     pkgs.teamspeak_client
     pkgs.signal-desktop
     pkgs.portfolio
+    pkgs.attic-client
     fPkgs.jameica-fhs
     fPkgs.pytr
-    attic-client
   ];
 
   systemd.user.services.attic-watch-store = {
@@ -29,7 +29,7 @@ in
       WantedBy = [ "default.target" ];
     };
     Service = {
-      ExecStart = "${attic-client}/bin/attic watch-store nixos";
+      ExecStart = "${lib.getExe pkgs.attic-client} watch-store nixos";
     };
   };
 }
