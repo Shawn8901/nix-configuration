@@ -604,7 +604,6 @@ in
       writeTokenFile = secrets.github-write-token.path;
       builder.sshKeyFile = secrets.ssh-builder-key.path;
       attic.enable = true;
-      attic.package = inputs'.attic.packages.attic-client;
     };
     server.enable = true;
     managed-user.enable = true;

@@ -8,6 +8,7 @@ let
   cfg = config.shawn8901.hydra;
   inherit (lib)
     mkEnableOption
+    mkPackageOption
     mkOption
     mkDefault
     types
@@ -29,7 +30,7 @@ in
       writeTokenFile = mkOption { type = types.path; };
       attic = {
         enable = mkEnableOption "Enables usage of attic as binary cache";
-        package = mkOption { type = types.package; };
+        package = mkPackageOption pkgs "attic-client" { };
       };
       builder = {
         sshKeyFile = mkOption { type = types.path; };
