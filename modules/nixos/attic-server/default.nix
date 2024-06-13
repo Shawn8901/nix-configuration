@@ -65,6 +65,7 @@ in
         inherit (cfg) package credentialsFile;
 
         enable = true;
+        useFlakeCompatOverlay = false;
         settings = {
           allowed-hosts = [ cfg.hostName ];
           api-endpoint = "https://${cfg.hostName}/";

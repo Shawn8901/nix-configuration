@@ -19,7 +19,7 @@ in
       hmInput = inputs.home-manager-stable;
       home-manager.shawn = { };
       extraModules = [
-        inputs.attic.nixosModules.atticd
+        (inputs.attic + "/nixos/atticd.nix")
         ../modules/nixos/attic-server
       ];
     };
