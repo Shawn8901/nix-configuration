@@ -8,6 +8,7 @@ let
   inherit (lib)
     types
     mkEnableOption
+    mkPackageOption
     mkOption
     mkDefault
     mkIf
@@ -23,7 +24,7 @@ in
         type = types.str;
         description = "full qualified hostname of the attic instance";
       };
-      package = mkOption { type = types.package; };
+      package = mkPackageOption pkgs "attic-server" { };
       credentialsFile = mkOption { type = types.path; };
     };
   };

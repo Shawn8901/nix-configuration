@@ -9,7 +9,6 @@
 }:
 let
   inherit (config.sops) secrets;
-  inherit (inputs') attic;
 
   vmPackage = self'.packages.victoriametrics.override {
     withBackupTools = false;
@@ -68,7 +67,6 @@ in
     attic = {
       enable = true;
       hostName = "cache.pointjig.de";
-      package = attic.packages.attic;
       credentialsFile = secrets.attic-env.path;
     };
     victoriametrics = {
