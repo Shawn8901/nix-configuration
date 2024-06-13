@@ -146,6 +146,11 @@ in
                 port = 9199
               </prometheus>
             </hydra_notify>
+            <githubstatus>
+              jobs = .*
+              useShortContext = true
+              excludeBuildFromContext = 1
+            </githubstatus>
           '';
         };
     };
