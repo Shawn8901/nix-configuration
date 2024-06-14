@@ -35,7 +35,6 @@ in
     kernelModules = [
       "kvm-intel"
       "cifs"
-      "snd_pcsp"
     ];
     kernelPackages = pkgs.linuxPackages;
     extraModulePackages = with config.boot.kernelPackages; [ it87 ];

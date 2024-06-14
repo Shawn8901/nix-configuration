@@ -93,6 +93,12 @@
       ];
     };
 
+    "/var/lib/alsa" = {
+      device = "/persist/var/lib/alsa";
+      noCheck = true;
+      options = [ "bind" ];
+    };
+
     "/var/lib/nixos" = {
       device = "/persist/var/lib/nixos";
       noCheck = true;

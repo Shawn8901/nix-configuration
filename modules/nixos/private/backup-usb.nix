@@ -35,9 +35,20 @@ in
     };
   };
   config = mkIf cfg.enable {
-    # FIXME: Sound support shoud be configurable
-    sound.enable = true;
+
     environment.systemPackages = [ pkgs.cifs-utils ];
+
+    nixpkgs.config.packageOverrides = pkgs: {
+      # ubuntu blacklists pc speaker as it annoys them
+      kmod-blacklist-ubuntu = pkgs.kmod-blacklist-ubuntu.overrideAttrs (old: {
+        patchPhase = ''
+          sed -i '/blacklist pcspkr/d' ./modprobe.d/blacklist.conf
+        '';
+      });
+    };
+
+    boot.kernelModules = [ "pcspkr" ];
+
     services.udev.extraRules = ''
       SUBSYSTEM=="block", ACTION=="add", ATTRS{idVendor}=="${cfg.device.idVendor}", ATTRS{idProduct}=="${cfg.device.idProduct}", ATTR{partition}=="${cfg.device.partition}", TAG+="systemd", ENV{SYSTEMD_WANTS}="backup-usb@%k.service"
     '';
