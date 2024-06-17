@@ -19,7 +19,7 @@ in
   options = {
     hardware.asus-numberpad-driver = {
       enable = mkEnableOption "Enables support for asus touchpad numpads";
-      package = mkPackageOption pkgs "asus-numberpad-driver";
+      package = mkPackageOption pkgs "asus-numberpad-driver" { };
       model = mkOption {
         type = types.str;
         description = "Model of the touchpad.";

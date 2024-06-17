@@ -146,10 +146,10 @@ in
   hardware = {
     sane.enable = true;
     keyboard.zsa.enable = true;
-    asus-touchpad-numpad = {
+    asus-numberpad-driver = {
       enable = true;
-      package = fPkgs.asus-touchpad-numpad-driver;
-      model = "ux433fa";
+      package = fPkgs.asus-numberpad-driver;
+      model = "up5401ea";
     };
     asus.battery = {
       enable = true;
