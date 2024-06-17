@@ -47,36 +47,30 @@ in
       packages = [ pkgs.noto-fonts ];
     };
 
-    services =
-      {
-        acpid.enable = true;
-        avahi = lib.mkMerge [
-          {
-            enable = true;
-            openFirewall = true;
-          }
-          (optionalAttrs (versionOlder config.system.nixos.release "24.05") { nssmdns = true; })
-          (optionalAttrs (!versionOlder config.system.nixos.release "24.05") { nssmdns4 = true; })
-        ];
-        pipewire = {
+    services = {
+      acpid.enable = true;
+      avahi = {
+        enable = true;
+        openFirewall = true;
+        nssmdns4 = true;
+      };
+      pipewire = {
+        enable = true;
+        pulse.enable = true;
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        wireplumber.enable = true;
+      };
+      desktopManager.plasma6.enable = true;
+      displayManager.sddm = {
+        enable = lib.mkDefault true;
+        autoNumlock = true;
+        wayland = {
           enable = true;
-          pulse.enable = true;
-          alsa.enable = true;
-          alsa.support32Bit = true;
-          wireplumber.enable = true;
+          compositor = "kwin";
         };
-      }
-      // (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
-        desktopManager.plasma6.enable = true;
-        displayManager.sddm = {
-          enable = lib.mkDefault true;
-          autoNumlock = true;
-          wayland = {
-            enable = true;
-            compositor = "kwin";
-          };
-        };
-      });
+      };
+    };
 
     security = {
       rtkit.enable = true;
@@ -104,46 +98,37 @@ in
     };
     sound.enable = false;
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    environment = lib.mkMerge [
-      {
-        sessionVariables = {
-          AMD_VULKAN_ICD = "RADV";
-          MOZ_ENABLE_WAYLAND = "1";
-          NIXOS_OZONE_WL = "1";
-          QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-          _JAVA_AWT_WM_NONREPARENTING = "1";
-          GTK_USE_PORTAL = "1";
-        };
-        systemPackages = lib.mkMerge [
-          (lib.optionals (config.services ? desktopManager && config.services.desktopManager.plasma6.enable) (
-            with pkgs.kdePackages;
-            [
-              ark
-              print-manager
-              kate
-              skanlite
-              kalk
-            ]
-          ))
-          [
-            pkgs.git
-            pkgs.nh
-            (pkgs.btop.override { rocmSupport = true; })
-          ]
-        ];
-      }
-      (lib.optionalAttrs
-        (config.services ? desktopManager && config.services.desktopManager.plasma6.enable)
-        {
-          plasma6.excludePackages = with pkgs.kdePackages; [
-            elisa
-            khelpcenter
-            kate
-            gwenview
-          ];
-        }
-      )
-    ];
+    environment = {
+      sessionVariables = {
+        AMD_VULKAN_ICD = "RADV";
+        MOZ_ENABLE_WAYLAND = "1";
+        NIXOS_OZONE_WL = "1";
+        QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+        _JAVA_AWT_WM_NONREPARENTING = "1";
+        GTK_USE_PORTAL = "1";
+        FLAKE = lib.mkDefault "github:shawn8901/nix-configuration";
+      };
+      systemPackages =
+        [
+          pkgs.git
+          pkgs.nh
+          (pkgs.btop.override { rocmSupport = true; })
+        ]
+        ++ (with pkgs.kdePackages; [
+          ark
+          print-manager
+          kate
+          skanlite
+          kalk
+        ]);
+
+      plasma6.excludePackages = with pkgs.kdePackages; [
+        elisa
+        khelpcenter
+        kate
+        gwenview
+      ];
+    };
 
     programs = lib.mkMerge [
       {

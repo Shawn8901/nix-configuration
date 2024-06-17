@@ -180,27 +180,6 @@
         "type": "github"
       }
     },
-    "home-manager-oldstable": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs-oldstable"
-        ]
-      },
-      "locked": {
-        "lastModified": 1717476296,
-        "narHash": "sha256-ScHe38Tr+TxGURC17kby4mIIxOG3aJvZWXzPM79UnEk=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "095ef64aa3b2ab4a4f1bf07f29997e21e3a5576a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "ref": "release-23.11",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "home-manager-stable": {
       "inputs": {
         "nixpkgs": [
@@ -294,22 +273,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-oldstable": {
-      "locked": {
-        "lastModified": 1718229064,
-        "narHash": "sha256-ZFav8A9zPNfjZg/wrxh1uZeMJHELRfRgFP+meq01XYk=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "5c2ec3a5c2ee9909904f860dadc19bc12cd9cc44",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-23.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1711460390,
@@ -382,13 +345,11 @@
         "flake-utils": "flake-utils_2",
         "fp-rndp-lib": "fp-rndp-lib",
         "home-manager": "home-manager",
-        "home-manager-oldstable": "home-manager-oldstable",
         "home-manager-stable": "home-manager-stable",
         "mimir": "mimir",
         "mimir-client": "mimir-client",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-deezer": "nixpkgs-deezer",
-        "nixpkgs-oldstable": "nixpkgs-oldstable",
         "nixpkgs-stable": "nixpkgs-stable_2",
         "sops-nix": "sops-nix",
         "stfc-bot": "stfc-bot"

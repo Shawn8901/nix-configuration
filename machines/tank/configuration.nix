@@ -497,10 +497,10 @@ in
         enable = true;
         inherit package;
         settings = {
-          store = {
-            db.type = "rocksdb";
-            db.path = "/var/lib/stalwart-mail/db";
-            db.compression = "lz4";
+          store.db = {
+            type = "rocksdb";
+            path = "/var/lib/stalwart-mail/db";
+            compression = "lz4";
           };
           storage.blob = "db";
 
@@ -521,29 +521,31 @@ in
             cert = "%{file:/var/lib/acme/tank.pointjig.de/cert.pem}%";
             default = true;
           };
-          server.http.use-x-forwarded = true;
-          server.tls.enable = true;
-          server.listener = {
-            "smtp" = {
-              bind = [ "[::]:25" ];
-              protocol = "smtp";
-            };
-            "submission" = {
-              bind = [ "[::]:587" ];
-              protocol = "smtp";
-            };
-            "imaptls" = {
-              bind = [ "[::]:993" ];
-              protocol = "imap";
-              tls.implicit = true;
-            };
-            "sieve" = {
-              bind = [ "[::]:4190" ];
-              protocol = "managesieve";
-            };
-            "http" = {
-              bind = [ "127.0.0.1:8080" ];
-              protocol = "http";
+          server = {
+            http.use-x-forwarded = true;
+            tls.enable = true;
+            listener = {
+              "smtp" = {
+                bind = [ "[::]:25" ];
+                protocol = "smtp";
+              };
+              "submission" = {
+                bind = [ "[::]:587" ];
+                protocol = "smtp";
+              };
+              "imaptls" = {
+                bind = [ "[::]:993" ];
+                protocol = "imap";
+                tls.implicit = true;
+              };
+              "sieve" = {
+                bind = [ "[::]:4190" ];
+                protocol = "managesieve";
+              };
+              "http" = {
+                bind = [ "127.0.0.1:8080" ];
+                protocol = "http";
+              };
             };
           };
         };

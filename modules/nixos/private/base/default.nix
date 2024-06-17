@@ -7,7 +7,6 @@
 }:
 let
   inherit (lib)
-    mkMerge
     mkDefault
     versionOlder
     optionalAttrs
@@ -38,22 +37,14 @@ in
     swraid.enable = mkDefault false;
     enableContainers = false;
   };
-
-  environment.sessionVariables.FLAKE = lib.mkDefault "github:shawn8901/nix-configuration";
   environment.systemPackages = [ pkgs.vim ];
 
-  services = mkMerge [
-    {
-      lvm.enable = false;
-      journald.extraConfig = ''
-        SystemMaxUse=100M
-        SystemMaxFileSize=50M
-      '';
-    }
-    (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
-      dbus.implementation = "broker";
-    })
-  ]
-
-  ;
+  services = {
+    lvm.enable = false;
+    journald.extraConfig = ''
+      SystemMaxUse=100M
+      SystemMaxFileSize=50M
+    '';
+    dbus.implementation = "broker";
+  };
 }

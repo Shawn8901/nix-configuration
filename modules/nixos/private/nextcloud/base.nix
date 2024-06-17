@@ -9,7 +9,6 @@ let
   inherit (lib)
     mkEnableOption
     mkDefault
-    mkMerge
     mkOption
     mkPackageOption
     types
@@ -53,56 +52,44 @@ in
     systemd.services.nextcloud-setup.after = [ "nginx-config-reload.service" ];
 
     services = {
-      nextcloud = mkMerge [
-        {
-          inherit (cfg) home hostName package;
-          notify_push = {
-            enable = cfg.notify_push.package != null;
-            inherit (cfg.notify_push) package;
-            bendDomainToLocalhost = true;
-          };
-          enable = true;
-          configureRedis = true;
-          https = true;
-          autoUpdateApps.enable = true;
-          autoUpdateApps.startAt = "Sun 14:00:00";
-          maxUploadSize = "1G";
-          database.createLocally = true;
-          config = {
-            dbtype = "pgsql";
-            dbuser = "nextcloud";
-            dbhost = "/run/postgresql";
-            dbname = "nextcloud";
-            adminuser = "admin";
-            adminpassFile = cfg.adminPasswordFile;
-          };
-          caching = {
-            apcu = false;
-            memcached = false;
-          };
-          phpOptions = {
-            "opcache.interned_strings_buffer" = "32";
-            "opcache.enable" = "1";
-            "opcache.save_comments" = "1";
-            "opcache.revalidate_freq" = "60";
-          };
-        }
-        (optionalAttrs (versionOlder config.system.nixos.release "24.05") {
-          extraOptions = {
-            "overwrite.cli.url" = "https://${cfg.hostName}";
-            default_phone_region = "DE";
-            maintenance_window_start = mkDefault "1";
-          };
-        })
-        (optionalAttrs (!versionOlder config.system.nixos.release "24.05") {
-          settings = {
-            "overwrite.cli.url" = "https://${cfg.hostName}";
-            default_phone_region = "DE";
-            maintenance_window_start = mkDefault "1";
-          };
-        })
-      ];
-
+      nextcloud = {
+        inherit (cfg) home hostName package;
+        notify_push = {
+          enable = cfg.notify_push.package != null;
+          inherit (cfg.notify_push) package;
+          bendDomainToLocalhost = true;
+        };
+        enable = true;
+        configureRedis = true;
+        https = true;
+        autoUpdateApps.enable = true;
+        autoUpdateApps.startAt = "Sun 14:00:00";
+        maxUploadSize = "1G";
+        database.createLocally = true;
+        config = {
+          dbtype = "pgsql";
+          dbuser = "nextcloud";
+          dbhost = "/run/postgresql";
+          dbname = "nextcloud";
+          adminuser = "admin";
+          adminpassFile = cfg.adminPasswordFile;
+        };
+        caching = {
+          apcu = false;
+          memcached = false;
+        };
+        phpOptions = {
+          "opcache.interned_strings_buffer" = "32";
+          "opcache.enable" = "1";
+          "opcache.save_comments" = "1";
+          "opcache.revalidate_freq" = "60";
+        };
+        settings = {
+          "overwrite.cli.url" = "https://${cfg.hostName}";
+          default_phone_region = "DE";
+          maintenance_window_start = mkDefault "1";
+        };
+      };
       postgresql = {
         ensureDatabases = [ "${config.services.nextcloud.config.dbname}" ];
         ensureUsers = [

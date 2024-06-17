@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
-    nixpkgs-oldstable.url = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs-deezer.url = "github:NixOS/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
@@ -18,10 +17,6 @@
     home-manager-stable = {
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
-    home-manager-oldstable = {
-      url = "github:nix-community/home-manager/release-23.11";
-      inputs.nixpkgs.follows = "nixpkgs-oldstable";
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
