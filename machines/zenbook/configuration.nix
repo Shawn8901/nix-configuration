@@ -173,6 +173,8 @@ in
     "scanner"
     "lp"
     "networkmanager"
+    "input"
+    "i2c"
   ];
 
   shawn8901 = {
