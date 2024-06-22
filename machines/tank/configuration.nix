@@ -489,67 +489,62 @@ in
       };
     };
 
-    stalwart-mail =
-      let
-        package = fPkgs.stalwart-mail;
-      in
-      {
-        enable = true;
-        inherit package;
-        settings = {
-          store.db = {
-            type = "rocksdb";
-            path = "/var/lib/stalwart-mail/db";
-            compression = "lz4";
-          };
-          storage.blob = "db";
+    stalwart-mail = {
+      enable = true;
+      spam-filter = true;
+      settings = {
+        store.db = {
+          type = "rocksdb";
+          path = "/var/lib/stalwart-mail/db";
+          compression = "lz4";
+        };
+        storage.blob = "db";
 
-          config.resource = {
-            spam-filter = "file://${package}/etc/stalwart/spamfilter.toml";
-            webadmin = "file://${fPkgs.stalwart-webadmin.webadmin}/webadmin.zip";
-          };
-          authentication.fallback-admin = {
-            user = "admin";
-            secret = "%{env:FALLBACK_ADMIN_PASSWORD}%";
-          };
-          lookup.default.hostname = "tank.pointjig.de";
-          tracer.stdout = {
-            level = "trace";
-          };
-          certificate.default = {
-            private-key = "%{file:/var/lib/acme/tank.pointjig.de/key.pem}%";
-            cert = "%{file:/var/lib/acme/tank.pointjig.de/cert.pem}%";
-            default = true;
-          };
-          server = {
-            http.use-x-forwarded = true;
-            tls.enable = true;
-            listener = {
-              "smtp" = {
-                bind = [ "[::]:25" ];
-                protocol = "smtp";
-              };
-              "submission" = {
-                bind = [ "[::]:587" ];
-                protocol = "smtp";
-              };
-              "imaptls" = {
-                bind = [ "[::]:993" ];
-                protocol = "imap";
-                tls.implicit = true;
-              };
-              "sieve" = {
-                bind = [ "[::]:4190" ];
-                protocol = "managesieve";
-              };
-              "http" = {
-                bind = [ "127.0.0.1:8080" ];
-                protocol = "http";
-              };
+        config.resource = {
+          webadmin = "file://${fPkgs.stalwart-webadmin.webadmin}/webadmin.zip";
+        };
+        authentication.fallback-admin = {
+          user = "admin";
+          secret = "%{env:FALLBACK_ADMIN_PASSWORD}%";
+        };
+        lookup.default.hostname = "tank.pointjig.de";
+        tracer.stdout = {
+          level = "trace";
+        };
+        certificate.default = {
+          private-key = "%{file:/var/lib/acme/tank.pointjig.de/key.pem}%";
+          cert = "%{file:/var/lib/acme/tank.pointjig.de/cert.pem}%";
+          default = true;
+        };
+        server = {
+          http.use-x-forwarded = true;
+          tls.enable = true;
+          listener = {
+            "smtp" = {
+              bind = [ "[::]:25" ];
+              protocol = "smtp";
+            };
+            "submission" = {
+              bind = [ "[::]:587" ];
+              protocol = "smtp";
+            };
+            "imaptls" = {
+              bind = [ "[::]:993" ];
+              protocol = "imap";
+              tls.implicit = true;
+            };
+            "sieve" = {
+              bind = [ "[::]:4190" ];
+              protocol = "managesieve";
+            };
+            "http" = {
+              bind = [ "127.0.0.1:8080" ];
+              protocol = "http";
             };
           };
         };
       };
+    };
   };
   users.users.stalwart-mail.extraGroups = [ "nginx" ];
   systemd.services.stalwart-mail = {

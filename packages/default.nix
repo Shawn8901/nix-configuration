@@ -56,14 +56,6 @@ in
         inherit (pkgs) vdhcoapp;
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
-
-        stalwart-mail = pkgs.stalwart-mail.overrideAttrs (old: {
-          postInstall = ''
-            mkdir -p $out/etc/stalwart
-            cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
-            cp -r resources/config/spamfilter $out/etc/stalwart/
-          '';
-        });
       };
     in
     {
