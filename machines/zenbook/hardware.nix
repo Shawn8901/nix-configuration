@@ -26,11 +26,9 @@ in
         "sd_mod"
         "sr_mod"
       ];
-      kernelModules = [ "amdgpu" ];
       systemd.enable = true;
     };
     kernelModules = [
-      "amdgpu"
       "kvm-amd"
       "cifs"
       "usb_storage"

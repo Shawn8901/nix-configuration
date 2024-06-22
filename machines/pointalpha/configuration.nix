@@ -127,6 +127,7 @@ in
   };
 
   hardware = {
+    amdgpu.initrd.enable = true;
     sane = {
       enable = true;
       extraBackends = [

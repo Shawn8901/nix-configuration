@@ -144,6 +144,7 @@ in
     upower.enable = true;
   };
   hardware = {
+    amdgpu.initrd.enable = true;
     sane.enable = true;
     keyboard.zsa.enable = true;
     asus-touchpad-numpad = {
