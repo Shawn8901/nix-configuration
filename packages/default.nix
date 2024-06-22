@@ -64,31 +64,6 @@ in
             cp -r resources/config/spamfilter $out/etc/stalwart/
           '';
         });
-
-        stalwart-mail_0_7 = pkgs.stalwart-mail.overrideAttrs (old: rec {
-          pname = "stalwart-mail_0_7";
-          version = "0.7.3";
-          src = pkgs.fetchFromGitHub {
-            owner = "stalwartlabs";
-            repo = "mail-server";
-            rev = "v${version}";
-            hash = "sha256-Hpb7/GLrbZkruY3UTWdwIzwiwgcCT/JzFnUH5tCZaOQ=";
-            fetchSubmodules = true;
-          };
-
-          postInstall = ''
-            mkdir -p $out/etc/stalwart $out/share/web/
-            cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
-            cp -r resources/config/spamfilter $out/etc/stalwart/
-            cp resources/webadmin.zip $out/share/web/
-          '';
-
-          cargoDeps = old.cargoDeps.overrideAttrs (_: {
-            inherit src;
-            name = "${pname}-${version}-vendor.tar.gz";
-            outputHash = "sha256-k0CB1L8B6+bizBxcj1QM7CjFjC8spbRZ9ERU+9gqmgY=";
-          });
-        });
       };
     in
     {
