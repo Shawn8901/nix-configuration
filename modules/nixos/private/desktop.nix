@@ -80,22 +80,25 @@ in
 
     systemd.defaultUnit = "graphical.target";
 
-    hardware = {
-      bluetooth = {
-        enable = true;
-        package = pkgs.bluez5-experimental;
-        settings.General.Experimental = true;
-        input.General.ClassicBondedOnly = false;
-      };
-      pulseaudio.enable = false;
-      opengl = {
-        enable = true;
-        driSupport = true;
-        driSupport32Bit = true;
-        extraPackages = [ pkgs.libva ];
-        extraPackages32 = [ pkgs.pkgsi686Linux.libva ];
-      };
-    };
+    hardware = lib.mkMerge [
+      {
+        bluetooth = {
+          enable = true;
+          package = pkgs.bluez5-experimental;
+          settings.General.Experimental = true;
+          input.General.ClassicBondedOnly = false;
+        };
+        pulseaudio.enable = false;
+      }
+      (lib.optionalAttrs (!versionOlder config.system.nixos.release "24.11") {
+        graphics = {
+          enable = true;
+          enable32Bit = true;
+          extraPackages = [ pkgs.libva ];
+          extraPackages32 = [ pkgs.pkgsi686Linux.libva ];
+        };
+      })
+    ];
     sound.enable = false;
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     environment = {
