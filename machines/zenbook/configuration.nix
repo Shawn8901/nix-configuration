@@ -147,7 +147,7 @@ in
     sane.enable = true;
     keyboard.zsa.enable = true;
     asus-numberpad-driver = {
-      enable = true;
+      enable = false;
       package = fPkgs.asus-numberpad-driver;
       model = "up5401ea";
     };
@@ -173,8 +173,6 @@ in
     "scanner"
     "lp"
     "networkmanager"
-    "input"
-    "i2c"
   ];
 
   shawn8901 = {

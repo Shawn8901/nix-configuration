@@ -24,6 +24,7 @@ in
         type = types.str;
         description = "Model of the touchpad.";
       };
+
     };
   };
   config = mkIf cfg.enable {
@@ -31,7 +32,7 @@ in
 
     systemd.services.asus-numberpad-driver = {
       description = "Activate Numpad inside the touchpad with top right corner switch";
-      script = "${lib.getExe cfg.package} ${cfg.model}";
+      script = "${lib.getExe cfg.package} ${cfg.model} /etc/asus-numberpad-driver";
       path = [ pkgs.i2c-tools ];
 
       after = [ "display-manager.service" ];
