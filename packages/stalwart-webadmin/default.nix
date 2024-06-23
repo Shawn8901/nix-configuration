@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  fetchurl,
+{ lib
+, fetchFromGitHub
+, stdenv
+, fetchurl
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stalwart-webadmin";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchurl {
     url = "https://github.com/stalwartlabs/webadmin/releases/download/v${finalAttrs.version}/webadmin.zip";
-    hash = "sha256-+FIdiA4iMur8GS46mpTAQpOQYCb11O9oZoiijQ/q6xY=";
+    hash = "sha256-sK7l2Ovu5P5QXtgopzKJsgwtZ64ADs3Jdm29VjeGg6A=";
   };
 
   outputs = [
