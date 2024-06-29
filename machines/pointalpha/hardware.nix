@@ -52,6 +52,7 @@ in
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
+    tmp.useTmpfs = false;
   };
 
   fileSystems = {
