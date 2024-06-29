@@ -160,7 +160,12 @@ in
     };
   };
 
-  nix.settings.keep-outputs = true;
+  nix.settings = {
+    keep-outputs = true;
+    keep-derivations = true;
+    cores = 8;
+    max-jobs = 4;
+  };
   environment = {
     systemPackages = [ pkgs.cifs-utils ];
     etc = {
