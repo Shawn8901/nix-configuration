@@ -215,7 +215,10 @@ in
               ;
           }
         ];
-      settings.max-jobs = 2;
+      settings = {
+        keep-outputs = mkDefault true;
+        keep-derivations = mkDefault true;
+      };
       extraOptions =
         let
           urls = [
