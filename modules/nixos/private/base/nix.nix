@@ -31,6 +31,7 @@ in
   };
 
   nix = {
+    channel.enable = false;
     package = pkgs.nix;
     settings = {
       auto-optimise-store = true;
