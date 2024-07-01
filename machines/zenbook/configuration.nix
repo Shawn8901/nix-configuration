@@ -177,6 +177,29 @@ in
     "networkmanager"
   ];
 
+  security.pam.services.sddm-autologin.text = lib.mkForce ''
+    auth     requisite pam_nologin.so
+    auth     optional  ${config.systemd.package}/lib/security/pam_systemd_loadkey.so keyname=zfs-rpool
+    auth     optional  ${pkgs.kdePackages.kwallet-pam}/lib/security/pam_kwallet5.so kwalletd=${pkgs.kdePackages.kwallet}/bin/kwalletd6
+    auth     required  pam_succeed_if.so uid >= ${toString config.services.displayManager.sddm.autoLogin.minimumUid} quiet
+    auth     required  pam_permit.so
+
+    account  include   sddm
+
+    password include   sddm
+
+    session  include   sddm
+  '';
+  systemd.services.display-manager.serviceConfig.KeyringMode = "inherit";
+  services.displayManager = {
+    autoLogin = {
+      enable = true;
+      user = "shawn";
+    };
+    sessionData.autologinSession = "plasma";
+  };
+  boot.zfs.storeEncryptionCredentials = true;
+
   shawn8901 = {
     desktop.enable = true;
     managed-user.enable = true;
