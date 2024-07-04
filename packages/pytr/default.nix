@@ -1,28 +1,28 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  fetchpatch,
-  writeScript,
-  certifi,
-  coloredlogs,
-  ecdsa,
-  packaging,
-  pathvalidate,
-  pygments,
-  requests-futures,
-  shtab,
-  websockets,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, fetchpatch
+, writeScript
+, certifi
+, coloredlogs
+, ecdsa
+, packaging
+, pathvalidate
+, pygments
+, requests-futures
+, shtab
+, websockets
+,
 }:
 buildPythonApplication rec {
   pname = "pytr";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "marzzzello";
     repo = "pytr";
     rev = version;
-    hash = "sha256-AK7nrRvrJ5n9ngU2jmET2MC/6qP8FEMa9QIjFOWPX1A=";
+    hash = "sha256-4NVjr77Go+sBS5RBf9r2GWtovODZFQN0cQ5RwmAI5iw=";
   };
 
   propagatedBuildInputs = [
