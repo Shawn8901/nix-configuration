@@ -16,13 +16,13 @@
 }:
 buildPythonApplication rec {
   pname = "pytr";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "marzzzello";
     repo = "pytr";
     rev = version;
-    hash = "sha256-4NVjr77Go+sBS5RBf9r2GWtovODZFQN0cQ5RwmAI5iw=";
+    hash = "sha256-USZGXOyAN8zsRjAuJzoqxRxhbAbTZmXSSQIQFW6eWYY=";
   };
 
   propagatedBuildInputs = [
