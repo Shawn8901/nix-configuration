@@ -239,10 +239,7 @@ in
           "nix.serverSettings" = {
             "nil" = {
               "diagnostics" = {
-                "ignored" = [
-                  "unused_binding"
-                  "unused_with"
-                ];
+                "ignored" = [ ];
               };
               "formatting" = {
                 "command" = [ "${getExe pkgs.nixfmt-rfc-style}" ];
