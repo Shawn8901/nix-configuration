@@ -1,16 +1,9 @@
 {
-  self,
-  self',
   inputs,
   lib,
   config,
-  withSystem,
   ...
 }:
-let
-  inherit (config.shawn8901.system-generator) generateSystem;
-  cfg = config.shawn8901.nixosConfigurations;
-in
 {
   config.fp-rndp-lib.nixosConfigurations = {
     watchtower = {

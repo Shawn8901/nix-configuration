@@ -12,7 +12,6 @@ let
     mkOption
     mkDefault
     types
-    literalExpression
     ;
 in
 {

@@ -1,8 +1,7 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, fetchurl
-,
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stalwart-webadmin";

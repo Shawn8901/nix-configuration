@@ -3,7 +3,6 @@
   buildPythonApplication,
   fetchFromGitHub,
   python3,
-  i2c-tools,
 }:
 buildPythonApplication {
   pname = "asus-touchpad-numpad-driver";

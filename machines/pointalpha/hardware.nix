@@ -1,6 +1,5 @@
 {
   self',
-  config,
   pkgs,
   lib,
   modulesPath,

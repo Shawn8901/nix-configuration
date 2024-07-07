@@ -1,17 +1,6 @@
-{
-  inputs',
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, lib, ... }:
 let
-  inherit (lib)
-    mkDefault
-    versionOlder
-    optionalAttrs
-    optionalString
-    ;
+  inherit (lib) mkDefault;
 in
 {
   documentation = {

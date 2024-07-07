@@ -1,10 +1,4 @@
-{
-  self',
-  pkgs,
-  lib,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 let
   inherit (lib)
     types

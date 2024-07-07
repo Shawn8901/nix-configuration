@@ -1,20 +1,11 @@
 {
-  self,
   pkgs,
   lib,
   config,
-  inputs',
   ...
 }:
 let
-  inherit (pkgs.hostPlatform) system;
-  inherit (lib)
-    genAttrs
-    mkIf
-    mkDefault
-    mkForce
-    versionOlder
-    ;
+  inherit (lib) mkDefault mkForce;
 in
 {
   sops.secrets = {

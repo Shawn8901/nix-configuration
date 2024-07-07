@@ -1,18 +1,11 @@
 {
-  self,
   config,
-  flakeConfig,
   lib,
   pkgs,
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    optionalAttrs
-    versionOlder
-    ;
+  inherit (lib) mkEnableOption mkIf;
 
   cfg = config.shawn8901.managed-user;
 in

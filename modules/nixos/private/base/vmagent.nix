@@ -1,18 +1,11 @@
 {
-  self,
   config,
   lib,
-  pkgs,
   flakeConfig,
   ...
 }:
 let
-  inherit (lib)
-    optionals
-    mkMerge
-    optionalAttrs
-    versionOlder
-    ;
+  inherit (lib) optionals mkMerge optionalAttrs;
 in
 {
   sops.secrets = {

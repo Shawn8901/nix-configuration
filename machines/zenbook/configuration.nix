@@ -41,7 +41,6 @@ in
     useNetworkd = false;
     useDHCP = false;
   };
-  services.resolved.enable = false;
   systemd.network.wait-online.anyInterface = true;
 
   environment.systemPackages = with pkgs; [
@@ -50,6 +49,7 @@ in
   ];
 
   services = {
+    resolved.enable = false;
     udev.packages = [ pkgs.libmtp.out ];
     openssh = {
       enable = true;

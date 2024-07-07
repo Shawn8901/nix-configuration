@@ -1,6 +1,5 @@
 {
   self',
-  inputs',
   pkgs,
   lib,
   ...

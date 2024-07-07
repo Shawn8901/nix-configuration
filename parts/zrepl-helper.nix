@@ -1,14 +1,12 @@
-{ lib, flake-parts-lib, ... }:
+{ lib, ... }:
 let
   inherit (lib)
     mkOption
     types
-    literalExpression
     toInt
     removePrefix
     filter
     ;
-  inherit (flake-parts-lib) mkSubmoduleOptions;
 in
 {
   options = {

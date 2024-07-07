@@ -5,8 +5,6 @@
   flakeConfig,
   pkgs,
   lib,
-  inputs,
-  inputs',
   ...
 }:
 let

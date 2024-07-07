@@ -1,17 +1,11 @@
 {
-  inputs',
   config,
   lib,
   pkgs,
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    singleton
-    const
-    ;
+  inherit (lib) mkEnableOption mkIf;
 
   cfg = config.shawn8901.server;
 in

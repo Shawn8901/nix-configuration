@@ -1,6 +1,6 @@
-{ lib, osConfig, ... }:
+{ lib, ... }:
 let
-  inherit (lib) versionOlder mkDefault;
+  inherit (lib) mkDefault;
 in
 {
   home.stateVersion = "23.05";

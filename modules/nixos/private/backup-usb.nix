@@ -9,7 +9,6 @@ let
   inherit (lib)
     mkIf
     mkEnableOption
-    mkPackageOption
     mkOption
     types
     ;

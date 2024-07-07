@@ -1,4 +1,3 @@
-{ self, ... }:
 {
   config.fp-rndp-lib.modules.nixos = {
     public = ./nixos/public;

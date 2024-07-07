@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ config, ... }:
 {
   boot.initrd.systemd.services.initrd-rollback-root = {
     after = [ "zfs-import-rpool.service" ];

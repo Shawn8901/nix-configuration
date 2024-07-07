@@ -80,14 +80,7 @@
 
       flake.hydraJobs =
         let
-          inherit (nixpkgs) lib;
           name = "merge-pr";
-          hosts = map (n: "nixos." + n) (lib.attrNames self.nixosConfigurations);
-          packages = lib.flatten (
-            lib.attrValues (
-              lib.mapAttrs (system: attr: map (p: "${system}.${p}") (lib.attrNames attr)) self.packages
-            )
-          );
         in
         {
           ${name} = nixpkgs.legacyPackages.x86_64-linux.releaseTools.aggregate {
@@ -95,7 +88,7 @@
             meta = {
               schedulingPriority = 10;
             };
-            constituents = hosts;
+            constituents = map (n: "nixos." + n) (nixpkgs.lib.attrNames self.nixosConfigurations);
           };
         };
 

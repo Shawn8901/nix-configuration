@@ -1,16 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchzip
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, writeScript
-, imagemagick
-, p7zip
-, nodePackages
-, electron_13
-,
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  imagemagick,
+  p7zip,
+  nodePackages,
+  electron_13,
 }:
 let
   desktopItem = makeDesktopItem {

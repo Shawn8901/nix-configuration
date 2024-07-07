@@ -1,9 +1,6 @@
 {
-  self,
-  self',
   config,
   flakeConfig,
-  pkgs,
   inputs',
   ...
 }:

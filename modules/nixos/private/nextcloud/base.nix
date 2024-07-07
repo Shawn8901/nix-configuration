@@ -13,8 +13,6 @@ let
     mkPackageOption
     types
     literalExpression
-    optionalAttrs
-    versionOlder
     ;
 in
 {

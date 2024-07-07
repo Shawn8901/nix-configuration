@@ -1,13 +1,10 @@
 {
-  config,
   lib,
-  perSystem,
   withSystem,
   inputs,
   ...
 }:
 let
-  genPackageName = system: packageName: "${system}.${packageName}";
   inherit (builtins) elem;
 in
 {

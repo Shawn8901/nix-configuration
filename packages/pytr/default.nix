@@ -1,18 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, fetchpatch
-, writeScript
-, certifi
-, coloredlogs
-, ecdsa
-, packaging
-, pathvalidate
-, pygments
-, requests-futures
-, shtab
-, websockets
-,
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  certifi,
+  coloredlogs,
+  ecdsa,
+  packaging,
+  pathvalidate,
+  pygments,
+  requests-futures,
+  shtab,
+  websockets,
 }:
 buildPythonApplication rec {
   pname = "pytr";

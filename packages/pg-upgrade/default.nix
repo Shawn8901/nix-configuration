@@ -1,8 +1,4 @@
-{
-  writeShellScriptBin,
-  pkgs,
-  wakeupTime ? "13:00:00",
-}:
+{ pkgs }:
 pkgs.writeScriptBin "upgrade-pg" ''
   set -eux
   systemctl stop postgresql

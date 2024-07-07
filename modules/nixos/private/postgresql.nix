@@ -13,7 +13,6 @@ let
     mkDefault
     mkIf
     types
-    literalExpression
     ;
 in
 {
