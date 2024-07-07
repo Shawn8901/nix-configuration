@@ -1,21 +1,13 @@
 {
-  self',
   pkgs,
   lib,
   config,
-  inputs',
   ...
 }:
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    optionalAttrs
-    versionOlder
-    ;
+  inherit (lib) mkEnableOption mkIf versionOlder;
 
   cfg = config.shawn8901.desktop;
-  fPkgs = self'.packages;
 in
 {
 
@@ -109,12 +101,10 @@ in
         QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
         _JAVA_AWT_WM_NONREPARENTING = "1";
         GTK_USE_PORTAL = "1";
-        FLAKE = lib.mkDefault "github:shawn8901/nix-configuration";
       };
       systemPackages =
         [
           pkgs.git
-          pkgs.nh
           (pkgs.btop.override { rocmSupport = true; })
         ]
         ++ (with pkgs.kdePackages; [
@@ -137,6 +127,10 @@ in
       {
         dconf.enable = true;
         ssh.startAgent = true;
+        nh = {
+          enable = true;
+          flake = lib.mkDefault "github:shawn8901/nix-configuration";
+        };
         steam = {
           enable = true;
           extraCompatPackages = [ pkgs.proton-ge-bin ];

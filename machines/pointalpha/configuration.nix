@@ -1,15 +1,12 @@
 {
   self,
-  self',
   pkgs,
   lib,
   config,
   flakeConfig,
-  inputs',
   ...
 }:
 let
-  fPkgs = self'.packages;
   hosts = self.nixosConfigurations;
 
   inherit (config.sops) secrets;
@@ -150,6 +147,7 @@ in
       openFirewall = true;
     };
     partition-manager.enable = true;
+    nh.flake = "/home/shawn/dev/nix-configuration";
   };
 
   virtualisation = {
@@ -173,7 +171,6 @@ in
       "samba/credentials_shawn".source = secrets.samba.path;
     };
     sessionVariables = {
-      FLAKE = "/home/shawn/dev/nix-configuration";
       WINEFSYNC = "1";
       WINEDEBUG = "-all";
     };

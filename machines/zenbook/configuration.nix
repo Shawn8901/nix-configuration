@@ -5,7 +5,6 @@
   lib,
   config,
   flakeConfig,
-  inputs,
   ...
 }:
 let
@@ -160,10 +159,11 @@ in
   };
   systemd.tmpfiles.rules = [ "d /media/nas 0750 shawn users -" ];
 
+  programs.nh.flake = "/home/shawn/dev/nix-configuration";
+
   environment = {
     etc."samba/credentials_shawn".source = secrets.samba.path;
     sessionVariables = {
-      FLAKE = "/home/shawn/dev/nix-configuration";
       WINEFSYNC = "1";
       WINEDEBUG = "-all";
     };
