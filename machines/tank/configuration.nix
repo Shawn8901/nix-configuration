@@ -91,7 +91,7 @@ in
       };
       pointalpha-online = {
         script = ''
-          ping -w 1 pointalpha
+          ${pkgs.iputils}/bin/ping -w 1 pointalpha
 
           if [[ "$?" -eq "0" ]]; then
             grep pointalpha /tmp/hyda/dynamic-machines > /dev/null || \
@@ -106,7 +106,7 @@ in
     timers.pointalpha-online = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = "*:0/5";
+        OnCalendar = "*:0/1";
       };
     };
   };
