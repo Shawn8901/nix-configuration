@@ -49,6 +49,9 @@ in
         443
       ];
     };
+
+    systemd.tmpfiles.rules = [ "f /tmp/hyda/dynamic-machines 666 hydra hydra - " ];
+
     services = {
       nginx = {
         enable = mkDefault true;
@@ -83,8 +86,6 @@ in
           static_configs = [ { targets = [ "localhost:9199" ]; } ];
         }
       ];
-
-      systemd.tmpfiles.rules = [ "f /tmp/hyda/dynamic-machines 666 hydra hydra - " ];
 
       hydra =
         let
