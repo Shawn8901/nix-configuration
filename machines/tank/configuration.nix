@@ -12,6 +12,7 @@ let
   fPkgs = self'.packages;
 
   inherit (config.sops) secrets;
+  inherit (lib) concatStringsSep;
 in
 {
   imports = [ ./save-darlings.nix ];
@@ -84,12 +85,40 @@ in
       };
       wait-online.ignoredInterfaces = [ "enp4s0" ];
     };
-    services.prometheus-fritz-exporter = {
-      requires = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+    services = {
+      prometheus-fritz-exporter = {
+        requires = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+      };
+      pointalpha-online =
+        let
+          maxJobs = hosts.pointalpha.config.nix.settings.max-jobs;
+          systemFeatures = hosts.pointalpha.config.nix.settings.system-features;
+        in
+        {
+          script = ''
+            set -x
+            if ${pkgs.iputils}/bin/ping -c1 -w 1 pointalpha > /dev/null; then
+              grep pointalpha /tmp/hyda/dynamic-machines > /dev/null || \
+              echo "ssh://root@pointalpha x86_64-linux,i686-linux ${secrets.ssh-builder-key.path} ${toString maxJobs} 1 ${concatStringsSep "," systemFeatures} - -" >  /tmp/hyda/dynamic-machines \
+              && echo "Added pointalpha to dynamic build machines"
+            else
+              grep pointalpha /tmp/hyda/dynamic-machines > /dev/null && echo "" > /tmp/hyda/dynamic-machines && echo "Cleared dynamic build machines"
+            fi
+            set +x
+          '';
+        };
+    };
+    timers.pointalpha-online = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "*:0/1";
+      };
     };
   };
+
   nix.settings.cores = 4;
+
   services = {
     openssh.hostKeys = [
       {
