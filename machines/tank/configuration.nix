@@ -12,6 +12,7 @@ let
   fPkgs = self'.packages;
 
   inherit (config.sops) secrets;
+  inherit (lib) concatStringsSep;
 in
 {
   imports = [ ./save-darlings.nix ];
@@ -89,19 +90,24 @@ in
         requires = [ "network-online.target" ];
         after = [ "network-online.target" ];
       };
-      pointalpha-online = {
-        script = ''
-          ${pkgs.iputils}/bin/ping -w 1 pointalpha
+      pointalpha-online =
+        let
+          maxJobs = hosts.pointalpha.config.nix.setting.max-jobs;
+          systemFeatures = hosts.pointalpha.config.nix.setting.system-features;
+        in
+        {
+          script = ''
+            ${pkgs.iputils}/bin/ping -w 1 pointalpha
 
-          if [[ "$?" -eq "0" ]]; then
-            grep pointalpha /tmp/hyda/dynamic-machines > /dev/null || \
-            echo "ssh://root@localhost x86_64-linux,i686-linux /run/secrets/ssh-builder-key 1 1 benchmark,big-parallel,kvm,nixos-test,gccarch-x86-64-v3 - -" >  /tmp/hyda/dynamic-machines \
-            echo "Added pointalpha to dynamic build machines"
-          else
-            grep pointalpha /tmp/hyda/dynamic-machines > /dev/null && echo "" > /tmp/hyda/dynamic-machines && echo "Cleared dynamic build machines"
-          fi
-        '';
-      };
+            if [[ "$?" -eq "0" ]]; then
+              grep pointalpha /tmp/hyda/dynamic-machines > /dev/null || \
+              echo "ssh://root@pointalpha x86_64-linux,i686-linux ${secrets.ssh-builder-key.path} ${maxJobs} 1 ${concatStringsSep "," systemFeatures} - -" >  /tmp/hyda/dynamic-machines
+              echo "Added pointalpha to dynamic build machines"
+            else
+              grep pointalpha /tmp/hyda/dynamic-machines > /dev/null && echo "" > /tmp/hyda/dynamic-machines && echo "Cleared dynamic build machines"
+            fi
+          '';
+        };
     };
     timers.pointalpha-online = {
       wantedBy = [ "timers.target" ];
