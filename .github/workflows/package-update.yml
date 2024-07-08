@@ -51,7 +51,7 @@ jobs:
           git config user.email git@pointjig.de
           git config user.name "Git Bot"
       - name: Update package
-        run: nix run nixpkgs\#nix-update -- --format --build --commit --flake ${{ matrix.package }}
+        run: nix run nixpkgs\#nix-update -- --build --commit --flake ${{ matrix.package }}
       - name: Push branch and create PR
         run: |
           UPSTREAM=${1:-'@{u}'}
