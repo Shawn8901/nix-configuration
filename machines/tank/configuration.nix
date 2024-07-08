@@ -97,9 +97,7 @@ in
         in
         {
           script = ''
-            ${pkgs.iputils}/bin/ping -w 1 pointalpha
-
-            if [[ "$?" -eq "0" ]]; then
+            if ${pkgs.iputils}/bin/ping -c1 -w 1 pointalpha; then
               grep pointalpha /tmp/hyda/dynamic-machines > /dev/null || \
               echo "ssh://root@pointalpha x86_64-linux,i686-linux ${secrets.ssh-builder-key.path} ${toString maxJobs} 1 ${concatStringsSep "," systemFeatures} - -" >  /tmp/hyda/dynamic-machines
               echo "Added pointalpha to dynamic build machines"
