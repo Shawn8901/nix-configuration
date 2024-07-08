@@ -84,6 +84,8 @@ in
         }
       ];
 
+      systemd.tmpfiles.rules = [ "f /tmp/hyda/dynamic-machines 666 hydra hydra - " ];
+
       hydra =
         let
           jq = lib.getExe pkgs.jq;
@@ -119,6 +121,10 @@ in
           listenHost = "127.0.0.1";
           port = 3000;
           package = pkgs.hydra_unstable;
+          buildMachinesFiles = [
+            "/etc/nix/machines"
+            "/tmp/hyda/dynamic-machines"
+          ];
           minimumDiskFree = 5;
           minimumDiskFreeEvaluator = 10;
           hydraURL = "https://${cfg.hostName}";
