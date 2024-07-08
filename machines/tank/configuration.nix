@@ -84,12 +84,35 @@ in
       };
       wait-online.ignoredInterfaces = [ "enp4s0" ];
     };
-    services.prometheus-fritz-exporter = {
-      requires = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+    services = {
+      prometheus-fritz-exporter = {
+        requires = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+      };
+      pointalpha-online = {
+        script = ''
+          ping -w 1 pointalpha
+
+          if [[ "$?" -eq "0" ]]; then
+            grep pointalpha /tmp/hyda/dynamic-machines > /dev/null || \
+            echo "ssh://root@localhost x86_64-linux,i686-linux /run/secrets/ssh-builder-key 1 1 benchmark,big-parallel,kvm,nixos-test,gccarch-x86-64-v3 - -" >  /tmp/hyda/dynamic-machines \
+            echo "Added pointalpha to dynamic build machines"
+          else
+            grep pointalpha /tmp/hyda/dynamic-machines > /dev/null && echo "" > /tmp/hyda/dynamic-machines && echo "Cleared dynamic build machines"
+          fi
+        '';
+      };
+    };
+    timers.pointalpha-online = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "*:0/5";
+      };
     };
   };
+
   nix.settings.cores = 4;
+
   services = {
     openssh.hostKeys = [
       {
