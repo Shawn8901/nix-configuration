@@ -92,8 +92,8 @@ in
       };
       pointalpha-online =
         let
-          maxJobs = hosts.pointalpha.config.nix.setting.max-jobs;
-          systemFeatures = hosts.pointalpha.config.nix.setting.system-features;
+          maxJobs = hosts.pointalpha.config.nix.settings.max-jobs;
+          systemFeatures = hosts.pointalpha.config.nix.settings.system-features;
         in
         {
           script = ''
