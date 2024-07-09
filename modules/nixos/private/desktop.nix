@@ -105,7 +105,9 @@ in
       systemPackages =
         [
           pkgs.git
-          (pkgs.btop.override { rocmSupport = true; })
+          pkgs.btop
+          # rocm is currently broken at 09.07.2024
+          #(pkgs.btop.override { rocmSupport = true; })
         ]
         ++ (with pkgs.kdePackages; [
           ark
