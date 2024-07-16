@@ -45,7 +45,6 @@ in
       useDHCP = lib.mkDefault false;
     };
 
-    sound.enable = lib.mkDefault false;
     hardware = {
       pulseaudio.enable = false;
       bluetooth.enable = false;
