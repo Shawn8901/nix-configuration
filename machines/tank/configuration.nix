@@ -100,7 +100,7 @@ in
             set -x
             if ${pkgs.iputils}/bin/ping -c1 -w 1 pointalpha > /dev/null; then
               grep pointalpha /tmp/hyda/dynamic-machines > /dev/null || \
-              echo "ssh://root@pointalpha x86_64-linux,i686-linux ${secrets.ssh-builder-key.path} ${toString maxJobs} 1 ${concatStringsSep "," systemFeatures} - -" >  /tmp/hyda/dynamic-machines \
+              echo "ssh://root@pointalpha x86_64-linux,i686-linux ${secrets.ssh-builder-key.path} ${toString maxJobs} 4 ${concatStringsSep "," systemFeatures} - -" >  /tmp/hyda/dynamic-machines \
               && echo "Added pointalpha to dynamic build machines"
             else
               grep pointalpha /tmp/hyda/dynamic-machines > /dev/null && echo "" > /tmp/hyda/dynamic-machines && echo "Cleared dynamic build machines"
