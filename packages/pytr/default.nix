@@ -7,6 +7,7 @@
   ecdsa,
   packaging,
   pathvalidate,
+  babel,
   pygments,
   requests-futures,
   shtab,
@@ -14,16 +15,19 @@
 }:
 buildPythonApplication rec {
   pname = "pytr";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
-    owner = "marzzzello";
+    owner = "pytr-org";
     repo = "pytr";
     rev = version;
-    hash = "sha256-USZGXOyAN8zsRjAuJzoqxRxhbAbTZmXSSQIQFW6eWYY=";
+    hash = "sha256-0ekUpkuyT0TB2YQi7CUMwosLI2tR0owJE2XQBaiy8Iw=";
   };
 
+  nativeBuildInputs = [ babel ];
+
   propagatedBuildInputs = [
+    babel
     certifi
     coloredlogs
     ecdsa
