@@ -9,8 +9,10 @@
     watchtower = {
       hostPlatform.system = "aarch64-linux";
       nixpkgs = inputs.nixpkgs-stable;
-      hmInput = inputs.home-manager-stable;
-      home-manager.shawn = { };
+      home-manager = {
+        input = inputs.home-manager-stable;
+        users = [ "shawn" ];
+      };
       extraModules = [
         (inputs.attic + "/nixos/atticd.nix")
         ../modules/nixos/attic-server
@@ -21,28 +23,17 @@
     };
     pointalpha = {
       inherit (inputs) nixpkgs;
-      hmInput = inputs.home-manager;
-      unfreeSoftware = [
-        "steam"
-        "steam-run"
-        "steam-original"
-        "vscode"
-        "vscode-extension-MS-python-vscode-pylance"
-        "deezer"
-        "discord"
-        "teamspeak-client"
-        "tampermonkey"
-        "betterttv"
-        "teamviewer"
-        "keymapp"
-        "epsonscan2"
-      ];
-      home-manager.shawn = { };
+      home-manager = {
+        input = inputs.home-manager;
+        users = [ "shawn" ];
+      };
     };
     pointjig = {
       inherit (inputs) nixpkgs;
-      hmInput = inputs.home-manager;
-      home-manager.shawn = { };
+      home-manager = {
+        input = inputs.home-manager;
+        users = [ "shawn" ];
+      };
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
@@ -50,13 +41,17 @@
     };
     shelter = {
       nixpkgs = inputs.nixpkgs-stable;
-      hmInput = inputs.home-manager-stable;
-      home-manager.shawn = { };
+      home-manager = {
+        input = inputs.home-manager-stable;
+        users = [ "shawn" ];
+      };
     };
     tank = {
       inherit (inputs) nixpkgs;
-      hmInput = inputs.home-manager;
-      home-manager.shawn = { };
+      home-manager = {
+        input = inputs.home-manager;
+        users = [ "shawn" ];
+      };
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
@@ -64,20 +59,10 @@
     };
     zenbook = {
       inherit (inputs) nixpkgs;
-      hmInput = inputs.home-manager;
-      unfreeSoftware = [
-        "steam"
-        "steam-run"
-        "steam-original"
-        "vscode"
-        "vscode-extension-MS-python-vscode-pylance"
-        "deezer"
-        "discord"
-        "teamspeak-client"
-        "tampermonkey"
-        "betterttv"
-      ];
-      home-manager.shawn = { };
+      home-manager = {
+        input = inputs.home-manager;
+        users = [ "shawn" ];
+      };
     };
     trivia-gs = {
       inherit (inputs) nixpkgs;

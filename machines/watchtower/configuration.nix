@@ -1,6 +1,8 @@
 {
+  self,
   self',
   config,
+  inputs,
   pkgs,
   lib,
   ...

@@ -15,8 +15,6 @@ let
   inherit (lib) concatStringsSep;
 in
 {
-  imports = [ ./save-darlings.nix ];
-
   sops.secrets = {
     ssh-builder-key = {
       owner = "hydra-queue-runner";

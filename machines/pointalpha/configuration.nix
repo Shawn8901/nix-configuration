@@ -10,9 +10,27 @@ let
   hosts = self.nixosConfigurations;
 
   inherit (config.sops) secrets;
+
+  allowUnfreePredicate = pkgs: (pkg: lib.elem (lib.getName pkg) pkgs);
+
 in
 {
-  imports = [ ./save-darlings.nix ];
+
+  nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate [
+    "steam"
+    "steam-run"
+    "steam-original"
+    "vscode"
+    "vscode-extension-MS-python-vscode-pylance"
+    "deezer"
+    "discord"
+    "teamspeak-client"
+    "tampermonkey"
+    "betterttv"
+    "teamviewer"
+    "keymapp"
+    "epsonscan2"
+  ];
 
   sops.secrets = {
     zrepl = { };
