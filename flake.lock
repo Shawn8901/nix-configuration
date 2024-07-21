@@ -147,11 +147,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1721472605,
-        "narHash": "sha256-FLlnOMw6tu5/T3AcabAEdl+hODVyl5BjHxyn0M31M2Q=",
+        "lastModified": 1721594591,
+        "narHash": "sha256-jbWQAaVBD6iYso0P46muXgRG5e9g7a0byo/pYreE6ys=",
         "owner": "Shawn8901",
         "repo": "fp-rndp-lib",
-        "rev": "8cbd6124d0954013fa3751a8c96a3f8032eafdd2",
+        "rev": "8ba5e54e8738ca2c1d1c8ca7e9fb8ff7bd1e8b8d",
         "type": "github"
       },
       "original": {
