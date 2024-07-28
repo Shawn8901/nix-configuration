@@ -116,6 +116,7 @@ in
             "device.sensors.enabled" = false;
             "dom.battery.enabled" = false;
             "dom.webaudio.enabled" = false;
+            "dom.private-attribution.submission.enabled" = false;
             "experiments.enabled" = false;
             "experiments.supported" = false;
             "privacy.donottrackheader.enabled" = true;
@@ -139,6 +140,7 @@ in
             "toolkit.telemetry.shutdownPingSender.enabled" = false;
             "toolkit.telemetry.unified" = false;
             "toolkit.telemetry.updatePing.enabled" = false;
+            "toolkit.telemetry.pioneer-new-studies-available" = false;
             "gfx.webrender.compositor.force-enabled" = true;
             "browser.cache.disk.enable" = false;
             "browser.cache.memory.enable" = true;
