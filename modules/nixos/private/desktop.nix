@@ -112,6 +112,9 @@ in
           kate
           skanlite
           kalk
+          kleopatra
+          kdepim-addons
+          kmailtransport
         ]);
 
       plasma6.excludePackages = with pkgs.kdePackages; [
