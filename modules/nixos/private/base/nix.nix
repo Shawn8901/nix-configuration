@@ -49,7 +49,7 @@ in
     daemonIOSchedClass = "idle";
     daemonCPUSchedPolicy = "idle";
     gc = {
-      automatic = true;
+      automatic = mkDefault true;
       dates = "weekly";
       options = mkDefault "--delete-older-than 7d";
     };
