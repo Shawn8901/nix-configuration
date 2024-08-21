@@ -5,11 +5,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stalwart-webadmin";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchurl {
     url = "https://github.com/stalwartlabs/webadmin/releases/download/v${finalAttrs.version}/webadmin.zip";
-    hash = "sha256-3+FnXC/t0EXmGl0q7WkijQlV8F60LK+pKjxn0YSMgmg=";
+    hash = "sha256-6YXYUxu0vTr5OmanikN7s6/9X14wPm3hb73lTBOuLy0=";
   };
 
   outputs = [
