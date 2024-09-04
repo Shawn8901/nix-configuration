@@ -15,13 +15,13 @@
 }:
 buildPythonApplication rec {
   pname = "pytr";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
     rev = version;
-    hash = "sha256-0ekUpkuyT0TB2YQi7CUMwosLI2tR0owJE2XQBaiy8Iw=";
+    hash = "sha256-ig77uxKSs0i6OMgQxaYwIMeQOmSteBuqaVWxs0Uy8tc=";
   };
 
   nativeBuildInputs = [ babel ];
