@@ -43,7 +43,6 @@ in
         #   SDL2 = pkgs.SDL2.override { withStatic = true; };
         # };
 
-        pytr = pkgs.python3.pkgs.callPackage ./pytr { };
         asus-touchpad-numpad-driver = pkgs.python3.pkgs.callPackage ./asus-touchpad-numpad-driver { };
 
         jameica-fhs = pkgs.callPackage ./jameica/fhsenv.nix { };

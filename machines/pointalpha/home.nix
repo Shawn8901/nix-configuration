@@ -16,8 +16,8 @@ in
     pkgs.signal-desktop
     pkgs.portfolio
     pkgs.attic-client
+    pkgs.pytr
     fPkgs.jameica-fhs
-    fPkgs.pytr
   ];
 
   systemd.user.services.attic-watch-store = {
