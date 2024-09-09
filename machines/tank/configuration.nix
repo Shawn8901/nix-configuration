@@ -539,9 +539,6 @@ in
         };
         storage.blob = "db";
 
-        config.resource = {
-          webadmin = "file://${fPkgs.stalwart-webadmin.webadmin}/webadmin.zip";
-        };
         authentication.fallback-admin = {
           user = "admin";
           secret = "%{env:FALLBACK_ADMIN_PASSWORD}%";
