@@ -387,15 +387,14 @@ in
     samba = {
       enable = true;
       openFirewall = true;
-      extraConfig = ''
-        logging = systemd
-        min receivefile size = 16384
-        use sendfile = true
-        aio read size = 16384
-        aio write size = 16384
-      '';
-
-      shares = {
+      settings = {
+        global = {
+          "logging" = "systemd";
+          "min receivefile size" = 16384;
+          "use sendfile" = true;
+          "aio read size" = 16384;
+          "aio write size" = 16384;
+        };
         homes = {
           browseable = "no";
           writable = "no";
