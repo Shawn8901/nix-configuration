@@ -32,6 +32,7 @@ in
       "usb_storage"
       "k10temp"
       "ntsync"
+      "sg"
     ];
     kernelPackages = packagesFor self'.packages.linux_xanmod_x86_64_v3;
     extraModprobeConfig = ''

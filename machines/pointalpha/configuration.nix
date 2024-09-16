@@ -30,6 +30,7 @@ in
     "teamviewer"
     "keymapp"
     "epsonscan2"
+    "makemkv"
   ];
 
   sops.secrets = {

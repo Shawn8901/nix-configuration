@@ -18,6 +18,8 @@ in
     pkgs.attic-client
     pkgs.pytr
     fPkgs.jameica-fhs
+    pkgs.makemkv
+    (pkgs.asunder.override { mp3Support = true; })
   ];
 
   systemd.user.services.attic-watch-store = {
