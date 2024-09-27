@@ -167,6 +167,7 @@ in
     };
     partition-manager.enable = true;
     nh.flake = "/home/shawn/dev/nix-configuration";
+    kdeconnect.enable = true;
   };
 
   virtualisation = {
