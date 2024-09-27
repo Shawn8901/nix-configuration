@@ -58,8 +58,8 @@ in
       };
     };
     fonts = {
-      fontconfig.enable = lib.mkDefault (!config.environment.noXlibs);
-      enableDefaultPackages = lib.mkDefault (!config.environment.noXlibs);
+      fontconfig.enable = lib.mkDefault true;
+      enableDefaultPackages = lib.mkDefault true;
       packages = [
         (pkgs.nerdfonts.override {
           fonts = [
