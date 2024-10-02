@@ -33,19 +33,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
 
-  version = "6.0.220";
+  version = "6.0.230";
   pname = "deezer";
 
   src = fetchzip {
     url = "https://github.com/SibrenVasse/deezer/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-FmV+0QXBu/y+LrmygGSOIXwuX3w6+Tb23XsdnIrNhvs=";
+    hash = "sha256-TzqkiITLaUsDANTvAu1M2zOUNdd5OEaTfMe162iVusU=";
   };
 
   # this is a nasty workaround to trick nix-update to update your hash, whilst having src on the github repo
   # that is providing patches, whilst also updating a second hash
   go-modules = fetchurl {
     url = "https://www.deezer.com/desktop/download/artifact/win32/x86/${shortenVersion finalAttrs.version}";
-    hash = "sha256-xUkltY678gKI35gYMAgquXG09jv2b0cB+0hfUlZbpCM=";
+    hash = "sha256-AHWeWvKbzY9eaXc+tv+jK2ziTo4mJaumrAIQunyDBsA=";
   };
 
   patches = [
