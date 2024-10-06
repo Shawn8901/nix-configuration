@@ -7,7 +7,7 @@
     nixpkgs-deezer.url = "github:NixOS/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
-      url = "github:zhaofengli/attic";
+      url = "github:zhaofengli/attic/61ebdef2e263c091f24807b07701be5cb8068dea";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
