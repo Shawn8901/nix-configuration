@@ -102,6 +102,7 @@ in
             "memories.vod.vaapi" = lib.mkIf cfg.configureMemoriesVaapi true;
             "memories.vod.ffmpeg" = lib.getExe pkgs.ffmpeg-headless;
             "memories.vod.ffprobe" = "${pkgs.ffmpeg-headless}/bin/ffprobe";
+            "preview_ffmpeg_path" = lib.getExe pkgs.ffmpeg-headless;
           })
 
           (lib.mkIf cfg.configurePreviewSettings {
