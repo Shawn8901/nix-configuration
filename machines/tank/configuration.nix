@@ -445,7 +445,6 @@ in
     };
     nextcloud = {
       recommendedDefaults = true;
-      configureImaginary = true;
       configureMemories = true;
       configureMemoriesVaapi = true;
       configurePreviewSettings = true;
