@@ -19,6 +19,7 @@ in
     pkgs.pytr
     fPkgs.jameica-fhs
     pkgs.makemkv
+    pkgs.libation
     (pkgs.asunder.override { mp3Support = true; })
   ];
 
