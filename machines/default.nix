@@ -15,7 +15,6 @@
       };
       extraModules = [
         (inputs.attic + "/nixos/atticd.nix")
-        ../modules/nixos/attic-server
       ];
     };
     next = {
