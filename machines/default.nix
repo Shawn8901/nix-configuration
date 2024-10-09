@@ -15,7 +15,7 @@
       };
       extraModules = [
         (inputs.attic + "/nixos/atticd.nix")
-        ../modules/nixos/attic-server
+        ./watchtower/attic-server.nix
       ];
     };
     next = {
