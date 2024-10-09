@@ -134,6 +134,11 @@ in
       };
   };
   services = {
+    immich = {
+      enable = true;
+      host = "192.168.11.31";
+      openFirewall = true;
+    };
     openssh.hostKeys = [
       {
         path = "/persist/etc/ssh/ssh_host_ed25519_key";
