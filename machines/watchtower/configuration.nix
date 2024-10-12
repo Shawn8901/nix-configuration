@@ -1,14 +1,14 @@
 {
-  self,
   self',
   config,
-  inputs,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 let
   inherit (config.sops) secrets;
+  inherit (pkgs.hostPlatform) system;
 
   vmPackage = self'.packages.victoriametrics.override {
     withBackupTools = false;
@@ -67,7 +67,8 @@ in
     attic = {
       enable = true;
       hostName = "cache.pointjig.de";
-      credentialsFile = secrets.attic-env.path;
+      package = inputs.nixpkgs.legacyPackages.${system}.attic-server;
+      environmentFile = secrets.attic-env.path;
     };
     victoriametrics = {
       enable = true;

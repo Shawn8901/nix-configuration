@@ -14,7 +14,7 @@
         users = [ "shawn" ];
       };
       extraModules = [
-        (inputs.attic + "/nixos/atticd.nix")
+        (inputs.nixpkgs + "/nixos/modules/services/networking/atticd.nix")
         ./watchtower/attic-server.nix
       ];
     };

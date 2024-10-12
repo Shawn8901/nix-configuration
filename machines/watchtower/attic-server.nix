@@ -25,7 +25,7 @@ in
         description = "full qualified hostname of the attic instance";
       };
       package = mkPackageOption pkgs "attic-server" { };
-      credentialsFile = mkOption { type = types.path; };
+      environmentFile = mkOption { type = types.path; };
     };
   };
   config = mkIf cfg.enable {
@@ -62,22 +62,12 @@ in
         };
       };
       atticd = {
-        inherit (cfg) package credentialsFile;
-
+        inherit (cfg) package environmentFile;
         enable = true;
-        useFlakeCompatOverlay = false;
         settings = {
-          allowed-hosts = [ cfg.hostName ];
-          api-endpoint = "https://${cfg.hostName}/";
           database = {
             url = "postgresql:///atticd?host=/run/postgresql";
             heartbeat = true;
-          };
-          chunking = {
-            nar-size-threshold = 65536;
-            min-size = 16384;
-            avg-size = 65536;
-            max-size = 262144;
           };
           compression.type = "zstd";
           garbage-collection = {
