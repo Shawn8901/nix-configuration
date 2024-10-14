@@ -2,12 +2,10 @@
   config,
   inputs',
   pkgs,
-  self',
   ...
 }:
 let
   inherit (config.sops) secrets;
-  fPkgs = self'.packages;
   mailHostname = "mail.pointjig.de";
 in
 {
@@ -22,7 +20,7 @@ in
       owner = "stfcbot";
       group = "stfcbot";
     };
-    stalwart-fallback-admin = { };
+    stalwart-env = { };
   };
 
   networking.firewall = {
@@ -68,31 +66,41 @@ in
       '';
       serviceConfig = {
         User = "stalwart-mail";
-        EnvironmentFile = [ secrets.stalwart-fallback-admin.path ];
+        EnvironmentFile = [ secrets.stalwart-env.path ];
       };
     };
   };
 
   services = {
     fstrim.enable = true;
-    postgresql.settings = {
-      max_connections = 200;
-      shared_buffers = "1GB";
-      effective_cache_size = "3GB";
-      maintenance_work_mem = "256MB";
-      checkpoint_completion_target = 0.9;
-      wal_buffers = "16MB";
-      default_statistics_target = 100;
-      random_page_cost = 4;
-      effective_io_concurrency = 2;
-      work_mem = "1310kB";
-      huge_pages = "off";
-      min_wal_size = "1GB";
-      max_wal_size = "4GB";
+    postgresql = {
+      settings = {
+        max_connections = 200;
+        shared_buffers = "1GB";
+        effective_cache_size = "3GB";
+        maintenance_work_mem = "256MB";
+        checkpoint_completion_target = 0.9;
+        wal_buffers = "16MB";
+        default_statistics_target = 100;
+        random_page_cost = 4;
+        effective_io_concurrency = 2;
+        work_mem = "1310kB";
+        huge_pages = "off";
+        min_wal_size = "1GB";
+        max_wal_size = "4GB";
 
-      track_activities = true;
-      track_counts = true;
-      track_io_timing = true;
+        track_activities = true;
+        track_counts = true;
+        track_io_timing = true;
+      };
+      ensureDatabases = [ "stalwart-mail" ];
+      ensureUsers = [
+        {
+          name = "stalwart-mail";
+          ensureDBOwnership = true;
+        }
+      ];
+
     };
     nginx = {
       package = pkgs.nginxQuic;
@@ -132,9 +140,11 @@ in
       enable = true;
       settings = {
         store.db = {
-          type = "rocksdb";
-          path = "/var/lib/stalwart-mail/db";
-          compression = "lz4";
+          type = "postgresql";
+          host = "localhost";
+          password = "%{env:POSTGRESQL_PASSWORD}%";
+          port = 5432;
+          database = "stalwart-mail";
         };
         storage.blob = "db";
 
