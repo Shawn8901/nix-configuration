@@ -19,6 +19,7 @@ in
     "steam"
     "steam-run"
     "steam-original"
+    "steam-unwrapped"
     "vscode"
     "vscode-extension-MS-python-vscode-pylance"
     "deezer"
