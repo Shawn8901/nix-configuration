@@ -139,6 +139,7 @@ in
           package = pkgs.steam-small.override {
             extraEnv = {
               inherit (config.environment.sessionVariables) AMD_VULKAN_ICD;
+              extraBwrapArgs = [ "--unsetenv TZ" ];
             };
             extraLibraries = p: [
               # Fix Unity Fonts
