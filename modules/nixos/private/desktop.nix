@@ -8,6 +8,8 @@ let
   inherit (lib) mkEnableOption mkIf versionOlder;
 
   cfg = config.shawn8901.desktop;
+
+  allowUnfreePredicate = pkgs: (pkg: lib.elem (lib.getName pkg) pkgs);
 in
 {
 
@@ -125,6 +127,13 @@ in
       ];
     };
 
+    nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate [
+      "steam"
+      "steam-run"
+      "steam-original"
+      "steam-unwrapped"
+    ];
+
     programs = lib.mkMerge [
       {
         dconf.enable = true;
@@ -139,6 +148,7 @@ in
           package = pkgs.steam-small.override {
             extraEnv = {
               inherit (config.environment.sessionVariables) AMD_VULKAN_ICD;
+              extraBwrapArgs = [ "--unsetenv TZ" ];
             };
             extraLibraries = p: [
               # Fix Unity Fonts
