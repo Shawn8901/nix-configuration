@@ -56,7 +56,10 @@ in
     programs.nano.enable = false;
     services = {
       qemuGuest.enable = true;
-      resolved.enable = true;
+      resolved = {
+        enable = true;
+        llmnr = "false";
+      };
       vnstat.enable = true;
       openssh = {
         enable = true;
