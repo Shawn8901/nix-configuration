@@ -15,8 +15,14 @@
       };
       extraModules = [
         (inputs.nixpkgs + "/nixos/modules/services/networking/atticd.nix")
+        (inputs.nixpkgs + "/nixos/modules/services/databases/victoriametrics.nix")
         ./watchtower/attic-server.nix
+        ./watchtower/victoriametrics.nix
       ];
+      disabledModules = [
+        "services/databases/victoriametrics.nix"
+      ];
+
     };
     next = {
       nixpkgs = inputs.nixpkgs-stable;
