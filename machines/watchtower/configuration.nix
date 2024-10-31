@@ -45,7 +45,7 @@ in
     nginx.package = pkgs.nginxQuic;
     vmagent = {
       package = vmPackage;
-      remoteWrite.url = lib.mkForce "http://${config.services.victoriametrics.listenAddress}:${toString config.services.victoriametrics.port}/api/v1/write";
+      remoteWrite.url = lib.mkForce "http://${config.services.victoriametrics.listenAddress}/api/v1/write";
       extraArgs = lib.mkForce [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
     };
   };
@@ -86,7 +86,7 @@ in
         {
           name = "VictoriaMetrics";
           type = "victoriametrics-datasource";
-          url = "http://${config.services.victoriametrics.listenAddress}:${toString config.services.victoriametrics.port}";
+          url = "http://${config.services.victoriametrics.listenAddress}";
         }
       ];
     };

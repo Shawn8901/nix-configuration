@@ -12,7 +12,6 @@ let
     mkOption
     mkDefault
     mkIf
-    optionals
     ;
 
   cfg = config.shawn8901.victoriametrics;
@@ -23,7 +22,7 @@ let
       {
         username = "vm";
         password = "%{PASSWORD}";
-        url_prefix = "http://${config.services.victoriametrics.listenAddress}:${toString config.services.victoriametrics.port}";
+        url_prefix = "http://${config.services.victoriametrics.listenAddress}";
       }
     ];
   };
@@ -82,7 +81,7 @@ in
         inherit (cfg) package;
         enable = true;
         retentionPeriod = "1y";
-        listenAddress = "localhost";
+        listenAddress = "localhost:8428";
         extraOptions = [
           "-selfScrapeInterval=10s"
           "-selfScrapeInstance=${config.networking.hostName}"
