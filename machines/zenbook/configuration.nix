@@ -25,6 +25,7 @@ in
     "deezer"
     "discord"
     "teamspeak-client"
+    "teamspeak3"
     "tampermonkey"
     "betterttv"
   ];
