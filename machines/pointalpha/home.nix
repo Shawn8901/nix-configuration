@@ -12,7 +12,7 @@ in
 
   home.packages = [
     pkgs.keymapp
-    pkgs.teamspeak_client
+    pkgs.teamspeak3
     pkgs.signal-desktop
     pkgs.portfolio
     pkgs.attic-client
