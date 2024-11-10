@@ -42,7 +42,7 @@
   expat,
   udev,
   killall,
-  webkitgtk,
+  webkitgtk_4_0,
   extraPkgs ? pkgs: [ ],
   extraLibraries ? pkgs: [ ],
 }:
@@ -94,7 +94,7 @@ let
         libva
         udev
 
-        webkitgtk
+        webkitgtk_4_0
 
         killall
       ]
