@@ -64,6 +64,11 @@ in
         nix-tree
         nixpkgs-review
         vdhcoapp
+
+        # For tomrijndorp.find-it-faster
+        fzf
+        ripgrep
+        bat
       ]
       ++ (with fPkgs; [
         deezer
@@ -165,6 +170,7 @@ in
           editorconfig.editorconfig
           mkhl.direnv
           usernamehw.errorlens
+          tomrijndorp.find-it-faster
 
           # nix dev
           jnoortheen.nix-ide
@@ -199,6 +205,10 @@ in
             "key" = "ctrl+shift+k";
             "command" = "-editor.action.deleteLines";
             "when" = "textInputFocus && !editorReadonly";
+          }
+          {
+            "key" = "ctrl+shift+l";
+            "command" = "find-it-faster.findWithinFiles";
           }
         ];
         userSettings = {
@@ -250,6 +260,7 @@ in
           };
           "python.analysis.autoImportCompletions" = true;
           "python.analysis.typeCheckingMode" = "standard";
+          "find-it-faster.general.useTerminalInEditor" = true;
         };
       };
 
