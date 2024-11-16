@@ -131,6 +131,7 @@ in
         ssh.startAgent = true;
         nh = {
           enable = true;
+          clean.enable = true;
           flake = lib.mkDefault "github:shawn8901/nix-configuration";
         };
         steam = {
