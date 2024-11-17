@@ -1,0 +1,23 @@
+name: Clean up old action runs
+
+on:
+  schedule:
+    - cron: "0 1 * * 1"
+  workflow_dispatch: {}
+
+jobs:
+  sync_fork:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          token: "${{ secrets.GH_TOKEN }}"
+          fetch-depth: 1
+      - name: Delete old runs
+        shell: bash
+        run: |
+          gh run list -L100 --created="<=$(date -d "7 days ago" +"%Y-%m-%d")" --json databaseId -q ".[].databaseId" | \
+          xargs -IID gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/runs/ID" -X DELETE
+        env:
+          GH_TOKEN: "${{ secrets.GH_TOKEN }}"
