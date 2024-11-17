@@ -14,36 +14,45 @@ jobs:
         run: |
           gh repo sync Shawn8901/nixpkgs --source NixOS/nixpkgs --branch master
           gh repo sync Shawn8901/nixpkgs --source NixOS/nixpkgs --branch nixos-unstable
+          gh repo sync Shawn8901/nixpkgs --source NixOS/nixpkgs --branch nixos-24.11
         env:
           GH_TOKEN: "${{ secrets.GH_TOKEN }}"
   update-branch:
     runs-on: ubuntu-22.04
     needs: [sync_fork]
     steps:
-      - name: Clone repository
+      - name: Clone config repo
+        uses: actions/checkout@v4
+        with:
+          repository: "${{ github.repository }}"
+          token: "${{ secrets.GH_TOKEN }}"
+          path: "config"
+
+      - name: Clone nixpkgs repository
         uses: actions/checkout@v4
         with:
           repository: "Shawn8901/nixpkgs"
           token: "${{ secrets.GH_TOKEN }}"
+          path: "nixpkgs"
+          fetch-depth: 0
+
       - name: Set up git
         shell: bash
         run: |
           git config user.email git@pointjig.de
           git config user.name "Git Bot"
-      - name: Fetch origin
-        shell: bash
-        run: |
-          git fetch origin
-      - name: Update custom branch
-        shell: bash
-        run: |
-          git checkout nixos-unstable-custom
-          commits_ahead=$(git rev-list --count nixos-unstable-custom..origin/nixos-unstable)
-          if [ $commits_ahead -eq 0 ]
-          then
-            exit 0
-          fi
-          git rebase origin/nixos-unstable
-          git push --force-with-lease
-        env:
-          GH_TOKEN: "${{ secrets.GH_TOKEN }}"
+        working-directory: "nixpkgs"
+
+      - name: Sync Unstable
+        uses: ./config/.github/actions/update-custom-branch
+        with:
+          gh_token: "${{ secrets.GH_TOKEN }}"
+          release: "unstable"
+          working_dir: "nixpkgs"
+
+      - name: Sync 24.11
+        uses: ./config/.github/actions/update-custom-branch
+        with:
+          gh_token: "${{ secrets.GH_TOKEN }}"
+          release: "24.11"
+          working_dir: "nixpkgs"

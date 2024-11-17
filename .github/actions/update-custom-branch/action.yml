@@ -1,0 +1,29 @@
+name: "update-custom-branch"
+description: "Does rebase the custom branch on top of upstream"
+inputs:
+  release:
+    description: "Custom branch for a release to be synced"
+    required: true
+  gh_token:
+    description: "GH Token used for pushing the content"
+    required: true
+  working_dir:
+    description: "dir that this applies on"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Update custom ${{ inputs.release }} branch
+      working-directory: ${{ inputs.working_dir }}
+      shell: bash
+      run: |
+        git checkout nixos-${{ inputs.release }}-custom
+        commits_ahead=$(git rev-list --count nixos-${{ inputs.release }}-custom..origin/nixos-${{ inputs.release }})
+        if [ $commits_ahead -eq 0 ]
+        then
+          exit 0
+        fi
+        git rebase origin/nixos-${{ inputs.release }}
+        git push --force-with-lease
+      env:
+        GH_TOKEN: "${{ inputs.gh_token }}"
