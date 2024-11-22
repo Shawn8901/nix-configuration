@@ -64,6 +64,7 @@ in
         nix-tree
         nixpkgs-review
         vdhcoapp
+        element-desktop
 
         # For tomrijndorp.find-it-faster
         fzf
