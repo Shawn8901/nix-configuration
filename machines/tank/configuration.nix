@@ -116,20 +116,12 @@ in
     };
   };
 
-  nix.settings =
-    let
-      kibibyte = 1024;
-      mibibyte = 1024 * kibibyte;
-      gibibyte = 1024 * mibibyte;
-    in
-    {
-      keep-outputs = true;
-      keep-derivations = true;
-      cores = 4;
-      max-jobs = 4;
-      min-free = lib.mkDefault (5 * gibibyte);
-      max-free = lib.mkDefault (25 * gibibyte);
-    };
+  nix.settings = {
+    keep-outputs = true;
+    keep-derivations = true;
+    cores = 4;
+    max-jobs = 4;
+  };
   services = {
     openssh.hostKeys = [
       {

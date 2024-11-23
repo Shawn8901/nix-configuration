@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config.fp-rndp-lib.nixosConfigurations = {
+  config.fp-lib.nixosConfigurations = {
     watchtower = {
       hostPlatform.system = "aarch64-linux";
       nixpkgs = inputs.nixpkgs-stable;

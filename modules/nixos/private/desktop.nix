@@ -129,11 +129,6 @@ in
       {
         dconf.enable = true;
         ssh.startAgent = true;
-        nh = {
-          enable = true;
-          clean.enable = true;
-          flake = lib.mkDefault "github:shawn8901/nix-configuration";
-        };
         steam = {
           enable = true;
           extraCompatPackages = [ pkgs.proton-ge-bin ];

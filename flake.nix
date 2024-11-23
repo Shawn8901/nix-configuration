@@ -18,7 +18,6 @@
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
     mimir = {
       url = "github:Shawn8901/mimir";
@@ -41,11 +40,6 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    fp-rndp-lib = {
-      url = "github:Shawn8901/fp-rndp-lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
-    };
   };
 
   outputs =
@@ -63,13 +57,16 @@
         "aarch64-linux"
       ];
 
-      fp-rndp-lib.root = ./.;
-      fp-rndp-lib.modules.privateNamePrefix = "shawn8901";
+      fp-lib.modules.privateNamePrefix = "shawn8901";
 
       imports = [
-        inputs.fp-rndp-lib.flakeModule
+        ./parts/type-defs/hydra-jobs.nix
+        ./parts/type-defs/modules.nix
+        ./parts/type-defs/system.nix
 
         ./parts/zrepl-helper.nix
+        ./parts/modules.nix
+        ./parts/system.nix
 
         ./modules
         ./packages

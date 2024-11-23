@@ -63,29 +63,6 @@
         "type": "github"
       }
     },
-    "fp-rndp-lib": {
-      "inputs": {
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1722757611,
-        "narHash": "sha256-YQEHJhZXyGJrgSF3W8tB4yzoSdITgCjbmcgeBRfmn/o=",
-        "owner": "Shawn8901",
-        "repo": "fp-rndp-lib",
-        "rev": "4092b1f6fb11d291b7ab2a7eb3e5284f669ededa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Shawn8901",
-        "repo": "fp-rndp-lib",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -171,10 +148,11 @@
       "locked": {
         "lastModified": 1732371210,
         "narHash": "sha256-C5D8eDueQ/iq1Yn3uABv5WRKDTGSHuC/l/77IXu6EJo=",
-        "owner": "Shawn8901",
-        "repo": "nixpkgs",
+        "ref": "refs/heads/nixos-unstable-custom",
         "rev": "c3ea32b11a812ee73c8a784246189c5b8246a0c5",
-        "type": "github"
+        "revCount": 710103,
+        "type": "git",
+        "url": "file:///home/shawn/dev/nixpkgs"
       },
       "original": {
         "owner": "Shawn8901",
@@ -220,7 +198,6 @@
         "firefox-addons": "firefox-addons",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
-        "fp-rndp-lib": "fp-rndp-lib",
         "home-manager": "home-manager",
         "home-manager-stable": "home-manager-stable",
         "mimir": "mimir",

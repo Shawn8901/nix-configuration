@@ -182,22 +182,11 @@ in
     };
   };
 
-  nix = {
-    gc.automatic = false;
-    settings =
-      let
-        kibibyte = 1024;
-        mibibyte = 1024 * kibibyte;
-        gibibyte = 1024 * mibibyte;
-      in
-      {
-        keep-outputs = true;
-        keep-derivations = true;
-        cores = 8;
-        max-jobs = 4;
-        min-free = lib.mkDefault (5 * gibibyte);
-        max-free = lib.mkDefault (25 * gibibyte);
-      };
+  nix.settings = {
+    keep-outputs = true;
+    keep-derivations = true;
+    cores = 8;
+    max-jobs = 4;
   };
   environment = {
     systemPackages = [ pkgs.cifs-utils ];

@@ -14,8 +14,4 @@ in
     man.enable = mkDefault false;
   };
   manual.manpages.enable = mkDefault false;
-  nix.gc = {
-    automatic = true;
-    options = "-d";
-  };
 }

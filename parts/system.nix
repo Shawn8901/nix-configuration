@@ -1,0 +1,111 @@
+{
+  self,
+  config,
+  inputs,
+  lib,
+  withSystem,
+  ...
+}:
+let
+  inherit (builtins) hashString;
+  inherit (lib)
+    mapAttrs
+    attrValues
+    substring
+    genAttrs
+    ;
+
+  cfg = config.fp-lib.nixosConfigurations;
+
+  # Generates a lib.nixosSystem based on given name and config.
+  generateSystem = mapAttrs (
+    name: conf:
+    withSystem conf.hostPlatform.system (
+      {
+        system,
+        inputs',
+        self',
+        ...
+      }:
+      let
+        inherit (conf.nixpkgs) lib;
+        configDir = "${self}/machines/${name}";
+        extraArgs = {
+          inherit
+            self
+            self'
+            inputs
+            inputs'
+            ;
+          flakeConfig = config;
+        };
+      in
+      lib.nixosSystem {
+        modules =
+          [
+            {
+              _module.args = extraArgs;
+              nixpkgs = {
+                inherit (conf) hostPlatform;
+              };
+              networking.hostName = name;
+              networking.hostId = substring 0 8 (hashString "md5" "${name}");
+              system.configurationRevision = self.rev or "dirty";
+              inherit (conf) disabledModules;
+            }
+
+            inputs.sops-nix.nixosModules.sops
+            { sops.defaultSopsFile = "${configDir}/secrets.yaml"; }
+            "${configDir}/configuration.nix"
+          ]
+          ++ lib.optionals (builtins.pathExists "${configDir}/hardware.nix") [ "${configDir}/hardware.nix" ]
+          ++ lib.optionals (builtins.pathExists "${configDir}/impermanence.nix") [
+            "${configDir}/impermanence.nix"
+          ]
+          ++ (attrValues config.flake.nixosModules)
+          ++ conf.extraModules
+          ++ lib.optionals (conf.home-manager.input != null) [
+            conf.home-manager.input.nixosModule
+            (
+              { config, ... }:
+              {
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  extraSpecialArgs = extraArgs;
+                  sharedModules = [
+                    inputs.sops-nix.homeManagerModule
+                  ] ++ (attrValues self.flakeModules.home-manager) ++ conf.home-manager.extraModules;
+                  users = genAttrs conf.home-manager.users (
+                    name:
+                    let
+                      user = config.users.users.${name};
+                    in
+                    {
+                      imports = [
+                        (
+                          { config, ... }:
+                          {
+                            sops = {
+                              age.keyFile = "${config.xdg.configHome}/sops/age/keys.txt";
+                              defaultSopsFile = "${configDir}/secrets-home.yaml";
+                              defaultSymlinkPath = "/run/user/${toString user.uid}/secrets";
+                              defaultSecretsMountPoint = "/run/user/${toString user.uid}/secrets.d";
+                            };
+                          }
+                        )
+                      ] ++ lib.optionals (builtins.pathExists "${configDir}/home.nix") [ "${configDir}/home.nix" ];
+
+                    }
+                  );
+                };
+              }
+            )
+          ];
+      }
+    )
+  );
+in
+{
+  flake.nixosConfigurations = generateSystem cfg;
+}

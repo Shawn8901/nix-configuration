@@ -76,7 +76,5 @@ in
         ignoreIP = [ "192.168.11.0/24" ];
       };
     };
-
-    nix.gc.options = "--delete-older-than 2d";
   };
 }

@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkDefault mkForce;
+  inherit (lib)
+    mkIf
+    mkDefault
+    mkForce
+    versionOlder
+    ;
 in
 {
   sops.secrets = {
@@ -46,10 +51,16 @@ in
     nrBuildUsers = mkForce 16;
     daemonIOSchedClass = "idle";
     daemonCPUSchedPolicy = "idle";
-    gc = {
-      automatic = mkDefault true;
-      dates = "weekly";
-      options = mkDefault "--delete-older-than 7d";
+  };
+
+  programs.nh = {
+    enable = true;
+    flake = mkIf (!versionOlder config.system.nixos.release "25.05") (
+      lib.mkDefault "github:shawn8901/nix-configuration"
+    );
+    clean = {
+      enable = true;
+      extraArgs = "--keep 5 --keep-since 3d";
     };
   };
 }
