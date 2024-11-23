@@ -14,15 +14,9 @@
         users = [ "shawn" ];
       };
       extraModules = [
-        (inputs.nixpkgs + "/nixos/modules/services/networking/atticd.nix")
-        (inputs.nixpkgs + "/nixos/modules/services/databases/victoriametrics.nix")
         ./watchtower/attic-server.nix
         ./watchtower/victoriametrics.nix
       ];
-      disabledModules = [
-        "services/databases/victoriametrics.nix"
-      ];
-
     };
     next = {
       nixpkgs = inputs.nixpkgs-stable;
@@ -35,9 +29,9 @@
       };
     };
     pointjig = {
-      inherit (inputs) nixpkgs;
+      nixpkgs = inputs.nixpkgs-stable;
       home-manager = {
-        input = inputs.home-manager;
+        input = inputs.home-manager-stable;
         users = [ "shawn" ];
       };
       extraModules = [
@@ -71,7 +65,7 @@
       };
     };
     trivia-gs = {
-      inherit (inputs) nixpkgs;
+      nixpkgs = inputs.nixpkgs-stable;
     };
   };
 

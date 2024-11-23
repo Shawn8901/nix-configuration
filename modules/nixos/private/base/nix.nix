@@ -6,10 +6,8 @@
 }:
 let
   inherit (lib)
-    mkIf
     mkDefault
     mkForce
-    versionOlder
     ;
 in
 {
@@ -55,9 +53,7 @@ in
 
   programs.nh = {
     enable = true;
-    flake = mkIf (!versionOlder config.system.nixos.release "25.05") (
-      lib.mkDefault "github:shawn8901/nix-configuration"
-    );
+    flake = lib.mkDefault "github:shawn8901/nix-configuration";
     clean = {
       enable = true;
       extraArgs = "--keep 5 --keep-since 3d";

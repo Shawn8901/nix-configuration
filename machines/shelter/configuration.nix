@@ -34,10 +34,8 @@ in
           };
           routes = [
             {
-              routeConfig = {
-                Gateway = "2a01:8740:0001:0000:0000:0000:0000:0001";
-                GatewayOnLink = "yes";
-              };
+              Gateway = "2a01:8740:0001:0000:0000:0000:0000:0001";
+              GatewayOnLink = "yes";
             }
           ];
         };

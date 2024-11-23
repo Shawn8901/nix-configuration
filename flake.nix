@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:Shawn8901/nixpkgs/nixos-unstable-custom";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs-stable.url = "github:Shawn8901/nixpkgs/nixos-24.11-custom";
     nixpkgs-deezer.url = "github:NixOS/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
     home-manager = {
@@ -12,7 +12,7 @@
     };
 
     home-manager-stable = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     sops-nix = {

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf versionOlder;
+  inherit (lib) mkEnableOption mkIf;
 
   cfg = config.shawn8901.desktop;
 in
@@ -72,25 +72,21 @@ in
 
     systemd.defaultUnit = "graphical.target";
 
-    hardware = lib.mkMerge [
-      {
-        bluetooth = {
-          enable = true;
-          package = pkgs.bluez5-experimental;
-          settings.General.Experimental = true;
-          input.General.ClassicBondedOnly = false;
-        };
-        pulseaudio.enable = false;
-      }
-      (lib.optionalAttrs (!versionOlder config.system.nixos.release "24.11") {
-        graphics = {
-          enable = true;
-          enable32Bit = true;
-          extraPackages = [ pkgs.libva ];
-          extraPackages32 = [ pkgs.pkgsi686Linux.libva ];
-        };
-      })
-    ];
+    hardware = {
+      bluetooth = {
+        enable = true;
+        package = pkgs.bluez5-experimental;
+        settings.General.Experimental = true;
+        input.General.ClassicBondedOnly = false;
+      };
+      pulseaudio.enable = false;
+      graphics = {
+        enable = true;
+        enable32Bit = true;
+        extraPackages = [ pkgs.libva ];
+        extraPackages32 = [ pkgs.pkgsi686Linux.libva ];
+      };
+    };
     xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     environment = {
       sessionVariables = {
@@ -125,42 +121,38 @@ in
       ];
     };
 
-    programs = lib.mkMerge [
-      {
-        dconf.enable = true;
-        ssh.startAgent = true;
-        steam = {
-          enable = true;
-          extraCompatPackages = [ pkgs.proton-ge-bin ];
-          package = pkgs.steam-small.override {
-            extraEnv = {
-              inherit (config.environment.sessionVariables) AMD_VULKAN_ICD;
-              extraBwrapArgs = [ "--unsetenv TZ" ];
-            };
-            extraLibraries = p: [
-              # Fix Unity Fonts
-              (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
-                mkdir -p "$out/share/fonts"
-                font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-                find ${
-                  toString [
-                    pkgs.liberation_ttf
-                    pkgs.dejavu_fonts
-                  ]
-                } -regex "$font_regexp" \
-                  -exec ln -sf -t "$out/share/fonts" '{}' \;
-              '')
-              p.getent
-            ];
+    programs = {
+      dconf.enable = true;
+      ssh.startAgent = true;
+      steam = {
+        enable = true;
+        extraCompatPackages = [ pkgs.proton-ge-bin ];
+        package = pkgs.steam-small.override {
+          extraEnv = {
+            inherit (config.environment.sessionVariables) AMD_VULKAN_ICD;
+            extraBwrapArgs = [ "--unsetenv TZ" ];
           };
+          extraLibraries = p: [
+            # Fix Unity Fonts
+            (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
+              mkdir -p "$out/share/fonts"
+              font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+              find ${
+                toString [
+                  pkgs.liberation_ttf
+                  pkgs.dejavu_fonts
+                ]
+              } -regex "$font_regexp" \
+                -exec ln -sf -t "$out/share/fonts" '{}' \;
+            '')
+            p.getent
+          ];
         };
-      }
-      (lib.optionalAttrs (config.programs ? kde-pim) {
-        kde-pim = {
-          enable = true;
-          kmail = true;
-        };
-      })
-    ];
+      };
+      kde-pim = {
+        enable = true;
+        kmail = true;
+      };
+    };
   };
 }
