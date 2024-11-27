@@ -22,6 +22,7 @@ in
     "steam-unwrapped"
     "vscode"
     "vscode-extension-MS-python-vscode-pylance"
+    "vscode-extension-mhutchie-git-graph"
     "deezer"
     "discord"
     "teamspeak-client"
