@@ -49,5 +49,29 @@ in
         }
       ];
     };
+
+    systemd = {
+      services = {
+        postgresql-vacuum-analyze = {
+          description = "Vacuum and analyze all PostgreSQL databases";
+          after = [ "postgresql.service" ];
+          requires = [ "postgresql.service" ];
+          serviceConfig = {
+            ExecStart = "${lib.getExe' cfg.package "psql"} -c 'VACUUM ANALYZE'";
+            User = "postgres";
+          };
+          wantedBy = [ "timers.target" ];
+        };
+      };
+      timers.postgresql-vacuum-analyze = {
+        timerConfig = {
+          OnCalendar = "03:00";
+          Persistent = true;
+          RandomizedDelaySec = "30m";
+        };
+        wantedBy = [ "timers.target" ];
+      };
+    };
+
   };
 }
