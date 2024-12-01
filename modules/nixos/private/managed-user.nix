@@ -57,20 +57,6 @@ in
         '';
       };
     };
-    fonts = {
-      fontconfig.enable = lib.mkDefault true;
-      enableDefaultPackages = lib.mkDefault true;
-      packages = [
-        (pkgs.nerdfonts.override {
-          fonts = [
-            "Meslo"
-            "DroidSansMono"
-            "LiberationMono"
-            "Terminus"
-          ];
-        })
-      ];
-    };
 
     users = {
       mutableUsers = false;

@@ -25,6 +25,7 @@ in
 
     fonts = {
       fontconfig = {
+        enable = lib.mkDefault true;
         hinting.autohint = true;
         cache32Bit = true;
         subpixel.lcdfilter = "light";
@@ -36,7 +37,15 @@ in
         };
       };
       enableDefaultPackages = lib.mkDefault true;
-      packages = [ pkgs.noto-fonts ];
+      packages =
+        [ pkgs.noto-fonts ]
+        ++ (with pkgs.nerd-fonts; [
+          noto
+          liberation
+          meslo-lg
+          liberation
+        ]);
+
     };
 
     services = {
