@@ -9,6 +9,10 @@
     watchtower = {
       hostPlatform.system = "aarch64-linux";
       nixpkgs = inputs.nixpkgs-stable;
+      home-manager = {
+        input = inputs.home-manager-stable;
+        users = [ "shawn" ];
+      };
       extraModules = [
         ./watchtower/attic-server.nix
         ./watchtower/victoriametrics.nix
@@ -26,6 +30,10 @@
     };
     pointjig = {
       nixpkgs = inputs.nixpkgs-stable;
+      home-manager = {
+        input = inputs.home-manager-stable;
+        users = [ "shawn" ];
+      };
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
@@ -33,9 +41,17 @@
     };
     shelter = {
       nixpkgs = inputs.nixpkgs-stable;
+      home-manager = {
+        input = inputs.home-manager-stable;
+        users = [ "shawn" ];
+      };
     };
     tank = {
       inherit (inputs) nixpkgs;
+      home-manager = {
+        input = inputs.home-manager;
+        users = [ "shawn" ];
+      };
       extraModules = [
         inputs.mimir.nixosModules.default
         inputs.stfc-bot.nixosModules.default
