@@ -217,8 +217,5 @@ in
   };
   boot.zfs.storeEncryptionCredentials = true;
 
-  shawn8901 = {
-    desktop.enable = true;
-    managed-user.enable = true;
-  };
+  shawn8901.desktop.enable = true;
 }

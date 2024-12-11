@@ -12,7 +12,9 @@ in
 {
   options = {
     shawn8901.managed-user = {
-      enable = mkEnableOption "preconfigured users";
+      enable = mkEnableOption "preconfigured users" // {
+        default = (config ? home-manager);
+      };
     };
   };
   config = mkIf cfg.enable {

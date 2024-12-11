@@ -627,7 +627,6 @@ in
       attic.enable = true;
     };
     server.enable = true;
-    managed-user.enable = true;
   };
 
   environment.etc.".ztank_key".source = secrets.zfs-ztank-key.path;

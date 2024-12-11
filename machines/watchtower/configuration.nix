@@ -91,6 +91,5 @@ in
       ];
     };
     server.enable = true;
-    managed-user.enable = true;
   };
 }

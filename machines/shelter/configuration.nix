@@ -90,8 +90,5 @@ in
     audit.enable = false;
   };
 
-  shawn8901 = {
-    server.enable = true;
-    managed-user.enable = true;
-  };
+  shawn8901.server.enable = true;
 }

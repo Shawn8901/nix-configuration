@@ -200,6 +200,5 @@ in
   shawn8901 = {
     postgresql.enable = true;
     server.enable = true;
-    managed-user.enable = true;
   };
 }
