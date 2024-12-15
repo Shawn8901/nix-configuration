@@ -49,8 +49,6 @@ in
         '';
         interactiveShellInit = ''
           source "${pkgs.zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
-          source "${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh"
-          source "${pkgs.zsh-fzf-tab}/share/fzf-tab/lib/zsh-ls-colors/ls-colors.zsh"
 
           bindkey '^[[1;5C' forward-word        # ctrl right
           bindkey '^[[1;5D' backward-word       # ctrl left
