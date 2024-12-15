@@ -186,7 +186,7 @@ in
   nix.settings = {
     keep-outputs = true;
     keep-derivations = true;
-    cores = 8;
+    cores = 6;
     max-jobs = 3;
   };
   environment = {
