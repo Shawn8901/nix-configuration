@@ -23,15 +23,20 @@ in
   ];
 
   boot = {
-    initrd.availableKernelModules = [
-      "ahci"
-      "xhci_pci"
-      "nvme"
-      "usbhid"
-      "usb_storage"
-      "sd_mod"
-      "sr_mod"
-    ];
+    initrd = {
+      availableKernelModules = [
+        "ahci"
+        "xhci_pci"
+        "nvme"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+        "sr_mod"
+      ];
+      postResumeCommands = lib.mkAfter ''
+        ${pkgs.zfs}/bin/zfs mount -a
+      '';
+    };
     kernelModules = [
       "kvm-intel"
       "cifs"
@@ -52,9 +57,7 @@ in
       extraPools = [ "ztank" ];
       requestEncryptionCredentials = [ "ztank" ];
     };
-    postBootCommands = lib.mkAfter ''
-      ${pkgs.zfs}/bin/zfs mount -a
-    '';
+
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -98,7 +101,7 @@ in
     "/persist/var/lib/nextcloud/data" = {
       device = "ztank/replica/nextcloud";
       fsType = "zfs";
-      options = zfsOptions ++ [ "noauto" ];
+      options = zfsOptions;
     };
 
     "/boot" = {
