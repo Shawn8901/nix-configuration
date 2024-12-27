@@ -449,30 +449,35 @@ in
     auditd.enable = false;
     audit.enable = false;
   };
-  users.users = {
-    root.openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"
-    ];
-    ela = {
-      hashedPasswordFile = secrets.ela.path;
-      isNormalUser = true;
-      group = "users";
-      uid = 1001;
-      shell = pkgs.zsh;
-    };
-    nologin = {
-      isNormalUser = false;
-      isSystemUser = true;
-      group = "users";
-    };
-    shawn.extraGroups = [ "nextcloud" ];
-    attic = {
-      isNormalUser = false;
-      isSystemUser = true;
-      group = "users";
-      home = "/var/lib/attic";
-    };
-  };
+  users.users = lib.mkMerge [
+    {
+      root.openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGsHm9iUQIJVi/l1FTCIFwGxYhCOv23rkux6pMStL49N"
+      ];
+      ela = {
+        hashedPasswordFile = secrets.ela.path;
+        isNormalUser = true;
+        group = "users";
+        uid = 1001;
+        shell = pkgs.zsh;
+      };
+      nologin = {
+        isNormalUser = false;
+        isSystemUser = true;
+        group = "users";
+      };
+      shawn.extraGroups = [ "nextcloud" ];
+      attic = {
+        isNormalUser = false;
+        isSystemUser = true;
+        group = "users";
+        home = "/var/lib/attic";
+      };
+    }
+    (lib.optionalAttrs config.services.stalwart-mail.enable {
+      stalwart-mail.extraGroups = [ "nginx" ];
+    })
+  ];
 
   services = {
     prometheus.exporters.fritz = {
@@ -499,7 +504,6 @@ in
         ];
       }
     ];
-
     nginx = {
       package = pkgs.nginxQuic;
       virtualHosts."tank.pointjig.de" = {
@@ -516,9 +520,8 @@ in
         };
       };
     };
-
     stalwart-mail = {
-      enable = true;
+      enable = false;
       settings = {
         store.db = {
           type = "rocksdb";
@@ -570,15 +573,9 @@ in
       };
     };
   };
-  users.users.stalwart-mail.extraGroups = [ "nginx" ];
-  systemd.services.stalwart-mail = {
-    preStart = ''
-      mkdir -p /var/lib/stalwart-mail/{queue,reports,db}
-    '';
-    serviceConfig = {
-      User = "stalwart-mail";
-      EnvironmentFile = [ secrets.stalwart-fallback-admin.path ];
-    };
+  systemd.services.stalwart-mail.serviceConfig = lib.mkIf (config.services.stalwart-mail.enable) {
+    User = "stalwart-mail";
+    EnvironmentFile = [ secrets.stalwart-fallback-admin.path ];
   };
 
   shawn8901 = {
