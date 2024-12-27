@@ -109,7 +109,8 @@ in
       systemPackages =
         [
           pkgs.git
-          (pkgs.btop.override { rocmSupport = true; })
+          #pkgs.btop-rocm
+          pkgs.btop
         ]
         ++ (with pkgs.kdePackages; [
           ark
