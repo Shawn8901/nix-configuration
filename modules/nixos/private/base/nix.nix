@@ -32,6 +32,7 @@ in
       allow-import-from-derivation = false;
       substituters = [
         "https://nix-community.cachix.org"
+        "https://cache.pointjig.de/nixos"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -40,6 +41,7 @@ in
       cores = mkDefault 6;
       max-jobs = mkDefault 2;
       experimental-features = "nix-command flakes";
+      netrc-file = mkForce config.sops.secrets.nix-netrc-ro.path;
     };
     extraOptions = ''
       !include ${config.sops.secrets.nix-gh-token-ro.path}
