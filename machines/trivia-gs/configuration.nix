@@ -1,14 +1,11 @@
 {
-  self',
   config,
   pkgs,
   ...
 }:
 let
   inherit (config.sops) secrets;
-  fPkgs = self'.packages;
-
-  hostname = "mail.trivia-gs.de";
+  mailHostname = "mail.trivia-gs.de";
 in
 {
   sops.secrets = {
@@ -53,25 +50,36 @@ in
     wait-online.anyInterface = true;
   };
 
-  systemd.services.stalwart-mail = {
-    preStart = ''
-      mkdir -p /var/lib/stalwart-mail/{queue,reports,db}
-    '';
-    serviceConfig = {
-      User = "stalwart-mail";
-      EnvironmentFile = [ secrets.stalwart-fallback-admin.path ];
-    };
+  systemd.services.stalwart-mail.serviceConfig = {
+    User = "stalwart-mail";
+    EnvironmentFile = [ secrets.stalwart-fallback-admin.path ];
   };
 
   services = {
     fstrim.enable = true;
+    postgresql = {
+      settings = {
+        track_activities = true;
+        track_counts = true;
+        track_io_timing = true;
+      };
+      ensureDatabases = [ "stalwart-mail" ];
+      ensureUsers = [
+        {
+          name = "stalwart-mail";
+          ensureDBOwnership = true;
+        }
+      ];
+    };
     stalwart-mail = {
       enable = true;
       settings = {
         store.db = {
-          type = "rocksdb";
-          path = "/var/lib/stalwart-mail/db";
-          compression = "lz4";
+          type = "postgresql";
+          host = "localhost";
+          password = "%{env:POSTGRESQL_PASSWORD}%";
+          port = 5432;
+          database = "stalwart-mail";
         };
         storage.blob = "db";
 
@@ -79,13 +87,10 @@ in
           user = "admin";
           secret = "%{env:FALLBACK_ADMIN_PASSWORD}%";
         };
-        lookup.default.hostname = hostname;
-        tracer.stdout = {
-          level = "trace";
-        };
+        lookup.default.hostname = mailHostname;
         certificate.default = {
-          private-key = "%{file:/var/lib/acme/${hostname}/key.pem}%";
-          cert = "%{file:/var/lib/acme/${hostname}/cert.pem}%";
+          private-key = "%{file:/var/lib/acme/${mailHostname}/key.pem}%";
+          cert = "%{file:/var/lib/acme/${mailHostname}/cert.pem}%";
           default = true;
         };
         server = {
@@ -123,10 +128,10 @@ in
       virtualHosts."trivia-gs.de" = {
         enableACME = true;
         forceSSL = true;
-        globalRedirect = hostname;
+        globalRedirect = mailHostname;
       };
-      virtualHosts."${hostname}" = {
-        serverName = "${hostname}";
+      virtualHosts."${mailHostname}" = {
+        serverName = "${mailHostname}";
         forceSSL = true;
         enableACME = true;
         http3 = true;
@@ -139,10 +144,7 @@ in
     };
   };
 
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "barannikov.de@gmail.com";
-  };
+  security.acme.defaults.email = "barannikov.de@gmail.com";
 
   users = {
     mutableUsers = false;
