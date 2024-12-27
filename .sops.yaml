@@ -78,7 +78,7 @@ creation_rules:
           - *shawn
           - *watchtower
 
-  - path_regex: machines/triva-gs/[^/]+\.yaml$
+  - path_regex: machines/trivia-gs/[^/]+\.yaml$
     key_groups:
       - age:
           - *shawn

@@ -10,7 +10,7 @@ in
 {
   sops.secrets = {
     root.neededForUsers = true;
-    stalwart-fallback-admin = { };
+    stalwart-env = { };
   };
 
   networking.firewall = {
@@ -52,7 +52,7 @@ in
 
   systemd.services.stalwart-mail.serviceConfig = {
     User = "stalwart-mail";
-    EnvironmentFile = [ secrets.stalwart-fallback-admin.path ];
+    EnvironmentFile = [ secrets.stalwart-env.path ];
   };
 
   services = {
