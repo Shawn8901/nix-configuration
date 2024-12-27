@@ -60,16 +60,14 @@ in
       };
       wait-online.anyInterface = true;
     };
-    services.stalwart-mail = {
-      preStart = ''
-        mkdir -p /var/lib/stalwart-mail/{queue,reports,db}
-      '';
-      serviceConfig = {
-        User = "stalwart-mail";
-        EnvironmentFile = [ secrets.stalwart-env.path ];
-      };
+    services.stalwart-mail.serviceConfig = {
+      User = "stalwart-mail";
+      EnvironmentFile = [ secrets.stalwart-env.path ];
     };
   };
+
+  # So that we can read acme certificate from nginx
+  users.users.stalwart-mail.extraGroups = [ "nginx" ];
 
   services = {
     fstrim.enable = true;
@@ -88,7 +86,6 @@ in
         huge_pages = "off";
         min_wal_size = "1GB";
         max_wal_size = "4GB";
-
         track_activities = true;
         track_counts = true;
         track_io_timing = true;
@@ -100,7 +97,6 @@ in
           ensureDBOwnership = true;
         }
       ];
-
     };
     nginx = {
       package = pkgs.nginxQuic;
@@ -188,9 +184,6 @@ in
       };
     };
   };
-
-  # So that we can read acme certificate from nginx
-  users.users.stalwart-mail.extraGroups = [ "nginx" ];
 
   security = {
     auditd.enable = false;
