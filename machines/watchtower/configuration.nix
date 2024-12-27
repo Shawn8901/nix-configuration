@@ -10,7 +10,7 @@ let
   inherit (config.sops) secrets;
   inherit (pkgs.hostPlatform) system;
 
-  vmPackage = self'.packages.victoriametrics.override {
+  vmPackage = pkgs.victoriametrics.override {
     withBackupTools = false;
     withVmAlert = false;
     withVictoriaLogs = false;

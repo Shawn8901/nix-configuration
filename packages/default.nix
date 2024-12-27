@@ -15,8 +15,6 @@ in
         pg-upgrade = pkgs.callPackage ./pg-upgrade { };
         generate-zrepl-ssl = pkgs.callPackage ./shellscripts/generate-zrepl-ssl.nix { };
         vm-grafana-datasource = pkgs.callPackage ./vm-grafana-datasource { };
-        # remove with 24.11
-        victoriametrics = pkgs.callPackage ./victoriametrics { };
       };
     in
     {
@@ -47,9 +45,6 @@ in
         jameica-fhs = pkgs.callPackage ./jameica/fhsenv.nix { };
 
         deezer = pkgsDeezer.callPackage ./deezer { };
-
-        # remove with 24.11
-        inherit (pkgs) vdhcoapp;
 
         linux_xanmod_x86_64_v3 = pkgs.callPackage ./linux-xanmod-x86-64-v3 { };
       };
