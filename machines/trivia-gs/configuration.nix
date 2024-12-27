@@ -160,5 +160,12 @@ in
     };
   };
 
-  shawn8901.server.enable = true;
+  shawn8901 = {
+    postgresql = {
+      enable = true;
+      package = pkgs.postgresql_16;
+      dataDir = "/var/lib/postgresql/16";
+    };
+    server.enable = true;
+  };
 }
