@@ -15,49 +15,52 @@ let
   inherit (lib) concatStringsSep;
 in
 {
-  sops.secrets = {
-    ssh-builder-key = {
-      owner = "hydra-queue-runner";
-    };
-    zfs-ztank-key = { };
-    zrepl = { };
-    ela = { };
-    nextcloud-admin = {
-      owner = "nextcloud";
-      group = "nextcloud";
-    };
-    prometheus-nextcloud = {
-      owner = config.services.prometheus.exporters.nextcloud.user;
-      inherit (config.services.prometheus.exporters.nextcloud) group;
-    };
-    prometheus-fritzbox = {
-      owner = config.services.prometheus.exporters.fritz.user;
-      inherit (config.services.prometheus.exporters.fritz) group;
-    };
-    # GitHub access token is stored on all systems with group right for nixbld
-    # but hydra-queue-runner has to be able to read them but can not be added
-    # to nixbld (it then crashes as soon as its writing to the store).
-    nix-gh-token-ro.mode = lib.mkForce "0777";
-    github-write-token = {
-      owner = "hydra-queue-runner";
-      group = "hydra";
-    };
-    stalwart-fallback-admin = {
-      owner = "stalwart-mail";
-      group = "stalwart-mail";
-    };
-
-    # mimir-env-dev = {
-    #   file = ../../secrets/mimir-env-dev.age;
-    #   owner = lib.mkIf config.services.stne-mimir.enable "mimir";
-    #   group = lib.mkIf config.services.stne-mimir.enable "mimir";
-    # };
-    #  stfc-env-dev = {
-    #   file = ../../secrets/stfc-env-dev.age;
-    #   owner = lib.mkIf config.services.stfc-bot.enable "stfcbot";
-    #   group = lib.mkIf config.services.stfc-bot.enable "stfcbot";
-    # };
-  };
+  sops.secrets = lib.mkMerge [
+    {
+      ssh-builder-key = {
+        owner = "hydra-queue-runner";
+      };
+      zfs-ztank-key = { };
+      zrepl = { };
+      ela = { };
+      nextcloud-admin = {
+        owner = "nextcloud";
+        group = "nextcloud";
+      };
+      prometheus-nextcloud = {
+        owner = config.services.prometheus.exporters.nextcloud.user;
+        inherit (config.services.prometheus.exporters.nextcloud) group;
+      };
+      prometheus-fritzbox = {
+        owner = config.services.prometheus.exporters.fritz.user;
+        inherit (config.services.prometheus.exporters.fritz) group;
+      };
+      # GitHub access token is stored on all systems with group right for nixbld
+      # but hydra-queue-runner has to be able to read them but can not be added
+      # to nixbld (it then crashes as soon as its writing to the store).
+      nix-gh-token-ro.mode = lib.mkForce "0777";
+      github-write-token = {
+        owner = "hydra-queue-runner";
+        group = "hydra";
+      };
+      # mimir-env-dev = {
+      #   file = ../../secrets/mimir-env-dev.age;
+      #   owner = lib.mkIf config.services.stne-mimir.enable "mimir";
+      #   group = lib.mkIf config.services.stne-mimir.enable "mimir";
+      # };
+      #  stfc-env-dev = {
+      #   file = ../../secrets/stfc-env-dev.age;
+      #   owner = lib.mkIf config.services.stfc-bot.enable "stfcbot";
+      #   group = lib.mkIf config.services.stfc-bot.enable "stfcbot";
+      # };
+    }
+    (lib.optionalAttrs config.services.stalwart-mail.enable {
+      stalwart-fallback-admin = {
+        owner = "stalwart-mail";
+        group = "stalwart-mail";
+      };
+    })
+  ];
 
   networking = {
     firewall.allowedTCPPorts = (flakeConfig.shawn8901.zrepl.servePorts config.services.zrepl) ++ [
