@@ -23,20 +23,18 @@ in
   ];
 
   boot = {
-    initrd = {
-      availableKernelModules = [
-        "ahci"
-        "xhci_pci"
-        "nvme"
-        "usbhid"
-        "usb_storage"
-        "sd_mod"
-        "sr_mod"
-      ];
-      postResumeCommands = lib.mkAfter ''
-        ${pkgs.zfs}/bin/zfs mount -a
-      '';
-    };
+    initrd.availableKernelModules = [
+      "ahci"
+      "xhci_pci"
+      "nvme"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+      "sr_mod"
+    ];
+    postBootCommands = lib.mkAfter ''
+      ${pkgs.zfs}/bin/zfs mount -a
+    '';
     kernelModules = [
       "kvm-intel"
       "cifs"
@@ -94,12 +92,6 @@ in
 
     "/home" = {
       device = "rpool/safe/home";
-      fsType = "zfs";
-      options = zfsOptions;
-    };
-
-    "/persist/var/lib/nextcloud/data" = {
-      device = "ztank/replica/nextcloud";
       fsType = "zfs";
       options = zfsOptions;
     };
