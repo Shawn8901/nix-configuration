@@ -1,6 +1,7 @@
 { lib, ... }:
 {
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
+  boot.initrd.postResumeCommands = lib.mkAfter ''
+    echo "Rollback rpool to blank snapshot"
     zfs rollback -r rpool/local/root@blank
   '';
 
