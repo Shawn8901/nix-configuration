@@ -44,14 +44,25 @@ let
         modules =
           [
             {
+              inherit (conf) disabledModules;
+
               _module.args = extraArgs;
               nixpkgs = {
                 inherit (conf) hostPlatform;
               };
-              networking.hostName = name;
-              networking.hostId = substring 0 8 (hashString "md5" "${name}");
+              networking = {
+                hostName = name;
+                hostId = substring 0 8 (hashString "md5" "${name}");
+              };
               system.configurationRevision = self.rev or "dirty";
-              inherit (conf) disabledModules;
+              nix = {
+                registry = {
+                  nixpkgs.flake = conf.nixpkgs;
+                  nixos-config.flake = inputs.self;
+                };
+                nixPath = [ "nixpkgs=/etc/nix/inputs/nixpkgs" ];
+              };
+              environment.etc."nix/inputs/nixpkgs".source = conf.nixpkgs.outPath;
             }
 
             inputs.sops-nix.nixosModules.sops
@@ -73,9 +84,12 @@ let
                   useGlobalPkgs = true;
                   useUserPackages = true;
                   extraSpecialArgs = extraArgs;
-                  sharedModules = [
-                    inputs.sops-nix.homeManagerModule
-                  ] ++ (attrValues self.flakeModules.home-manager) ++ conf.home-manager.extraModules;
+                  sharedModules =
+                    [
+                      inputs.sops-nix.homeManagerModule
+                    ]
+                    ++ (attrValues self.flakeModules.home-manager)
+                    ++ conf.home-manager.extraModules;
                   users = genAttrs conf.home-manager.users (
                     name:
                     let
