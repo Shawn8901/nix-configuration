@@ -29,7 +29,7 @@ in
       autoUpgrade = {
         enable = true;
         dates = "05:14";
-        flake = "github:shawn8901/nix-configuration";
+        flake = "github:shawn8901/nixos-configuration";
         allowReboot = true;
         persistent = true;
       };

@@ -12,7 +12,7 @@
   "type": 0,
   "inputs": {
     "nixexpr": {
-      "value": "https://github.com/shawn8901/nix-configuration main",
+      "value": "https://github.com/shawn8901/nixos-configuration main",
       "type": "git",
       "emailresponsible": false
     },
@@ -23,7 +23,7 @@
     },
     "pulls": {
       "type": "githubpulls",
-      "value": "shawn8901 nix-configuration",
+      "value": "shawn8901 nixos-configuration",
       "emailresponsible": false
     }
   }

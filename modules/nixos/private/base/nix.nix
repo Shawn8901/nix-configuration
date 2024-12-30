@@ -55,7 +55,7 @@ in
 
   programs.nh = {
     enable = true;
-    flake = lib.mkDefault "github:shawn8901/nix-configuration";
+    flake = lib.mkDefault "github:shawn8901/nixos-configuration";
     clean = {
       enable = true;
       extraArgs = "--keep 5 --keep-since 3d";

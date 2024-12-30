@@ -113,7 +113,7 @@ in
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $(<${cfg.writeTokenFile})" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/shawn8901/nix-configuration/pulls/$job_name/merge \
+            https://api.github.com/repos/shawn8901/nixos-configuration/pulls/$job_name/merge \
             -d '{"merge_method":"rebase"}'
           '';
         in

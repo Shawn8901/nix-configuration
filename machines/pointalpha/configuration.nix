@@ -170,7 +170,7 @@ in
       enable = true;
       openFirewall = true;
     };
-    nh.flake = "/home/shawn/dev/nix-configuration";
+    nh.flake = "/home/shawn/dev/nixos-configuration";
     kdeconnect.enable = true;
   };
 

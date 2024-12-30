@@ -13,7 +13,7 @@ let
     emailoverride = "";
     keepnr = 1;
     type = 1;
-    flake = "github:shawn8901/nix-configuration/pull/${num}/head";
+    flake = "github:shawn8901/nixos-configuration/pull/${num}/head";
   }) prs;
   mkFlakeJobset = branch: {
     description = "Build ${branch}";
@@ -25,16 +25,19 @@ let
     keepnr = 3;
     hidden = false;
     type = 1;
-    flake = "github:shawn8901/nix-configuration/${branch}";
+    flake = "github:shawn8901/nixos-configuration/${branch}";
   };
 
-  desc = prJobsets // { "main" = mkFlakeJobset "main"; };
+  desc = prJobsets // {
+    "main" = mkFlakeJobset "main";
+  };
 
   log = {
     pulls = prs;
     jobsets = desc;
   };
-in {
+in
+{
   jobsets = pkgs.runCommand "spec-jobsets.json" { } ''
     cat >$out <<EOF
     ${builtins.toJSON desc}
