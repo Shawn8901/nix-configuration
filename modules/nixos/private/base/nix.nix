@@ -38,9 +38,12 @@ in
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nixos:5axzveeiERb8xAeioBUHNHq4SVLvwDcJkLMFsWq0l1E="
       ];
-      cores = mkDefault 6;
+      cores = mkDefault 4;
       max-jobs = mkDefault 2;
-      experimental-features = "nix-command flakes";
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       netrc-file = mkForce config.sops.secrets.nix-netrc-ro.path;
     };
     extraOptions = ''

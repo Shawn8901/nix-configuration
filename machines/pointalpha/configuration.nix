@@ -186,7 +186,6 @@ in
     keep-outputs = true;
     keep-derivations = true;
     cores = 6;
-    max-jobs = 3;
   };
   environment = {
     systemPackages = [ pkgs.cifs-utils ];
