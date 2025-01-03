@@ -122,8 +122,6 @@ in
   nix.settings = {
     keep-outputs = true;
     keep-derivations = true;
-    cores = 4;
-    max-jobs = 4;
   };
   services = {
     openssh.hostKeys = [

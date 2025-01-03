@@ -185,8 +185,7 @@ in
   nix.settings = {
     keep-outputs = true;
     keep-derivations = true;
-    cores = 6;
-    max-jobs = 3;
+    cores = 7;
   };
   environment = {
     systemPackages = [ pkgs.cifs-utils ];
