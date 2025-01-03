@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 let
-  inherit (lib) mkDefault;
+  inherit (lib) mkDefault mkForce;
 in
 {
   documentation = {
@@ -26,7 +26,10 @@ in
     swraid.enable = mkDefault false;
     enableContainers = false;
   };
-  environment.systemPackages = [ pkgs.vim ];
+  environment = {
+    systemPackages = [ pkgs.vim ];
+    defaultPackages = mkForce [ ];
+  };
 
   services = {
     lvm.enable = false;
