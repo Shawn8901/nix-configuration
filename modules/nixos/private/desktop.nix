@@ -71,6 +71,8 @@ in
           compositor = "kwin";
         };
       };
+      speechd.enable = false;
+      orca.enable = false;
     };
 
     security = {
