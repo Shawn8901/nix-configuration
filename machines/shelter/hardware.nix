@@ -17,7 +17,7 @@
       requestEncryptionCredentials = false;
     };
     extraModprobeConfig = ''
-      options zfs zfs_arc_max=209715200
+      options zfs zfs_arc_max=134217728
     '';
     supportedFilesystems = [ "zfs" ];
     loader.grub = {
